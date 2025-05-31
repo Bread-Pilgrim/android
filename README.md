@@ -1,27 +1,32 @@
-# 빵지순례 (Bake Load)
+# 빵지순례 (BakeRoad)
 ## Development
 
 ### Required
-
 - IDE : Android Studio Meerkat
 - JDK : `17+`
 - Kotlin : `2.1.10`
 
 ### Language
-
-- `Kotlin`
+- Kotlin
 
 ### Libraries
-
-- Compose
-    - Material3
+- AndroidX
+    - Lifecycle & ViewModel Compose
+    - Navigation
+    - Compose
+        - Bom
+        - Foundation
+        - Material3
+        - UI Tooling
+    - Hilt
+        - Navigation Compose
+    - Splash Screen
 - Hilt
-- Coil (compose)
+- Coil (Compose)
 - Kakao Auth
 - Timber
 
 ### Gradle Dependency
-
 - Gradle Version Catalog
 
 ## Architecture

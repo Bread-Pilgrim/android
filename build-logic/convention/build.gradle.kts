@@ -35,6 +35,8 @@ gradlePlugin {
     val conventionPluginClasses = listOf(
         "android.application" to "AndroidApplicationConventionPlugin",
         "android.application.compose" to "AndroidApplicationComposeConventionPlugin",
+        "android.library" to "AndroidLibraryConventoinPlugin",
+        "android.library.compose" to "AndroidLibraryComposeConventionPlugin",
         "hilt" to "HiltConventionPlugin",
         "jvm.library" to "JvmLibraryConventionPlugin"
     )
@@ -52,7 +54,7 @@ gradlePlugin {
 fun NamedDomainObjectContainer<PluginDeclaration>.registerPlugins(pair: Pair<String, String>) {
     val (pluginName, className) = pair
     register(pluginName) {
-        id = "bakeload.$pluginName"
+        id = "bakeroad.$pluginName"
         implementationClass = className
     }
 }

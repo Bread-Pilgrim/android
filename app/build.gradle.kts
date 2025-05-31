@@ -1,9 +1,9 @@
 import com.twolskone.bakeroad.BakeLoadBuildType
 
 plugins {
-    alias(libs.plugins.bakeload.android.application)
-    alias(libs.plugins.bakeload.android.application.compose)
-    alias(libs.plugins.bakeload.hilt)
+    alias(libs.plugins.bakeroad.android.application)
+    alias(libs.plugins.bakeroad.android.application.compose)
+    alias(libs.plugins.bakeroad.hilt)
 }
 
 android {
@@ -41,9 +41,10 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.material3)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
     implementation(libs.timber)
 
     testImplementation(libs.junit)

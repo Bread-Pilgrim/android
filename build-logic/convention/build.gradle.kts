@@ -35,7 +35,7 @@ gradlePlugin {
     val conventionPluginClasses = listOf(
         "android.application" to "AndroidApplicationConventionPlugin",
         "android.application.compose" to "AndroidApplicationComposeConventionPlugin",
-        "android.library" to "AndroidLibraryConventoinPlugin",
+        "android.library" to "AndroidLibraryConventionPlugin",
         "android.library.compose" to "AndroidLibraryComposeConventionPlugin",
         "hilt" to "HiltConventionPlugin",
         "jvm.library" to "JvmLibraryConventionPlugin"

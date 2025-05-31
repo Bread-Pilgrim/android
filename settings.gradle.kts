@@ -26,6 +26,8 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "bakeload"
+rootProject.name = "bakeroad"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")  // 프로젝트 참조 방식 개선
 include(":app")
+include(":core")
+include(":core:designsystem")

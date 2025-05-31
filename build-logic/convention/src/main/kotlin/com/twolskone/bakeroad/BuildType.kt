@@ -1,6 +1,6 @@
 package com.twolskone.bakeroad
 
-enum class BakeLoadBuildType(val applicationIdSuffix: String? = null) {
+enum class BakeRoadBuildType(val applicationIdSuffix: String? = null) {
     DEBUG(".debug"),
     RELEASE
 }

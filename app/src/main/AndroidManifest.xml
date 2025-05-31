@@ -10,11 +10,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BakeLoad">
+        android:theme="@style/Theme.BakeRoad">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.BakeLoad">
+            android:theme="@style/Theme.BakeRoad">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

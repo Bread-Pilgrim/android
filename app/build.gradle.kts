@@ -1,4 +1,4 @@
-import com.twolskone.bakeroad.BakeLoadBuildType
+import com.twolskone.bakeroad.BakeRoadBuildType
 
 plugins {
     alias(libs.plugins.bakeroad.android.application)
@@ -10,7 +10,7 @@ android {
     namespace = "com.twolskone.bakeroad"
 
     defaultConfig {
-        applicationId = "com.twolskone.bakeload"
+        applicationId = "com.twolskone.bakeroad"
         versionCode = 1
         versionName = "1.0.0"   // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
@@ -22,11 +22,11 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix = BakeLoadBuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = BakeRoadBuildType.DEBUG.applicationIdSuffix
         }
         release {
             isMinifyEnabled = false
-            applicationIdSuffix = BakeLoadBuildType.RELEASE.applicationIdSuffix
+            applicationIdSuffix = BakeRoadBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }

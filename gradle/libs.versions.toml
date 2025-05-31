@@ -83,6 +83,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 bakeroad-android-application = { id = "bakeroad.android.application" }
 bakeroad-android-application-compose = { id = "bakeroad.android.application.compose" }
 bakeroad-android-library = { id = "bakeroad.android.library" }
-bakeroad-android-library-compsoe = { id = "bakeraod.android.library.compose" }
+bakeroad-android-library-compose = { id = "bakeroad.android.library.compose" }
 bakeroad-hilt = { id = "bakeroad.hilt" }
-bakeload-jvm-library = { id = "bakeroad.jvm.library" }
+bakeroad-jvm-library = { id = "bakeroad.jvm.library" }

@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.twolskone.bakeload", appContext.packageName)
+        assertEquals("com.twolskone.bakeroad", appContext.packageName)
     }
 }

@@ -1,4 +1,4 @@
-package com.twolskone.bakeload.ui.theme
+package com.twolskone.bakeroad.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

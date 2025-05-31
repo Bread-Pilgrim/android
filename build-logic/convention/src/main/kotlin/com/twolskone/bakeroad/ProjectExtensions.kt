@@ -1,4 +1,4 @@
-package com.twolskone.bakeload
+package com.twolskone.bakeroad
 
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalog

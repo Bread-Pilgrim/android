@@ -1,4 +1,4 @@
-import com.twolskone.bakeload.BakeLoadBuildType
+import com.twolskone.bakeroad.BakeLoadBuildType
 
 plugins {
     alias(libs.plugins.bakeload.android.application)
@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.twolskone.bakeload"
+    namespace = "com.twolskone.bakeroad"
 
     defaultConfig {
         applicationId = "com.twolskone.bakeload"

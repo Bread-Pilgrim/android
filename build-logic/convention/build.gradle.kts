@@ -4,7 +4,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "com.twolskone.bakeload.buildlogic"
+group = "com.twolskone.bakeroad.buildlogic"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17

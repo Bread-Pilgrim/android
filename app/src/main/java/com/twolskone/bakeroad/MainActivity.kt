@@ -1,4 +1,4 @@
-package com.twolskone.bakeload
+package com.twolskone.bakeroad
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,7 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.twolskone.bakeload.ui.theme.BakeLoadTheme
+import com.twolskone.bakeroad.ui.theme.BakeLoadTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

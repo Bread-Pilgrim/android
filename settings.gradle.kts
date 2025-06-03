@@ -31,3 +31,5 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")  // 프로젝트 참조 방�
 include(":app")
 include(":core")
 include(":core:designsystem")
+include(":core:common")
+include(":core:common:android")

@@ -4,13 +4,14 @@ kotlin = "2.1.10"
 ksp = "2.1.10-1.0.31"
 androidDesugarJdkLibs = "2.1.5"
 hilt = "2.56"
+androidxCore = "1.16.0"
 androidxLifecycle = "2.9.0"
 androidxNavigation = "2.9.0"
 androidxHiltNavigationCompose = "1.2.0"
 androidxCoreSpashscreen = "1.0.1"
 androidxComposeFoundation = "1.8.2"
+kotlinxCoroutines = "1.10.1"
 kotlinxSerializationJson = "1.8.1"
-coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -25,12 +26,12 @@ timber = "5.0.1"
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
 # Androidx
-androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
+androidx-core-spashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSpashscreen" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
-androidx-core-spashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSpashscreen" }
 
 # Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -51,6 +52,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 # Kotlinx
+kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 # Hilt

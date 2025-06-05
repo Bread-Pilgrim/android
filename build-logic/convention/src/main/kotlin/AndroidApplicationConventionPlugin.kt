@@ -11,6 +11,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
         with(target) {
             apply(plugin = "com.android.application")
             apply(plugin = "org.jetbrains.kotlin.android")
+            apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             extensions.configure<ApplicationExtension> {
                 configureKotlinAndroid(this)

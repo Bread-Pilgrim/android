@@ -12,16 +12,22 @@
 ### Libraries
 - AndroidX
     - Lifecycle & ViewModel Compose
-    - Navigation
+    - Navigation (Compose)
     - Compose
-        - Bom
         - Foundation
         - Material3
         - UI Tooling
     - Hilt
         - Navigation Compose
     - Splash Screen
+ - Kotlinx
+    - Coroutines
+    - Serialization Json
+    - Collections Immutable
 - Hilt
+- Okhttp3 (Logging Interceptor)
+- Retrofit
+    - Converter Kotlinx Serialization
 - Coil (Compose)
 - Kakao Auth
 - Timber

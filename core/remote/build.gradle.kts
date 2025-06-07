@@ -9,9 +9,6 @@ android {
 }
 
 dependencies {
-
-    api(projects.core.common)
-
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization)

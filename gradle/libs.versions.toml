@@ -25,6 +25,7 @@ retrofit = "2.11.0"
 coil = "2.7.0"
 timber = "5.0.1"
 secrets = "2.0.1"
+kakao = "2.21.3"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -68,11 +69,12 @@ hilt-core = { group = "com.google.dagger", name = "hilt-core", version.ref = "hi
 
 # Third party
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-retrofit = { group = "com.squreup.retrofit2", name = "retrofit", version.ref = "retrofit" }
+retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-kotlin-serialization = { group = "com.squareup.retrofit2", name = "converter-kotlinx-serialization", version.ref = "retrofit" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+kakao-auth = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
@@ -96,5 +98,6 @@ bakeroad-android-application = { id = "bakeroad.android.application" }
 bakeroad-android-application-compose = { id = "bakeroad.android.application.compose" }
 bakeroad-android-library = { id = "bakeroad.android.library" }
 bakeroad-android-library-compose = { id = "bakeroad.android.library.compose" }
+bakeroad-android-feature = { id = "bakeroad.android.feature" }
 bakeroad-hilt = { id = "bakeroad.hilt" }
 bakeroad-jvm-library = { id = "bakeroad.jvm.library" }

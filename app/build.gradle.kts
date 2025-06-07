@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.bakeroad.android.application)
     alias(libs.plugins.bakeroad.android.application.compose)
     alias(libs.plugins.bakeroad.hilt)
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -36,11 +37,17 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
+    implementation(projects.feature.onboard)
 
-    implementation(projects.core.common)
+    implementation(projects.core.common.kotlin)
+    implementation(projects.core.common.android)
     implementation(projects.core.designsystem)
     implementation(projects.core.remote)
 
@@ -50,10 +57,15 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.timber)
+    implementation(libs.kakao.auth) // 카카오 로그인
 
     testImplementation(libs.junit)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.ui.test.junit4)
+}
+
+secrets {
+    defaultPropertiesFileName = "secrets.defaults.properties"
 }

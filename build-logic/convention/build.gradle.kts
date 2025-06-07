@@ -37,6 +37,7 @@ gradlePlugin {
         "android.application.compose" to "AndroidApplicationComposeConventionPlugin",
         "android.library" to "AndroidLibraryConventionPlugin",
         "android.library.compose" to "AndroidLibraryComposeConventionPlugin",
+        "android.feature" to "AndroidFeatureConventionPlugin",
         "hilt" to "HiltConventionPlugin",
         "jvm.library" to "JvmLibraryConventionPlugin"
     )

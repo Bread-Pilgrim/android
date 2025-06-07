@@ -44,6 +44,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.splash)
     implementation(projects.feature.onboard)
 
     implementation(projects.core.common.kotlin)
@@ -52,6 +53,7 @@ dependencies {
     implementation(projects.core.remote)
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.core.spashscreen)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)

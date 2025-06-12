@@ -9,6 +9,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             apply(plugin = "bakeroad.android.library")
+            apply(plugin = "bakeroad.android.library.compose")
             apply(plugin = "bakeroad.hilt")
             apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 

@@ -45,6 +45,7 @@ android {
 
 dependencies {
     implementation(projects.feature.splash)
+    implementation(projects.feature.login)
     implementation(projects.feature.onboard)
 
     implementation(projects.core.common.kotlin)

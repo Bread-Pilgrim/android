@@ -9,6 +9,9 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common.kotlin)
+    implementation(projects.core.datastore)
+
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit)
     implementation(libs.retrofit.kotlin.serialization)

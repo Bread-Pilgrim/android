@@ -1,5 +1,11 @@
 package com.twolskone.bakeroad.core.remote.di
 
+import com.twolskone.bakeroad.core.remote.AuthOkHttpClient
+import com.twolskone.bakeroad.core.remote.AuthRetrofit
+import com.twolskone.bakeroad.core.remote.CommonOkHttpClient
+import com.twolskone.bakeroad.core.remote.CommonRetrofit
+import com.twolskone.bakeroad.core.remote.interceptor.BaseInterceptor
+import com.twolskone.bakeroad.core.remote.interceptor.TokenInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,19 +31,43 @@ internal object NetworkModule {
         HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
 
+    @AuthOkHttpClient
     @Provides
     @Singleton
-    fun providesOkHttpClient(loggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
+    fun providesAuthOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, baseInterceptor: BaseInterceptor): OkHttpClient =
         OkHttpClient.Builder()
             .addNetworkInterceptor(loggingInterceptor)
+            .addInterceptor(baseInterceptor)
             .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .build()
 
+    @CommonOkHttpClient
     @Provides
     @Singleton
-    fun providesRetrofit(okHttpClient: OkHttpClient): Retrofit =
+    fun providesCommonOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenInterceptor: TokenInterceptor): OkHttpClient =
+        OkHttpClient.Builder()
+            .addNetworkInterceptor(loggingInterceptor)
+            .addInterceptor(tokenInterceptor)
+            .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
+            .build()
+
+    @AuthRetrofit
+    @Provides
+    @Singleton
+    fun providesAuthRetrofit(@AuthOkHttpClient okHttpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder()
+            .client(okHttpClient)
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .build()
+
+    @CommonRetrofit
+    @Provides
+    @Singleton
+    fun providesCommonRetrofit(@CommonOkHttpClient okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))

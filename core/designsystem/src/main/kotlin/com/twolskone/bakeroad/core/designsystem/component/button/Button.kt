@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.designsystem.component
+package com.twolskone.bakeroad.core.designsystem.component.button
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -73,7 +73,7 @@ enum class ButtonSize {
  * Button content layout for arranging the text label, leading icon, and trailing icon.
  */
 @Composable
-internal fun BakeRoadSolidButtonContent(
+internal fun BakeRoadButtonContent(
     buttonSize: ButtonSize,
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,

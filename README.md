@@ -20,7 +20,8 @@
     - Hilt
         - Navigation Compose
     - Splash Screen
- - Kotlinx
+    - DataStore
+- Kotlinx
     - Coroutines
     - Serialization Json
     - Collections Immutable

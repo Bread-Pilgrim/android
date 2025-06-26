@@ -29,17 +29,17 @@ enum class ButtonSize {
             LARGE -> RoundedCornerShape(10.dp)
             MEDIUM -> RoundedCornerShape(8.dp)
             SMALL -> RoundedCornerShape(6.dp)
-            XSMALL -> RoundedCornerShape(4.dp)
+            XSMALL -> RoundedCornerShape(6.dp)
         }
 
     val contentPadding: PaddingValues
         @Composable
         get() = when (this) {
-            XLARGE -> PaddingValues(horizontal = 36.dp, vertical = 16.dp)
-            LARGE -> PaddingValues(horizontal = 28.dp, vertical = 13.dp)
-            MEDIUM -> PaddingValues(horizontal = 20.dp, vertical = 9.dp)
-            SMALL -> PaddingValues(horizontal = 14.dp, vertical = 7.dp)
-            XSMALL -> PaddingValues(horizontal = 12.dp, vertical = 5.dp)
+            XLARGE -> PaddingValues(horizontal = 36.dp, vertical = 17.dp)
+            LARGE -> PaddingValues(horizontal = 24.dp, vertical = 13.dp)
+            MEDIUM -> PaddingValues(horizontal = 16.dp, vertical = 9.dp)
+            SMALL -> PaddingValues(horizontal = 12.dp, vertical = 7.dp)
+            XSMALL -> PaddingValues(horizontal = 10.dp, vertical = 5.dp)
         }
 
     val typography: TextStyle
@@ -49,7 +49,7 @@ enum class ButtonSize {
             LARGE -> BakeRoadTheme.typography.bodyMediumSemibold
             MEDIUM -> BakeRoadTheme.typography.bodySmallSemibold
             SMALL -> BakeRoadTheme.typography.body2XSmallSemibold
-            XSMALL -> BakeRoadTheme.typography.body2XSmallMedium
+            XSMALL -> BakeRoadTheme.typography.body2XSmallSemibold
         }
 
     val iconSize: Dp

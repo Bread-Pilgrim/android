@@ -2,8 +2,6 @@ package com.twolskone.bakeroad.core.designsystem.component.popup
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,17 +18,9 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
-import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
-import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonVariant
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonVariant
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
-enum class AlertButton {
-    SHORT, LONG
-}
-
+private val WindowHorizontalPadding = 20.dp
 private val AlertShape = RoundedCornerShape(20.dp)
 private val AlertPadding = 16.dp
 
@@ -38,7 +28,7 @@ private val AlertPadding = 16.dp
 @Composable
 fun BakeRoadAlert(
     modifier: Modifier = Modifier,
-    buttonType: AlertButton,
+    buttonType: PopupButton,
     title: String = "",
     content: String = "",
     primaryText: String,
@@ -49,7 +39,7 @@ fun BakeRoadAlert(
 ) {
     val windowInfo = LocalWindowInfo.current
     val density = LocalDensity.current
-    val width = remember { with(density) { windowInfo.containerSize.width.toDp() - 40.dp } }
+    val width = remember { with(density) { windowInfo.containerSize.width.toDp() - (WindowHorizontalPadding * 2) } }
 
     BasicAlertDialog(
         modifier = modifier
@@ -72,7 +62,7 @@ fun BakeRoadAlert(
             )
             Spacer(modifier = Modifier.height(16.dp))
             // Buttons.
-            BakeRoadAlertButtons(
+            BakeRoadPopupButtons(
                 buttonType = buttonType,
                 primaryText = primaryText,
                 secondaryText = secondaryText,
@@ -83,63 +73,12 @@ fun BakeRoadAlert(
     }
 }
 
-@Composable
-private fun ColumnScope.BakeRoadAlertButtons(
-    buttonType: AlertButton,
-    primaryText: String,
-    secondaryText: String,
-    onPrimaryClick: () -> Unit,
-    onSecondaryClick: () -> Unit
-) {
-    when (buttonType) {
-        AlertButton.SHORT -> {
-            Row(modifier = Modifier.fillMaxWidth()) {
-                BakeRoadOutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    role = OutlinedButtonVariant.SECONDARY,
-                    size = ButtonSize.XLARGE,
-                    onClick = onSecondaryClick,
-                    content = { Text(text = primaryText) }
-                )
-                BakeRoadSolidButton(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .weight(1f),
-                    role = SolidButtonVariant.PRIMARY,
-                    size = ButtonSize.XLARGE,
-                    onClick = onPrimaryClick,
-                    content = { Text(text = secondaryText) }
-                )
-            }
-        }
-
-        AlertButton.LONG -> {
-            BakeRoadSolidButton(
-                modifier = Modifier.fillMaxWidth(),
-                role = SolidButtonVariant.PRIMARY,
-                size = ButtonSize.LARGE,
-                onClick = onPrimaryClick,
-                content = { Text(text = primaryText) }
-            )
-            BakeRoadOutlinedButton(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                role = OutlinedButtonVariant.SECONDARY,
-                size = ButtonSize.LARGE,
-                onClick = onSecondaryClick,
-                content = { Text(text = secondaryText) }
-            )
-        }
-    }
-}
-
 @Preview
 @Composable
 private fun BakeRoadAlertPreview() {
     BakeRoadTheme {
         BakeRoadAlert(
-            buttonType = AlertButton.LONG,
+            buttonType = PopupButton.LONG,
             title = "제목",
             content = "내용",
             primaryText = "권장행동",

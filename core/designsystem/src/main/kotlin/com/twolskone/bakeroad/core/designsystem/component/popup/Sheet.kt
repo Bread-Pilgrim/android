@@ -84,7 +84,7 @@ fun BakeRoadSheet(
             // Content.
             Text(
                 text = content,
-                style = BakeRoadTheme.typography.bodyXSmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
             )
             Spacer(modifier = Modifier.height(24.dp))
             // User action.

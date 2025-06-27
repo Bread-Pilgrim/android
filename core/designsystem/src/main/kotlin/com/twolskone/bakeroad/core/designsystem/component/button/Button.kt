@@ -48,8 +48,8 @@ enum class ButtonSize {
             XLARGE -> BakeRoadTheme.typography.bodyLargeSemibold
             LARGE -> BakeRoadTheme.typography.bodyMediumSemibold
             MEDIUM -> BakeRoadTheme.typography.bodySmallSemibold
-            SMALL -> BakeRoadTheme.typography.body2XSmallSemibold
-            XSMALL -> BakeRoadTheme.typography.body2XSmallSemibold
+            SMALL -> BakeRoadTheme.typography.body2XsmallSemibold
+            XSMALL -> BakeRoadTheme.typography.body2XsmallSemibold
         }
 
     val iconSize: Dp

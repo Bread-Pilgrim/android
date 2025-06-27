@@ -22,24 +22,24 @@ data class BakeRoadTypography(
     val headingLargeBold: TextStyle,
     val headingMediumBold: TextStyle,
     val headingSmallBold: TextStyle,
-    val bodyXLargeSemibold: TextStyle,
+    val bodyXlargeSemibold: TextStyle,
     val bodyLargeSemibold: TextStyle,
     val bodyMediumSemibold: TextStyle,
     val bodySmallSemibold: TextStyle,
-    val bodyXSmallSemibold: TextStyle,
-    val body2XSmallSemibold: TextStyle,
-    val bodyXLargeMedium: TextStyle,
+    val bodyXsmallSemibold: TextStyle,
+    val body2XsmallSemibold: TextStyle,
+    val bodyXlargeMedium: TextStyle,
     val bodyLargeMedium: TextStyle,
     val bodyMediumMedium: TextStyle,
     val bodySmallMedium: TextStyle,
-    val bodyXSmallMedium: TextStyle,
-    val body2XSmallMedium: TextStyle,
-    val bodyXLargeRegular: TextStyle,
+    val bodyXsmallMedium: TextStyle,
+    val body2XsmallMedium: TextStyle,
+    val bodyXlargeRegular: TextStyle,
     val bodyLargeRegular: TextStyle,
     val bodyMediumRegular: TextStyle,
     val bodySmallRegular: TextStyle,
-    val bodyXSmallRegular: TextStyle,
-    val body2XSmallRegular: TextStyle,
+    val bodyXsmallRegular: TextStyle,
+    val body2XsmallRegular: TextStyle,
 )
 
 internal val LocalBakeRoadTypography = staticCompositionLocalOf { bakeRoadTypography }
@@ -65,7 +65,7 @@ internal val bakeRoadTypography = BakeRoadTypography(
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    bodyXLargeSemibold = TextStyle(
+    bodyXlargeSemibold = TextStyle(
         fontFamily = pretendard,
         fontSize = 20.sp,
         fontWeight = FontWeight(600),
@@ -93,21 +93,21 @@ internal val bakeRoadTypography = BakeRoadTypography(
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    bodyXSmallSemibold = TextStyle(
+    bodyXsmallSemibold = TextStyle(
         fontFamily = pretendard,
         fontSize = 14.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    body2XSmallSemibold = TextStyle(
+    body2XsmallSemibold = TextStyle(
         fontFamily = pretendard,
         fontSize = 13.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    bodyXLargeMedium = TextStyle(
+    bodyXlargeMedium = TextStyle(
         fontFamily = pretendard,
         fontSize = 20.sp,
         fontWeight = FontWeight(500),
@@ -135,21 +135,21 @@ internal val bakeRoadTypography = BakeRoadTypography(
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    bodyXSmallMedium = TextStyle(
+    bodyXsmallMedium = TextStyle(
         fontFamily = pretendard,
         fontSize = 14.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    body2XSmallMedium = TextStyle(
+    body2XsmallMedium = TextStyle(
         fontFamily = pretendard,
         fontSize = 13.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    bodyXLargeRegular = TextStyle(
+    bodyXlargeRegular = TextStyle(
         fontFamily = pretendard,
         fontSize = 20.sp,
         fontWeight = FontWeight(400),
@@ -177,14 +177,14 @@ internal val bakeRoadTypography = BakeRoadTypography(
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    bodyXSmallRegular = TextStyle(
+    bodyXsmallRegular = TextStyle(
         fontFamily = pretendard,
         fontSize = 14.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
-    body2XSmallRegular = TextStyle(
+    body2XsmallRegular = TextStyle(
         fontFamily = pretendard,
         fontSize = 13.sp,
         fontWeight = FontWeight(400),

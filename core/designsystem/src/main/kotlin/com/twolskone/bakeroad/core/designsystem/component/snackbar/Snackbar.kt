@@ -153,7 +153,7 @@ private fun BakeRoadSnackbar(
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
                     text = snackbarData.visuals.message,
-                    style = BakeRoadTheme.typography.bodyXSmallMedium
+                    style = BakeRoadTheme.typography.bodyXsmallMedium
                 )
             }
         }

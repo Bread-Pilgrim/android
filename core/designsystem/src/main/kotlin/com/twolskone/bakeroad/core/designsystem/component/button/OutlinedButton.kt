@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -71,9 +72,7 @@ fun BakeRoadOutlinedButton(
         border = BorderStroke(width = 1.dp, color = role.outlineColor(enabled = enabled)),
         contentPadding = size.contentPadding
     ) {
-        CompositionLocalProvider(LocalTextStyle provides size.typography) {
-            content()
-        }
+        ProvideTextStyle(value = size.typography) { content() }
     }
 }
 

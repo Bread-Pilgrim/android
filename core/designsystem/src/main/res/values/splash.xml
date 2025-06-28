@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="CoreDesignSystem.BakeRoad.Theme.Splash" parent="Theme.SplashScreen">
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <item name="postSplashScreenTheme">@style/CoreDesignSystem.BakeRoad.Theme</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/core_designsystem_ic_logo_splash</item>
+        <item name="windowSplashScreenBackground">@color/core_designsystem_white</item>
+    </style>
+</resources>

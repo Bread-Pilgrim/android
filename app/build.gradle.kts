@@ -44,21 +44,22 @@ android {
 }
 
 dependencies {
-    implementation(projects.feature.splash)
-    implementation(projects.feature.login)
+    implementation(projects.feature.intro)
     implementation(projects.feature.onboard)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)
     implementation(projects.core.designsystem)
+    implementation(projects.core.ui)
     implementation(projects.core.remote)
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.spashscreen)
+    implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
+
     implementation(libs.timber)
     implementation(libs.kakao.auth) // 카카오 로그인
 

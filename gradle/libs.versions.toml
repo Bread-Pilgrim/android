@@ -8,7 +8,7 @@ androidxCore = "1.16.0"
 androidxLifecycle = "2.9.0"
 androidxNavigation = "2.9.0"
 androidxHiltNavigationCompose = "1.2.0"
-androidxCoreSpashscreen = "1.0.1"
+androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.0"
 kotlinxCoroutines = "1.10.1"
 kotlinxSerializationJson = "1.8.1"
@@ -32,7 +32,7 @@ android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs
 
 # Androidx
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCore" }
-androidx-core-spashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSpashscreen" }
+androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewmodelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }

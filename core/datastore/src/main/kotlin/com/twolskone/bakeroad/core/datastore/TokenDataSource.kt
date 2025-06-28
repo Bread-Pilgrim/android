@@ -26,6 +26,7 @@ class TokenDataSource @Inject constructor(@TokenDataStore private val dataStore:
 
     suspend fun setTokens(accessToken: String, refreshToken: String) {
         runCatching {
+            Timber.i("setTokens >> accessToken: $accessToken, refreshToken: $refreshToken")
             dataStore.edit { preferences ->
                 preferences[KEY_ACCESS_TOKEN] = accessToken
                 preferences[KEY_REFRESH_TOKEN] = refreshToken

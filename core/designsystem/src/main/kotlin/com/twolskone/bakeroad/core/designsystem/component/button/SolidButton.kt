@@ -10,30 +10,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
-enum class SolidButtonVariant {
-    PRIMARY,
-    SECONDARY;
-
-    val colors: ButtonColors
-        @Composable
-        get() = when (this) {
-            PRIMARY ->
-                ButtonColors(
-                    containerColor = BakeRoadTheme.colorScheme.Primary500,
-                    contentColor = BakeRoadTheme.colorScheme.White,
-                    disabledContainerColor = BakeRoadTheme.colorScheme.Gray50,
-                    disabledContentColor = BakeRoadTheme.colorScheme.Gray300
-                )
-
-            SECONDARY -> ButtonColors(
-                containerColor = BakeRoadTheme.colorScheme.Primary100,
-                contentColor = BakeRoadTheme.colorScheme.Primary500,
-                disabledContainerColor = BakeRoadTheme.colorScheme.Primary50,
-                disabledContentColor = BakeRoadTheme.colorScheme.Primary200
-            )
-        }
-}
-
 /**
  * Solid button with generic content slot.
  */
@@ -88,4 +64,28 @@ fun BakeRoadSolidButton(
             )
         }
     }
+}
+
+enum class SolidButtonVariant {
+    PRIMARY,
+    SECONDARY;
+
+    val colors: ButtonColors
+        @Composable
+        get() = when (this) {
+            PRIMARY ->
+                ButtonColors(
+                    containerColor = BakeRoadTheme.colorScheme.Primary500,
+                    contentColor = BakeRoadTheme.colorScheme.White,
+                    disabledContainerColor = BakeRoadTheme.colorScheme.Gray50,
+                    disabledContentColor = BakeRoadTheme.colorScheme.Gray300
+                )
+
+            SECONDARY -> ButtonColors(
+                containerColor = BakeRoadTheme.colorScheme.Primary100,
+                contentColor = BakeRoadTheme.colorScheme.Primary500,
+                disabledContainerColor = BakeRoadTheme.colorScheme.Primary50,
+                disabledContentColor = BakeRoadTheme.colorScheme.Primary200
+            )
+        }
 }

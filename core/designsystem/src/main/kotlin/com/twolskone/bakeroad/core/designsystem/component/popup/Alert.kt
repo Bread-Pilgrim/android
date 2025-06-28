@@ -30,15 +30,11 @@ private val WindowHorizontalPadding = 20.dp
 private val AlertShape = RoundedCornerShape(20.dp)
 private val AlertPadding = 16.dp
 
-enum class AlertButton {
-    SHORT, LONG
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BakeRoadAlert(
     modifier: Modifier = Modifier,
-    buttonType: AlertButton,
+    buttonType: PopupButton,
     title: String = "",
     content: String = "",
     primaryText: String,
@@ -72,7 +68,7 @@ fun BakeRoadAlert(
             )
             Spacer(modifier = Modifier.height(16.dp))
             // Buttons.
-            BakeRoadAlertButtons(
+            BakeRoadPopupButtons(
                 buttonType = buttonType,
                 primaryText = primaryText,
                 secondaryText = secondaryText,
@@ -84,15 +80,15 @@ fun BakeRoadAlert(
 }
 
 @Composable
-private fun BakeRoadAlertButtons(
-    buttonType: AlertButton,
+private fun BakeRoadPopupButtons(
+    buttonType: PopupButton,
     primaryText: String,
     secondaryText: String,
     onPrimaryClick: () -> Unit,
     onSecondaryClick: () -> Unit
 ) {
     when (buttonType) {
-        AlertButton.SHORT -> {
+        PopupButton.SHORT -> {
             Row(modifier = Modifier.fillMaxWidth()) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.weight(1f),
@@ -113,7 +109,7 @@ private fun BakeRoadAlertButtons(
             }
         }
 
-        AlertButton.LONG -> {
+        PopupButton.LONG -> {
             BakeRoadSolidButton(
                 modifier = Modifier.fillMaxWidth(),
                 role = SolidButtonVariant.PRIMARY,
@@ -139,7 +135,7 @@ private fun BakeRoadAlertButtons(
 private fun BakeRoadAlertPreview() {
     BakeRoadTheme {
         BakeRoadAlert(
-            buttonType = AlertButton.LONG,
+            buttonType = PopupButton.LONG,
             title = "제목",
             content = "내용",
             primaryText = "권장행동",

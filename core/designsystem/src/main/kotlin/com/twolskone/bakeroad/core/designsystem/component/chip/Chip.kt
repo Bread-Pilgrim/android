@@ -23,6 +23,30 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
+@Composable
+fun BakeRoadChip(
+    selected: Boolean,
+    onSelectedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    color: ChipColor = ChipColor.MAIN,
+    size: ChipSize = ChipSize.LARGE,
+    label: @Composable () -> Unit,
+) {
+    val style = if (selected) ChipStyle.FILL else ChipStyle.WEAK
+
+    Box(
+        modifier = modifier
+            .clickable { onSelectedChange(!selected) }
+            .background(color = color.getContainerColor(style), shape = size.shape)
+            .padding(size.padding),
+        contentAlignment = Alignment.Center
+    ) {
+        ProvideTextStyle(value = size.typography.copy(color = color.getContentColor(style))) {
+            label()
+        }
+    }
+}
+
 enum class ChipColor {
     MAIN, SUB, GRAY, LIGHT_GRAY, RED, SUCCESS;
 
@@ -76,30 +100,6 @@ enum class ChipSize {
 
 enum class ChipStyle {
     WEAK, FILL
-}
-
-@Composable
-fun BakeRoadChip(
-    selected: Boolean,
-    onSelectedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier,
-    color: ChipColor = ChipColor.MAIN,
-    size: ChipSize = ChipSize.LARGE,
-    label: @Composable () -> Unit,
-) {
-    val style = if (selected) ChipStyle.FILL else ChipStyle.WEAK
-    
-    Box(
-        modifier = modifier
-            .clickable { onSelectedChange(!selected) }
-            .background(color = color.getContainerColor(style), shape = size.shape)
-            .padding(size.padding),
-        contentAlignment = Alignment.Center
-    ) {
-        ProvideTextStyle(value = size.typography.copy(color = color.getContentColor(style))) {
-            label()
-        }
-    }
 }
 
 @Preview

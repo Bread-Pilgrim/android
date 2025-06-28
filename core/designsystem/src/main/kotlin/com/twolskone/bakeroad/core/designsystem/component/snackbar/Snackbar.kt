@@ -35,29 +35,6 @@ import kotlinx.coroutines.delay
 
 private val SnackbarRadius = 12.dp
 
-enum class SnackbarTheme {
-    DARK, WHITE;
-
-    val containerColor: Color
-        @Composable
-        get() = when (this) {
-            DARK -> BakeRoadTheme.colorScheme.Black
-            WHITE -> BakeRoadTheme.colorScheme.White
-        }
-
-    @Composable
-    fun getContentColor(type: SnackbarType): Color =
-        when (this) {
-            DARK -> if (type == SnackbarType.ERROR) BakeRoadTheme.colorScheme.Error500 else BakeRoadTheme.colorScheme.White
-            WHITE -> if (type == SnackbarType.ERROR) BakeRoadTheme.colorScheme.Error500 else BakeRoadTheme.colorScheme.Success950
-        }
-}
-
-enum class SnackbarType(val iconRes: Int) {
-    SUCCESS(iconRes = R.drawable.core_designsystem_ic_success),
-    ERROR(iconRes = R.drawable.core_designsystem_ic_error)
-}
-
 @Composable
 fun BakeRoadSnackbarBox(
     modifier: Modifier = Modifier,
@@ -158,6 +135,29 @@ private fun BakeRoadSnackbar(
             }
         }
     )
+}
+
+enum class SnackbarTheme {
+    DARK, WHITE;
+
+    val containerColor: Color
+        @Composable
+        get() = when (this) {
+            DARK -> BakeRoadTheme.colorScheme.Black
+            WHITE -> BakeRoadTheme.colorScheme.White
+        }
+
+    @Composable
+    fun getContentColor(type: SnackbarType): Color =
+        when (this) {
+            DARK -> if (type == SnackbarType.ERROR) BakeRoadTheme.colorScheme.Error500 else BakeRoadTheme.colorScheme.White
+            WHITE -> if (type == SnackbarType.ERROR) BakeRoadTheme.colorScheme.Error500 else BakeRoadTheme.colorScheme.Success950
+        }
+}
+
+enum class SnackbarType(val iconRes: Int) {
+    SUCCESS(iconRes = R.drawable.core_designsystem_ic_success),
+    ERROR(iconRes = R.drawable.core_designsystem_ic_error)
 }
 
 @Preview

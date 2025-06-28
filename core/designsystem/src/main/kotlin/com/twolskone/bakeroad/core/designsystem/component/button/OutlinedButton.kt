@@ -12,45 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
-enum class OutlinedButtonVariant {
-    PRIMARY,
-    SECONDARY,
-    ASSISTIVE;
-
-    val colors: ButtonColors
-        @Composable
-        get() = when (this) {
-            PRIMARY ->
-                ButtonColors(
-                    containerColor = BakeRoadTheme.colorScheme.White,
-                    contentColor = BakeRoadTheme.colorScheme.Primary500,
-                    disabledContainerColor = BakeRoadTheme.colorScheme.White,
-                    disabledContentColor = BakeRoadTheme.colorScheme.Gray200
-                )
-
-            SECONDARY -> ButtonColors(
-                containerColor = BakeRoadTheme.colorScheme.White,
-                contentColor = BakeRoadTheme.colorScheme.Primary500,
-                disabledContainerColor = BakeRoadTheme.colorScheme.White,
-                disabledContentColor = BakeRoadTheme.colorScheme.Gray200
-            )
-
-            ASSISTIVE -> ButtonColors(
-                containerColor = BakeRoadTheme.colorScheme.White,
-                contentColor = BakeRoadTheme.colorScheme.Gray990,
-                disabledContainerColor = BakeRoadTheme.colorScheme.White,
-                disabledContentColor = BakeRoadTheme.colorScheme.Gray200
-            )
-        }
-
-    @Composable
-    fun outlineColor(enabled: Boolean) =
-        when (this) {
-            PRIMARY -> if (enabled) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray200
-            SECONDARY, ASSISTIVE -> BakeRoadTheme.colorScheme.Gray200
-        }
-}
-
 /**
  * Outlined button with generic content slot.
  */
@@ -106,4 +67,43 @@ fun BakeRoadOutlinedButton(
             )
         }
     }
+}
+
+enum class OutlinedButtonVariant {
+    PRIMARY,
+    SECONDARY,
+    ASSISTIVE;
+
+    val colors: ButtonColors
+        @Composable
+        get() = when (this) {
+            PRIMARY ->
+                ButtonColors(
+                    containerColor = BakeRoadTheme.colorScheme.White,
+                    contentColor = BakeRoadTheme.colorScheme.Primary500,
+                    disabledContainerColor = BakeRoadTheme.colorScheme.White,
+                    disabledContentColor = BakeRoadTheme.colorScheme.Gray200
+                )
+
+            SECONDARY -> ButtonColors(
+                containerColor = BakeRoadTheme.colorScheme.White,
+                contentColor = BakeRoadTheme.colorScheme.Primary500,
+                disabledContainerColor = BakeRoadTheme.colorScheme.White,
+                disabledContentColor = BakeRoadTheme.colorScheme.Gray200
+            )
+
+            ASSISTIVE -> ButtonColors(
+                containerColor = BakeRoadTheme.colorScheme.White,
+                contentColor = BakeRoadTheme.colorScheme.Gray990,
+                disabledContainerColor = BakeRoadTheme.colorScheme.White,
+                disabledContentColor = BakeRoadTheme.colorScheme.Gray200
+            )
+        }
+
+    @Composable
+    fun outlineColor(enabled: Boolean) =
+        when (this) {
+            PRIMARY -> if (enabled) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray200
+            SECONDARY, ASSISTIVE -> BakeRoadTheme.colorScheme.Gray200
+        }
 }

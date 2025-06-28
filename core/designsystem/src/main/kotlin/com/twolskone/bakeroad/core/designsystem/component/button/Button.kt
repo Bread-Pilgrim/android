@@ -13,7 +13,38 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 /**
- * Button common size
+ * Button content layout for arranging the text label, leading icon, and trailing icon.
+ */
+@Composable
+internal fun BakeRoadButtonContent(
+    buttonSize: ButtonSize,
+    text: @Composable () -> Unit,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
+) {
+    if (leadingIcon != null) {
+        Box(modifier = Modifier.size(buttonSize.iconSize)) {
+            leadingIcon()
+        }
+    }
+    Box(
+        modifier = Modifier
+            .padding(
+                start = if (leadingIcon != null) buttonSize.iconSpacing else 0.dp,
+                end = if (trailingIcon != null) buttonSize.iconSpacing else 0.dp,
+            )
+    ) {
+        text()
+    }
+    if (trailingIcon != null) {
+        Box(modifier = Modifier.size(buttonSize.iconSize)) {
+            trailingIcon()
+        }
+    }
+}
+
+/**
+ * Common button size
  */
 enum class ButtonSize {
     XLARGE,
@@ -67,35 +98,4 @@ enum class ButtonSize {
             MEDIUM -> 5.dp
             SMALL, XSMALL -> 4.dp
         }
-}
-
-/**
- * Button content layout for arranging the text label, leading icon, and trailing icon.
- */
-@Composable
-internal fun BakeRoadButtonContent(
-    buttonSize: ButtonSize,
-    text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
-) {
-    if (leadingIcon != null) {
-        Box(modifier = Modifier.size(buttonSize.iconSize)) {
-            leadingIcon()
-        }
-    }
-    Box(
-        modifier = Modifier
-            .padding(
-                start = if (leadingIcon != null) buttonSize.iconSpacing else 0.dp,
-                end = if (trailingIcon != null) buttonSize.iconSpacing else 0.dp,
-            )
-    ) {
-        text()
-    }
-    if (trailingIcon != null) {
-        Box(modifier = Modifier.size(buttonSize.iconSize)) {
-            trailingIcon()
-        }
-    }
 }

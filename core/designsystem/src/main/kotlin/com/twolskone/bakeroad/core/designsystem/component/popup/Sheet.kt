@@ -37,16 +37,12 @@ import kotlinx.coroutines.launch
 private val SheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
 private val SheetPadding = 16.dp
 
-enum class SheetButton {
-    SHORT, LONG
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BakeRoadSheet(
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
-    buttonType: SheetButton,
+    buttonType: PopupButton,
     title: String,
     content: String,
     primaryText: String,
@@ -106,14 +102,14 @@ fun BakeRoadSheet(
 
 @Composable
 internal fun BakeRoadSheetButtons(
-    buttonType: SheetButton,
+    buttonType: PopupButton,
     primaryText: String,
     secondaryText: String,
     onPrimaryClick: () -> Unit,
     onSecondaryClick: () -> Unit
 ) {
     when (buttonType) {
-        SheetButton.SHORT -> {
+        PopupButton.SHORT -> {
             Row(modifier = Modifier.fillMaxWidth()) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.weight(1f),
@@ -134,7 +130,7 @@ internal fun BakeRoadSheetButtons(
             }
         }
 
-        SheetButton.LONG -> {
+        PopupButton.LONG -> {
             BakeRoadSolidButton(
                 modifier = Modifier.fillMaxWidth(),
                 role = SolidButtonVariant.PRIMARY,
@@ -179,7 +175,7 @@ private fun BakeRoadSheetPreview() {
 
             if (showSheet) {
                 BakeRoadSheet(
-                    buttonType = SheetButton.LONG,
+                    buttonType = PopupButton.LONG,
                     title = "제목",
                     content = "내용",
                     primaryText = "권장행동",

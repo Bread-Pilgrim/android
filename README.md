@@ -1,15 +1,20 @@
-# 빵지순례 (BakeRoad)
+# 빵글 (Android)
+> 빵 따라 걷는 부산의 맛있는 순간들
+<p align="left">
+  <img src="https://github.com/user-attachments/assets/e7f0d7b9-c483-46e9-b146-30f98a06a245" alt="Frame 1707482694" width="300"/>
+</p>
+
 ## Development
 
-### Required
+### 1. Required
 - IDE : Android Studio Meerkat
 - JDK : `17+`
 - Kotlin : `2.1.10`
 
-### Language
+### 2. Language
 - Kotlin
 
-### Libraries
+### 3. Libraries
 - AndroidX
     - Lifecycle & ViewModel Compose
     - Navigation (Compose)
@@ -33,7 +38,7 @@
 - Kakao Auth
 - Timber
 
-### Gradle Dependency
+### 4. Gradle Dependency
 - Gradle Version Catalog
 
 ## Architecture
@@ -49,3 +54,4 @@
         > 해당 모듈의 `build.gradle` 파일에 직접 정의하는 것이 바람직하다.
         
 - MVI
+    - `UiState` `Intent` `SideEffect`

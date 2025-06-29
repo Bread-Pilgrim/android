@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.core.remote.di
 
 import com.twolskone.bakeroad.core.remote.AuthOkHttpClient
 import com.twolskone.bakeroad.core.remote.AuthRetrofit
+import com.twolskone.bakeroad.core.remote.BuildConfig
 import com.twolskone.bakeroad.core.remote.CommonOkHttpClient
 import com.twolskone.bakeroad.core.remote.CommonRetrofit
 import com.twolskone.bakeroad.core.remote.interceptor.BaseInterceptor
@@ -24,6 +25,7 @@ import retrofit2.converter.kotlinx.serialization.asConverterFactory
 internal object NetworkModule {
 
     private const val TIMEOUT_SECONDS = 15L
+    private const val BASE_URL = BuildConfig.BASE_URL
 
     @Provides
     @Singleton
@@ -60,6 +62,7 @@ internal object NetworkModule {
     @Singleton
     fun providesAuthRetrofit(@AuthOkHttpClient okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
@@ -69,6 +72,7 @@ internal object NetworkModule {
     @Singleton
     fun providesCommonRetrofit(@CommonOkHttpClient okHttpClient: OkHttpClient): Retrofit =
         Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()

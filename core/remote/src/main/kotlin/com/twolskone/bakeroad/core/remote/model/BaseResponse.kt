@@ -37,10 +37,10 @@ internal fun <T> BaseResponse<T>.toDataOrNull(): T? =
 internal fun <T> BaseResponse<T>.toData(): T =
     data ?: throw BakeRoadException(code = code, message = message)
 
-internal suspend fun <T : BaseResponse<Unit>> FlowCollector<Unit>.emitRemote(response: T) {
+internal suspend fun <T : BaseResponse<Unit>> FlowCollector<Unit>.emitUnit(response: T) {
     emit(response.toDataOrNull() ?: Unit)
 }
 
-internal suspend fun <T : BaseResponse<R>, R> FlowCollector<R>.emitRemote(response: T) {
+internal suspend fun <T : BaseResponse<R>, R: Any> FlowCollector<R>.emitData(response: T) {
     emit(response.toData())
 }

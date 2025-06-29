@@ -3,12 +3,10 @@ plugins {
 }
 
 android {
-    namespace = "com.twolskone.bakeroad.feature.splash"
+    namespace = "com.twolskone.bakeroad.feature.intro"
 }
 
 dependencies {
-    implementation(projects.core.common.android)
-
     implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.kakao.auth) // 카카오 로그인

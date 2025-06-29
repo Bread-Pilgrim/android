@@ -10,6 +10,6 @@ class ClientException(
 ) : BaseException(message, cause) {
 
     companion object {
-        const val EMPTY_TOKEN_ERROR_CODE = 1000
+        const val ERROR_CODE_EMPTY_TOKEN = 1000 // 저장된 토큰이 없음. (신규 및 재설치 사용자)
     }
 }

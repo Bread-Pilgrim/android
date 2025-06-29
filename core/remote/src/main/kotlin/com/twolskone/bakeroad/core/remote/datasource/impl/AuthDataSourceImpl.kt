@@ -8,7 +8,8 @@ import com.twolskone.bakeroad.core.datastore.TokenDataSource
 import com.twolskone.bakeroad.core.remote.R
 import com.twolskone.bakeroad.core.remote.api.AuthApi
 import com.twolskone.bakeroad.core.remote.datasource.AuthDataSource
-import com.twolskone.bakeroad.core.remote.model.emitRemote
+import com.twolskone.bakeroad.core.remote.model.auth.AuthLoginRequest
+import com.twolskone.bakeroad.core.remote.model.emitUnit
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -24,18 +25,21 @@ internal class AuthDataSourceImpl @Inject constructor(
 ) : AuthDataSource {
 
     override fun login(accessToken: String): Flow<Unit> = flow {
-        emitRemote(api.login(accessToken))
+        val request = AuthLoginRequest(loginType = "KAKAO") // TODO. 로그인 플랫폼 추가 시, enum 화 및 로직 분기
+
+        emitUnit(api.login(accessToken = accessToken, request = request))
     }.flowOn(networkDispatcher)
 
     override fun verify(): Flow<Unit> = flow {
         val (accessToken, refreshToken) = tokenDataSource.getTokens()
+        // 신규 및 재설치 사용자
         if (accessToken.isEmpty() || refreshToken.isEmpty()) {
             throw ClientException(
-                code = ClientException.EMPTY_TOKEN_ERROR_CODE,
+                code = ClientException.ERROR_CODE_EMPTY_TOKEN,
                 message = context.getString(R.string.core_remote_error_message_empty_token)
             )
         }
 
-        emitRemote(api.verify(accessToken, refreshToken))
+        emitUnit(api.verify(accessToken, refreshToken))
     }.flowOn(networkDispatcher)
 }

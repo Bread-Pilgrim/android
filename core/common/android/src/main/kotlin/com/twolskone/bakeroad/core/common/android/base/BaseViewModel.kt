@@ -11,6 +11,8 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSideEffect>(
@@ -20,10 +22,10 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
     private val initialState: US by lazy { initState(savedStateHandle) }
 
     private val _state = MutableStateFlow(initialState)
-    private val _sideEffect = MutableSharedFlow<SE>()
+    val state: StateFlow<US>
+        get() = _state.asStateFlow()
 
-    protected val currentState: US
-        get() = _state.value
+    private val _sideEffect = MutableSharedFlow<SE>()
 
     protected val ceh = CoroutineExceptionHandler { _, throwable ->
         handleException(cause = throwable)
@@ -50,10 +52,10 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
         }
     }
 
-    abstract fun handleIntent(intent: I)
+    abstract suspend fun handleIntent(intent: I)
 
     protected fun reduce(reduce: US.() -> US) {
-        val newState = currentState.reduce()
+        val newState = state.value.reduce()
         _state.value = newState
     }
 

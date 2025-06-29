@@ -6,6 +6,10 @@ plugins {
 
 android {
     namespace = "com.twolskone.bakeroad.core.remote"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -20,5 +24,5 @@ dependencies {
 }
 
 secrets {
-
+    defaultPropertiesFileName = "secrets.defaults.properties"
 }

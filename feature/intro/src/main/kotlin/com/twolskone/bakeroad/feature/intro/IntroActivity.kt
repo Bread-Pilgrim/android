@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.splash
+package com.twolskone.bakeroad.feature.intro
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -25,8 +25,6 @@ internal class IntroActivity : ComponentActivity() {
             }
         }
 
-//        splashScreen.setKeepOnScreenCondition {
-//            false
-//        }
+        splashScreen.setKeepOnScreenCondition { viewModel.state.value.shouldKeepSplashScreen }
     }
 }

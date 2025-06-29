@@ -7,4 +7,9 @@ class BakeRoadException(
     val code: Int,
     override val message: String,
     override val cause: Throwable? = null
-) : BaseException(message, cause)
+) : BaseException(message, cause) {
+
+    companion object {
+        const val ERROR_CODE_REFRESH_TOKEN_EXPIRED = 1001   // refreshToken 만료 → 로그인 화면
+    }
+}

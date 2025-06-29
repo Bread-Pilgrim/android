@@ -14,8 +14,11 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             apply(plugin = "org.jetbrains.kotlin.plugin.serialization")
 
             dependencies {
+                "implementation"(project(":core:common:android"))   // BaseViewModel, MVI models(UiState, Intent, SideEffect) ..
+                "implementation"(project(":core:common:kotlin"))    // Exception handling.
                 "implementation"(project(":core:designsystem"))
                 "implementation"(project(":core:ui"))
+                "implementation"(project(":core:domain"))
 
                 "implementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodelCompose").get())

@@ -3,7 +3,6 @@ package com.twolskone.bakeroad.core.domain.usecase
 import com.twolskone.bakeroad.core.common.kotlin.network.extension.orFalse
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
 import javax.inject.Inject
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
@@ -12,11 +11,11 @@ import kotlinx.coroutines.flow.map
  */
 class VerifyTokenUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
-    suspend fun invoke(onError: (Throwable) -> Unit): Boolean =
+    suspend operator fun invoke(/*onError: (Throwable) -> Unit*/): Boolean =
         authRepository.verify()
             .map { true }
-            .catch { cause ->
+            /*.catch { cause ->
                 onError(cause)
                 emit(false)
-            }.firstOrNull().orFalse()
+            }*/.firstOrNull().orFalse()
 }

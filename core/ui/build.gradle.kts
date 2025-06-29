@@ -8,4 +8,5 @@ android {
 }
 
 dependencies {
+    api(projects.core.designsystem)
 }

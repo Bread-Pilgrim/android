@@ -14,6 +14,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.InputTransformation
 import androidx.compose.foundation.text.input.KeyboardActionHandler
 import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.Text
@@ -36,6 +37,7 @@ fun BakeRoadTextField(
     state: TextFieldState,
     validType: TextFieldValidType = TextFieldValidType.DEFAULT,
     enabled: Boolean = true,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
     inputTransformation: InputTransformation? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
@@ -50,8 +52,9 @@ fun BakeRoadTextField(
         state = state,
         modifier = modifier,
         enabled = enabled,
+        lineLimits = lineLimits,
         inputTransformation = inputTransformation,
-        textStyle = BakeRoadTheme.typography.bodySmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray990),
+        textStyle = BakeRoadTheme.typography.bodySmallRegular.copy(color = validType.labelColor),
         keyboardOptions = keyboardOptions,
         onKeyboardAction = onKeyboardAction,
         cursorBrush = SolidColor(value = BakeRoadTheme.colorScheme.Primary500),
@@ -77,7 +80,7 @@ fun BakeRoadTextField(
                         .background(color = BakeRoadTheme.colorScheme.White, shape = TextFieldShape)
                         .border(
                             width = 1.dp,
-                            color = if (isFocus) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray100,
+                            color = validType.getBorderColor(isFocus = isFocus),
                             shape = TextFieldShape
                         )
                         .padding(horizontal = 16.dp, vertical = 13.5.dp)
@@ -101,7 +104,23 @@ fun BakeRoadTextField(
 }
 
 enum class TextFieldValidType {
-    DEFAULT, SUCCESS, ERROR;
+    DEFAULT, SUCCESS, ERROR;    // ACTIVE 타입은 focus 로 판별.
+
+    @Composable
+    fun getBorderColor(isFocus: Boolean): Color =
+        when (this) {
+            DEFAULT -> if (isFocus) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray100
+            SUCCESS -> if (isFocus) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray300
+            ERROR -> BakeRoadTheme.colorScheme.Error400
+        }
+
+    val labelColor: Color
+        @Composable
+        get() = when (this) {
+            DEFAULT -> BakeRoadTheme.colorScheme.Gray400
+            SUCCESS -> BakeRoadTheme.colorScheme.Gray990
+            ERROR -> BakeRoadTheme.colorScheme.Error500
+        }
 
     val descriptionColor: Color
         @Composable

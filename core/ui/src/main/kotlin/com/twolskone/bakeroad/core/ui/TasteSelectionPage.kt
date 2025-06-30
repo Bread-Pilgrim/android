@@ -54,8 +54,8 @@ fun TasteSelectionPage(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(horizontal = 16.dp)
-            .background(color = BakeRoadTheme.colorScheme.White),
+            .background(color = BakeRoadTheme.colorScheme.White)
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.Start
     ) {
         // Title.

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_onboarding_title_nickname_settings">회원님의 닉네임을 설정해주세요.</string>
+    <string name="feature_onboarding_description_nickname_settings">취향이 담긴 닉네임을 추천드려요!</string>
+    <string name="feature_onboarding_title_nickname">닉네임</string>
+    <string name="feature_onboarding_button_bakeroad_start">빵글 시작하기</string>
+    <string name="feature_onboarding_description_nickname_length">8자 이하로 설정해주세요.</string>
+</resources>

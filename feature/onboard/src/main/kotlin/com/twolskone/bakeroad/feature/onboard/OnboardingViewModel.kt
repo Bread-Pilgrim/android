@@ -20,6 +20,9 @@ internal class OnboardingViewModel @Inject constructor(
     override suspend fun handleIntent(intent: OnboardingIntent) {
         when (intent) {
             is OnboardingIntent.OnNicknameTextChanged -> validateNickname(text = intent.text)
+            is OnboardingIntent.MoveToPage -> reduce {
+                copy(preferenceState = preferenceState.copy(page = intent.page))
+            }
         }
     }
 

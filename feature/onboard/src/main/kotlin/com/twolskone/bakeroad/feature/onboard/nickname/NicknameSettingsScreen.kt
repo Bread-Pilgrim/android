@@ -7,9 +7,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -50,8 +49,7 @@ internal fun NicknameSettingsScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = BakeRoadTheme.colorScheme.White)
-            .statusBarsPadding()
-            .navigationBarsPadding(),
+            .systemBarsPadding(),
         horizontalAlignment = Alignment.Start
     ) {
         // TopBar.

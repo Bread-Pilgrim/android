@@ -24,7 +24,8 @@ internal class OnboardingActivity : ComponentActivity() {
                     .fillMaxSize()
                     .statusBarsPadding()
                     .imePadding(),
-                navHostController = rememberNavController()
+                navHostController = rememberNavController(),
+                finish = { finish() }
             )
         }
     }

@@ -16,10 +16,10 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             dependencies {
                 "implementation"(project(":core:common:android"))   // BaseViewModel, MVI models(UiState, Intent, SideEffect) ..
                 "implementation"(project(":core:common:kotlin"))    // Exception handling.
-                "implementation"(project(":core:designsystem"))
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:domain"))
                 "implementation"(project(":core:navigator"))
+                "implementation"(project(":core:model"))
 
                 "implementation"(libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodelCompose").get())

@@ -9,5 +9,6 @@ android {
 
 dependencies {
     api(projects.core.remote)
+    api(projects.core.datastore)
     implementation(projects.core.domain)
 }

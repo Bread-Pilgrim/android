@@ -43,9 +43,10 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun BreadPreferencePage(
     modifier: Modifier = Modifier,
-    page: Int,
-    breadPreferences: ImmutableList<BreadPreference>,
-    selectedBreadPreferences: ImmutableSet<Int>,
+    page: Int,  /* 페이지 */
+    title: String,  /* 페이지 제목 */
+    breadPreferences: ImmutableList<BreadPreference>,   /* 빵 취향 목록 */
+    selectedBreadPreferences: ImmutableSet<Int>,    /* 선택된 빵 취향 목록 */
     onPreferenceSelected: (BreadPreference) -> Unit,
     onPreviousPage: (Int) -> Unit,
     onNextPage: (Int) -> Unit,
@@ -64,16 +65,16 @@ fun BreadPreferencePage(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 67.dp, bottom = 6.dp),
-            text = stringResource(R.string.core_ui_title_taste_selection),
+            text = title,
             style = BakeRoadTheme.typography.headingLargeBold
         )
         // Description.
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.core_ui_description_taste_selection),
+            text = stringResource(R.string.core_ui_description_bread_preference),
             style = BakeRoadTheme.typography.bodySmallRegular
         )
-        // Step indicator.
+        // Page indicator.
         PageIndicator(
             modifier = Modifier
                 .padding(top = 25.dp)
@@ -87,7 +88,8 @@ fun BreadPreferencePage(
                 .fillMaxWidth()
                 .weight(1f),
             horizontalArrangement = Arrangement.spacedBy(space = 12.dp, alignment = Alignment.Start),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            maxItemsInEachRow = 2
         ) {
             breadPreferences.fastForEach { taste ->
                 BreadPreferenceChip(
@@ -216,6 +218,7 @@ private val DummyBreadPreferences = listOf(
     BreadPreference(id = 7, text = "달콤한 디저트 빵 (마카롱, 타르트)"),
     BreadPreference(id = 8, text = "샌드위치 / 브런치 스타일"),
     BreadPreference(id = 9, text = "케이크, 브라우니, 파이류"),
+    BreadPreference(id = 9, text = "케이크, 파이류"),
 )
 
 @Preview(showBackground = true)
@@ -224,6 +227,7 @@ private fun BreadPreferencePagePreview() {
     BakeRoadTheme {
         BreadPreferencePage(
             page = 2,
+            title = "빵 취향을 알려주세요!",
             breadPreferences = DummyBreadPreferences.toImmutableList(),
             selectedBreadPreferences = persistentSetOf(1),
             onPreferenceSelected = {},

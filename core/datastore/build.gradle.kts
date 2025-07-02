@@ -8,6 +8,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.common.kotlin)
+
     api(libs.androidx.datastore.preferences)
     implementation(libs.timber)
 }

@@ -11,7 +11,9 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
@@ -26,6 +28,8 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
         get() = _state.asStateFlow()
 
     private val _sideEffect = MutableSharedFlow<SE>()
+    val sideEffect: SharedFlow<SE>
+        get() = _sideEffect.asSharedFlow()
 
     protected val ceh = CoroutineExceptionHandler { _, throwable ->
         handleException(cause = throwable)

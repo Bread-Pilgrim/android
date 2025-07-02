@@ -8,6 +8,7 @@ import com.kakao.sdk.common.model.KakaoSdkError
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.network.exception.BakeRoadException
 import com.twolskone.bakeroad.core.common.kotlin.network.exception.ClientException
+import com.twolskone.bakeroad.core.domain.usecase.GetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.LoginUseCase
 import com.twolskone.bakeroad.core.domain.usecase.VerifyTokenUseCase
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
@@ -21,13 +22,23 @@ import timber.log.Timber
 internal class IntroViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val verifyTokenUseCase: VerifyTokenUseCase,
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val getOnboardingStatusUseCase: GetOnboardingStatusUseCase
 ) : BaseViewModel<IntroUiState, IntroIntent, IntroSideEffect>(savedStateHandle) {
 
     init {
         launch {
-            if (state.value.shouldKeepSplashScreen && verifyTokenUseCase()) {
-                postSideEffect(IntroSideEffect.NavigateToHome)
+            val isOnboardingCompleted = getOnboardingStatusUseCase()
+            if (verifyTokenUseCase()) {
+                postSideEffect(
+                    if (isOnboardingCompleted) {
+                        IntroSideEffect.NavigateToHome
+                    } else {
+                        IntroSideEffect.NavigateToOnboarding
+                    }
+                )
+            } else {
+                stopSplashScreen()
             }
         }
     }

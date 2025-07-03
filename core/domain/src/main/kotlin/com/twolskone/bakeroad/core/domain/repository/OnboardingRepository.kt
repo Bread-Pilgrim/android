@@ -1,8 +1,6 @@
 package com.twolskone.bakeroad.core.domain.repository
 
-import kotlinx.coroutines.flow.Flow
-
-interface CacheRepository {
+interface OnboardingRepository {
     suspend fun isOnboardingCompleted(): Boolean
     suspend fun setOnboardingCompleted(value: Boolean)
 }

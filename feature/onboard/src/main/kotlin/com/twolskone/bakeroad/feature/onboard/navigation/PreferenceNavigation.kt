@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.twolskone.bakeroad.feature.onboard.preference.PreferenceRoute
+import com.twolskone.bakeroad.feature.onboard.preference.PreferenceOptionsRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,7 +18,7 @@ internal fun NavGraphBuilder.preferenceScreen(
     finish: () -> Unit,
 ) {
     composable<PreferenceRoute> {
-        PreferenceRoute(
+        PreferenceOptionsRoute(
             navigateToNicknameSettings = navigateToNicknameSettings,
             finish = finish
         )

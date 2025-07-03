@@ -11,4 +11,5 @@ dependencies {
     api(projects.core.remote)
     api(projects.core.datastore)
     implementation(projects.core.domain)
+    implementation(projects.core.model)
 }

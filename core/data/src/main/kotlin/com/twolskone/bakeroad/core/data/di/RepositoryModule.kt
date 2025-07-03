@@ -1,9 +1,11 @@
 package com.twolskone.bakeroad.core.data.di
 
 import com.twolskone.bakeroad.core.data.repository.AuthRepositoryImpl
-import com.twolskone.bakeroad.core.data.repository.CacheRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.OnboardingRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.PreferRepositoryImpl
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
-import com.twolskone.bakeroad.core.domain.repository.CacheRepository
+import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
+import com.twolskone.bakeroad.core.domain.repository.PreferRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -20,5 +22,9 @@ internal abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsCacheRepository(cacheRepository: CacheRepositoryImpl): CacheRepository
+    abstract fun bindsOnboardingRepository(onboardingRepository: OnboardingRepositoryImpl): OnboardingRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsPreferRepository(preferRepository: PreferRepositoryImpl): PreferRepository
 }

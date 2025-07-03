@@ -34,20 +34,26 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.model.BreadPreference
+import com.twolskone.bakeroad.core.model.PreferenceOption
+import com.twolskone.bakeroad.core.model.PreferenceOptionType
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * 빵 취향 옵션 설정
+ * @param optionList        취향 옵션 목록
+ * @param selectedOptions   선택된 취향 옵션 IDs
+ */
 @Composable
-fun BreadPreferencePage(
+fun PreferenceOptionsPage(
     modifier: Modifier = Modifier,
-    page: Int,  /* 페이지 */
-    title: String,  /* 페이지 제목 */
-    breadPreferences: ImmutableList<BreadPreference>,   /* 빵 취향 목록 */
-    selectedBreadPreferences: ImmutableSet<Int>,    /* 선택된 빵 취향 목록 */
-    onPreferenceSelected: (BreadPreference) -> Unit,
+    page: Int,
+    title: String,
+    optionList: ImmutableList<PreferenceOption>,
+    selectedOptions: ImmutableSet<Int>,
+    onOptionSelected: (Boolean, PreferenceOption) -> Unit,
     onPreviousPage: (Int) -> Unit,
     onNextPage: (Int) -> Unit,
     onComplete: () -> Unit,
@@ -71,7 +77,7 @@ fun BreadPreferencePage(
         // Description.
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.core_ui_description_bread_preference),
+            text = stringResource(R.string.core_ui_description_preference),
             style = BakeRoadTheme.typography.bodySmallRegular
         )
         // Page indicator.
@@ -91,11 +97,11 @@ fun BreadPreferencePage(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             maxItemsInEachRow = 2
         ) {
-            breadPreferences.fastForEach { taste ->
-                BreadPreferenceChip(
-                    selected = selectedBreadPreferences.contains(taste.id),
-                    breadPreference = taste,
-                    onSelected = onPreferenceSelected
+            optionList.fastForEach { taste ->
+                OptionChip(
+                    selected = selectedOptions.contains(taste.id),
+                    option = taste,
+                    onSelected = onOptionSelected
                 )
             }
         }
@@ -116,9 +122,8 @@ fun BreadPreferencePage(
                 }
             }
             BakeRoadSolidButton(
-                modifier = Modifier
-                    .align(Alignment.CenterEnd),
-                enabled = selectedBreadPreferences.isNotEmpty(),
+                modifier = Modifier.align(Alignment.CenterEnd),
+                enabled = selectedOptions.isNotEmpty(),
                 role = SolidButtonVariant.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = {
@@ -129,7 +134,10 @@ fun BreadPreferencePage(
                     }
                 }
             ) {
-                Text(text = stringResource(R.string.core_ui_button_next), style = BakeRoadTheme.typography.bodyMediumSemibold)
+                Text(
+                    text = stringResource(R.string.core_ui_button_next),
+                    style = BakeRoadTheme.typography.bodyMediumSemibold
+                )
             }
         }
     }
@@ -193,44 +201,44 @@ private fun PageIndicatorStep(number: Int, page: Int) {
 }
 
 @Composable
-private fun BreadPreferenceChip(
+private fun OptionChip(
     selected: Boolean,
-    breadPreference: BreadPreference,
-    onSelected: (BreadPreference) -> Unit
+    option: PreferenceOption,
+    onSelected: (Boolean, PreferenceOption) -> Unit
 ) {
     BakeRoadChip(
         selected = selected,
         color = ChipColor.MAIN,
         size = ChipSize.LARGE,
-        onSelectedChange = { onSelected(breadPreference) }
+        onSelectedChange = { onSelected(!selected, option) }
     ) {
-        Text(text = breadPreference.text)
+        Text(text = option.name)
     }
 }
 
-private val DummyBreadPreferences = listOf(
-    BreadPreference(id = 1, text = "페이스트리류 (크루아상, 뺑오쇼콜라)"),
-    BreadPreference(id = 2, text = "담백한 식사용 빵 (식빵, 치아바타, 바케트, 하드롤)"),
-    BreadPreference(id = 3, text = "건강한 빵 (비건, 글루텐프리, 저당)"),
-    BreadPreference(id = 4, text = "구움과자 류 (마들렌, 휘낭시에, 까눌레)"),
-    BreadPreference(id = 5, text = "클래식 & 레트로 빵 (단팥빵, 맘모스, 꽈배기, 크림빵"),
-    BreadPreference(id = 6, text = "달콤한 디저트 빵 (마카롱, 타르트)"),
-    BreadPreference(id = 7, text = "달콤한 디저트 빵 (마카롱, 타르트)"),
-    BreadPreference(id = 8, text = "샌드위치 / 브런치 스타일"),
-    BreadPreference(id = 9, text = "케이크, 브라우니, 파이류"),
-    BreadPreference(id = 9, text = "케이크, 파이류"),
+private val DummyPreferenceOptions = listOf(
+    PreferenceOption(id = 1, name = "페이스트리류 (크루아상, 뺑오쇼콜라)", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 2, name = "담백한 식사용 빵 (식빵, 치아바타, 바케트, 하드롤)", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 3, name = "건강한 빵 (비건, 글루텐프리, 저당)", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 4, name = "구움과자 류 (마들렌, 휘낭시에, 까눌레)", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 5, name = "클래식 & 레트로 빵 (단팥빵, 맘모스, 꽈배기, 크림빵", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 6, name = "달콤한 디저트 빵 (마카롱, 타르트)", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 7, name = "달콤한 디저트 빵 (마카롱, 타르트)", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 8, name = "샌드위치 / 브런치 스타일", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 9, name = "케이크, 브라우니, 파이류", type = PreferenceOptionType.BREAD_TYPE),
+    PreferenceOption(id = 9, name = "케이크, 파이류", type = PreferenceOptionType.BREAD_TYPE),
 )
 
 @Preview(showBackground = true)
 @Composable
-private fun BreadPreferencePagePreview() {
+private fun PreferenceOptionsPagePreview() {
     BakeRoadTheme {
-        BreadPreferencePage(
+        PreferenceOptionsPage(
             page = 2,
             title = "빵 취향을 알려주세요!",
-            breadPreferences = DummyBreadPreferences.toImmutableList(),
-            selectedBreadPreferences = persistentSetOf(1),
-            onPreferenceSelected = {},
+            optionList = DummyPreferenceOptions.toImmutableList(),
+            selectedOptions = persistentSetOf(1),
+            onOptionSelected = { _, _ -> },
             onPreviousPage = {},
             onNextPage = {},
             onComplete = {}

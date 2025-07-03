@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.twolskone.bakeroad.core.designsystem.extension.noRippleClickable
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 @Composable
@@ -36,7 +36,7 @@ fun BakeRoadChip(
 
     Box(
         modifier = modifier
-            .noRippleClickable { onSelectedChange(!selected) }
+            .noRippleSingleClickable { onSelectedChange(!selected) }
             .background(color = color.getContainerColor(style), shape = size.shape)
             .padding(size.padding),
         contentAlignment = Alignment.Center

@@ -1,7 +1,7 @@
 package com.twolskone.bakeroad.feature.onboard.di
 
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
-import com.twolskone.bakeroad.feature.onboard.OnboardingNavigatorImpl
+import com.twolskone.bakeroad.feature.onboard.navigator.OnboardingNavigatorImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

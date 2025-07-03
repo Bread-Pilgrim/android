@@ -1,9 +1,10 @@
-package com.twolskone.bakeroad.feature.onboard
+package com.twolskone.bakeroad.feature.onboard.navigator
 
 import android.app.Activity
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
+import com.twolskone.bakeroad.feature.onboard.OnboardingActivity
 import javax.inject.Inject
 
 internal class OnboardingNavigatorImpl @Inject constructor() : OnboardingNavigator {

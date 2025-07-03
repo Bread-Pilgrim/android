@@ -5,12 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.model.PreferenceOptionType
 import com.twolskone.bakeroad.feature.onboard.OnboardingViewModel
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingIntent
 import timber.log.Timber
 
 @Composable
-internal fun PreferenceRoute(
+internal fun PreferenceOptionsRoute(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToNicknameSettings: () -> Unit,
@@ -26,10 +27,17 @@ internal fun PreferenceRoute(
         }
     }
 
-    PreferenceScreen(
+    PreferenceOptionsScreen(
         modifier = modifier,
         state = state,
-        onPreferenceSelected = {},
+        onOptionSelected = { selected, option ->
+            when (option.type) {
+                PreferenceOptionType.BREAD_TYPE -> viewModel.intent(OnboardingIntent.SelectBreadTypeOption(selected = selected, option = option))
+                PreferenceOptionType.FLAVOR -> viewModel.intent(OnboardingIntent.SelectFlavorOption(selected = selected, option = option))
+                PreferenceOptionType.ATMOSPHERE -> viewModel.intent(OnboardingIntent.SelectBakeryTypeOption(selected = selected, option = option))
+                PreferenceOptionType.COMMERCIAL_AREA -> {}
+            }
+        },
         onPreviousPage = { page ->
             if (page > 0) {
                 viewModel.intent(OnboardingIntent.MoveToPage(page = page))

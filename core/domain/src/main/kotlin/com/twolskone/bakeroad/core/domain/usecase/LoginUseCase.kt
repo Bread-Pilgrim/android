@@ -4,7 +4,6 @@ import com.twolskone.bakeroad.core.common.kotlin.network.extension.orFalse
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 
 /**
  * 로그인
@@ -14,7 +13,5 @@ import kotlinx.coroutines.flow.map
 class LoginUseCase @Inject constructor(private val authRepository: AuthRepository) {
 
     suspend operator fun invoke(accessToken: String): Boolean =
-        authRepository.login(accessToken)
-            .map { true }
-            .firstOrNull().orFalse()
+        authRepository.login(accessToken).firstOrNull().orFalse()
 }

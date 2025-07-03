@@ -26,6 +26,9 @@ internal object NetworkModule {
 
     private const val TIMEOUT_SECONDS = 15L
     private const val BASE_URL = BuildConfig.BASE_URL
+    private val json = Json {
+        ignoreUnknownKeys = true
+    }
 
     @Provides
     @Singleton
@@ -64,7 +67,7 @@ internal object NetworkModule {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 
     @CommonRetrofit
@@ -74,6 +77,6 @@ internal object NetworkModule {
         Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
 }

@@ -28,16 +28,11 @@ internal class IntroViewModel @Inject constructor(
 
     init {
         launch {
-            val isOnboardingCompleted = getOnboardingStatusUseCase()
             if (verifyTokenUseCase()) {
-                postSideEffect(
-                    if (isOnboardingCompleted) {
-                        IntroSideEffect.NavigateToHome
-                    } else {
-                        IntroSideEffect.NavigateToOnboarding
-                    }
-                )
+                // 토큰 유효성 통과 : Home 또는 Onboarding 화면 이동
+                navigate(isOnboardingCompleted = getOnboardingStatusUseCase())
             } else {
+                // 토큰 유효성 실패 : 로그인 화면
                 stopSplashScreen()
             }
         }
@@ -50,10 +45,7 @@ internal class IntroViewModel @Inject constructor(
     override suspend fun handleIntent(intent: IntroIntent) {
         when (intent) {
             is IntroIntent.LoginKakao -> {
-                val completeLogin = loginUseCase(accessToken = intent.accessToken)
-                if (completeLogin) {
-                    // TODO. Navigate to Home or Taste
-                }
+                navigate(isOnboardingCompleted = loginUseCase(accessToken = intent.accessToken))
             }
         }
     }
@@ -91,6 +83,16 @@ internal class IntroViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun navigate(isOnboardingCompleted: Boolean) {
+        postSideEffect(
+            if (isOnboardingCompleted) {
+                IntroSideEffect.NavigateToHome
+            } else {
+                IntroSideEffect.NavigateToOnboarding
+            }
+        )
     }
 
     private fun stopSplashScreen() {

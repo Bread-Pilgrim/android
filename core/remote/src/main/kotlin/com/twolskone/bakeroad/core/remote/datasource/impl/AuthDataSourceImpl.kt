@@ -27,9 +27,13 @@ internal class AuthDataSourceImpl @Inject constructor(
     @ApplicationContext private val context: Context
 ) : AuthDataSource {
 
-    override fun login(accessToken: String): Flow<Unit> = flow {
-        val request = AuthLoginRequest(loginType = "KAKAO") // TODO. 로그인 플랫폼 추가 시, enum 화 및 로직 분기
-        emitUnit(api.login(accessToken = accessToken, request = request))
+    override fun login(accessToken: String): Flow<Boolean> = flow {
+        val request = AuthLoginRequest(loginType = "KAKAO")
+        val response = api.login(accessToken = accessToken, request = request)
+        val isOnboardingCompleted = response.toData().isOnboardingCompleted
+
+        cacheDataSource.setOnboardingCompleted(value = isOnboardingCompleted)
+        emit(isOnboardingCompleted)
     }.flowOn(networkDispatcher)
 
     override fun verify(): Flow<Unit> = flow {
@@ -41,8 +45,7 @@ internal class AuthDataSourceImpl @Inject constructor(
                 message = context.getString(R.string.core_remote_error_message_empty_token)
             )
         }
-        val isOnBoardingCompleted = api.verify(accessToken, refreshToken).toData().isOnboardingCompleted
-        cacheDataSource.setOnboardingCompleted(value = isOnBoardingCompleted)
-        emit(Unit)
+
+        emitUnit(api.verify(accessToken, refreshToken))
     }.flowOn(networkDispatcher)
 }

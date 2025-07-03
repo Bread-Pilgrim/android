@@ -6,6 +6,7 @@ import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.json.JSONObject
 import timber.log.Timber
 
@@ -17,11 +18,12 @@ internal open class BaseInterceptor @Inject constructor(private val tokenDataSou
             val responseBody = response.body
 
             if (response.isSuccessful && responseBody != null) {
-                val json = JSONObject(responseBody.string())
+                val responseBodyString = responseBody.string()
+                val json = JSONObject(responseBodyString)
                 // Update expired token.
                 if (json.has("token")) {
-                    Timber.i("Update expired token..")
                     json.optJSONObject("token")?.let { token ->
+                        Timber.i("Update expired token..")
                         if (token.has("access_token") && token.has("refresh_token")) {
                             runBlocking {
                                 tokenDataSource.setTokens(
@@ -32,6 +34,10 @@ internal open class BaseInterceptor @Inject constructor(private val tokenDataSou
                         }
                     }
                 }
+
+                return response.newBuilder()
+                    .body(responseBodyString.toResponseBody(responseBody.contentType()))
+                    .build()
             }
 
             response

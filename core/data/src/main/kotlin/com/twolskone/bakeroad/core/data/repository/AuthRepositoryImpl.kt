@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 
 internal class AuthRepositoryImpl @Inject constructor(private val authDataSource: AuthDataSource) : AuthRepository {
 
-    override fun login(accessToken: String): Flow<Unit> {
+    override fun login(accessToken: String): Flow<Boolean> {
         return authDataSource.login(accessToken)
     }
 

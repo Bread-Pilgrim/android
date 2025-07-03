@@ -79,7 +79,7 @@ enum class ChipSize {
     val typography: TextStyle
         @Composable
         get() = when (this) {
-            SMALL -> BakeRoadTheme.typography.body2XsmallMedium
+            SMALL -> BakeRoadTheme.typography.body3XsmallMedium
             LARGE -> BakeRoadTheme.typography.bodyXsmallMedium
         }
 

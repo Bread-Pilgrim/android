@@ -34,12 +34,14 @@ data class BakeRoadTypography(
     val bodySmallMedium: TextStyle,
     val bodyXsmallMedium: TextStyle,
     val body2XsmallMedium: TextStyle,
+    val body3XsmallMedium: TextStyle,
     val bodyXlargeRegular: TextStyle,
     val bodyLargeRegular: TextStyle,
     val bodyMediumRegular: TextStyle,
     val bodySmallRegular: TextStyle,
     val bodyXsmallRegular: TextStyle,
     val body2XsmallRegular: TextStyle,
+    val body3XsmallRegular: TextStyle
 )
 
 internal val LocalBakeRoadTypography = staticCompositionLocalOf { bakeRoadTypography }
@@ -149,6 +151,13 @@ internal val bakeRoadTypography = BakeRoadTypography(
         lineHeight = 1.4.em,
         letterSpacing = 0.sp
     ),
+    body3XsmallMedium = TextStyle(
+        fontFamily = pretendard,
+        fontSize = 12.sp,
+        fontWeight = FontWeight(500),
+        lineHeight = 1.4.em,
+        letterSpacing = 0.sp
+    ),
     bodyXlargeRegular = TextStyle(
         fontFamily = pretendard,
         fontSize = 20.sp,
@@ -187,6 +196,13 @@ internal val bakeRoadTypography = BakeRoadTypography(
     body2XsmallRegular = TextStyle(
         fontFamily = pretendard,
         fontSize = 13.sp,
+        fontWeight = FontWeight(400),
+        lineHeight = 1.4.em,
+        letterSpacing = 0.sp
+    ),
+    body3XsmallRegular = TextStyle(
+        fontFamily = pretendard,
+        fontSize = 12.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
         letterSpacing = 0.sp

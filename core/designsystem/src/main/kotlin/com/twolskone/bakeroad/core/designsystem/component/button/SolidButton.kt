@@ -45,8 +45,8 @@ fun BakeRoadSolidButton(
     role: SolidButtonVariant,
     size: ButtonSize,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)?,
-    trailingIcon: @Composable (() -> Unit)?
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     BakeRoadSolidButton(
         onClick = onClick,

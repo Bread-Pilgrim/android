@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -23,7 +24,7 @@ internal fun BakeRoadButtonContent(
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
     if (leadingIcon != null) {
-        Box(modifier = Modifier.size(buttonSize.iconSize)) {
+        Box(modifier = Modifier.size(buttonSize.iconSize), contentAlignment = Alignment.Center) {
             leadingIcon()
         }
     }
@@ -37,7 +38,7 @@ internal fun BakeRoadButtonContent(
         text()
     }
     if (trailingIcon != null) {
-        Box(modifier = Modifier.size(buttonSize.iconSize)) {
+        Box(modifier = Modifier.size(buttonSize.iconSize), contentAlignment = Alignment.Center) {
             trailingIcon()
         }
     }

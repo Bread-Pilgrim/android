@@ -17,7 +17,7 @@ internal fun PreferenceOptionsRoute(
     navigateToNicknameSettings: () -> Unit,
     finish: () -> Unit,
 ) {
-    val state = viewModel.state.collectAsStateWithLifecycle().value.preferenceState
+    val state = viewModel.state.collectAsStateWithLifecycle().value.preferenceOptionsState
 
     BackHandler {
         if (state.page > 1) {

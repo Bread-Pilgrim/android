@@ -2,16 +2,19 @@ package com.twolskone.bakeroad.feature.onboard.nickname
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,6 +30,8 @@ import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonVariant
 import com.twolskone.bakeroad.core.designsystem.component.input.BakeRoadTextField
 import com.twolskone.bakeroad.core.designsystem.component.input.TextFieldValidType
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoading
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.onboard.R
 
@@ -35,7 +40,9 @@ internal fun NicknameSettingsScreen(
     modifier: Modifier = Modifier,
     textFieldState: TextFieldState,
     description: String,
+    isLoading: Boolean,
     onBackClick: () -> Unit,
+    onStartClick: () -> Unit
 ) {
     val textFieldValidType = if (textFieldState.text.isEmpty()) {
         TextFieldValidType.DEFAULT
@@ -53,63 +60,76 @@ internal fun NicknameSettingsScreen(
         horizontalAlignment = Alignment.Start
     ) {
         // TopBar.
-        Row(
-            modifier = Modifier
-                .padding(horizontal = 14.dp, vertical = 16.dp)
-                .fillMaxWidth()
-        ) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
-                contentDescription = "Back"
-            )
-        }
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxSize()
-        ) {
-            // Title.
-            Text(
+        Row(modifier = Modifier.fillMaxWidth()) {
+            IconButton(
                 modifier = Modifier
-                    .padding(top = 11.dp)
-                    .fillMaxWidth(),
-                text = stringResource(R.string.feature_onboarding_title_nickname_settings),
-                style = BakeRoadTheme.typography.headingLargeBold
-            )
-            // Description.
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 6.dp),
-                text = stringResource(R.string.feature_onboarding_description_nickname_settings),
-                style = BakeRoadTheme.typography.bodySmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray800)
-            )
-            BakeRoadTextField(
-                modifier = Modifier
-                    .padding(top = 44.dp)
-                    .fillMaxWidth(),
-                state = textFieldState,
-                validType = textFieldValidType,
-                title = stringResource(R.string.feature_onboarding_title_nickname),
-                description = description,
-                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                onKeyboardAction = { performAction ->
-                    // TODO. 유효성 검사?
-                    performAction()
-                },
-//                inputTransformation = InputTransformation.maxLength(8)
-            )
-            Spacer(modifier = Modifier.weight(1f))
-            BakeRoadSolidButton(
-                modifier = Modifier
-                    .padding(bottom = 36.dp)
-                    .fillMaxWidth(),
-                enabled = textFieldValidType == TextFieldValidType.SUCCESS,
-                role = SolidButtonVariant.PRIMARY,
-                size = ButtonSize.XLARGE,
-                onClick = {}
+                    .padding(start = 4.dp, top = 6.dp, bottom = 6.dp)
+                    .size(44.dp),
+                onClick = onBackClick
             ) {
-                Text(text = stringResource(id = R.string.feature_onboarding_button_bakeroad_start))
+                Image(
+                    imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
+                    contentDescription = "Back"
+                )
+            }
+        }
+        Box {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .fillMaxSize()
+            ) {
+                // Title.
+                Text(
+                    modifier = Modifier
+                        .padding(top = 11.dp)
+                        .fillMaxWidth(),
+                    text = stringResource(R.string.feature_onboarding_title_nickname_settings),
+                    style = BakeRoadTheme.typography.headingLargeBold
+                )
+                // Description.
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 6.dp),
+                    text = stringResource(R.string.feature_onboarding_description_nickname_settings),
+                    style = BakeRoadTheme.typography.bodySmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                )
+                BakeRoadTextField(
+                    modifier = Modifier
+                        .padding(top = 44.dp)
+                        .fillMaxWidth(),
+                    state = textFieldState,
+                    validType = textFieldValidType,
+                    title = stringResource(R.string.feature_onboarding_title_nickname),
+                    description = description,
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                    onKeyboardAction = { performAction -> performAction() },
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                BakeRoadSolidButton(
+                    modifier = Modifier
+                        .padding(bottom = 24.dp)
+                        .fillMaxWidth(),
+                    enabled = textFieldValidType == TextFieldValidType.SUCCESS,
+                    role = SolidButtonVariant.PRIMARY,
+                    size = ButtonSize.XLARGE,
+                    trailingIcon = if (isLoading) {
+                        { BakeRoadLoading() }
+                    } else null,
+                    text = {
+                        Text(text = stringResource(id = R.string.feature_onboarding_button_bakeroad_start))
+                    },
+                    onClick = onStartClick
+                )
+            }
+            // Block.
+            if (isLoading) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .noRippleSingleClickable {}
+                )
             }
         }
     }
@@ -119,13 +139,15 @@ internal fun NicknameSettingsScreen(
 @Composable
 private fun NicknameSettingsScreenPreview() {
     BakeRoadTheme {
-        val textFieldState = rememberTextFieldState()
+        val textFieldState = rememberTextFieldState("닉네임뭐로하지")
 
         NicknameSettingsScreen(
             modifier = Modifier.fillMaxSize(),
             textFieldState = textFieldState,
             description = "",
-            onBackClick = {}
+            isLoading = true,
+            onBackClick = {},
+            onStartClick = {}
         )
     }
 }

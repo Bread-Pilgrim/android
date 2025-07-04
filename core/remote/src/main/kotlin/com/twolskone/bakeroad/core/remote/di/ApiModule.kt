@@ -4,6 +4,7 @@ import com.twolskone.bakeroad.core.remote.AuthRetrofit
 import com.twolskone.bakeroad.core.remote.CommonRetrofit
 import com.twolskone.bakeroad.core.remote.api.AuthApi
 import com.twolskone.bakeroad.core.remote.api.PreferApi
+import com.twolskone.bakeroad.core.remote.api.UserApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,4 +24,8 @@ internal object ApiModule {
     @Provides
     @Singleton
     fun providesPreferApi(@CommonRetrofit retrofit: Retrofit): PreferApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesUserApi(@CommonRetrofit retrofit: Retrofit): UserApi = retrofit.create()
 }

@@ -4,6 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.twolskone.bakeroad.feature.onboard.nickname.navigation.navigateToNicknameSettings
+import com.twolskone.bakeroad.feature.onboard.nickname.navigation.nicknameSettingsScreen
+import com.twolskone.bakeroad.feature.onboard.preference.navigation.PreferenceRoute
+import com.twolskone.bakeroad.feature.onboard.preference.navigation.navigateToPreferenceOptions
+import com.twolskone.bakeroad.feature.onboard.preference.navigation.preferenceOptionsScreen
 
 @Composable
 internal fun OnBoardingNavHost(
@@ -16,10 +21,15 @@ internal fun OnBoardingNavHost(
         navController = navHostController,
         startDestination = PreferenceRoute,
     ) {
-        preferenceScreen(
+        // 취향 설정
+        preferenceOptionsScreen(
             navigateToNicknameSettings = navHostController::navigateToNicknameSettings,
             finish = finish
         )
-        nicknameSettingsScreen(onBackClick = navHostController::navigateToPreference)
+        // 닉네임 설정
+        nicknameSettingsScreen(
+            navController = navHostController,
+            onBackClick = navHostController::navigateToPreferenceOptions
+        )
     }
 }

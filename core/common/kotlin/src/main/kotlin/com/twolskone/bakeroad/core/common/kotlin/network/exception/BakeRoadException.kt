@@ -11,5 +11,6 @@ class BakeRoadException(
 
     companion object {
         const val ERROR_CODE_REFRESH_TOKEN_EXPIRED = 1001   // refreshToken 만료 → 로그인 화면
+        const val ERROR_CODE_DUPLICATE_ENTRY = 1009         // 중복 데이터
     }
 }

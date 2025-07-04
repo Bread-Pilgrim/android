@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +41,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
+
+private val PageIndicatorWidth = 234.dp
+private const val PageCount = 4
 
 /**
  * 빵 취향 옵션 설정
@@ -84,8 +88,8 @@ fun PreferenceOptionsPage(
         PageIndicator(
             modifier = Modifier
                 .padding(top = 25.dp)
-                .fillMaxWidth(fraction = 0.5f),
-            page = page
+                .width(PageIndicatorWidth),
+            currentPage = page
         )
         // Chips.
         FlowRow(
@@ -144,29 +148,22 @@ fun PreferenceOptionsPage(
 }
 
 @Composable
-private fun PageIndicator(modifier: Modifier, page: Int) {
-    // TODO. 4페이지 이상일 때 확장성 고려?
-    if (page <= 3) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(3.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            PageIndicatorStep(number = 1, page = page)
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(4.dp)
-                    .background(color = BakeRoadTheme.colorScheme.Gray50, shape = CircleShape),
-            )
-            PageIndicatorStep(number = 2, page = page)
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .height(4.dp)
-                    .background(color = BakeRoadTheme.colorScheme.Gray50, shape = CircleShape),
-            )
-            PageIndicatorStep(number = 3, page = page)
+private fun PageIndicator(modifier: Modifier, currentPage: Int) {
+    Row(
+        modifier = modifier,
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        (1..PageCount).forEach { page ->
+            PageIndicatorStep(page = page, currentPage = currentPage)
+            if (page < PageCount) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(4.dp)
+                        .background(color = BakeRoadTheme.colorScheme.Gray50, shape = CircleShape),
+                )
+            }
         }
     }
 }
@@ -174,16 +171,16 @@ private fun PageIndicator(modifier: Modifier, page: Int) {
 private val StepSize = 24.dp
 
 @Composable
-private fun PageIndicatorStep(number: Int, page: Int) {
-    if (number < page) {
+private fun PageIndicatorStep(page: Int, currentPage: Int) {
+    if (page < currentPage) {
         Image(
             modifier = Modifier.size(StepSize),
             imageVector = ImageVector.vectorResource(R.drawable.core_ui_ic_check_primary),
             contentDescription = "Check"
         )
     } else {
-        val containerColor = if (number == page) BakeRoadTheme.colorScheme.Black else BakeRoadTheme.colorScheme.Gray50
-        val contentColor = if (number == page) BakeRoadTheme.colorScheme.White else BakeRoadTheme.colorScheme.Gray300
+        val containerColor = if (page == currentPage) BakeRoadTheme.colorScheme.Black else BakeRoadTheme.colorScheme.Gray50
+        val contentColor = if (page == currentPage) BakeRoadTheme.colorScheme.White else BakeRoadTheme.colorScheme.Gray300
 
         Box(
             modifier = Modifier
@@ -192,7 +189,7 @@ private fun PageIndicatorStep(number: Int, page: Int) {
             contentAlignment = Alignment.Center
         ) {
             Text(
-                text = number.toString(),
+                text = page.toString(),
                 style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = contentColor),
                 textAlign = TextAlign.Center
             )

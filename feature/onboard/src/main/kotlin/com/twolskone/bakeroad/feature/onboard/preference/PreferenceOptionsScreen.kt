@@ -6,12 +6,12 @@ import androidx.compose.ui.res.stringResource
 import com.twolskone.bakeroad.core.model.PreferenceOption
 import com.twolskone.bakeroad.core.ui.PreferenceOptionsPage
 import com.twolskone.bakeroad.core.ui.R
-import com.twolskone.bakeroad.feature.onboard.model.PreferenceState
+import com.twolskone.bakeroad.feature.onboard.model.PreferenceOptionsState
 
 @Composable
 internal fun PreferenceOptionsScreen(
     modifier: Modifier = Modifier,
-    state: PreferenceState,
+    state: PreferenceOptionsState,
     onOptionSelected: (Boolean, PreferenceOption) -> Unit,
     onPreviousPage: (Int) -> Unit,
     onNextPage: (Int) -> Unit,
@@ -34,6 +34,12 @@ internal fun PreferenceOptionsScreen(
             stringResource(R.string.core_ui_title_preference_bakery_type),
             state.bakeryTypeList,
             state.selectedBakeryTypes
+        )
+
+        4 -> Triple(
+            stringResource(R.string.core_ui_title_preference_commercial_area),
+            state.commercialAreaList,
+            state.selectedCommercialAreas
         )
 
         else -> return

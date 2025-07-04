@@ -11,8 +11,8 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
-internal data class PreferenceState(
-    @IntRange(from = 1, to = 3) val page: Int = 1,
+internal data class PreferenceOptionsState(
+    @IntRange(from = 1, to = 4) val page: Int = 1,
     val breadTypeList: ImmutableList<PreferenceOption> = persistentListOf(),
     val flavorList: ImmutableList<PreferenceOption> = persistentListOf(),
     val bakeryTypeList: ImmutableList<PreferenceOption> = persistentListOf(),
@@ -23,10 +23,10 @@ internal data class PreferenceState(
     val selectedCommercialAreas: PersistentSet<Int> = persistentSetOf()
 )
 
-internal fun PreferenceOptions.toUiState(): PreferenceState =
-    PreferenceState(
-        breadTypeList = breadTypes.toImmutableList(),
-        flavorList = flavors.toImmutableList(),
-        bakeryTypeList = atmospheres.toImmutableList(),
-        commercialAreaList = commercialAreas.toImmutableList()
+internal fun PreferenceOptionsState.copy(preferenceOptions: PreferenceOptions): PreferenceOptionsState =
+    copy(
+        breadTypeList = preferenceOptions.breadTypes.toImmutableList(),
+        flavorList = preferenceOptions.flavors.toImmutableList(),
+        bakeryTypeList = preferenceOptions.atmospheres.toImmutableList(),
+        commercialAreaList = preferenceOptions.commercialAreas.toImmutableList()
     )

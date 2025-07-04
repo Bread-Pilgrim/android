@@ -31,3 +31,14 @@ enum class PreferenceOptionType {
     ATMOSPHERE,         // 빵집 분위기
     COMMERCIAL_AREA     // 상권지역
 }
+
+/**
+ * 선택된 빵 취향 옵션 목록
+ * (ID 값)
+ */
+data class SelectedPreferenceOptions(
+    val flavors: List<Int>,
+    val breadTypes: List<Int>,
+    val atmospheres: List<Int>,
+    val commercialAreas: List<Int>
+)

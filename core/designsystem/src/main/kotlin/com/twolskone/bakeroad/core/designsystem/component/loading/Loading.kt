@@ -9,6 +9,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
@@ -36,7 +37,7 @@ fun BakeRoadLoading(
             initialValue = 0f,
             targetValue = 360f,
             animationSpec = infiniteRepeatable(
-                animation = tween(durationMillis = 700, easing = LinearEasing)
+                animation = tween(durationMillis = 600, easing = LinearEasing)
             )
         )
 
@@ -44,6 +45,7 @@ fun BakeRoadLoading(
         modifier = modifier
             .size(LoadingSize)
             .background(color = backgroundColor, shape = CircleShape)
+            .padding(LoadingStrokeWidth / 2)
             .rotate(rotation.value)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
@@ -75,6 +77,6 @@ fun BakeRoadLoading(
 @Composable
 private fun BakeRoadLoadingPreview() {
     BakeRoadTheme {
-        BakeRoadLoading()
+        BakeRoadLoading(modifier = Modifier.size(20.dp))
     }
 }

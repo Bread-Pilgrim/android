@@ -1,5 +1,6 @@
-package com.twolskone.bakeroad.feature.onboard.navigation
+package com.twolskone.bakeroad.feature.onboard.preference.navigation
 
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -10,15 +11,16 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data object PreferenceRoute
 
-internal fun NavController.navigateToPreference(navOptions: NavOptions? = null) =
+internal fun NavController.navigateToPreferenceOptions(navOptions: NavOptions? = null) =
     navigate(route = PreferenceRoute, navOptions = navOptions)
 
-internal fun NavGraphBuilder.preferenceScreen(
+internal fun NavGraphBuilder.preferenceOptionsScreen(
     navigateToNicknameSettings: () -> Unit,
     finish: () -> Unit,
 ) {
-    composable<PreferenceRoute> {
+    composable<PreferenceRoute> { backStackEntry ->
         PreferenceOptionsRoute(
+            viewModel = hiltViewModel(backStackEntry),
             navigateToNicknameSettings = navigateToNicknameSettings,
             finish = finish
         )

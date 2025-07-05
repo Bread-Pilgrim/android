@@ -1,12 +1,9 @@
 package com.twolskone.bakeroad.core.designsystem.component.button
 
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
@@ -15,35 +12,35 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
  */
 @Composable
 fun BakeRoadSolidButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    role: SolidButtonVariant,
+    style: SolidButtonStyle,
     size: ButtonSize,
-    content: @Composable RowScope.() -> Unit
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = role.colors,
+        colors = style.colors,
         shape = size.shape,
         contentPadding = size.contentPadding
     ) {
-        ProvideTextStyle(value = size.typography) { content() }
+        ProvideTextStyle(value = size.typography, content = content)
     }
 }
 
 /**
- * Solid button with text and icon content slots
+ * Solid button with text and icon content slots.
  */
 @Composable
 fun BakeRoadSolidButton(
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    role: SolidButtonVariant,
+    style: SolidButtonStyle,
     size: ButtonSize,
+    onClick: () -> Unit,
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null
@@ -52,10 +49,10 @@ fun BakeRoadSolidButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        role = role,
+        style = style,
         size = size
     ) {
-        CompositionLocalProvider(LocalTextStyle provides size.typography) {
+        ProvideTextStyle(value = size.typography) {
             BakeRoadButtonContent(
                 text = text,
                 buttonSize = size,
@@ -66,7 +63,7 @@ fun BakeRoadSolidButton(
     }
 }
 
-enum class SolidButtonVariant {
+enum class SolidButtonStyle {
     PRIMARY,
     SECONDARY;
 

@@ -22,8 +22,8 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonVariant
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonVariant
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 private val WindowHorizontalPadding = 20.dp
@@ -92,7 +92,7 @@ private fun BakeRoadPopupButtons(
             Row(modifier = Modifier.fillMaxWidth()) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.weight(1f),
-                    role = OutlinedButtonVariant.SECONDARY,
+                    style = OutlinedButtonStyle.SECONDARY,
                     size = ButtonSize.XLARGE,
                     onClick = onSecondaryClick,
                     content = { Text(text = primaryText) }
@@ -101,7 +101,7 @@ private fun BakeRoadPopupButtons(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .weight(1f),
-                    role = SolidButtonVariant.PRIMARY,
+                    style = SolidButtonStyle.PRIMARY,
                     size = ButtonSize.XLARGE,
                     onClick = onPrimaryClick,
                     content = { Text(text = secondaryText) }
@@ -112,7 +112,7 @@ private fun BakeRoadPopupButtons(
         PopupButton.LONG -> {
             BakeRoadSolidButton(
                 modifier = Modifier.fillMaxWidth(),
-                role = SolidButtonVariant.PRIMARY,
+                style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = onPrimaryClick,
                 content = { Text(text = primaryText) }
@@ -121,7 +121,7 @@ private fun BakeRoadPopupButtons(
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .fillMaxWidth(),
-                role = OutlinedButtonVariant.SECONDARY,
+                style = OutlinedButtonStyle.SECONDARY,
                 size = ButtonSize.LARGE,
                 onClick = onSecondaryClick,
                 content = { Text(text = secondaryText) }

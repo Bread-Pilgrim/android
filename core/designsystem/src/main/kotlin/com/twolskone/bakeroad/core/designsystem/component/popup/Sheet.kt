@@ -29,8 +29,8 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonVariant
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonVariant
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import kotlinx.coroutines.launch
 
@@ -113,7 +113,7 @@ internal fun BakeRoadSheetButtons(
             Row(modifier = Modifier.fillMaxWidth()) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.weight(1f),
-                    role = OutlinedButtonVariant.SECONDARY,
+                    style = OutlinedButtonStyle.SECONDARY,
                     size = ButtonSize.LARGE,
                     onClick = onSecondaryClick,
                     content = { Text(text = primaryText) }
@@ -122,7 +122,7 @@ internal fun BakeRoadSheetButtons(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .weight(1f),
-                    role = SolidButtonVariant.PRIMARY,
+                    style = SolidButtonStyle.PRIMARY,
                     size = ButtonSize.LARGE,
                     onClick = onPrimaryClick,
                     content = { Text(text = secondaryText) }
@@ -133,7 +133,7 @@ internal fun BakeRoadSheetButtons(
         PopupButton.LONG -> {
             BakeRoadSolidButton(
                 modifier = Modifier.fillMaxWidth(),
-                role = SolidButtonVariant.PRIMARY,
+                style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = onPrimaryClick,
                 content = { Text(text = primaryText) }
@@ -142,7 +142,7 @@ internal fun BakeRoadSheetButtons(
                 modifier = Modifier
                     .padding(top = 8.dp)
                     .fillMaxWidth(),
-                role = OutlinedButtonVariant.SECONDARY,
+                style = OutlinedButtonStyle.SECONDARY,
                 size = ButtonSize.LARGE,
                 onClick = onSecondaryClick,
                 content = { Text(text = secondaryText) }
@@ -167,7 +167,7 @@ private fun BakeRoadSheetPreview() {
             BakeRoadSolidButton(
                 modifier = Modifier.width(200.dp),
                 onClick = { scope.launch { showSheet = true } },
-                role = SolidButtonVariant.PRIMARY,
+                style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.LARGE
             ) {
                 Text(text = "눌러봐")

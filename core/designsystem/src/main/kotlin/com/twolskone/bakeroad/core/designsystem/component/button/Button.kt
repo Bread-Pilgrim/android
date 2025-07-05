@@ -15,6 +15,10 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 /**
  * Button content layout for arranging the text label, leading icon, and trailing icon.
+ *
+ * [Used in]
+ * @see BakeRoadSolidButton
+ * @see BakeRoadOutlinedButton
  */
 @Composable
 internal fun BakeRoadButtonContent(
@@ -24,7 +28,10 @@ internal fun BakeRoadButtonContent(
     trailingIcon: @Composable (() -> Unit)? = null
 ) {
     if (leadingIcon != null) {
-        Box(modifier = Modifier.size(buttonSize.iconSize), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.size(buttonSize.iconSize),
+            contentAlignment = Alignment.Center
+        ) {
             leadingIcon()
         }
     }
@@ -38,7 +45,10 @@ internal fun BakeRoadButtonContent(
         text()
     }
     if (trailingIcon != null) {
-        Box(modifier = Modifier.size(buttonSize.iconSize), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = Modifier.size(buttonSize.iconSize),
+            contentAlignment = Alignment.Center
+        ) {
             trailingIcon()
         }
     }
@@ -46,6 +56,10 @@ internal fun BakeRoadButtonContent(
 
 /**
  * Common button size
+ *
+ * [Used in]
+ * @see BakeRoadSolidButton
+ * @see BakeRoadOutlinedButton
  */
 enum class ButtonSize {
     XLARGE,

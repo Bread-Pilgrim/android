@@ -1,13 +1,10 @@
 package com.twolskone.bakeroad.core.designsystem.component.button
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
@@ -20,32 +17,32 @@ fun BakeRoadOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    role: OutlinedButtonVariant,
+    style: OutlinedButtonStyle,
     size: ButtonSize,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable () -> Unit
 ) {
     OutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = role.colors,
+        colors = style.colors,
         shape = size.shape,
-        border = BorderStroke(width = 1.dp, color = role.outlineColor(enabled = enabled)),
+        border = BorderStroke(width = 1.dp, color = style.outlineColor(enabled = enabled)),
         contentPadding = size.contentPadding
     ) {
-        ProvideTextStyle(value = size.typography) { content() }
+        ProvideTextStyle(value = size.typography, content)
     }
 }
 
 /**
- * Outlined button with text and icon content slots
+ * Outlined button with text and icon content slots.
  */
 @Composable
 fun BakeRoadOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    role: OutlinedButtonVariant,
+    style: OutlinedButtonStyle,
     size: ButtonSize,
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)?,
@@ -55,10 +52,10 @@ fun BakeRoadOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        role = role,
+        style = style,
         size = size
     ) {
-        CompositionLocalProvider(LocalTextStyle provides size.typography) {
+        ProvideTextStyle(value = size.typography) {
             BakeRoadButtonContent(
                 text = text,
                 buttonSize = size,
@@ -69,7 +66,7 @@ fun BakeRoadOutlinedButton(
     }
 }
 
-enum class OutlinedButtonVariant {
+enum class OutlinedButtonStyle {
     PRIMARY,
     SECONDARY,
     ASSISTIVE;

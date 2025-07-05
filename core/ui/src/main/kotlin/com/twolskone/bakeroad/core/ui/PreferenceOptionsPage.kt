@@ -29,8 +29,8 @@ import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonVariant
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonVariant
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
@@ -118,7 +118,7 @@ fun PreferenceOptionsPage(
             if (page > 1) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    role = OutlinedButtonVariant.PRIMARY,
+                    style = OutlinedButtonStyle.PRIMARY,
                     size = ButtonSize.LARGE,
                     onClick = { onPreviousPage(page - 1) }
                 ) {
@@ -128,7 +128,7 @@ fun PreferenceOptionsPage(
             BakeRoadSolidButton(
                 modifier = Modifier.align(Alignment.CenterEnd),
                 enabled = selectedOptions.isNotEmpty(),
-                role = SolidButtonVariant.PRIMARY,
+                style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = {
                     if (page == 3) {

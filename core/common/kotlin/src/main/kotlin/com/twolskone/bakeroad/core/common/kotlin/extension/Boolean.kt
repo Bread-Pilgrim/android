@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.common.kotlin.network.extension
+package com.twolskone.bakeroad.core.common.kotlin.extension
 
 fun Boolean?.orFalse() = this ?: false
 

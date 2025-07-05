@@ -1,6 +1,6 @@
 package com.twolskone.bakeroad.core.domain.usecase
 
-import com.twolskone.bakeroad.core.common.kotlin.network.extension.orFalse
+import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
 import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull

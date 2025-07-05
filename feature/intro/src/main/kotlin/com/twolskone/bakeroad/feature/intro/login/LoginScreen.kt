@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.intro.login
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +31,9 @@ import com.twolskone.bakeroad.feature.intro.R
 @Composable
 internal fun LoginScreen(onKakaoLoginClick: () -> Unit) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = BakeRoadTheme.colorScheme.White),
         contentAlignment = Alignment.Center
     ) {
         Column(

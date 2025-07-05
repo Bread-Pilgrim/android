@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.feature.onboard.navigation.OnBoardingNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -15,9 +16,10 @@ import dagger.hilt.android.AndroidEntryPoint
 internal class OnboardingActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
+
         setContent {
+            SystemBarColorTheme(lightTheme = true)
             OnBoardingNavHost(
                 modifier = Modifier
                     .fillMaxSize()

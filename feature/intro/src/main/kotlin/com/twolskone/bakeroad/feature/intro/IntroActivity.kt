@@ -3,10 +3,10 @@ package com.twolskone.bakeroad.feature.intro
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -21,10 +21,10 @@ internal class IntroActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
-        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
+            SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
                 IntroRoute(
                     navigateToHome = {},

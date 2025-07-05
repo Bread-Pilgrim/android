@@ -41,7 +41,7 @@ fun Modifier.singleClickable(
     onClick: () -> Unit
 ): Modifier =
     composed {
-        val clickable = remember { mutableStateOf(false) }
+        val clickable = remember { mutableStateOf(true) }
 
         Modifier.clickable(
             enabled = clickable.value,

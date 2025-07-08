@@ -46,6 +46,7 @@ android {
 dependencies {
     implementation(projects.feature.intro)
     implementation(projects.feature.onboard)
+    implementation(projects.feature.home)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_home">홈</string>
+    <string name="feature_home_button_change_preference">내 취향 변경</string>
+    <string name="feature_home_button_see_all">전체보기</string>
+    <string name="feature_home_title_my_preference_bakery">내 취향 추천 빵집 🥨</string>
+    <string name="feature_home_title_hot_bakery">Hot한 빵집 모음 🔥</string>
+    <string name="feature_home_title_Attraction">같이 가볼만한 관광지 🏖</string>
+</resources>

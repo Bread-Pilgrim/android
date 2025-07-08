@@ -25,6 +25,23 @@ object BakeRoadTheme {
         get() = LocalBakeRoadTypography.current
 }
 
+val LightDefaultColorScheme = lightColorScheme(
+    primary = Primary500,
+    onPrimary = White,
+    primaryContainer = Primary500,
+    onPrimaryContainer = White,
+    secondary = Secondary500,
+    onSecondary = White,
+    secondaryContainer = Secondary500,
+    onSecondaryContainer = White,
+    error = Error500,
+    onError = White,
+    errorContainer = Error500,
+    onErrorContainer = White,
+    background = White,
+    onBackground = Gray950
+)
+
 @Composable
 fun BakeRoadTheme(content: @Composable () -> Unit) {
     CompositionLocalProvider(
@@ -32,8 +49,8 @@ fun BakeRoadTheme(content: @Composable () -> Unit) {
         LocalBakeRoadColorScheme provides bakeRoadLightColorScheme
     ) {
         MaterialTheme(
-            colorScheme = lightColorScheme(),   // Use BakeRoadTheme.colorScheme
-            typography = Typography(),          // Use BakeRoadTheme.typography
+            colorScheme = LightDefaultColorScheme,  // Use BakeRoadTheme.colorScheme
+            typography = Typography(),              // Use BakeRoadTheme.typography
             content = content
         )
     }

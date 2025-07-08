@@ -65,11 +65,7 @@ fun BakeRoadSheet(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(
-                    top = SheetPadding,
-                    start = SheetPadding,
-                    end = SheetPadding
-                )
+                .padding(SheetPadding)
         ) {
             // Title.
             Text(
@@ -101,7 +97,8 @@ fun BakeRoadSheet(
 }
 
 @Composable
-internal fun BakeRoadSheetButtons(
+fun BakeRoadSheetButtons(
+    modifier: Modifier = Modifier,
     buttonType: PopupButton,
     primaryText: String,
     secondaryText: String,
@@ -110,7 +107,11 @@ internal fun BakeRoadSheetButtons(
 ) {
     when (buttonType) {
         PopupButton.SHORT -> {
-            Row(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .then(modifier)
+            ) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.weight(1f),
                     style = OutlinedButtonStyle.SECONDARY,

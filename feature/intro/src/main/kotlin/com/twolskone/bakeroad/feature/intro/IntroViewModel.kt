@@ -86,6 +86,8 @@ internal class IntroViewModel @Inject constructor(
                     else -> {}  // TODO. Alert
                 }
             }
+
+            else -> {}  // Unknown error? how?
         }
     }
 

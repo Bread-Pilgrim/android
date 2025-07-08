@@ -25,11 +25,11 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 @Composable
 fun BakeRoadChip(
-    selected: Boolean,
-    onSelectedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    selected: Boolean,
     color: ChipColor = ChipColor.MAIN,
     size: ChipSize = ChipSize.LARGE,
+    onSelectedChange: (Boolean) -> Unit = {},
     label: @Composable () -> Unit,
 ) {
     val style = if (selected) ChipStyle.FILL else ChipStyle.WEAK

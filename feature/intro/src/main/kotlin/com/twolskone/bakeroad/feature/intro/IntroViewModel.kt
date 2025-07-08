@@ -74,6 +74,7 @@ internal class IntroViewModel @Inject constructor(
                 Timber.e(cause.message)
                 when (cause.code) {
                     ClientException.ERROR_CODE_EMPTY_TOKEN -> showLoginScreen()
+                    else -> showLoginScreen()
                 }
             }
 
@@ -81,8 +82,11 @@ internal class IntroViewModel @Inject constructor(
                 Timber.e(cause.message)
                 when (cause.code) {
                     BakeRoadException.ERROR_CODE_REFRESH_TOKEN_EXPIRED -> showLoginScreen()
+                    else -> showLoginScreen()
                 }
             }
+
+            else -> showLoginScreen()
         }
     }
 

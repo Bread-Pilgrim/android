@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.navigator
+package com.twolskone.bakeroad.core.navigator.base
 
 import android.app.Activity
 import android.content.Intent

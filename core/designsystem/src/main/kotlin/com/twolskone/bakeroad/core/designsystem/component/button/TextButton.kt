@@ -11,6 +11,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -127,14 +128,14 @@ enum class TextButtonStyle {
         get() = when (this) {
             PRIMARY ->
                 ButtonColors(
-                    containerColor = BakeRoadTheme.colorScheme.White,
+                    containerColor = Color.Transparent,
                     contentColor = BakeRoadTheme.colorScheme.Primary500,
                     disabledContainerColor = BakeRoadTheme.colorScheme.White,
                     disabledContentColor = BakeRoadTheme.colorScheme.Gray200
                 )
 
             ASSISTIVE -> ButtonColors(
-                containerColor = BakeRoadTheme.colorScheme.White,
+                containerColor = Color.Transparent,
                 contentColor = BakeRoadTheme.colorScheme.Gray800,
                 disabledContainerColor = BakeRoadTheme.colorScheme.White,
                 disabledContentColor = BakeRoadTheme.colorScheme.Gray200

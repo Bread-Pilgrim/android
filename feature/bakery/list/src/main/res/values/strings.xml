@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_bakery_list_title_preference">내 취향 빵집</string>
+    <string name="feature_bakery_list_title_hot">Hot한 빵집 모음</string>
+</resources>

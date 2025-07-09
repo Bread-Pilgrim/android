@@ -9,7 +9,7 @@ import com.twolskone.bakeroad.core.exception.ClientError
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.remote.api.AuthApi
 import com.twolskone.bakeroad.core.remote.datasource.AuthDataSource
-import com.twolskone.bakeroad.core.remote.model.auth.AuthLoginRequest
+import com.twolskone.bakeroad.core.remote.model.auth.LoginRequest
 import com.twolskone.bakeroad.core.remote.model.emitUnit
 import com.twolskone.bakeroad.core.remote.model.toData
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -28,7 +28,7 @@ internal class AuthDataSourceImpl @Inject constructor(
 ) : AuthDataSource {
 
     override fun login(accessToken: String): Flow<Boolean> = flow {
-        val request = AuthLoginRequest(loginType = "KAKAO")
+        val request = LoginRequest(loginType = "KAKAO")
         val response = api.login(accessToken = accessToken, request = request)
         val isOnboardingCompleted = response.toData().isOnboardingCompleted
 

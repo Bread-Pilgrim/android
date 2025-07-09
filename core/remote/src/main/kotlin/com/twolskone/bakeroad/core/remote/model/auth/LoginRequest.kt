@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AuthLoginResponse(
-    @SerialName("onboarding_completed")
-    val isOnboardingCompleted: Boolean
+internal data class LoginRequest(
+    @SerialName("login_type")
+    val loginType: String
 )

@@ -48,7 +48,7 @@ internal fun HomeScreen(
                         modifier = Modifier.padding(end = 4.dp),
                         style = TextButtonStyle.ASSISTIVE,
                         size = TextButtonSize.SMALL,
-                        content = { Text(text = stringResource(id = R.string.feature_home_button_change_preference)) },
+                        content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change)) },
                         onClick = {}
                     )
                 }

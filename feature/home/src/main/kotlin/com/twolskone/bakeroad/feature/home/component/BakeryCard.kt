@@ -23,7 +23,6 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.feature.home.R
 
 private val ImageSize = 116.dp
 private val ImageShape = RoundedCornerShape(6.dp)
@@ -46,7 +45,7 @@ internal fun BakeryCard(
                 modifier = Modifier
                     .padding(6.dp)
                     .align(Alignment.TopEnd),
-                imageVector = ImageVector.vectorResource(id = R.drawable.feature_home_ic_heart_stroke),
+                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
                 contentDescription = "Bookmark"
             )
         }
@@ -57,7 +56,7 @@ internal fun BakeryCard(
         )
         Row(modifier = Modifier.padding(top = 4.dp)) {
             Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.feature_home_ic_star_yellow),
+                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
                 contentDescription = "RatingStar"
             )
             Text(

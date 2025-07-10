@@ -5,8 +5,8 @@ import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
 import com.twolskone.bakeroad.core.remote.api.TourApi
 import com.twolskone.bakeroad.core.remote.datasource.TourDataSource
 import com.twolskone.bakeroad.core.remote.model.emitData
-import com.twolskone.bakeroad.core.remote.model.tour.TourEventResponse
-import com.twolskone.bakeroad.core.remote.model.tour.AttractionResponse
+import com.twolskone.bakeroad.core.remote.model.tour.TourAreaEventResponse
+import com.twolskone.bakeroad.core.remote.model.tour.TourAreaResponse
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -18,11 +18,11 @@ internal class TourDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : TourDataSource {
 
-    override fun getAttractions(regionCode: String): Flow<List<AttractionResponse>> = flow {
-        emitData(api.getAttractions(regionCode = regionCode))
+    override fun getAreas(areaCode: String, tourCategory: String): Flow<List<TourAreaResponse>> = flow {
+        emitData(api.getAreas(areaCode = areaCode, tourCategory = tourCategory))
     }.flowOn(networkDispatcher)
 
-    override fun getEvent(regionCode: String): Flow<TourEventResponse> = flow {
-        emitData(api.getEvent(regionCode = regionCode))
+    override fun getAreaEvent(areaCode: String): Flow<TourAreaEventResponse> = flow {
+        emitData(api.getAreaEvent(areaCode = areaCode))
     }.flowOn(networkDispatcher)
 }

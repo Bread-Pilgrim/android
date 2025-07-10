@@ -7,10 +7,10 @@ import com.twolskone.bakeroad.core.domain.usecase.GetPreferenceOptionsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingUseCase
 import com.twolskone.bakeroad.core.model.SelectedPreferenceOptions
-import com.twolskone.bakeroad.feature.onboard.model.copy
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingIntent
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingSideEffect
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingState
+import com.twolskone.bakeroad.feature.onboard.preference.model.copy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.delay
@@ -59,8 +59,19 @@ internal class OnboardingViewModel @Inject constructor(
                 copy(preferenceOptionsState = preferenceOptionsState.copy(selectedBakeryTypes = options))
             }
 
+            is OnboardingIntent.SelectCommercialAreaOption -> reduce {
+                val options = preferenceOptionsState.selectedCommercialAreas.run {
+                    if (intent.selected) add(intent.option.id) else remove(intent.option.id)
+                }
+                copy(preferenceOptionsState = preferenceOptionsState.copy(selectedCommercialAreas = options))
+            }
+
             is OnboardingIntent.MoveToPage -> reduce {
                 copy(preferenceOptionsState = preferenceOptionsState.copy(page = intent.page))
+            }
+
+            is OnboardingIntent.UpdateNicknameText -> reduce {
+                copy(nicknameSettingsState = nicknameSettingsState.copy(nicknameText = intent.text))
             }
 
             OnboardingIntent.StartBakeRoad -> {

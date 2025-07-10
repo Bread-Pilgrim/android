@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.onboard.model
+package com.twolskone.bakeroad.feature.onboard.preference.model
 
 import androidx.annotation.IntRange
 import androidx.compose.runtime.Immutable

@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.onboard.model
+package com.twolskone.bakeroad.feature.onboard.nickname.model
 
 import androidx.compose.runtime.Immutable
 

@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.onboard.nickname
 
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,6 +27,10 @@ internal fun NicknameSettingsRoute(
         R.string.feature_onboarding_description_nickname_max_length
     } else {
         null
+    }
+
+    LaunchedEffect(textFieldState.text) {
+        viewModel.intent(OnboardingIntent.UpdateNicknameText(text = textFieldState.text.toString()))
     }
 
     NicknameSettingsScreen(

@@ -35,7 +35,7 @@ internal fun PreferenceOptionsRoute(
                 PreferenceOptionType.BREAD_TYPE -> viewModel.intent(OnboardingIntent.SelectBreadTypeOption(selected = selected, option = option))
                 PreferenceOptionType.FLAVOR -> viewModel.intent(OnboardingIntent.SelectFlavorOption(selected = selected, option = option))
                 PreferenceOptionType.ATMOSPHERE -> viewModel.intent(OnboardingIntent.SelectBakeryTypeOption(selected = selected, option = option))
-                PreferenceOptionType.COMMERCIAL_AREA -> {}
+                PreferenceOptionType.COMMERCIAL_AREA -> viewModel.intent(OnboardingIntent.SelectCommercialAreaOption(selected = selected, option = option))
             }
         },
         onPreviousPage = { page ->

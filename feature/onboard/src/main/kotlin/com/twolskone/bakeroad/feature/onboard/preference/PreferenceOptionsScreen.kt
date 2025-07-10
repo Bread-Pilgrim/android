@@ -6,7 +6,7 @@ import androidx.compose.ui.res.stringResource
 import com.twolskone.bakeroad.core.model.PreferenceOption
 import com.twolskone.bakeroad.core.ui.PreferenceOptionsPage
 import com.twolskone.bakeroad.core.ui.R
-import com.twolskone.bakeroad.feature.onboard.model.PreferenceOptionsState
+import com.twolskone.bakeroad.feature.onboard.preference.model.PreferenceOptionsState
 
 @Composable
 internal fun PreferenceOptionsScreen(

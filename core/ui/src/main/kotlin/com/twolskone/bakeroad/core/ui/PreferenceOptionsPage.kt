@@ -43,7 +43,7 @@ import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 
 private val PageIndicatorWidth = 234.dp
-private const val PageCount = 4
+private const val TotalPage = 4
 
 /**
  * 빵 취향 옵션 설정
@@ -53,6 +53,7 @@ private const val PageCount = 4
 @Composable
 fun PreferenceOptionsPage(
     modifier: Modifier = Modifier,
+    totalPage: Int = TotalPage,
     page: Int,
     title: String,
     optionList: ImmutableList<PreferenceOption>,
@@ -89,6 +90,7 @@ fun PreferenceOptionsPage(
             modifier = Modifier
                 .padding(top = 25.dp)
                 .width(PageIndicatorWidth),
+            totalPage = totalPage,
             currentPage = page
         )
         // Chips.
@@ -131,7 +133,7 @@ fun PreferenceOptionsPage(
                 style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = {
-                    if (page == 3) {
+                    if (page == totalPage) {
                         onComplete()
                     } else {
                         onNextPage(page + 1)
@@ -148,15 +150,19 @@ fun PreferenceOptionsPage(
 }
 
 @Composable
-private fun PageIndicator(modifier: Modifier, currentPage: Int) {
+private fun PageIndicator(
+    modifier: Modifier,
+    totalPage: Int,
+    currentPage: Int
+) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(3.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        (1..PageCount).forEach { page ->
+        (1..totalPage).forEach { page ->
             PageIndicatorStep(page = page, currentPage = currentPage)
-            if (page < PageCount) {
+            if (page < totalPage) {
                 Box(
                     modifier = Modifier
                         .weight(1f)

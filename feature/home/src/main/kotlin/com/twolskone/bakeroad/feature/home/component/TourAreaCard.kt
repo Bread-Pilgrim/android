@@ -27,7 +27,7 @@ private val ImageShape = RoundedCornerShape(10.dp)
  * 관광지 추천 카드
  */
 @Composable
-internal fun AttractionCard(
+internal fun TourAreaCard(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
@@ -67,7 +67,7 @@ internal fun AttractionCard(
 
 @Preview
 @Composable
-private fun AttractionCardPreview() {
+private fun TourAreaCardPreview() {
     BakeRoadTheme {
         Column(
             modifier = Modifier
@@ -76,8 +76,8 @@ private fun AttractionCardPreview() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            AttractionCard(modifier = Modifier.fillMaxWidth())
-            AttractionCard(modifier = Modifier.fillMaxWidth())
+            TourAreaCard(modifier = Modifier.fillMaxWidth())
+            TourAreaCard(modifier = Modifier.fillMaxWidth())
         }
     }
 }

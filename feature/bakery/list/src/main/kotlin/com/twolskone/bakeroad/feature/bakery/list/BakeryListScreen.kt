@@ -27,17 +27,17 @@ import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.model.type.Bakery
 import com.twolskone.bakeroad.feature.bakery.list.component.BakeryCard
 
 @Composable
 internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
-    bakeryType: BakeryType
+    bakery: Bakery
 ) {
-    val title = when (bakeryType) {
-        BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
-        BakeryType.HOT -> stringResource(id = R.string.feature_bakery_list_title_hot)
+    val title = when (bakery) {
+        Bakery.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
+        Bakery.HOT -> stringResource(id = R.string.feature_bakery_list_title_hot)
     }
 
     Column(
@@ -64,7 +64,7 @@ internal fun BakeryListScreen(
             title = { Text(text = title) },
             rightActions = {
                 // 내 취향 변경 버튼.
-                if (bakeryType == BakeryType.PREFERENCE) {
+                if (bakery == Bakery.PREFERENCE) {
                     BakeRoadTextButton(
                         style = TextButtonStyle.ASSISTIVE,
                         size = TextButtonSize.SMALL,
@@ -98,7 +98,7 @@ internal fun BakeryListScreen(
 private fun BakeryListScreenPreview() {
     BakeRoadTheme {
         BakeryListScreen(
-            bakeryType = BakeryType.PREFERENCE
+            bakery = Bakery.PREFERENCE
         )
     }
 }

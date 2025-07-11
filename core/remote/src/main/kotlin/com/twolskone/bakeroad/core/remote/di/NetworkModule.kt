@@ -5,8 +5,8 @@ import com.twolskone.bakeroad.core.remote.AuthRetrofit
 import com.twolskone.bakeroad.core.remote.BuildConfig
 import com.twolskone.bakeroad.core.remote.CommonOkHttpClient
 import com.twolskone.bakeroad.core.remote.CommonRetrofit
-import com.twolskone.bakeroad.core.remote.interceptor.BaseInterceptor
-import com.twolskone.bakeroad.core.remote.interceptor.TokenInterceptor
+import com.twolskone.bakeroad.core.remote.interceptor.HeaderInterceptor
+import com.twolskone.bakeroad.core.remote.interceptor.ResponseInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,10 +39,13 @@ internal object NetworkModule {
     @AuthOkHttpClient
     @Provides
     @Singleton
-    fun providesAuthOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, baseInterceptor: BaseInterceptor): OkHttpClient =
+    fun providesAuthOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        responseInterceptor: ResponseInterceptor
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addNetworkInterceptor(loggingInterceptor)
-            .addInterceptor(baseInterceptor)
+            .addInterceptor(responseInterceptor)
             .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
@@ -51,10 +54,15 @@ internal object NetworkModule {
     @CommonOkHttpClient
     @Provides
     @Singleton
-    fun providesCommonOkHttpClient(loggingInterceptor: HttpLoggingInterceptor, tokenInterceptor: TokenInterceptor): OkHttpClient =
+    fun providesCommonOkHttpClient(
+        loggingInterceptor: HttpLoggingInterceptor,
+        headerInterceptor: HeaderInterceptor,
+        responseInterceptor: ResponseInterceptor
+    ): OkHttpClient =
         OkHttpClient.Builder()
             .addNetworkInterceptor(loggingInterceptor)
-            .addInterceptor(tokenInterceptor)
+            .addInterceptor(headerInterceptor)
+            .addInterceptor(responseInterceptor)
             .connectTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .readTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)
             .writeTimeout(TIMEOUT_SECONDS, TimeUnit.SECONDS)

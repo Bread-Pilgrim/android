@@ -14,6 +14,7 @@ import com.twolskone.bakeroad.feature.onboard.preference.model.copy
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.delay
+import timber.log.Timber
 
 private const val DELAY_START_BAKE_ROAD = 1_500L
 
@@ -71,7 +72,7 @@ internal class OnboardingViewModel @Inject constructor(
             }
 
             is OnboardingIntent.UpdateNicknameText -> reduce {
-                copy(nicknameSettingsState = nicknameSettingsState.copy(nicknameText = intent.text))
+                copy(nicknameSettingsState = nicknameSettingsState.copy(nicknameText = intent.text, errorMessage = ""))
             }
 
             OnboardingIntent.StartBakeRoad -> {
@@ -95,13 +96,14 @@ internal class OnboardingViewModel @Inject constructor(
     }
 
     override fun handleException(cause: Throwable) {
+        Timber.e(cause)
         reduce { copy(isLoading = false) }
         when (cause) {
             is BakeRoadException -> {
                 when (cause.code) {
                     // 닉네임 중복.
                     BakeRoadException.ERROR_CODE_DUPLICATE_ENTRY -> {
-                        reduce { copy(nicknameSettingsState = nicknameSettingsState.copy(description = cause.message)) }
+                        reduce { copy(nicknameSettingsState = nicknameSettingsState.copy(errorMessage = cause.message)) }
                     }
                 }
             }

@@ -6,6 +6,5 @@ import androidx.compose.runtime.Immutable
 internal data class NicknameSettingsState(
     val isLoading: Boolean = false,
     val nicknameText: String = "",
-    val descriptionId: Int? = null,
-    val description: String = ""
+    val errorMessage: String = ""
 )

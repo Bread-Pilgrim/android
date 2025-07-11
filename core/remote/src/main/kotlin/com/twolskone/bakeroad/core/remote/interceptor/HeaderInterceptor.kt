@@ -7,10 +7,10 @@ import okhttp3.Interceptor
 import okhttp3.Response
 
 /**
- * Token Interceptor
- * Add JWT access token.
+ * Header Interceptor
+ * Add JWT access token and refresh token.
  */
-internal class TokenInterceptor @Inject constructor(private val tokenDataSource: TokenDataSource) : BaseInterceptor(tokenDataSource) {
+internal class HeaderInterceptor @Inject constructor(private val tokenDataSource: TokenDataSource) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val (accessToken, refreshToken) = runBlocking { tokenDataSource.getTokens() }

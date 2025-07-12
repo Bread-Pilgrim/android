@@ -1,21 +1,24 @@
 package com.twolskone.bakeroad.core.designsystem.component.button
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ProvideTextStyle
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+
+private val Shape = RoundedCornerShape(5.dp)
 
 /**
  * Text button.
@@ -29,15 +32,20 @@ fun BakeRoadTextButton(
     onClick: () -> Unit,
     content: @Composable () -> Unit,
 ) {
-    TextButton(
-        modifier = modifier,
-        shape = RoundedCornerShape(5.dp),
-        enabled = enabled,
-        colors = style.colors,
-        contentPadding = size.contentPadding,
-        onClick = onClick
+    Box(
+        modifier = modifier
+            .clip(Shape)
+            .singleClickable { onClick() }
+            .background(
+                color = style.getContainerColor(enabled = enabled),
+                shape = Shape
+            )
+            .padding(size.contentPadding)
     ) {
-        ProvideTextStyle(value = size.typography, content = content)
+        ProvideTextStyle(
+            value = size.typography.copy(color = style.getContentColor(enabled = enabled)),
+            content = content
+        )
     }
 }
 
@@ -123,22 +131,17 @@ enum class TextButtonStyle {
     PRIMARY,
     ASSISTIVE;
 
-    val colors: ButtonColors
-        @Composable
-        get() = when (this) {
-            PRIMARY ->
-                ButtonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = BakeRoadTheme.colorScheme.Primary500,
-                    disabledContainerColor = BakeRoadTheme.colorScheme.White,
-                    disabledContentColor = BakeRoadTheme.colorScheme.Gray200
-                )
+    @Composable
+    fun getContainerColor(enabled: Boolean): Color =
+        when (this) {
+            PRIMARY -> if (enabled) Color.Transparent else BakeRoadTheme.colorScheme.White
+            ASSISTIVE -> Color.Transparent
+        }
 
-            ASSISTIVE -> ButtonColors(
-                containerColor = Color.Transparent,
-                contentColor = BakeRoadTheme.colorScheme.Gray800,
-                disabledContainerColor = BakeRoadTheme.colorScheme.White,
-                disabledContentColor = BakeRoadTheme.colorScheme.Gray200
-            )
+    @Composable
+    fun getContentColor(enabled: Boolean): Color =
+        when (this) {
+            PRIMARY -> if (enabled) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray200
+            ASSISTIVE -> if (enabled) BakeRoadTheme.colorScheme.Gray800 else BakeRoadTheme.colorScheme.Gray200
         }
 }

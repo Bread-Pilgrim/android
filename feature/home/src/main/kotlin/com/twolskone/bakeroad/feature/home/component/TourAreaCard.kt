@@ -44,7 +44,7 @@ internal fun TourAreaCard(
             style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990)
         )
         Row(
-            modifier = Modifier.padding(top = 6.dp),
+            modifier = Modifier.padding(top = 2.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(

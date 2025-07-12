@@ -5,5 +5,6 @@ import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {
+    fun getAreas(): Flow<Map<Int, String>>
     fun getTourAreas(areaCode: String, tourAreaCategory: TourAreaCategory): Flow<List<TourArea>>
 }

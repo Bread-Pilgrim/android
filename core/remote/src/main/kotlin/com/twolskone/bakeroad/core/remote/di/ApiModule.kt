@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.core.remote.di
 
 import com.twolskone.bakeroad.core.remote.AuthRetrofit
 import com.twolskone.bakeroad.core.remote.CommonRetrofit
+import com.twolskone.bakeroad.core.remote.api.AreaApi
 import com.twolskone.bakeroad.core.remote.api.AuthApi
 import com.twolskone.bakeroad.core.remote.api.PreferApi
 import com.twolskone.bakeroad.core.remote.api.TourApi
@@ -33,4 +34,8 @@ internal object ApiModule {
     @Provides
     @Singleton
     fun providesTourApi(@CommonRetrofit retrofit: Retrofit): TourApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesAreaApi(@CommonRetrofit retrofit: Retrofit): AreaApi = retrofit.create()
 }

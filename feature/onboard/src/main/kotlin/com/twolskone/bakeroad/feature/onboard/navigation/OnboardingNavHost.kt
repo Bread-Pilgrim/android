@@ -18,27 +18,27 @@ import com.twolskone.bakeroad.feature.onboard.preference.navigation.preferenceOp
 internal fun OnBoardingNavHost(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
-    navHostController: NavHostController,
+    navController: NavHostController,
     finish: () -> Unit
 ) {
     NavHost(
         modifier = modifier,
-        navController = navHostController,
+        navController = navController,
         startDestination = PreferenceRoute,
     ) {
         // 취향 설정
         preferenceOptionsScreen(
             viewModel = viewModel,
-            navigateToNicknameSettings = navHostController::navigateToNicknameSettings,
+            navigateToNicknameSettings = navController::navigateToNicknameSettings,
             finish = finish
         )
         // 닉네임 설정
         nicknameSettingsScreen(
             viewModel = viewModel,
             onBackClick = {
-                val canBack = navHostController.currentDestination.isRouteInHierarchy(route = NicknameSettingsRoute::class)
+                val canBack = navController.currentDestination.isRouteInHierarchy(route = NicknameSettingsRoute::class)
                 if (canBack) {
-                    navHostController.navigateToPreferenceOptions()
+                    navController.navigateToPreferenceOptions()
                 }
             }
         )

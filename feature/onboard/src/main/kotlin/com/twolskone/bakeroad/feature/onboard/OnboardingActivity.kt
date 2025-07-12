@@ -3,7 +3,6 @@ package com.twolskone.bakeroad.feature.onboard
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.ui.Modifier
@@ -24,7 +23,7 @@ internal class OnboardingActivity : ComponentActivity() {
                 modifier = Modifier
                     .fillMaxSize()
                     .imePadding(),
-                navHostController = rememberNavController(),
+                navController = rememberNavController(),
                 finish = { finish() }
             )
         }

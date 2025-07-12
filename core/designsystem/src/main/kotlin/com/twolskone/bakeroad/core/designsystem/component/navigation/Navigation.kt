@@ -175,7 +175,7 @@ private fun BakeRoadNavigationBarPreview() {
                         )
                     },
                     label = {
-                        Text(text = "추천")
+                        Text(text = "홈")
                     },
                     onClick = {
                         selectedIndex = 0

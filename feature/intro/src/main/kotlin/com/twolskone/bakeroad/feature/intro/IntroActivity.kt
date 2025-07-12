@@ -9,6 +9,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.White
+import com.twolskone.bakeroad.core.navigator.MainNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -19,6 +20,9 @@ internal class IntroActivity : ComponentActivity() {
     @Inject
     lateinit var onboardingNavigator: OnboardingNavigator
 
+    @Inject
+    lateinit var mainNavigator: MainNavigator
+
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
         setSystemBarColorTheme(lightTheme = true)
@@ -27,7 +31,7 @@ internal class IntroActivity : ComponentActivity() {
         setContent {
             BakeRoadTheme {
                 IntroRoute(
-                    navigateToHome = {},
+                    navigateToHome = { mainNavigator.navigateFromActivity(activity = this, withFinish = true) },
                     navigateToOnboarding = { onboardingNavigator.navigateFromActivity(activity = this, withFinish = true) }
                 )
             }

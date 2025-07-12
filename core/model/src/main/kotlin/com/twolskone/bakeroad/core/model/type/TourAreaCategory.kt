@@ -1,9 +1,17 @@
 package com.twolskone.bakeroad.core.model.type
 
+/**
+ * 관광지 카테고리
+ * @property NATURE             자연
+ * @property HUMANITIES         인문(문화/예술/역사)
+ * @property LEISURE            레포츠
+ * @property SHOPPING           쇼핑
+ * @property RECOMMENDED_COURSE 추천코스
+ */
 enum class TourAreaCategory(val code: String) {
-    NATURE("A01"),              // 자연
-    HUMANITIES("A02"),          // 인문(문화/예술/역사)
-    LEISURE("A03"),             // 레포츠
-    SHOPPING("A04"),            // 쇼핑
-    RECOMMENDED_COURSE("C01")   // 추천코스
+    NATURE("A01"),
+    HUMANITIES("A02"),
+    LEISURE("A03"),
+    SHOPPING("A04"),
+    RECOMMENDED_COURSE("C01")
 }

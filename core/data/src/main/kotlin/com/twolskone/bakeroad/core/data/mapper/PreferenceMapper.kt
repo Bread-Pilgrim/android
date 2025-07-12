@@ -3,9 +3,9 @@ package com.twolskone.bakeroad.core.data.mapper
 import com.twolskone.bakeroad.core.model.PreferenceOption
 import com.twolskone.bakeroad.core.model.PreferenceOptionType
 import com.twolskone.bakeroad.core.model.PreferenceOptions
-import com.twolskone.bakeroad.core.remote.model.prefer.PreferOptionsResponse
+import com.twolskone.bakeroad.core.remote.model.preference.PreferenceOptionsResponse
 
-internal fun PreferOptionsResponse.toExternalModel(): PreferenceOptions =
+internal fun PreferenceOptionsResponse.toExternalModel(): PreferenceOptions =
     PreferenceOptions(
         flavors = flavors.map { flavor -> flavor.toExternalModel(type = PreferenceOptionType.FLAVOR) },
         breadTypes = breadTypes.map { breadType -> breadType.toExternalModel(type = PreferenceOptionType.BREAD_TYPE) },
@@ -13,5 +13,5 @@ internal fun PreferOptionsResponse.toExternalModel(): PreferenceOptions =
         commercialAreas = commercialAreas.map { commercialArea -> commercialArea.toExternalModel(type = PreferenceOptionType.COMMERCIAL_AREA) }
     )
 
-private fun PreferOptionsResponse.Option.toExternalModel(type: PreferenceOptionType): PreferenceOption =
+private fun PreferenceOptionsResponse.Option.toExternalModel(type: PreferenceOptionType): PreferenceOption =
     PreferenceOption(type = type, id = id, name = name)

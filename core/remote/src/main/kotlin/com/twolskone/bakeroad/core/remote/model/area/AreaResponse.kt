@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class AreaResponse(
     @SerialName("area_code")
-    val areaCode: Int,
+    val areaCode: Int = -1,
     @SerialName("area_name")
     val areaName: String = ""
 )

@@ -27,12 +27,13 @@ import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextBut
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
+import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadLineChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.designsystem.theme.Primary50
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
+import com.twolskone.bakeroad.feature.home.component.BakeryCard
 import com.twolskone.bakeroad.feature.home.component.Title
 import com.twolskone.bakeroad.feature.home.component.TourAreaCard
 
@@ -40,7 +41,7 @@ import com.twolskone.bakeroad.feature.home.component.TourAreaCard
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier.background(Color.White)) {
+    LazyColumn(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         item {
             BakeRoadTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
@@ -62,16 +63,27 @@ internal fun HomeScreen(
                 }
             )
         }
+        // 지역 필터.
         stickyHeader {
-            // TEST
-            Column {
-                // Filters.
-                Box(
+            Column(modifier = Modifier.fillMaxWidth()) {
+                LazyRow(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .height(52.dp)
-                        .background(color = Primary50)
-                ) { }
+                        .fillMaxWidth()
+                        .background(color = BakeRoadTheme.colorScheme.White),
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    items(
+                        items = TourAreaCategory.entries.toList(),
+                        key = { category -> category.code }
+                    ) { category ->
+                        BakeRoadLineChip(
+                            selected = false,
+                            onSelectedChange = {},
+                            label = { Text(text = category.toLabel()) }
+                        )
+                    }
+                }
                 // Gradient. (White <- Transparent)
                 Box(
                     modifier = Modifier
@@ -81,8 +93,9 @@ internal fun HomeScreen(
                             Brush.verticalGradient(
                                 colorStops = arrayOf(
                                     0.0f to Color.White,
-                                    0.7f to Color.White.copy(alpha = 0.6f),
-                                    0.9f to Color.White.copy(alpha = 0.3f),
+                                    0.2f to Color.White.copy(alpha = 0.7f),
+                                    0.5f to Color.White.copy(alpha = 0.4f),
+                                    0.8f to Color.White.copy(alpha = 0.1f),
                                     1.0f to Color.Transparent
                                 )
                             )
@@ -90,9 +103,58 @@ internal fun HomeScreen(
                 )
             }
         }
+        // 내 취향 추천 빵집 제목.
+        item {
+            Title(
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .fillMaxWidth(),
+                title = stringResource(id = R.string.feature_home_title_my_preference_bakery),
+                onSeeAllClick = {}
+            )
+        }
+        // 내 취향 추천 빵집 목록.
+        item {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(count = 5) {
+                    BakeryCard()
+                }
+            }
+        }
+        // Hot한 빵집 제목.
+        item {
+            Title(
+                modifier = Modifier
+                    .padding(top = 32.dp)
+                    .padding(horizontal = 10.dp)
+                    .fillMaxWidth(),
+                title = stringResource(id = R.string.feature_home_title_hot_bakery),
+                onSeeAllClick = {}
+            )
+        }
+        // Hot한 빵집 목록.
+        item {
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                horizontalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                items(count = 5) {
+                    BakeryCard()
+                }
+            }
+        }
         // 주변 추천 관광지 제목.
         item {
             Title(
+                modifier = Modifier
+                    .padding(top = 32.dp)
+                    .padding(horizontal = 10.dp)
+                    .fillMaxWidth(),
                 title = stringResource(id = R.string.feature_home_title_tour_area),
                 onSeeAllClick = {}
             )
@@ -100,13 +162,10 @@ internal fun HomeScreen(
         // 관광지 카테고리 필터.
         item {
             LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(
-                    top = 14.dp,
-                    bottom = 16.dp,
-                    start = 16.dp,
-                    end = 16.dp
-                ),
+                modifier = Modifier
+                    .padding(top = 10.dp, bottom = 8.dp)
+                    .fillMaxWidth(),
+                contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(9.dp)
             ) {
                 items(
@@ -124,8 +183,12 @@ internal fun HomeScreen(
             }
         }
         // 주변 추천 관광지 목록.
-        items(count = 3 /* test */) {
-            TourAreaCard()
+        items(count = 10 /* test */) {
+            TourAreaCard(
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .fillMaxWidth()
+            )
         }
     }
 }

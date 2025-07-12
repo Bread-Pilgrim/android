@@ -1,9 +1,11 @@
 package com.twolskone.bakeroad.core.remote.di
 
+import com.twolskone.bakeroad.core.remote.datasource.AreaDataSource
 import com.twolskone.bakeroad.core.remote.datasource.AuthDataSource
 import com.twolskone.bakeroad.core.remote.datasource.PreferDataSource
 import com.twolskone.bakeroad.core.remote.datasource.TourDataSource
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
+import com.twolskone.bakeroad.core.remote.datasource.impl.AreaDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.AuthDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.PreferDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.TourDataSourceImpl
@@ -33,4 +35,8 @@ internal abstract class RemoteModule {
     @Binds
     @Singleton
     abstract fun bindsTourDataSource(tourDataSource: TourDataSourceImpl): TourDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsAreaDataSource(areaDataSource: AreaDataSourceImpl): AreaDataSource
 }

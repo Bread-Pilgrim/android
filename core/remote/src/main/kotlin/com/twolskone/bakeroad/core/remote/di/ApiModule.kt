@@ -4,7 +4,8 @@ import com.twolskone.bakeroad.core.remote.AuthRetrofit
 import com.twolskone.bakeroad.core.remote.CommonRetrofit
 import com.twolskone.bakeroad.core.remote.api.AreaApi
 import com.twolskone.bakeroad.core.remote.api.AuthApi
-import com.twolskone.bakeroad.core.remote.api.PreferApi
+import com.twolskone.bakeroad.core.remote.api.BakeryApi
+import com.twolskone.bakeroad.core.remote.api.PreferenceApi
 import com.twolskone.bakeroad.core.remote.api.TourApi
 import com.twolskone.bakeroad.core.remote.api.UserApi
 import dagger.Module
@@ -25,7 +26,7 @@ internal object ApiModule {
 
     @Provides
     @Singleton
-    fun providesPreferApi(@CommonRetrofit retrofit: Retrofit): PreferApi = retrofit.create()
+    fun providesPreferApi(@CommonRetrofit retrofit: Retrofit): PreferenceApi = retrofit.create()
 
     @Provides
     @Singleton
@@ -38,4 +39,8 @@ internal object ApiModule {
     @Provides
     @Singleton
     fun providesAreaApi(@CommonRetrofit retrofit: Retrofit): AreaApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesBakeryApi(@CommonRetrofit retrofit: Retrofit): BakeryApi = retrofit.create()
 }

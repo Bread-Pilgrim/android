@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LoginResponse(
     @SerialName("onboarding_completed")
-    val isOnboardingCompleted: Boolean
+    val isOnboardingCompleted: Boolean = false
 )

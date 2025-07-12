@@ -29,11 +29,12 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.intro.R
 
 @Composable
-internal fun LoginScreen(onKakaoLoginClick: () -> Unit) {
+internal fun LoginScreen(
+    modifier: Modifier = Modifier,
+    onKakaoLoginClick: () -> Unit
+) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(color = BakeRoadTheme.colorScheme.White),
+        modifier = modifier.background(color = BakeRoadTheme.colorScheme.White),
         contentAlignment = Alignment.Center
     ) {
         Column(

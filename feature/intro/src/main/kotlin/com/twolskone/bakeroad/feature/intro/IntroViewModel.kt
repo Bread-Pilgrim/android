@@ -13,6 +13,7 @@ import com.twolskone.bakeroad.core.domain.usecase.LoginUseCase
 import com.twolskone.bakeroad.core.domain.usecase.VerifyTokenUseCase
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
 import com.twolskone.bakeroad.feature.intro.mvi.IntroSideEffect
+import com.twolskone.bakeroad.feature.intro.mvi.IntroType
 import com.twolskone.bakeroad.feature.intro.mvi.IntroUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -33,7 +34,7 @@ internal class IntroViewModel @Inject constructor(
                 navigate(isOnboardingCompleted = getOnboardingStatusUseCase())
             } else {
                 // 토큰 유효성 실패 : 로그인 화면
-                stopSplashScreen()
+                showLoginScreen()
             }
         }
     }
@@ -72,14 +73,14 @@ internal class IntroViewModel @Inject constructor(
             is ClientException -> {
                 Timber.e(cause.message)
                 when (cause.code) {
-                    ClientException.ERROR_CODE_EMPTY_TOKEN -> stopSplashScreen()
+                    ClientException.ERROR_CODE_EMPTY_TOKEN -> showLoginScreen()
                 }
             }
 
             is BakeRoadException -> {
                 Timber.e(cause.message)
                 when (cause.code) {
-                    BakeRoadException.ERROR_CODE_REFRESH_TOKEN_EXPIRED -> stopSplashScreen()
+                    BakeRoadException.ERROR_CODE_REFRESH_TOKEN_EXPIRED -> showLoginScreen()
                 }
             }
         }
@@ -95,7 +96,7 @@ internal class IntroViewModel @Inject constructor(
         )
     }
 
-    private fun stopSplashScreen() {
-        reduce { copy(shouldKeepSplashScreen = false) }
+    private fun showLoginScreen() {
+        reduce { copy(type = IntroType.LOGIN) }
     }
 }

@@ -8,4 +8,5 @@ android {
 
 dependencies {
     implementation(libs.timber)
+    implementation(libs.coil.kt.compose)
 }

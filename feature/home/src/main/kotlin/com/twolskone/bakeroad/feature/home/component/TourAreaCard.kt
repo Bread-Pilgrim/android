@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,12 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.TourArea
 
 private val ImageShape = RoundedCornerShape(10.dp)
 
@@ -28,7 +32,8 @@ private val ImageShape = RoundedCornerShape(10.dp)
  */
 @Composable
 internal fun TourAreaCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    tourArea: TourArea
 ) {
     Column(modifier = modifier) {
         Box(
@@ -37,10 +42,17 @@ internal fun TourAreaCard(
                 .aspectRatio(21f / 9f)
                 .clip(ImageShape)
                 .background(color = BakeRoadTheme.colorScheme.Gray50, shape = ImageShape)
-        )
+        ) {
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = tourArea.imagePath,
+                contentDescription = "TourArea",
+                contentScale = ContentScale.Crop
+            )
+        }
         Text(
             modifier = Modifier.padding(top = 6.dp),
-            text = "부평 깡통시장",
+            text = tourArea.title,
             style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990)
         )
         Row(
@@ -49,7 +61,7 @@ internal fun TourAreaCard(
         ) {
             Text(
                 modifier = Modifier.padding(start = 2.dp),
-                text = "전통시장 / 광복동",
+                text = tourArea.address,
                 style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
             )
             BakeRoadChip(
@@ -58,8 +70,8 @@ internal fun TourAreaCard(
                     .padding(start = 6.dp),
                 size = ChipSize.SMALL,
                 color = ChipColor.MAIN,
-                selected = true,
-                label = { Text(text = "매일 10:00 ~ 20:00") }
+                selected = false,
+                label = { Text(text = tourArea.type) }
             )
         }
     }
@@ -76,8 +88,28 @@ private fun TourAreaCardPreview() {
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            TourAreaCard(modifier = Modifier.fillMaxWidth())
-            TourAreaCard(modifier = Modifier.fillMaxWidth())
+            TourAreaCard(
+                modifier = Modifier.fillMaxWidth(),
+                tourArea = TourArea(
+                    title = "부평 깡통시장",
+                    address = "전통시장 / 광복동",
+                    type = "자연",
+                    imagePath = "",
+                    mapX = 0f,
+                    mapY = 0f
+                )
+            )
+            TourAreaCard(
+                modifier = Modifier.fillMaxWidth(),
+                tourArea = TourArea(
+                    title = "부평 깡통시장",
+                    address = "전통시장 / 광복동",
+                    type = "자연",
+                    imagePath = "",
+                    mapX = 0f,
+                    mapY = 0f
+                )
+            )
         }
     }
 }

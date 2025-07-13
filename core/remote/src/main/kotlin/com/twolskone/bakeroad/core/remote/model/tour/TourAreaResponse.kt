@@ -14,7 +14,7 @@ data class TourAreaResponse(
     @SerialName("tour_img")
     val tourImg: String = "",
     @SerialName("mapx")
-    val mapX: Int = 0,
+    val mapX: Float = 0f,
     @SerialName("mapy")
-    val mapY: Int = 0
+    val mapY: Float = 0f
 )

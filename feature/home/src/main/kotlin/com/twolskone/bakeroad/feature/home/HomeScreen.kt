@@ -33,13 +33,17 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
-import com.twolskone.bakeroad.feature.home.component.BakeryCard
+import com.twolskone.bakeroad.feature.home.component.RecommendBakeryCard
 import com.twolskone.bakeroad.feature.home.component.Title
 import com.twolskone.bakeroad.feature.home.component.TourAreaCard
+import com.twolskone.bakeroad.feature.home.mvi.HomeState
 
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
+    state: HomeState,
+    onAreaSelect: (Boolean, Int) -> Unit,
+    onTourCategorySelect: (Boolean) -> Unit
 ) {
     LazyColumn(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         item {
@@ -74,13 +78,13 @@ internal fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(
-                        items = TourAreaCategory.entries.toList(),
-                        key = { category -> category.code }
-                    ) { category ->
+                        items = state.areaList,
+                        key = { area -> area.code }
+                    ) { area ->
                         BakeRoadLineChip(
-                            selected = false,
-                            onSelectedChange = {},
-                            label = { Text(text = category.toLabel()) }
+                            selected = state.selectedAreaCodes.contains(area.code),
+                            onSelectedChange = { onAreaSelect(it, area.code) },
+                            label = { Text(text = area.name) }
                         )
                     }
                 }
@@ -120,8 +124,11 @@ internal fun HomeScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(count = 5) {
-                    BakeryCard()
+                items(
+                    items = state.preferenceBakeryList,
+                    key = { bakery -> bakery.id }
+                ) {
+                    RecommendBakeryCard(bakery = it)
                 }
             }
         }
@@ -143,8 +150,11 @@ internal fun HomeScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                items(count = 5) {
-                    BakeryCard()
+                items(
+                    items = state.hotBakeryList,
+                    key = { bakery -> bakery.id }
+                ) {
+                    RecommendBakeryCard(bakery = it)
                 }
             }
         }
@@ -173,7 +183,7 @@ internal fun HomeScreen(
                     key = { category -> category.code }
                 ) { category ->
                     BakeRoadChip(
-                        selected = false,
+                        selected = state.selectedTourAreaCategories.contains(category),
                         color = ChipColor.SUB,
                         size = ChipSize.LARGE,
                         onSelectedChange = {},
@@ -183,11 +193,12 @@ internal fun HomeScreen(
             }
         }
         // 주변 추천 관광지 목록.
-        items(count = 10 /* test */) {
+        items(items = state.tourAreaList) {
             TourAreaCard(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 8.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                tourArea = it
             )
         }
     }
@@ -207,6 +218,11 @@ private fun TourAreaCategory.toLabel() =
 @Composable
 private fun HomeScreenPreview() {
     BakeRoadTheme {
-        HomeScreen(modifier = Modifier.fillMaxSize())
+        HomeScreen(
+            modifier = Modifier.fillMaxSize(),
+            state = HomeState(),
+            onAreaSelect = { _, _ -> },
+            onTourCategorySelect = {}
+        )
     }
 }

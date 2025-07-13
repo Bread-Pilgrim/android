@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
@@ -45,7 +44,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
-private val NavigationBarHeight = 66.dp
+//private val NavigationBarHeight = 66.dp
 private val NavigationBarShape = RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp)
 private val NavigationBarElevation = 12.dp
 
@@ -66,8 +65,8 @@ fun BakeRoadNavigationBar(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = NavigationBarHeight)
-                .padding(top = 4.dp, bottom = 6.dp, start = 16.dp, end = 16.dp)
+//                .heightIn(min = NavigationBarHeight)
+                .padding(top = 4.dp, start = 16.dp, end = 16.dp)
                 .navigationBarsPadding()
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceAround,

@@ -1,9 +1,11 @@
 package com.twolskone.bakeroad.core.data.di
 
 import com.twolskone.bakeroad.core.data.repository.AuthRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.HomeRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.OnboardingRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.PreferRepositoryImpl
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
+import com.twolskone.bakeroad.core.domain.repository.HomeRepository
 import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
 import com.twolskone.bakeroad.core.domain.repository.PreferRepository
 import dagger.Binds
@@ -27,4 +29,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsPreferRepository(preferRepository: PreferRepositoryImpl): PreferRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsHomeRepository(homeRepository: HomeRepositoryImpl): HomeRepository
 }

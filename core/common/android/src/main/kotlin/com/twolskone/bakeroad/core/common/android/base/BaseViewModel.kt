@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSideEffect>(
@@ -59,8 +60,7 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
     abstract suspend fun handleIntent(intent: I)
 
     protected fun reduce(reduce: US.() -> US) {
-        val newState = state.value.reduce()
-        _state.value = newState
+        _state.update(reduce)
     }
 
     protected fun postSideEffect(sideEffect: SE) {

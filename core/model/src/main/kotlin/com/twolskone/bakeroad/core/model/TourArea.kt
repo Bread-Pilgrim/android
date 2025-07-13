@@ -14,6 +14,6 @@ data class TourArea(
     val type: String,
     val address: String,
     val imagePath: String,
-    val mapX: Int,
-    val mapY: Int
+    val mapX: Float,
+    val mapY: Float
 )

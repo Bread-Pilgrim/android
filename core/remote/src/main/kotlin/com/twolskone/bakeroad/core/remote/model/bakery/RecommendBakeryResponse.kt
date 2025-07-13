@@ -7,12 +7,12 @@ import kotlinx.serialization.Serializable
 data class RecommendBakeryResponse(
     @SerialName("bakery_id")
     val bakeryId: Int = -1,
-    @SerialName("name")
+    @SerialName("bakery_name")
     val name: String = "",
     @SerialName("avg_rating")
     val avgRating: Float = -1f,
     @SerialName("review_count")
-    val reviewCount: Int = 0,
+    val reviewCount: Double = 0.0,
     @SerialName("is_opened")
     val isOpened: Boolean = false,
     @SerialName("img_url")

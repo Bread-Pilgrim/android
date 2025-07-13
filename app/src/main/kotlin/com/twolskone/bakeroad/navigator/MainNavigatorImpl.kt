@@ -15,6 +15,7 @@ internal class MainNavigatorImpl @Inject constructor() : MainNavigator {
         intentBuilder: Intent.() -> Intent
     ) {
         activity.startActivity(Intent(activity, MainActivity::class.java).intentBuilder())
+        if (withFinish) activity.finish()
     }
 
     override fun navigateFromLauncher(

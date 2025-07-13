@@ -8,7 +8,7 @@ internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
         id = bakeryId,
         name = name,
         rating = avgRating,
-        reviewCount = reviewCount,
+        reviewCount = reviewCount.toInt(),
         isOpened = isOpened,
         imageUrl = imgUrl
     )

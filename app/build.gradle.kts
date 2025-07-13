@@ -56,6 +56,7 @@ dependencies {
     implementation(projects.core.domain)
     implementation(projects.core.navigator)
     implementation(projects.core.model)
+    implementation(projects.core.exception)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.core.splashscreen)

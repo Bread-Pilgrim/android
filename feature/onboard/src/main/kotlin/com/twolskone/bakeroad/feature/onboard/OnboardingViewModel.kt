@@ -2,10 +2,12 @@ package com.twolskone.bakeroad.feature.onboard
 
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
-import com.twolskone.bakeroad.core.common.kotlin.network.exception.BakeRoadException
 import com.twolskone.bakeroad.core.domain.usecase.GetPreferenceOptionsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingUseCase
+import com.twolskone.bakeroad.core.exception.BakeRoadError
+import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.SelectedPreferenceOptions
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingIntent
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingSideEffect
@@ -90,7 +92,7 @@ internal class OnboardingViewModel @Inject constructor(
                     }
                 )
                 setOnboardingStatusUseCase(isOnboardingCompleted = true)
-                // TODO. Navigation.
+                // TODO. Navigate to home.
             }
         }
     }
@@ -99,14 +101,25 @@ internal class OnboardingViewModel @Inject constructor(
         Timber.e(cause)
         reduce { copy(isLoading = false) }
         when (cause) {
+            is ClientException -> {
+                // TODO. Alert
+            }
+
             is BakeRoadException -> {
-                when (cause.code) {
-                    // 닉네임 중복.
-                    BakeRoadException.ERROR_CODE_DUPLICATE_ENTRY -> {
+                when (cause.error) {
+                    BakeRoadError.DuplicateNickname -> {
                         reduce { copy(nicknameSettingsState = nicknameSettingsState.copy(errorMessage = cause.message)) }
                     }
+
+                    BakeRoadError.AlreadyOnboarding -> {
+                        // TODO. Navigate to home.
+                    }
+
+                    else -> {}  // TODO. Alert
                 }
             }
+
+            else -> {}  // Unknown case? how?
         }
     }
 }

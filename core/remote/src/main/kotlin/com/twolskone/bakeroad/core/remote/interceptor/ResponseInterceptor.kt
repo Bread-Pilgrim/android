@@ -1,7 +1,7 @@
 package com.twolskone.bakeroad.core.remote.interceptor
 
-import com.twolskone.bakeroad.core.common.kotlin.network.extension.handleNetworkException
 import com.twolskone.bakeroad.core.datastore.TokenDataSource
+import com.twolskone.bakeroad.core.exception.extension.handleNetworkException
 import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor

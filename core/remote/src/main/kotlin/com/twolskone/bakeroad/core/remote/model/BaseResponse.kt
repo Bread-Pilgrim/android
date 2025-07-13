@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.core.remote.model
 
-import com.twolskone.bakeroad.core.common.kotlin.network.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.BakeRoadError
+import com.twolskone.bakeroad.core.exception.BakeRoadException
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -31,16 +32,35 @@ internal fun <T> BaseResponse<T>.toDataOrNull(): T? =
     if (code == 200) {
         data
     } else {
-        throw BakeRoadException(code = code, message = message)
+        throw BakeRoadException(
+            statusCode = code,
+            error = runCatching {
+                (data as? String)?.let { BakeRoadError.valueOf(it) }
+            }.getOrDefault(null),
+            message = message
+        )
     }
 
 internal fun <T> BaseResponse<T>.toData(): T =
-    data ?: throw BakeRoadException(code = code, message = message)
+    if (code == 200) {
+        data ?: throw BakeRoadException(
+            statusCode = BakeRoadException.STATUS_CODE_UNKNOWN,
+            message = message
+        )
+    } else {
+        throw BakeRoadException(
+            statusCode = code,
+            error = runCatching {
+                (data as? String)?.let { BakeRoadError.valueOf(it) }
+            }.getOrDefault(null),
+            message = message
+        )
+    }
 
 internal suspend fun <T : BaseResponse<Unit>> FlowCollector<Unit>.emitUnit(response: T) {
     emit(response.toDataOrNull() ?: Unit)
 }
 
-internal suspend fun <T : BaseResponse<R>, R: Any> FlowCollector<R>.emitData(response: T) {
+internal suspend fun <T : BaseResponse<R>, R : Any> FlowCollector<R>.emitData(response: T) {
     emit(response.toData())
 }

@@ -1,6 +1,6 @@
-package com.twolskone.bakeroad.core.common.kotlin.network.extension
+package com.twolskone.bakeroad.core.exception.extension
 
-import com.twolskone.bakeroad.core.common.kotlin.network.exception.ClientException
+import com.twolskone.bakeroad.core.exception.ClientException
 import java.io.InterruptedIOException
 import java.net.SocketException
 import java.net.SocketTimeoutException
@@ -10,12 +10,9 @@ import javax.net.ssl.SSLHandshakeException
 import javax.net.ssl.SSLPeerUnverifiedException
 import retrofit2.HttpException
 
-const val ERROR_CODE_TEMPORARY_SERVER = 500
-const val ERROR_CODE_NETWORK_CONNECTION = 0
-const val ERROR_CODE_UNKNOWN = -1
-
 /**
- * 서버 응답 이전에 발생한 에러 핸들
+ * 서버 응답 이전에 발생한 에러 처리
+ * @see ClientException
  */
 fun Exception.handleNetworkException(): Nothing =
     throw when (this) {
@@ -32,7 +29,7 @@ fun Exception.handleNetworkException(): Nothing =
             // Temporary sever error
             500, 501, 502, 503, 504 -> {
                 ClientException(
-                    code = ERROR_CODE_TEMPORARY_SERVER,
+                    code = code,
                     message = "$[$code] 이용에 불편을 드려 죄송합니다.\n잠시 후 다시 이용해주세요."
                 )
             }
@@ -50,7 +47,7 @@ fun Exception.handleNetworkException(): Nothing =
         is SSLHandshakeException,
         is SSLPeerUnverifiedException -> {
             ClientException(
-                code = ERROR_CODE_TEMPORARY_SERVER,
+                code = 500,
                 message = "이용에 불편을 드려 죄송합니다.\n잠시 후 다시 이용해주세요."
             )
         }
@@ -62,7 +59,7 @@ fun Exception.handleNetworkException(): Nothing =
         is SSLException,
         is InterruptedIOException -> {
             ClientException(
-                code = ERROR_CODE_NETWORK_CONNECTION,
+                code = ClientException.ERROR_CODE_NETWORK,
                 message = "네트워크 연결이 불안해요.\n잠시 후 다시 이용해주세요."
             )
         }
@@ -70,7 +67,7 @@ fun Exception.handleNetworkException(): Nothing =
         // Unknown
         else -> {
             ClientException(
-                code = ERROR_CODE_UNKNOWN,
+                code = ClientException.ERROR_CODE_UNKNOWN,
                 message = "알 수 없는 오류가 발생했습니다."
             )
         }

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="core_remote_error_message_empty_token">저장된 토큰이 없습니다.</string>
-</resources>

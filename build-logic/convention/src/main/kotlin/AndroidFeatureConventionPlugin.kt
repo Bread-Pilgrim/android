@@ -15,7 +15,8 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 
             dependencies {
                 "implementation"(project(":core:common:android"))   // BaseViewModel, MVI models(UiState, Intent, SideEffect) ..
-                "implementation"(project(":core:common:kotlin"))    // Exception handling.
+                "implementation"(project(":core:common:kotlin"))    // Kotlin extensions.
+                "implementation"(project(":core:exception"))        // Error handling.
                 "implementation"(project(":core:ui"))
                 "implementation"(project(":core:domain"))
                 "implementation"(project(":core:navigator"))

@@ -2,15 +2,15 @@ package com.twolskone.bakeroad.feature.intro
 
 import androidx.lifecycle.SavedStateHandle
 import com.kakao.sdk.common.model.AuthError
-import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
-import com.twolskone.bakeroad.core.common.kotlin.network.exception.BakeRoadException
-import com.twolskone.bakeroad.core.common.kotlin.network.exception.ClientException
 import com.twolskone.bakeroad.core.domain.usecase.GetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.LoginUseCase
 import com.twolskone.bakeroad.core.domain.usecase.VerifyTokenUseCase
+import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.ClientError
+import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
 import com.twolskone.bakeroad.feature.intro.mvi.IntroSideEffect
 import com.twolskone.bakeroad.feature.intro.mvi.IntroType
@@ -18,6 +18,7 @@ import com.twolskone.bakeroad.feature.intro.mvi.IntroUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import timber.log.Timber
+import com.kakao.sdk.common.model.ClientError as KakaoClientError
 
 @HiltViewModel
 internal class IntroViewModel @Inject constructor(
@@ -52,11 +53,13 @@ internal class IntroViewModel @Inject constructor(
     }
 
     override fun handleException(cause: Throwable) {
+        Timber.e(cause.message)
+
         when (cause) {
             // 카카오 로그인
             is KakaoSdkError -> {
                 when (cause) {
-                    is ClientError -> {
+                    is KakaoClientError -> {
                         if (cause.reason == ClientErrorCause.Cancelled) Timber.e("카카오 로그인 취소")
                     }
 
@@ -71,16 +74,16 @@ internal class IntroViewModel @Inject constructor(
             }
 
             is ClientException -> {
-                Timber.e(cause.message)
-                when (cause.code) {
-                    ClientException.ERROR_CODE_EMPTY_TOKEN -> showLoginScreen()
+                when (cause.error) {
+                    ClientError.EmptyToken -> showLoginScreen() // 저장된 토큰이 없음 : 로그인 화면
+                    else -> {}  // TODO. Alert
                 }
             }
 
             is BakeRoadException -> {
-                Timber.e(cause.message)
-                when (cause.code) {
-                    BakeRoadException.ERROR_CODE_REFRESH_TOKEN_EXPIRED -> showLoginScreen()
+                when (cause.statusCode) {
+                    BakeRoadException.STATUS_CODE_INVALID_TOKEN -> showLoginScreen()    // 유효하지 않은 토큰 : 로그인 화면
+                    else -> {}  // TODO. Alert
                 }
             }
         }

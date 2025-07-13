@@ -13,6 +13,7 @@ android {
 }
 
 dependencies {
+    api(projects.core.exception)
     implementation(projects.core.common.kotlin)
     implementation(projects.core.datastore)
 

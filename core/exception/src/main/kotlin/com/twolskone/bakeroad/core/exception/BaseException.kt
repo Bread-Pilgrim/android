@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.common.kotlin.network.exception
+package com.twolskone.bakeroad.core.exception
 
 import java.io.IOException
 

@@ -21,19 +21,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.bakery.list.component.BakeryCard
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
-    bakeryType: BakeryType
+    bakeryType: BakeryType,
+    pagingItems: LazyPagingItems<Bakery>
 ) {
     val title = when (bakeryType) {
         BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
@@ -86,8 +92,12 @@ internal fun BakeryListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(10) {
-                BakeryCard()
+            items(count = pagingItems.itemCount) { index ->
+                pagingItems[index]?.let {
+                    BakeryCard()
+                } ?: run {
+
+                }
             }
         }
     }
@@ -97,8 +107,26 @@ internal fun BakeryListScreen(
 @Composable
 private fun BakeryListScreenPreview() {
     BakeRoadTheme {
+        val pagingData = PagingData.from(
+            listOf(
+                Bakery(
+                    id = 1,
+                    name = "서라당",
+                    rating = 4.7f,
+                    reviewCount = 20203,
+                    isOpened = true,
+                    imageUrl = "",
+                    addressGu = "",
+                    addressDong = "",
+                    signatureMenus = emptyList()
+                )
+            )
+        )
+        val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
+
         BakeryListScreen(
-            bakeryType = BakeryType.PREFERENCE
+            bakeryType = BakeryType.PREFERENCE,
+            pagingItems = lazyPagingItems
         )
     }
 }

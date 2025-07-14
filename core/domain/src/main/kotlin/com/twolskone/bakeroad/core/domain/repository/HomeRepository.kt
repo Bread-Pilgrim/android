@@ -9,6 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface HomeRepository {
     fun getAreas(): Flow<List<Area>>
-    fun getBakeries(type: BakeryType, vararg areaCode: String): Flow<List<RecommendBakery>>
-    fun getTourAreas(vararg areaCode: String, tourAreaCategory: TourAreaCategory): Flow<List<TourArea>>
+    fun getBakeries(areaCodes: Set<Int>, type: BakeryType): Flow<List<RecommendBakery>>
+    fun getTourAreas(areaCodes: Set<Int>, tourAreaCategory: TourAreaCategory): Flow<List<TourArea>>
 }

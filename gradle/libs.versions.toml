@@ -10,6 +10,7 @@ androidxNavigation = "2.9.0"
 androidxHiltNavigationCompose = "1.2.0"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.0"
+andoridxPaging3 = "3.3.6"
 kotlinxCoroutines = "1.10.1"
 kotlinxSerializationJson = "1.8.1"
 kotlinxCollectionsImmutable = "0.3.8"
@@ -38,6 +39,9 @@ androidx-lifecycle-viewmodelCompose = { group = "androidx.lifecycle", name = "li
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
 androidx-datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "androidxDataStore" }
+androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "andoridxPaging3" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "andoridxPaging3" }
+androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "andoridxPaging3" }
 
 # Compose
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }

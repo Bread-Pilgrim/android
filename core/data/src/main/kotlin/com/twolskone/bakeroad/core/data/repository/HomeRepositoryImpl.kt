@@ -23,28 +23,36 @@ internal class HomeRepositoryImpl @Inject constructor(
     override fun getAreas(): Flow<List<Area>> {
         return areaDataSource.getAreas()
             .map { areas ->
-                areas.map { Area(code = it.areaCode, name = it.areaName) }
+                areas.map {
+                    Area(code = it.areaCode, name = it.areaName)
+                }
             }
     }
 
-    override fun getBakeries(type: BakeryType, vararg areaCode: String): Flow<List<RecommendBakery>> {
+    override fun getBakeries(areaCodes: Set<Int>, type: BakeryType): Flow<List<RecommendBakery>> {
         return when (type) {
-            BakeryType.PREFERENCE -> bakeryDataSource.getRecommendPreferenceBakeries(areaCodes = areaCode)
+            BakeryType.PREFERENCE -> bakeryDataSource.getRecommendPreferenceBakeries(areaCodes = areaCodes)
                 .map { bakeries ->
-                    bakeries.map { bakery -> bakery.toExternalModel() }
+                    bakeries.map { bakery ->
+                        bakery.toExternalModel()
+                    }
                 }
 
-            BakeryType.HOT -> bakeryDataSource.getRecommendHotBakeries(areaCodes = areaCode)
+            BakeryType.HOT -> bakeryDataSource.getRecommendHotBakeries(areaCodes = areaCodes)
                 .map { bakeries ->
-                    bakeries.map { bakery -> bakery.toExternalModel() }
+                    bakeries.map { bakery ->
+                        bakery.toExternalModel()
+                    }
                 }
         }
     }
 
-    override fun getTourAreas(vararg areaCode: String, tourAreaCategory: TourAreaCategory): Flow<List<TourArea>> {
-        return tourDataSource.getAreas(areaCodes = areaCode, tourCategory = tourAreaCategory.code)
+    override fun getTourAreas(areaCodes: Set<Int>, tourAreaCategory: TourAreaCategory): Flow<List<TourArea>> {
+        return tourDataSource.getAreas(areaCodes = areaCodes, tourCategory = tourAreaCategory.code)
             .map { areas ->
-                areas.map { area -> area.toExternalModel() }
+                areas.map { area ->
+                    area.toExternalModel()
+                }
             }
     }
 }

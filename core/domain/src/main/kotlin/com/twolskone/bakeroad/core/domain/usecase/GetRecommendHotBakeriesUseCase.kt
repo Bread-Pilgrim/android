@@ -11,6 +11,6 @@ class GetRecommendHotBakeriesUseCase @Inject constructor(private val homeReposit
     suspend operator fun invoke(areaCodes: Set<Int>): List<RecommendBakery> =
         homeRepository.getBakeries(
             type = BakeryType.HOT,
-            areaCode = areaCodes.map { it.toString() }.toTypedArray()
+            areaCodes = areaCodes
         ).first()
 }

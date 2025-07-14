@@ -1,10 +1,12 @@
 package com.twolskone.bakeroad.core.data.di
 
 import com.twolskone.bakeroad.core.data.repository.AuthRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.BakeryRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.HomeRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.OnboardingRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.PreferRepositoryImpl
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
+import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.domain.repository.HomeRepository
 import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
 import com.twolskone.bakeroad.core.domain.repository.PreferRepository
@@ -33,4 +35,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsHomeRepository(homeRepository: HomeRepositoryImpl): HomeRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsBakeryRepository(bakeryRepository: BakeryRepositoryImpl): BakeryRepository
 }

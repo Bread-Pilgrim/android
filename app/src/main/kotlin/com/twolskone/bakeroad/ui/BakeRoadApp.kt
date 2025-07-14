@@ -15,13 +15,15 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.twolskone.bakeroad.core.common.android.base.extension.isRouteInHierarchy
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBar
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBarItem
+import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.navigation.BakeRoadMenu
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 
 @Composable
 internal fun BakeRoadApp(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    navigateToBakeryList: (BakeryType) -> Unit
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
@@ -49,7 +51,8 @@ internal fun BakeRoadApp(
                 .fillMaxSize()
                 .padding(contentPadding)
                 .systemBarsPadding(),
-            navController = navController
+            navController = navController,
+            navigateToBakeryList = navigateToBakeryList
         )
     }
 }

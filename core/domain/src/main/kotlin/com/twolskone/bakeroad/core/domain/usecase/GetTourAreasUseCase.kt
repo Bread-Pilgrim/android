@@ -10,7 +10,7 @@ class GetTourAreasUseCase @Inject constructor(private val homeRepository: HomeRe
 
     suspend operator fun invoke(areaCodes: Set<Int>, tourAreaCategory: TourAreaCategory): List<TourArea> =
         homeRepository.getTourAreas(
-            areaCode = areaCodes.map { it.toString() }.toTypedArray(),
+            areaCodes = areaCodes,
             tourAreaCategory = tourAreaCategory
         ).first()
 }

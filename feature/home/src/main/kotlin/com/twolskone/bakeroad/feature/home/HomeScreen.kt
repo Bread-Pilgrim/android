@@ -43,6 +43,7 @@ internal fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeState,
     onAreaSelect: (Boolean, Int) -> Unit,
+    onSeeAllPreferenceBakeriesClick: () -> Unit,
     onTourCategorySelect: (Boolean) -> Unit
 ) {
     LazyColumn(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
@@ -115,7 +116,7 @@ internal fun HomeScreen(
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.feature_home_title_my_preference_bakery),
-                onSeeAllClick = {}
+                onSeeAllClick = onSeeAllPreferenceBakeriesClick
             )
         }
         // 내 취향 추천 빵집 목록.
@@ -223,6 +224,7 @@ private fun HomeScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             state = HomeState(),
             onAreaSelect = { _, _ -> },
+            onSeeAllPreferenceBakeriesClick = {},
             onTourCategorySelect = {}
         )
     }

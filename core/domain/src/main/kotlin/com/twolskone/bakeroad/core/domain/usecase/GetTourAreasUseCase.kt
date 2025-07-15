@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.first
 
 class GetTourAreasUseCase @Inject constructor(private val homeRepository: HomeRepository) {
 
-    suspend operator fun invoke(areaCodes: Set<Int>, tourAreaCategory: TourAreaCategory): List<TourArea> =
+    suspend operator fun invoke(areaCodes: Set<Int>, tourCategories: Set<TourAreaCategory>): List<TourArea> =
         homeRepository.getTourAreas(
             areaCodes = areaCodes,
-            tourAreaCategory = tourAreaCategory
+            tourCategories = tourCategories
         ).first()
 }

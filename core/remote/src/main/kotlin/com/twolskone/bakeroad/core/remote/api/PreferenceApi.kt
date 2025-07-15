@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 internal interface PreferenceApi {
 
-    @GET("preference/options")
+    @GET("preferences/options")
     suspend fun getOptions(): BaseResponse<PreferenceOptionsResponse>
 }

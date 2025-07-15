@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.home
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.domain.usecase.GetAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendHotBakeriesUseCase
@@ -13,6 +14,11 @@ import com.twolskone.bakeroad.feature.home.mvi.HomeState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @HiltViewModel
@@ -24,12 +30,18 @@ internal class HomeViewModel @Inject constructor(
     private val getTourAreasUseCase: GetTourAreasUseCase
 ) : BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(savedStateHandle) {
 
-    init {
-        getAreas()
-    }
-
     override fun initState(savedStateHandle: SavedStateHandle): HomeState {
         return HomeState()
+    }
+
+    private val areaTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+
+    private val tourAreaCategoryTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+
+    init {
+        observeTrigger()
+        getAreas()
+        areaTrigger.tryEmit(Unit)
     }
 
     override suspend fun handleIntent(intent: HomeIntent) {
@@ -37,26 +49,40 @@ internal class HomeViewModel @Inject constructor(
             HomeIntent.RefreshAll -> refreshAll()
 
             is HomeIntent.SelectArea -> reduce {
-                val selectedAreaCodes = if (intent.selected) {
-                    if (intent.areaCode == EntireBusan) {
-                        state.value.selectedAreaCodes
-                            .clear()
-                            .add(intent.areaCode)
-                    } else {
-                        state.value.selectedAreaCodes
-                            .remove(EntireBusan)
-                            .add(intent.areaCode)
+                val originAreaCodes = selectedAreaCodes
+                val selectedAreaCodes = when {
+                    (intent.selected) -> {
+                        originAreaCodes.run {
+                            if (intent.areaCode == EntireBusan) {
+                                clear()
+                            } else {
+                                remove(EntireBusan)
+                            }
+                        }.add(intent.areaCode)
                     }
-                } else if (state.value.selectedAreaCodes.size > 1) {
-                    state.value.selectedAreaCodes.remove(intent.areaCode)
-                } else {
-                    state.value.selectedAreaCodes
-                }
 
+                    (originAreaCodes.size > 1) -> {
+                        originAreaCodes.remove(intent.areaCode)
+                    }
+
+                    else -> {
+                        originAreaCodes
+                    }
+                }
+                if (originAreaCodes != selectedAreaCodes) areaTrigger.tryEmit(Unit)
                 copy(selectedAreaCodes = selectedAreaCodes)
             }
 
-            is HomeIntent.SelectTourAreaCategory -> {}
+            is HomeIntent.SelectTourAreaCategory -> reduce {
+                val originTourCategories = selectedTourAreaCategories
+                val selectedTourCategories = when {
+                    (intent.selected) -> originTourCategories.add(intent.category)
+                    (originTourCategories.size > 1) -> originTourCategories.remove(intent.category)
+                    else -> originTourCategories
+                }
+                if (originTourCategories != selectedTourCategories) tourAreaCategoryTrigger.tryEmit(Unit)
+                copy(selectedTourAreaCategories = selectedTourCategories)
+            }
         }
     }
 
@@ -107,8 +133,21 @@ internal class HomeViewModel @Inject constructor(
     private fun refreshTourAreas() = launch {
         val tourAreas = getTourAreasUseCase(
             areaCodes = state.value.selectedAreaCodes,
-            tourAreaCategory = state.value.selectedTourAreaCategories.first()   // TODO.
+            tourCategories = state.value.selectedTourAreaCategories
         )
         reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
+    }
+
+    @OptIn(FlowPreview::class)
+    private fun observeTrigger() {
+        areaTrigger
+            .debounce(350L)
+            .onEach { refreshAll() }
+            .launchIn(viewModelScope)
+
+        tourAreaCategoryTrigger
+            .debounce(350L)
+            .onEach { refreshTourAreas() }
+            .launchIn(viewModelScope)
     }
 }

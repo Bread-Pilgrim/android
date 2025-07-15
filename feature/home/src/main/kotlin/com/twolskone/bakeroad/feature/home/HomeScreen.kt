@@ -44,7 +44,7 @@ internal fun HomeScreen(
     state: HomeState,
     onAreaSelect: (Boolean, Int) -> Unit,
     onSeeAllPreferenceBakeriesClick: () -> Unit,
-    onTourCategorySelect: (Boolean) -> Unit
+    onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit
 ) {
     LazyColumn(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         item {
@@ -181,14 +181,14 @@ internal fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(9.dp)
             ) {
                 items(
-                    items = TourAreaCategory.entries.toList(),
+                    items = TourAreaCategory.entries,
                     key = { category -> category.code }
                 ) { category ->
                     BakeRoadChip(
                         selected = state.selectedTourAreaCategories.contains(category),
                         color = ChipColor.SUB,
                         size = ChipSize.LARGE,
-                        onSelectedChange = {},
+                        onSelectedChange = { onTourCategorySelect(it, category) },
                         label = { Text(text = category.toLabel()) }
                     )
                 }
@@ -225,7 +225,7 @@ private fun HomeScreenPreview() {
             state = HomeState(),
             onAreaSelect = { _, _ -> },
             onSeeAllPreferenceBakeriesClick = {},
-            onTourCategorySelect = {}
+            onTourCategorySelect = { _, _ -> }
         )
     }
 }

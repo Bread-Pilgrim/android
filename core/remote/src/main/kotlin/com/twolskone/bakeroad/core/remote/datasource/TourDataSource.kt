@@ -5,6 +5,6 @@ import com.twolskone.bakeroad.core.remote.model.tour.TourAreaResponse
 import kotlinx.coroutines.flow.Flow
 
 interface TourDataSource {
-    fun getAreas(areaCodes: Set<Int>, tourCategory: String): Flow<List<TourAreaResponse>>
+    fun getAreas(areaCode: String, tourCategory: String): Flow<List<TourAreaResponse>>
     fun getAreaEvent(areaCode: String): Flow<TourAreaEventResponse>
 }

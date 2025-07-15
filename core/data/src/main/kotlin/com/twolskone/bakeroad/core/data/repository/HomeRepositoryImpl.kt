@@ -34,7 +34,7 @@ internal class HomeRepositoryImpl @Inject constructor(
                     bakeries.map { bakery -> bakery.toExternalModel() }
                 }
 
-            BakeryType.HOT -> bakeryDataSource.getRecommendAreaBakeries(areaCodes = areaCode)
+            BakeryType.HOT -> bakeryDataSource.getRecommendHotBakeries(areaCodes = areaCode)
                 .map { bakeries ->
                     bakeries.map { bakery -> bakery.toExternalModel() }
                 }

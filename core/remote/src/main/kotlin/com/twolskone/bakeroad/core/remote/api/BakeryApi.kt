@@ -10,6 +10,6 @@ internal interface BakeryApi {
     @GET("bakery/recommend/preference")
     suspend fun getRecommendPreferenceBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
 
-    @GET("bakery/recommend/area")
-    suspend fun getRecommendAreaBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
+    @GET("bakery/recommend/hot")
+    suspend fun getRecommendHotBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
 }

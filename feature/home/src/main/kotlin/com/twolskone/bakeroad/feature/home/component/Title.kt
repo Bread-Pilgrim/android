@@ -32,7 +32,7 @@ internal fun Title(
         Text(
             modifier = Modifier.padding(start = 6.dp),
             text = title,
-            style = BakeRoadTheme.typography.headingSmallBold
+            style = BakeRoadTheme.typography.headingMediumBold
         )
         BakeRoadTextButton(
             modifier = Modifier.padding(start = 6.dp),

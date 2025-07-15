@@ -5,5 +5,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface BakeryDataSource {
     fun getRecommendPreferenceBakeries(areaCodes: Array<out String>): Flow<List<RecommendBakeryResponse>>
-    fun getRecommendAreaBakeries(areaCodes: Array<out String>): Flow<List<RecommendBakeryResponse>>
+    fun getRecommendHotBakeries(areaCodes: Array<out String>): Flow<List<RecommendBakeryResponse>>
 }

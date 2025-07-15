@@ -12,7 +12,7 @@ import com.twolskone.bakeroad.feature.home.navigation.homeScreen
 internal fun BakeRoadNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    navigateToBakeryList: (BakeryType) -> Unit
+    navigateToBakeryList: (String, BakeryType) -> Unit
 ) {
     NavHost(
         modifier = modifier,

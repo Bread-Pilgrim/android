@@ -24,7 +24,7 @@ import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 internal fun BakeRoadApp(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    navigateToBakeryList: (BakeryType) -> Unit
+    navigateToBakeryList: (String, BakeryType) -> Unit
 ) {
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination

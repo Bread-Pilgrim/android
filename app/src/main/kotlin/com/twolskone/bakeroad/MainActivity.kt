@@ -25,11 +25,14 @@ class MainActivity : ComponentActivity() {
             BakeRoadTheme {
                 BakeRoadApp(
                     navController = rememberNavController(),
-                    navigateToBakeryList = { bakeryType ->
+                    navigateToBakeryList = { areaCode, bakeryType ->
                         bakeryListNavigator.navigateFromActivity(
                             activity = this,
                             withFinish = false,
-                            intentBuilder = { putExtra("bakeryType", bakeryType) }
+                            intentBuilder = {
+                                putExtra("areaCode", areaCode)
+                                putExtra("bakeryType", bakeryType)
+                            }
                         )
                     }
                 )

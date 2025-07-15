@@ -9,6 +9,6 @@ import kotlinx.coroutines.flow.Flow
 
 class GetBakeriesUseCase @Inject constructor(private val bakeryRepository: BakeryRepository) {
 
-    operator fun invoke(areaCodes: Set<Int>, bakeryType: BakeryType): Flow<PagingData<Bakery>> =
-        bakeryRepository.getBakeries(areaCodes = areaCodes, bakeryType = bakeryType)
+    operator fun invoke(areaCode: String, bakeryType: BakeryType): Flow<PagingData<Bakery>> =
+        bakeryRepository.getBakeries(areaCode = areaCode, bakeryType = bakeryType)
 }

@@ -12,7 +12,7 @@ import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 internal fun HomeRoute(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToBakeryList: (BakeryType) -> Unit
+    navigateToBakeryList: (areaCode: String, BakeryType) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -20,7 +20,12 @@ internal fun HomeRoute(
         modifier = modifier,
         state = state,
         onAreaSelect = { selected, code -> viewModel.intent(HomeIntent.SelectArea(selected = selected, areaCode = code)) },
-        onSeeAllPreferenceBakeriesClick = { navigateToBakeryList(BakeryType.PREFERENCE) },
+        onSeeAllPreferenceBakeriesClick = {
+            navigateToBakeryList(
+                state.selectedAreaCodes.joinToString(separator = ","),
+                BakeryType.PREFERENCE
+            )
+        },
         onTourCategorySelect = { selected, category -> viewModel.intent(HomeIntent.SelectTourAreaCategory(selected = selected, category = category)) }
     )
 }

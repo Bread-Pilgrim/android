@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.home.mvi
 
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.model.Area
+import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
@@ -9,8 +10,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-
-internal const val EntireBusan = 14
 
 internal data class HomeState(
     val selectedAreaCodes: PersistentSet<Int> = persistentSetOf(EntireBusan),

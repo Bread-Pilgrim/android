@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object HomeRoute
 
-fun NavGraphBuilder.homeScreen(navigateToBakeryList: (BakeryType) -> Unit) {
+fun NavGraphBuilder.homeScreen(navigateToBakeryList: (String, BakeryType) -> Unit) {
     composable<HomeRoute> {
         HomeRoute(navigateToBakeryList = navigateToBakeryList)
     }

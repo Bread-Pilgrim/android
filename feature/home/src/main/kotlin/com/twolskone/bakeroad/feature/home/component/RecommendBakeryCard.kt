@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -48,18 +49,19 @@ internal fun RecommendBakeryCard(
                 .clip(ImageShape)
                 .background(color = BakeRoadTheme.colorScheme.Gray50, shape = ImageShape)
         ) {
+            AsyncImage(
+                modifier = Modifier.fillMaxSize(),
+                model = bakery.imageUrl,
+                contentDescription = "Bakery",
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
+            )
             Image(
                 modifier = Modifier
                     .padding(6.dp)
                     .align(Alignment.TopEnd),
                 imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
                 contentDescription = "Bookmark"
-            )
-            AsyncImage(
-                modifier = Modifier.fillMaxSize(),
-                model = bakery.imageUrl,
-                contentDescription = "Bakery",
-                contentScale = ContentScale.Crop,
             )
         }
         Text(

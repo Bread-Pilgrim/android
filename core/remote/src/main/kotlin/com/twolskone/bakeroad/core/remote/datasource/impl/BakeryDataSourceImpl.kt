@@ -21,7 +21,7 @@ internal class BakeryDataSourceImpl @Inject constructor(
         emitData(api.getRecommendPreferenceBakeries(areaCode = areaCodes.joinToString(separator = ",")))
     }.flowOn(networkDispatcher)
 
-    override fun getRecommendAreaBakeries(areaCodes: Array<out String>): Flow<List<RecommendBakeryResponse>> = flow {
-        emitData(api.getRecommendAreaBakeries(areaCode = areaCodes.joinToString(separator = ",")))
+    override fun getRecommendHotBakeries(areaCodes: Array<out String>): Flow<List<RecommendBakeryResponse>> = flow {
+        emitData(api.getRecommendHotBakeries(areaCode = areaCodes.joinToString(separator = ",")))
     }.flowOn(networkDispatcher)
 }

@@ -73,8 +73,9 @@ internal fun HomeScreen(
                 LazyRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .background(color = BakeRoadTheme.colorScheme.White),
-                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+                        .background(color = BakeRoadTheme.colorScheme.White)
+                        .padding(top = 10.dp),
+                    contentPadding = PaddingValues(horizontal = 16.dp),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
                     items(
@@ -92,14 +93,14 @@ internal fun HomeScreen(
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(20.dp) // 상단 10dp 정도만
+                        .height(30.dp)
                         .background(
                             Brush.verticalGradient(
                                 colorStops = arrayOf(
-                                    0.0f to Color.White,
-                                    0.2f to Color.White.copy(alpha = 0.7f),
-                                    0.5f to Color.White.copy(alpha = 0.4f),
-                                    0.8f to Color.White.copy(alpha = 0.1f),
+                                    0.2f to Color.White,
+                                    0.4f to Color.White.copy(alpha = 0.8f),
+                                    0.6f to Color.White.copy(alpha = 0.5f),
+                                    0.8f to Color.White.copy(alpha = 0.2f),
                                     1.0f to Color.Transparent
                                 )
                             )
@@ -121,7 +122,7 @@ internal fun HomeScreen(
         item {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(
@@ -136,7 +137,7 @@ internal fun HomeScreen(
         item {
             Title(
                 modifier = Modifier
-                    .padding(top = 32.dp)
+                    .padding(top = 28.dp)
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.feature_home_title_hot_bakery),
@@ -147,7 +148,7 @@ internal fun HomeScreen(
         item {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 items(
@@ -162,7 +163,7 @@ internal fun HomeScreen(
         item {
             Title(
                 modifier = Modifier
-                    .padding(top = 32.dp)
+                    .padding(top = 28.dp)
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.feature_home_title_tour_area),

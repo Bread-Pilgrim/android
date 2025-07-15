@@ -14,9 +14,9 @@ internal const val EntireBusan = 14
 
 internal data class HomeState(
     val selectedAreaCodes: PersistentSet<Int> = persistentSetOf(EntireBusan),
+    val selectedTourAreaCategories: PersistentSet<TourAreaCategory> = persistentSetOf(TourAreaCategory.NATURE),
     val areaList: ImmutableList<Area> = persistentListOf(),
     val preferenceBakeryList: ImmutableList<RecommendBakery> = persistentListOf(),
     val hotBakeryList: ImmutableList<RecommendBakery> = persistentListOf(),
-    val selectedTourAreaCategories: Set<TourAreaCategory> = persistentSetOf(TourAreaCategory.NATURE),
     val tourAreaList: ImmutableList<TourArea> = persistentListOf()
 ) : BaseUiState

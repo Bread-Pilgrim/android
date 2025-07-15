@@ -24,13 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
-import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
+import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.bakery.list.component.BakeryCard
 import kotlinx.coroutines.flow.flowOf
@@ -68,19 +66,19 @@ internal fun BakeryListScreen(
                 }
             },
             title = { Text(text = title) },
-            rightActions = {
-                // 내 취향 변경 버튼.
-                if (bakeryType == BakeryType.PREFERENCE) {
-                    BakeRoadTextButton(
-                        style = TextButtonStyle.ASSISTIVE,
-                        size = TextButtonSize.SMALL,
-                        onClick = {},
-                        content = {
-                            Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change))
-                        }
-                    )
-                }
-            }
+//            rightActions = {
+//                // 내 취향 변경 버튼.
+//                if (bakeryType == BakeryType.PREFERENCE) {
+//                    BakeRoadTextButton(
+//                        style = TextButtonStyle.ASSISTIVE,
+//                        size = TextButtonSize.SMALL,
+//                        onClick = {},
+//                        content = {
+//                            Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change))
+//                        }
+//                    )
+//                }
+//            }
         )
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -93,8 +91,8 @@ internal fun BakeryListScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(count = pagingItems.itemCount) { index ->
-                pagingItems[index]?.let {
-                    BakeryCard()
+                pagingItems[index]?.let { bakery ->
+                    BakeryCard(bakery = bakery)
                 } ?: run {
 
                 }
@@ -114,7 +112,7 @@ private fun BakeryListScreenPreview() {
                     name = "서라당",
                     rating = 4.7f,
                     reviewCount = 20203,
-                    isOpened = true,
+                    openStatus = BakeryOpenStatus.OPEN,
                     imageUrl = "",
                     addressGu = "",
                     addressDong = "",

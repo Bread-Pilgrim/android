@@ -30,7 +30,7 @@ internal class BakeryRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 BakeryPagingSource(
                     bakeryDataSource = bakeryDataSource,
-                    areaCodes = areaCodes,
+                    areaCode = areaCodes.joinToString(separator = ","),
                     bakeryType = bakeryType
                 )
             }

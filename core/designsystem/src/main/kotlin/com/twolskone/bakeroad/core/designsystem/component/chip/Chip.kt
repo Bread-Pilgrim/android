@@ -29,11 +29,10 @@ fun BakeRoadChip(
     selected: Boolean,
     color: ChipColor = ChipColor.MAIN,
     size: ChipSize = ChipSize.LARGE,
+    style: ChipStyle = if (selected) ChipStyle.FILL else ChipStyle.WEAK,
     onSelectedChange: (Boolean) -> Unit = {},
     label: @Composable () -> Unit,
 ) {
-    val style = if (selected) ChipStyle.FILL else ChipStyle.WEAK
-
     Box(
         modifier = modifier
             .noRippleSingleClickable { onSelectedChange(!selected) }

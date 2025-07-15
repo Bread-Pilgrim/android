@@ -20,8 +20,8 @@ data class BakeryResponse(
     val avgRating: Float = -1f,
     @SerialName("review_count")
     val reviewCount: Double = 0.0,
-    @SerialName("is_opened")
-    val isOpened: Boolean = false,
+    @SerialName("open_status")
+    val openStatus: String = "O",  // O : 영업중, C : 영업종료, D : 휴무일
     @SerialName("img_url")
     val imgUrl: String = "",
     @SerialName("gu")

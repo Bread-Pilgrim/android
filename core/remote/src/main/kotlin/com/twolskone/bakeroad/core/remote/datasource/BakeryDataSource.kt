@@ -5,7 +5,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import kotlinx.coroutines.flow.Flow
 
 interface BakeryDataSource {
-    fun getRecommendPreferenceBakeries(areaCodes: Set<Int>): Flow<List<RecommendBakeryResponse>>
-    fun getRecommendHotBakeries(areaCodes: Set<Int>): Flow<List<RecommendBakeryResponse>>
-    suspend fun getPreferenceBakeries(areaCodes: Set<Int>, cursorId: Int, pageSize: Int): BakeriesResponse
+    fun getRecommendPreferenceBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>>
+    fun getRecommendHotBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>>
+    suspend fun getPreferenceBakeries(areaCode: String, cursorId: Int, pageSize: Int): BakeriesResponse
 }

@@ -8,4 +8,7 @@
     <string name="core_ui_button_next">다음</string>
     <string name="core_ui_button_previous">이전</string>
     <string name="core_ui_button_preference_change">내 취향 변경</string>
+    <string name="core_ui_label_bakery_open_status_open">영업중</string>
+    <string name="core_ui_label_bakery_open_status_closed">영업종료</string>
+    <string name="core_ui_label_bakery_open_status_day_off">휴무일</string>
 </resources>

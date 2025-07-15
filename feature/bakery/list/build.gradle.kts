@@ -8,5 +8,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.paging.compose)
+    implementation(libs.coil.kt.compose)
     implementation(libs.timber)
 }

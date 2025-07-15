@@ -8,13 +8,13 @@ import retrofit2.http.Query
 
 internal interface BakeryApi {
 
-    @GET("bakery/recommend/preference")
+    @GET("bakeries/recommend/preference")
     suspend fun getRecommendPreferenceBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
 
-    @GET("bakery/recommend/hot")
+    @GET("bakeries/recommend/hot")
     suspend fun getRecommendHotBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
 
-    @GET("bakery/preference")
+    @GET("bakeries/preference")
     suspend fun getPreferenceBakeries(
         @Query("area_code") areaCode: String,
         @Query("cursor_id") cursorId: Int,

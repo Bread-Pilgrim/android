@@ -19,21 +19,21 @@ internal class BakeryDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : BakeryDataSource {
 
-    override fun getRecommendPreferenceBakeries(areaCodes: Set<Int>): Flow<List<RecommendBakeryResponse>> = flow {
-        emitData(api.getRecommendPreferenceBakeries(areaCode = areaCodes.joinToString(separator = ",")))
+    override fun getRecommendPreferenceBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>> = flow {
+        emitData(api.getRecommendPreferenceBakeries(areaCode = areaCode))
     }.flowOn(networkDispatcher)
 
-    override fun getRecommendHotBakeries(areaCodes: Set<Int>): Flow<List<RecommendBakeryResponse>> = flow {
-        emitData(api.getRecommendHotBakeries(areaCode = areaCodes.joinToString(separator = ",")))
+    override fun getRecommendHotBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>> = flow {
+        emitData(api.getRecommendHotBakeries(areaCode = areaCode))
     }.flowOn(networkDispatcher)
 
     override suspend fun getPreferenceBakeries(
-        areaCodes: Set<Int>,
+        areaCode: String,
         cursorId: Int,
         pageSize: Int
     ): BakeriesResponse {
         val response = api.getPreferenceBakeries(
-            areaCode = areaCodes.joinToString(separator = ","),
+            areaCode = areaCode,
             cursorId = cursorId,
             pageSize = pageSize
         )

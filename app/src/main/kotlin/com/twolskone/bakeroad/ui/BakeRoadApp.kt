@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.util.fastForEach
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.twolskone.bakeroad.core.common.android.base.extension.isRouteInHierarchy
@@ -34,7 +35,7 @@ internal fun BakeRoadApp(
             .systemBarsPadding(),
         bottomBar = {
             BakeRoadNavigationBar(modifier = Modifier.fillMaxWidth()) {
-                BakeRoadMenu.entries.forEach { menu ->
+                BakeRoadMenu.entries.fastForEach { menu ->
                     BakeRoadNavigationBarItem(
                         selected = currentDestination.isRouteInHierarchy(route = menu.route),
                         icon = menu.icon,

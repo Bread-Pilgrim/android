@@ -19,17 +19,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
-import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.component.chip.ChipStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
-import com.twolskone.bakeroad.feature.home.R
+import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
+import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
 
 private val ImageSize = 116.dp
 private val ImageShape = RoundedCornerShape(6.dp)
@@ -85,22 +84,11 @@ internal fun RecommendBakeryCard(
                 style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
             )
         }
-        BakeRoadChip(
+        BakeryOpenStatusChip(
             modifier = Modifier.padding(top = 6.dp),
             size = ChipSize.SMALL,
-            color = if (bakery.isOpened) ChipColor.MAIN else ChipColor.LIGHT_GRAY,
-            selected = false,
-            label = {
-                Text(
-                    text = stringResource(
-                        id = if (bakery.isOpened) {
-                            R.string.feature_home_label_is_opened
-                        } else {
-                            R.string.feature_home_label_is_closed
-                        }
-                    )
-                )
-            }
+            style = ChipStyle.WEAK,
+            openStatus = bakery.openStatus
         )
     }
 }
@@ -121,7 +109,7 @@ private fun BakeryCardPreview() {
                     name = "서라당",
                     rating = 4.7f,
                     reviewCount = 10,
-                    isOpened = false,
+                    openStatus = BakeryOpenStatus.OPEN,
                     imageUrl = ""
                 )
             )
@@ -131,7 +119,7 @@ private fun BakeryCardPreview() {
                     name = "런던 베이글 뮤지엄",
                     rating = 4.7f,
                     reviewCount = 10,
-                    isOpened = true,
+                    openStatus = BakeryOpenStatus.CLOSED,
                     imageUrl = ""
                 )
             )

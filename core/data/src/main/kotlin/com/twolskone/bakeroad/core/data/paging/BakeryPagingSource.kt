@@ -12,7 +12,7 @@ internal const val PageSize = 15
 
 internal class BakeryPagingSource(
     private val bakeryDataSource: BakeryDataSource,
-    private val areaCodes: Set<Int>,
+    private val areaCode: String,
     private val bakeryType: BakeryType
 ) : PagingSource<Int, Bakery>() {
 
@@ -28,7 +28,7 @@ internal class BakeryPagingSource(
         return try {
             // TODO. BakeryType 분기
             val response = bakeryDataSource.getPreferenceBakeries(
-                areaCodes = areaCodes,
+                areaCode = areaCode,
                 cursorId = cursor,
                 pageSize = params.loadSize
             )

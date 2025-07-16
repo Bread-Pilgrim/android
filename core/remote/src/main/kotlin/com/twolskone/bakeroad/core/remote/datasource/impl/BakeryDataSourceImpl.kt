@@ -39,4 +39,13 @@ internal class BakeryDataSourceImpl @Inject constructor(
         )
         return response.toData()
     }
+
+    override suspend fun getHotBakeries(areaCode: String, cursorId: Int, pageSize: Int): BakeriesResponse {
+        val response = api.getHotBakeries(
+            areaCode = areaCode,
+            cursorId = cursorId,
+            pageSize = pageSize
+        )
+        return response.toData()
+    }
 }

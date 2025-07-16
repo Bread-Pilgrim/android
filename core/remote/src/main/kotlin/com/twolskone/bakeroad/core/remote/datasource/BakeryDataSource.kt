@@ -8,4 +8,5 @@ interface BakeryDataSource {
     fun getRecommendPreferenceBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>>
     fun getRecommendHotBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>>
     suspend fun getPreferenceBakeries(areaCode: String, cursorId: Int, pageSize: Int): BakeriesResponse
+    suspend fun getHotBakeries(areaCode: String, cursorId: Int, pageSize: Int): BakeriesResponse
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,6 +21,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -41,7 +43,7 @@ internal fun RecommendBakeryCard(
     modifier: Modifier = Modifier,
     bakery: RecommendBakery
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.width(ImageSize)) {
         Box(
             modifier = Modifier
                 .size(ImageSize)
@@ -66,7 +68,8 @@ internal fun RecommendBakeryCard(
         Text(
             modifier = Modifier.padding(top = 6.dp),
             text = bakery.name,
-            style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990)
+            style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
+            overflow = TextOverflow.Ellipsis
         )
         Row(modifier = Modifier.padding(top = 4.dp)) {
             Image(

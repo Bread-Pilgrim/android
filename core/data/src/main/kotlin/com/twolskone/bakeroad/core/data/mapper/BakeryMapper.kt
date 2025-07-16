@@ -13,7 +13,7 @@ internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
         rating = avgRating,
         reviewCount = reviewCount.toInt(),
         openStatus = runCatching {
-            BakeryOpenStatus.valueOf(openStatus)
+            BakeryOpenStatus.ofStatus(openStatus) ?: BakeryOpenStatus.OPEN
         }.getOrDefault(BakeryOpenStatus.OPEN),
         imageUrl = imgUrl
     )
@@ -25,7 +25,7 @@ internal fun BakeryResponse.toExternalModel(): Bakery =
         rating = avgRating,
         reviewCount = reviewCount.toInt(),
         openStatus = runCatching {
-            BakeryOpenStatus.valueOf(openStatus)
+            BakeryOpenStatus.ofStatus(openStatus) ?: BakeryOpenStatus.OPEN
         }.getOrDefault(BakeryOpenStatus.OPEN),
         imageUrl = imgUrl,
         addressGu = gu,

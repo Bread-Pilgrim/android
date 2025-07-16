@@ -20,4 +20,11 @@ internal interface BakeryApi {
         @Query("cursor_id") cursorId: Int,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
+
+    @GET("bakeries/hot")
+    suspend fun getHotBakeries(
+        @Query("area_code") areaCode: String,
+        @Query("cursor_id") cursorId: Int,
+        @Query("page_size") pageSize: Int
+    ): BaseResponse<BakeriesResponse>
 }

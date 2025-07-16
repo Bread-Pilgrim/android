@@ -26,12 +26,19 @@ internal class BakeryPagingSource(
         val cursor = params.key ?: StartCursor
 
         return try {
-            // TODO. BakeryType 분기
-            val response = bakeryDataSource.getPreferenceBakeries(
-                areaCode = areaCode,
-                cursorId = cursor,
-                pageSize = params.loadSize
-            )
+            val response = when (bakeryType) {
+                BakeryType.PREFERENCE -> bakeryDataSource.getPreferenceBakeries(
+                    areaCode = areaCode,
+                    cursorId = cursor,
+                    pageSize = params.loadSize
+                )
+
+                BakeryType.HOT -> bakeryDataSource.getHotBakeries(
+                    areaCode = areaCode,
+                    cursorId = cursor,
+                    pageSize = params.loadSize
+                )
+            }
             val beforeCursor = response.paging.cursor.before
             val afterCursor = response.paging.cursor.after
 

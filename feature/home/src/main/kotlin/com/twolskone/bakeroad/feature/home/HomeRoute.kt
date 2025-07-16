@@ -20,12 +20,12 @@ internal fun HomeRoute(
         modifier = modifier,
         state = state,
         onAreaSelect = { selected, code -> viewModel.intent(HomeIntent.SelectArea(selected = selected, areaCode = code)) },
-        onSeeAllPreferenceBakeriesClick = {
+        onTourCategorySelect = { selected, category -> viewModel.intent(HomeIntent.SelectTourAreaCategory(selected = selected, category = category)) },
+        onSeeAllBakeriesClick = { bakeryType ->
             navigateToBakeryList(
                 state.selectedAreaCodes.joinToString(separator = ","),
-                BakeryType.PREFERENCE
+                bakeryType
             )
-        },
-        onTourCategorySelect = { selected, category -> viewModel.intent(HomeIntent.SelectTourAreaCategory(selected = selected, category = category)) }
+        }
     )
 }

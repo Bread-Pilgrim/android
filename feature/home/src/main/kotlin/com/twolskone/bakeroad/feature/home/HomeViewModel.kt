@@ -7,7 +7,7 @@ import com.twolskone.bakeroad.core.domain.usecase.GetAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendHotBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendPreferenceBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
-import com.twolskone.bakeroad.feature.home.mvi.EntireBusan
+import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import com.twolskone.bakeroad.feature.home.mvi.HomeSideEffect
 import com.twolskone.bakeroad.feature.home.mvi.HomeState

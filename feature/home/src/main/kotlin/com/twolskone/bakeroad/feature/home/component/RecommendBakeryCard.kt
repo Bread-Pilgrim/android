@@ -69,6 +69,7 @@ internal fun RecommendBakeryCard(
             modifier = Modifier.padding(top = 6.dp),
             text = bakery.name,
             style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
+            maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Row(modifier = Modifier.padding(top = 4.dp)) {

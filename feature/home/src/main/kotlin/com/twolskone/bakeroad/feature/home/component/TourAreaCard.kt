@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -39,7 +40,7 @@ internal fun TourAreaCard(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .aspectRatio(21f / 9f)
+                .aspectRatio(16f / 9f)
                 .clip(ImageShape)
                 .background(color = BakeRoadTheme.colorScheme.Gray50, shape = ImageShape)
         ) {
@@ -47,33 +48,33 @@ internal fun TourAreaCard(
                 modifier = Modifier.fillMaxSize(),
                 model = tourArea.imagePath,
                 contentDescription = "TourArea",
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
             )
         }
-        Text(
-            modifier = Modifier.padding(top = 6.dp),
-            text = tourArea.title,
-            style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990)
-        )
         Row(
-            modifier = Modifier.padding(top = 2.dp),
+            modifier = Modifier.padding(top = 8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                modifier = Modifier.padding(start = 2.dp),
-                text = tourArea.address,
-                style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
-            )
             BakeRoadChip(
-                modifier = Modifier
-                    .weight(1f, fill = false)
-                    .padding(start = 6.dp),
                 size = ChipSize.SMALL,
                 color = ChipColor.MAIN,
                 selected = false,
                 label = { Text(text = tourArea.type) }
             )
+            Text(
+                modifier = Modifier
+                    .padding(start = 4.dp)
+                    .weight(1f, fill = false),
+                text = tourArea.title,
+                style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990)
+            )
         }
+        Text(
+            modifier = Modifier.padding(top = 4.dp),
+            text = tourArea.address,
+            style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
+        )
     }
 }
 

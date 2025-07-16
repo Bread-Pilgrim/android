@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.ui
 
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,9 +31,7 @@ internal fun BakeRoadApp(
     val currentDestination = currentBackStackEntry?.destination
 
     Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
+        modifier = modifier.fillMaxSize(),
         bottomBar = {
             BakeRoadNavigationBar(modifier = Modifier.fillMaxWidth()) {
                 BakeRoadMenu.entries.fastForEach { menu ->
@@ -51,6 +50,7 @@ internal fun BakeRoadApp(
             modifier = modifier
                 .fillMaxSize()
                 .padding(contentPadding)
+                .consumeWindowInsets(contentPadding)
                 .systemBarsPadding(),
             navController = navController,
             navigateToBakeryList = navigateToBakeryList

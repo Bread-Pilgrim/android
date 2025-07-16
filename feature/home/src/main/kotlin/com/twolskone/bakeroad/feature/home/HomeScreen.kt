@@ -32,6 +32,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.feature.home.component.RecommendBakeryCard
 import com.twolskone.bakeroad.feature.home.component.Title
@@ -43,8 +44,8 @@ internal fun HomeScreen(
     modifier: Modifier = Modifier,
     state: HomeState,
     onAreaSelect: (Boolean, Int) -> Unit,
-    onSeeAllPreferenceBakeriesClick: () -> Unit,
-    onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit
+    onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
+    onSeeAllBakeriesClick: (BakeryType) -> Unit
 ) {
     LazyColumn(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         item {
@@ -116,7 +117,7 @@ internal fun HomeScreen(
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.feature_home_title_my_preference_bakery),
-                onSeeAllClick = onSeeAllPreferenceBakeriesClick
+                onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.PREFERENCE) }
             )
         }
         // 내 취향 추천 빵집 목록.
@@ -142,7 +143,7 @@ internal fun HomeScreen(
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth(),
                 title = stringResource(id = R.string.feature_home_title_hot_bakery),
-                onSeeAllClick = {}
+                onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.HOT) }
             )
         }
         // Hot한 빵집 목록.
@@ -175,7 +176,7 @@ internal fun HomeScreen(
         item {
             LazyRow(
                 modifier = Modifier
-                    .padding(top = 10.dp, bottom = 8.dp)
+                    .padding(vertical = 10.dp)
                     .fillMaxWidth(),
                 contentPadding = PaddingValues(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(9.dp)
@@ -198,7 +199,7 @@ internal fun HomeScreen(
         items(items = state.tourAreaList) {
             TourAreaCard(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                    .padding(horizontal = 16.dp, vertical = 10.dp)
                     .fillMaxWidth(),
                 tourArea = it
             )
@@ -224,8 +225,8 @@ private fun HomeScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             state = HomeState(),
             onAreaSelect = { _, _ -> },
-            onSeeAllPreferenceBakeriesClick = {},
-            onTourCategorySelect = { _, _ -> }
+            onTourCategorySelect = { _, _ -> },
+            onSeeAllBakeriesClick = {}
         )
     }
 }

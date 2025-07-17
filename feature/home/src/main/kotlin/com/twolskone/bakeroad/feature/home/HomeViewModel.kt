@@ -8,6 +8,7 @@ import com.twolskone.bakeroad.core.domain.usecase.GetRecommendHotBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendPreferenceBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
 import com.twolskone.bakeroad.core.model.EntireBusan
+import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import com.twolskone.bakeroad.feature.home.mvi.HomeSideEffect
 import com.twolskone.bakeroad.feature.home.mvi.HomeState
@@ -17,6 +18,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -34,14 +36,14 @@ internal class HomeViewModel @Inject constructor(
         return HomeState()
     }
 
-    private val areaTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+    private val areaTrigger = MutableSharedFlow<Set<Int>>(replay = 0, extraBufferCapacity = 1)
 
-    private val tourAreaCategoryTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+    private val tourAreaCategoryTrigger = MutableSharedFlow<Set<TourAreaCategory>>(replay = 0, extraBufferCapacity = 1)
 
     init {
         observeTrigger()
         getAreas()
-        areaTrigger.tryEmit(Unit)
+        refreshAll()
     }
 
     override suspend fun handleIntent(intent: HomeIntent) {
@@ -69,7 +71,7 @@ internal class HomeViewModel @Inject constructor(
                         originAreaCodes
                     }
                 }
-                if (originAreaCodes != selectedAreaCodes) areaTrigger.tryEmit(Unit)
+                areaTrigger.tryEmit(selectedAreaCodes)
                 copy(selectedAreaCodes = selectedAreaCodes)
             }
 
@@ -80,7 +82,7 @@ internal class HomeViewModel @Inject constructor(
                     (originTourCategories.size > 1) -> originTourCategories.remove(intent.category)
                     else -> originTourCategories
                 }
-                if (originTourCategories != selectedTourCategories) tourAreaCategoryTrigger.tryEmit(Unit)
+                tourAreaCategoryTrigger.tryEmit(selectedTourCategories)
                 copy(selectedTourAreaCategories = selectedTourCategories)
             }
         }
@@ -141,12 +143,14 @@ internal class HomeViewModel @Inject constructor(
     @OptIn(FlowPreview::class)
     private fun observeTrigger() {
         areaTrigger
-            .debounce(350L)
+            .debounce(400L)
+            .filter { areaCodes -> state.value.selectedAreaCodes != areaCodes }
             .onEach { refreshAll() }
             .launchIn(viewModelScope)
 
         tourAreaCategoryTrigger
-            .debounce(350L)
+            .debounce(400L)
+            .filter { tourAreaCategories -> state.value.selectedTourAreaCategories != tourAreaCategories }
             .onEach { refreshTourAreas() }
             .launchIn(viewModelScope)
     }

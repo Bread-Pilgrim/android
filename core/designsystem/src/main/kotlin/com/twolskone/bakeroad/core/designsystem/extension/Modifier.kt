@@ -14,7 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val INTERVAL_SINGLE_CLICK = 300L
+private const val INTERVAL_SINGLE_CLICK = 200L
 
 // None ripple single clickable.
 @Composable

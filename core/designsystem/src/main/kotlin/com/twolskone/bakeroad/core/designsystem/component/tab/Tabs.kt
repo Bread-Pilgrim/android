@@ -38,6 +38,7 @@ import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.layout.SubcomposeLayout
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.platform.debugInspectorInfo
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.TextStyle
@@ -114,8 +115,8 @@ fun BakeRoadTab(
 
 @Composable
 fun BakeRoadScrollableTabRow(
-    selectedTabIndex: Int,
     modifier: Modifier = Modifier,
+    selectedTabIndex: Int,
     containerColor: Color = BakeRoadTheme.colorScheme.White,
     contentColor: Color = BakeRoadTheme.colorScheme.Gray990,
     edgePadding: Dp = 16.dp,
@@ -131,9 +132,9 @@ fun BakeRoadScrollableTabRow(
     tabs: @Composable () -> Unit
 ) {
     BakeRoadScrollableTabRowWithSubcomposeImpl(
+        modifier = modifier,
         selectedTabIndex = selectedTabIndex,
         indicator = indicator,
-        modifier = modifier,
         containerColor = containerColor,
         contentColor = contentColor,
         edgePadding = edgePadding,
@@ -191,9 +192,9 @@ object BakeRoadTabRowDefaults {
 
 @Composable
 private fun BakeRoadScrollableTabRowWithSubcomposeImpl(
+    modifier: Modifier = Modifier,
     selectedTabIndex: Int,
     indicator: @Composable (tabPositions: List<TabPosition>) -> Unit,
-    modifier: Modifier = Modifier,
     containerColor: Color,
     contentColor: Color,
     edgePadding: Dp,
@@ -201,7 +202,13 @@ private fun BakeRoadScrollableTabRowWithSubcomposeImpl(
     tabs: @Composable () -> Unit,
     scrollState: ScrollState
 ) {
-    Surface(modifier = modifier, color = containerColor, contentColor = contentColor) {
+    val screenWidth = LocalWindowInfo.current.containerSize.width
+
+    Surface(
+        modifier = modifier,
+        color = containerColor,
+        contentColor = contentColor
+    ) {
         val coroutineScope = rememberCoroutineScope()
         val scrollableTabData =
             remember(scrollState, coroutineScope) {
@@ -249,7 +256,7 @@ private fun BakeRoadScrollableTabRowWithSubcomposeImpl(
                 }
 
             // Position the children.
-            layout(layoutWidth, layoutHeight) {
+            layout(screenWidth, layoutHeight) {
                 // Place the tabs
                 val tabPositions = mutableListOf<TabPosition>()
                 var left = padding
@@ -273,7 +280,7 @@ private fun BakeRoadScrollableTabRowWithSubcomposeImpl(
                             constraints.copy(
                                 minHeight = 0,
                                 minWidth = layoutWidth,
-                                maxWidth = layoutWidth
+                                maxWidth = screenWidth
                             )
                         )
                     placeable.placeRelative(0, layoutHeight - placeable.height)

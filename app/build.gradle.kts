@@ -48,6 +48,7 @@ dependencies {
     implementation(projects.feature.onboard)
     implementation(projects.feature.home)
     implementation(projects.feature.bakery.list)
+    implementation(projects.feature.bakery.detail)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)

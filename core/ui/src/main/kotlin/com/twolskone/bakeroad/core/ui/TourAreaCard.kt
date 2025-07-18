@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.home.component
+package com.twolskone.bakeroad.core.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -29,10 +29,10 @@ import com.twolskone.bakeroad.core.model.TourArea
 private val ImageShape = RoundedCornerShape(10.dp)
 
 /**
- * 관광지 추천 카드
+ * 주변 관광지 카드
  */
 @Composable
-internal fun TourAreaCard(
+fun TourAreaCard(
     modifier: Modifier = Modifier,
     tourArea: TourArea
 ) {

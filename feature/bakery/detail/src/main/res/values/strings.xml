@@ -3,4 +3,17 @@
     <string name="feature_bakery_detail_button_write_review">리뷰 작성하기</string>
     <string name="feature_bakery_detail_button_view_map">지도 보기</string>
     <string name="feature_bakery_detail_button_call">연결</string>
+    <string name="feature_bakery_detail_button_view_all_menu">메뉴 전체보기</string>
+    <string name="feature_bakery_detail_button_view_all_review">리뷰 전체보기</string>
+    <string name="feature_bakery_detail_tab_home">홈</string>
+    <string name="feature_bakery_detail_tab_menu">메뉴</string>
+    <string name="feature_bakery_detail_tab_review">리뷰</string>
+    <string name="feature_bakery_detail_tab_tour_area">근처 관광지</string>
+    <string name="feature_bakery_detail_title_recommend_menu">추천 메뉴</string>
+    <string name="feature_bakery_detail_title_review">방문자 리뷰</string>
+    <string name="feature_bakery_detail_title_tour_area">근처 추천 관광지</string>
+    <string name="feature_bakery_detail_label_signature_menu">대표메뉴</string>
+    <string name="feature_bakery_detail_description_empty_review">아직 등록된 리뷰가 없습니다!\n방문하셨다면 리뷰를 남겨주세요 🥨</string>
+    <string name="feature_bakery_detail_review_count">(%s개)</string>
+    <string name="feature_bakery_detail_like">좋아요</string>
 </resources>

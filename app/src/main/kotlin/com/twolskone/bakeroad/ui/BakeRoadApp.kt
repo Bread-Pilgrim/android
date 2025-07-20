@@ -1,10 +1,8 @@
 package com.twolskone.bakeroad.ui
 
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,7 +21,6 @@ import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 
 @Composable
 internal fun BakeRoadApp(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
     navigateToBakeryList: (String, BakeryType) -> Unit
 ) {
@@ -31,7 +28,6 @@ internal fun BakeRoadApp(
     val currentDestination = currentBackStackEntry?.destination
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
         bottomBar = {
             BakeRoadNavigationBar(modifier = Modifier.fillMaxWidth()) {
                 BakeRoadMenu.entries.fastForEach { menu ->
@@ -44,16 +40,15 @@ internal fun BakeRoadApp(
                     )
                 }
             }
-        }
+        },
     ) { contentPadding ->
         BakeRoadNavHost(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxSize()
-                .padding(contentPadding)
-                .consumeWindowInsets(contentPadding)
-                .systemBarsPadding(),
+                .statusBarsPadding(),
+            padding = contentPadding,
             navController = navController,
-            navigateToBakeryList = navigateToBakeryList
+            navigateToBakeryList = navigateToBakeryList,
         )
     }
 }

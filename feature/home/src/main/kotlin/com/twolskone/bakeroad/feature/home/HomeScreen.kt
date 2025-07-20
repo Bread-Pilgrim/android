@@ -42,12 +42,18 @@ import com.twolskone.bakeroad.feature.home.mvi.HomeState
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
+    padding: PaddingValues,
     state: HomeState,
     onAreaSelect: (Boolean, Int) -> Unit,
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
     onSeeAllBakeriesClick: (BakeryType) -> Unit
 ) {
-    LazyColumn(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
+    LazyColumn(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = BakeRoadTheme.colorScheme.White),
+        contentPadding = PaddingValues(bottom = padding.calculateBottomPadding())
+    ) {
         item {
             BakeRoadTopAppBar(
                 modifier = Modifier.fillMaxWidth(),
@@ -225,6 +231,7 @@ private fun HomeScreenPreview() {
     BakeRoadTheme {
         HomeScreen(
             modifier = Modifier.fillMaxSize(),
+            padding = PaddingValues(0.dp),
             state = HomeState(),
             onAreaSelect = { _, _ -> },
             onTourCategorySelect = { _, _ -> },

@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.feature.home.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.twolskone.bakeroad.core.model.type.BakeryType
@@ -9,8 +10,14 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object HomeRoute
 
-fun NavGraphBuilder.homeScreen(navigateToBakeryList: (String, BakeryType) -> Unit) {
+fun NavGraphBuilder.homeScreen(
+    padding: PaddingValues,
+    navigateToBakeryList: (String, BakeryType) -> Unit
+) {
     composable<HomeRoute> {
-        HomeRoute(navigateToBakeryList = navigateToBakeryList)
+        HomeRoute(
+            padding = padding,
+            navigateToBakeryList = navigateToBakeryList
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.navigation
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -11,6 +12,7 @@ import com.twolskone.bakeroad.feature.home.navigation.homeScreen
 @Composable
 internal fun BakeRoadNavHost(
     modifier: Modifier = Modifier,
+    padding: PaddingValues,
     navController: NavHostController,
     navigateToBakeryList: (String, BakeryType) -> Unit
 ) {
@@ -19,6 +21,9 @@ internal fun BakeRoadNavHost(
         navController = navController,
         startDestination = HomeRoute
     ) {
-        homeScreen(navigateToBakeryList = navigateToBakeryList)
+        homeScreen(
+            padding = padding,
+            navigateToBakeryList = navigateToBakeryList
+        )
     }
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,7 +44,11 @@ internal fun RecommendBakeryCard(
     modifier: Modifier = Modifier,
     bakery: RecommendBakery
 ) {
-    Column(modifier = modifier.width(ImageSize)) {
+    Column(
+        modifier = modifier
+            .width(ImageSize)
+            .heightIn(min = 213.dp)
+    ) {
         Box(
             modifier = Modifier
                 .size(ImageSize)
@@ -66,13 +71,18 @@ internal fun RecommendBakeryCard(
             )
         }
         Text(
-            modifier = Modifier.padding(top = 6.dp),
+            modifier = Modifier
+                .padding(top = 6.dp),
+//                .height(min = BakeRoadTheme.typography.bodyXsmallSemibold.lineHeight),
             text = bakery.name,
             style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
-            maxLines = 1,
+            maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
-        Row(modifier = Modifier.padding(top = 4.dp)) {
+        Row(
+            modifier = Modifier.padding(top = 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Image(
                 imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
                 contentDescription = "RatingStar"
@@ -120,7 +130,7 @@ private fun BakeryCardPreview() {
             RecommendBakeryCard(
                 bakery = RecommendBakery(
                     id = 1,
-                    name = "런던 베이글 뮤지엄",
+                    name = "런던 베이글 뮤지엄런던 베이글 뮤지엄",
                     rating = 4.7f,
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.CLOSED,

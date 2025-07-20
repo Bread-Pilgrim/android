@@ -3,9 +3,13 @@ package com.twolskone.bakeroad.feature.bakery.detail.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,8 +28,40 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.bakery.detail.R
 
+/**
+ * Menu tab.
+ */
+internal fun LazyListScope.menu() {
+    item(contentType = "menuTitle") {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = BakeRoadTheme.colorScheme.White)
+                .padding(top = 20.dp, bottom = 16.dp)
+        ) {
+            Text(
+                text = stringResource(R.string.feature_bakery_detail_title_all_menu),
+                style = BakeRoadTheme.typography.bodyLargeSemibold
+            )
+        }
+    }
+    items(count = 10, contentType = { "menu" }) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = BakeRoadTheme.colorScheme.White)
+        ) {
+            Menu(modifier = Modifier.fillMaxWidth())
+            Spacer(modifier = Modifier.height(if (it == 9) 20.dp else 16.dp))
+        }
+    }
+}
+
+/**
+ * Menu item.
+ */
 @Composable
-fun Menu(modifier: Modifier = Modifier) {
+internal fun Menu(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
@@ -72,5 +108,19 @@ private fun MenuPreview() {
                 .fillMaxWidth()
                 .background(color = BakeRoadTheme.colorScheme.White)
         )
+    }
+}
+
+@Preview
+@Composable
+private fun MenuTabPreview() {
+    BakeRoadTheme {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(color = BakeRoadTheme.colorScheme.Gray40)
+        ) {
+            menu()
+        }
     }
 }

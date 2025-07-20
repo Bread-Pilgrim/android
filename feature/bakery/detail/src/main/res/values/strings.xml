@@ -10,6 +10,7 @@
     <string name="feature_bakery_detail_tab_review">리뷰</string>
     <string name="feature_bakery_detail_tab_tour_area">근처 관광지</string>
     <string name="feature_bakery_detail_title_recommend_menu">추천 메뉴</string>
+    <string name="feature_bakery_detail_title_all_menu">전체 메뉴</string>
     <string name="feature_bakery_detail_title_review">방문자 리뷰</string>
     <string name="feature_bakery_detail_title_tour_area">근처 추천 관광지</string>
     <string name="feature_bakery_detail_label_signature_menu">대표메뉴</string>

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.extension.INTERVAL_SINGLE_CLICK
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
@@ -26,11 +27,12 @@ fun BakeRoadLineChip(
     modifier: Modifier = Modifier,
     selected: Boolean,
     onSelectedChange: (Boolean) -> Unit = {},
+    selectInterval: Long = INTERVAL_SINGLE_CLICK,
     label: @Composable () -> Unit,
 ) {
     Box(
         modifier = modifier
-            .noRippleSingleClickable { onSelectedChange(!selected) }
+            .noRippleSingleClickable(clickInterval = selectInterval) { onSelectedChange(!selected) }
             .background(color = containerColor, shape = CircleShape)
             .border(
                 width = 1.dp,

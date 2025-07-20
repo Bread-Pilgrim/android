@@ -47,7 +47,7 @@ internal fun RecommendBakeryCard(
     Column(
         modifier = modifier
             .width(ImageSize)
-            .heightIn(min = 213.dp)
+            .heightIn(min = 200.dp)
     ) {
         Box(
             modifier = Modifier

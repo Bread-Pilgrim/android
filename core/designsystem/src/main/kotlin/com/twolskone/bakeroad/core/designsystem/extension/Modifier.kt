@@ -14,13 +14,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private const val INTERVAL_SINGLE_CLICK = 200L
+const val INTERVAL_SINGLE_CLICK = 300L
 
 // None ripple single clickable.
 @Composable
 fun Modifier.noRippleSingleClickable(
     onClickLabel: String? = null,
     role: Role? = null,
+    clickInterval: Long = INTERVAL_SINGLE_CLICK,
     onClick: () -> Unit
 ): Modifier =
     composed {
@@ -28,6 +29,7 @@ fun Modifier.noRippleSingleClickable(
             indication = null,
             onClickLabel = onClickLabel,
             role = role,
+            clickInterval = clickInterval,
             onClick = onClick
         )
     }
@@ -38,6 +40,7 @@ fun Modifier.singleClickable(
     scope: CoroutineScope = rememberCoroutineScope(),
     onClickLabel: String? = null,
     role: Role? = null,
+    clickInterval: Long = INTERVAL_SINGLE_CLICK,
     onClick: () -> Unit
 ): Modifier =
     composed {
@@ -51,7 +54,7 @@ fun Modifier.singleClickable(
                 clickable.value = false
                 onClick()
                 scope.launch {
-                    delay(INTERVAL_SINGLE_CLICK)
+                    delay(clickInterval)
                     clickable.value = true
                 }
             }
@@ -64,6 +67,7 @@ private fun Modifier.singleClickable(
     onClickLabel: String? = null,
     role: Role? = null,
     indication: Indication?,
+    clickInterval: Long,
     onClick: () -> Unit
 ): Modifier =
     composed {
@@ -80,7 +84,7 @@ private fun Modifier.singleClickable(
                 clickable.value = false
                 onClick()
                 scope.launch {
-                    delay(INTERVAL_SINGLE_CLICK)
+                    delay(clickInterval)
                     clickable.value = true
                 }
             }

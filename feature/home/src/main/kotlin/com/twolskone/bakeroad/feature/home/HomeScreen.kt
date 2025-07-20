@@ -86,6 +86,7 @@ internal fun HomeScreen(
                     ) { area ->
                         BakeRoadLineChip(
                             selected = state.selectedAreaCodes.contains(area.code),
+                            selectInterval = 0,
                             onSelectedChange = { onAreaSelect(it, area.code) },
                             label = { Text(text = area.name) }
                         )
@@ -189,6 +190,7 @@ internal fun HomeScreen(
                         selected = state.selectedTourAreaCategories.contains(category),
                         color = ChipColor.SUB,
                         size = ChipSize.LARGE,
+                        selectInterval = 0,
                         onSelectedChange = { onTourCategorySelect(it, category) },
                         label = { Text(text = category.toLabel()) }
                     )

@@ -1,12 +1,26 @@
 package com.twolskone.bakeroad.core.designsystem.component.button
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize.LARGE
+import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize.MEDIUM
+import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize.SMALL
+import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize.XLARGE
+import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize.XSMALL
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 /**
@@ -19,18 +33,31 @@ fun BakeRoadOutlinedButton(
     enabled: Boolean = true,
     style: OutlinedButtonStyle,
     size: ButtonSize,
-    content: @Composable () -> Unit
+    content: @Composable RowScope.() -> Unit
 ) {
-    OutlinedButton(
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        colors = style.colors,
-        shape = size.shape,
-        border = BorderStroke(width = 1.dp, color = style.outlineColor(enabled = enabled)),
-        contentPadding = size.contentPadding
+    val containerColor = if (enabled) style.colors.containerColor else style.colors.disabledContainerColor
+    val contentColor = if (enabled) style.colors.contentColor else style.colors.contentColor
+    val border = BorderStroke(width = 1.dp, color = style.outlineColor(enabled = enabled))
+
+    Box(
+        modifier = modifier
+            .border(border, size.shape)
+            .background(color = containerColor, shape = size.shape)
+            .clip(size.shape)
+            .singleClickable { onClick() },
+        contentAlignment = Alignment.Center
     ) {
-        ProvideTextStyle(value = size.typography, content)
+        ProvideContentColorTextStyle(
+            contentColor = contentColor,
+            textStyle = style.getTypography(size)
+        ) {
+            Row(
+                modifier = Modifier.padding(size.contentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = content
+            )
+        }
     }
 }
 
@@ -55,14 +82,12 @@ fun BakeRoadOutlinedButton(
         style = style,
         size = size
     ) {
-        ProvideTextStyle(value = size.typography) {
-            BakeRoadButtonContent(
-                text = text,
-                buttonSize = size,
-                leadingIcon = leadingIcon,
-                trailingIcon = trailingIcon
-            )
-        }
+        BakeRoadButtonContent(
+            text = text,
+            buttonSize = size,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon
+        )
     }
 }
 
@@ -102,5 +127,18 @@ enum class OutlinedButtonStyle {
         when (this) {
             PRIMARY -> if (enabled) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray200
             SECONDARY, ASSISTIVE -> BakeRoadTheme.colorScheme.Gray200
+        }
+
+    @Composable
+    fun getTypography(size: ButtonSize): TextStyle =
+        when (this) {
+            PRIMARY, SECONDARY -> size.typography
+            ASSISTIVE -> {
+                when (size) {
+                    XLARGE, LARGE -> BakeRoadTheme.typography.bodyMediumMedium
+                    MEDIUM -> BakeRoadTheme.typography.bodySmallMedium
+                    SMALL, XSMALL -> BakeRoadTheme.typography.body2XsmallMedium
+                }
+            }
         }
 }

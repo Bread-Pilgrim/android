@@ -1,10 +1,17 @@
 package com.twolskone.bakeroad.core.designsystem.component.button
 
-import androidx.compose.material3.Button
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 /**
@@ -17,17 +24,29 @@ fun BakeRoadSolidButton(
     style: SolidButtonStyle,
     size: ButtonSize,
     onClick: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable RowScope.() -> Unit
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        enabled = enabled,
-        colors = style.colors,
-        shape = size.shape,
-        contentPadding = size.contentPadding
+    val containerColor = if (enabled) style.colors.containerColor else style.colors.disabledContainerColor
+    val contentColor = if (enabled) style.colors.contentColor else style.colors.contentColor
+
+    Box(
+        modifier = modifier
+            .background(color = containerColor, shape = size.shape)
+            .clip(size.shape)
+            .singleClickable { onClick() },
+        contentAlignment = Alignment.Center
     ) {
-        ProvideTextStyle(value = size.typography, content = content)
+        ProvideContentColorTextStyle(
+            contentColor = contentColor,
+            textStyle = size.typography
+        ) {
+            Row(
+                modifier = Modifier.padding(size.contentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = content
+            )
+        }
     }
 }
 
@@ -52,14 +71,12 @@ fun BakeRoadSolidButton(
         style = style,
         size = size
     ) {
-        ProvideTextStyle(value = size.typography) {
-            BakeRoadButtonContent(
-                text = text,
-                buttonSize = size,
-                leadingIcon = leadingIcon,
-                trailingIcon = trailingIcon
-            )
-        }
+        BakeRoadButtonContent(
+            text = text,
+            buttonSize = size,
+            leadingIcon = leadingIcon,
+            trailingIcon = trailingIcon
+        )
     }
 }
 

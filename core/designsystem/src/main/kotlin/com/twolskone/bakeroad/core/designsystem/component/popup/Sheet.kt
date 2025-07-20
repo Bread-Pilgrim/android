@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.core.designsystem.component.popup
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,8 +25,10 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.R
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
@@ -35,7 +38,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import kotlinx.coroutines.launch
 
 private val SheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
-private val SheetPadding = 16.dp
+private val SheetPadding = PaddingValues(top = 24.dp, start = 16.dp, end = 16.dp, bottom = 14.dp)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -44,9 +47,9 @@ fun BakeRoadSheet(
     sheetState: SheetState = rememberModalBottomSheetState(),
     buttonType: PopupButton,
     title: String,
-    content: String,
-    primaryText: String,
-    secondaryText: String,
+    content: String = "",
+    primaryText: String = stringResource(id = R.string.core_designsystem_button_confirm),
+    secondaryText: String = stringResource(id = R.string.core_designsystem_button_cancel),
     userActionContent: (@Composable () -> Unit)? = null,
     onDismissRequest: () -> Unit,
     onPrimaryAction: () -> Unit,
@@ -72,15 +75,17 @@ fun BakeRoadSheet(
                 text = title,
                 style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Gray990)
             )
-            Spacer(modifier = Modifier.height(8.dp))
             // Content.
-            Text(
-                text = content,
-                style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
-            )
-            Spacer(modifier = Modifier.height(24.dp))
+            if (content.isNotBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = content,
+                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                )
+            }
             // User action.
             if (userActionContent != null) {
+                Spacer(modifier = Modifier.height(24.dp))
                 userActionContent()
             }
             Spacer(modifier = Modifier.height(24.dp))
@@ -117,7 +122,7 @@ fun BakeRoadSheetButtons(
                     style = OutlinedButtonStyle.SECONDARY,
                     size = ButtonSize.LARGE,
                     onClick = onSecondaryClick,
-                    content = { Text(text = primaryText) }
+                    content = { Text(text = secondaryText) }
                 )
                 BakeRoadSolidButton(
                     modifier = Modifier
@@ -126,7 +131,7 @@ fun BakeRoadSheetButtons(
                     style = SolidButtonStyle.PRIMARY,
                     size = ButtonSize.LARGE,
                     onClick = onPrimaryClick,
-                    content = { Text(text = secondaryText) }
+                    content = { Text(text = primaryText) }
                 )
             }
         }
@@ -179,8 +184,6 @@ private fun BakeRoadSheetPreview() {
                     buttonType = PopupButton.LONG,
                     title = "제목",
                     content = "내용",
-                    primaryText = "권장행동",
-                    secondaryText = "행동",
                     userActionContent = {
                         Box(
                             modifier = Modifier

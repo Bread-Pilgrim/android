@@ -2,8 +2,10 @@ package com.twolskone.bakeroad.feature.bakery.detail.component
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
@@ -36,6 +38,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
+import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
+import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
+import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
+import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
@@ -50,7 +60,31 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
  * Review tab.
  */
 internal fun LazyListScope.review() {
-
+    item("myReviewHeader") {
+        MyReviewHeaderSection(
+            modifier = Modifier.fillMaxWidth(),
+            reviewList = listOf()
+        )
+    }
+    items(count = 2, contentType = { "myReview" }) {
+        ReviewCard(
+            modifier = Modifier
+                .background(BakeRoadTheme.colorScheme.White)
+                .padding(vertical = 6.dp, horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+    }
+    item("allReviewHeader") {
+        AllReviewHeaderSection(modifier = Modifier.fillMaxWidth())
+    }
+    items(count = 10, contentType = { "allReview" }) {
+        ReviewCard(
+            modifier = Modifier
+                .background(BakeRoadTheme.colorScheme.White)
+                .padding(vertical = 6.dp, horizontal = 16.dp)
+                .fillMaxWidth()
+        )
+    }
 }
 
 /**
@@ -203,6 +237,142 @@ internal fun EmptyReviewCard(
     }
 }
 
+/**
+ * My reviews header section.
+ */
+@Composable
+private fun MyReviewHeaderSection(
+    modifier: Modifier = Modifier,
+    reviewList: List<String>
+) {
+//    val pagerState = rememberPagerState(pageCount = { reviewList.size })
+
+    Column(
+        modifier = modifier
+            .background(color = BakeRoadTheme.colorScheme.White)
+            .padding(top = 20.dp, bottom = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.feature_bakery_detail_my_review),
+                style = BakeRoadTheme.typography.bodyLargeSemibold
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 2.dp)
+                    .weight(1f),
+                text = stringResource(R.string.feature_bakery_detail_review_count, "100"),
+                style = BakeRoadTheme.typography.bodySmallMedium
+            )
+            BakeRoadOutlinedButton(
+                modifier = Modifier,
+                style = OutlinedButtonStyle.ASSISTIVE,
+                size = ButtonSize.SMALL,
+                onClick = {},
+                content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
+            )
+        }
+//        HorizontalPager(
+//            modifier = modifier,
+//            state = pagerState,
+//            contentPadding = PaddingValues(horizontal = 16.dp),
+//            pageSpacing = 8.dp
+//        ) {
+//            ReviewCard()
+//        }
+    }
+}
+
+/**
+ * All reviews header sections. (include my reviews)
+ */
+@Composable
+private fun AllReviewHeaderSection(
+    modifier: Modifier
+) {
+    Column(
+        modifier = modifier
+            .background(color = BakeRoadTheme.colorScheme.White)
+            .padding(top = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = stringResource(R.string.feature_bakery_detail_title_review),
+                style = BakeRoadTheme.typography.bodyLargeSemibold
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 2.dp)
+                    .weight(1f),
+                text = stringResource(R.string.feature_bakery_detail_review_count, "100"),
+                style = BakeRoadTheme.typography.bodySmallMedium
+            )
+        }
+        Row(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .padding(bottom = 6.dp)
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier.size(20.dp),
+                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
+                contentDescription = "RatingStar"
+            )
+            Text(
+                modifier = Modifier
+                    .padding(start = 5.dp)
+                    .weight(1f),
+                text = "5.0",
+                style = BakeRoadTheme.typography.bodyMediumMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
+            )
+            BakeRoadTextButton(
+                style = TextButtonStyle.ASSISTIVE,
+                size = TextButtonSize.SMALL,
+                onClick = {},
+                content = { Text(text = "좋아요 순") }
+            )
+        }
+    }
+}
+
+@Composable
+private fun EmptyReviewSection(
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier
+            .background(color = BakeRoadTheme.colorScheme.White)
+            .padding(top = 6.dp)
+            .padding(horizontal = 16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        EmptyReviewCard(modifier = Modifier.fillMaxWidth())
+        BakeRoadSolidButton(
+            modifier = Modifier
+                .padding(top = 16.dp, bottom = 20.dp)
+                .fillMaxWidth(),
+            style = SolidButtonStyle.PRIMARY,
+            size = ButtonSize.MEDIUM,
+            onClick = {},
+            content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun ReviewCardPreview() {
@@ -216,5 +386,32 @@ private fun ReviewCardPreview() {
 private fun EmptyReviewCardPreview() {
     BakeRoadTheme {
         EmptyReviewCard(modifier = Modifier.fillMaxWidth())
+    }
+}
+
+@Preview
+@Composable
+private fun MyReviewSectionPreview() {
+    BakeRoadTheme {
+        MyReviewHeaderSection(
+            modifier = Modifier.fillMaxWidth(),
+            reviewList = listOf("", "")
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AllReviewHeaderSectionPreview() {
+    BakeRoadTheme {
+        AllReviewHeaderSection(modifier = Modifier.fillMaxWidth())
+    }
+}
+
+@Preview
+@Composable
+private fun EmptyReviewSectionPreview() {
+    BakeRoadTheme {
+        EmptyReviewSection(modifier = Modifier.fillMaxWidth())
     }
 }

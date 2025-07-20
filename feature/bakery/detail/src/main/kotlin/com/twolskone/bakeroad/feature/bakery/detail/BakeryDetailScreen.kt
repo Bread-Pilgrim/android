@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,6 +23,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,10 +33,15 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import com.twolskone.bakeroad.core.designsystem.component.check.CheckSize
+import com.twolskone.bakeroad.core.designsystem.component.check.SingleCheck
+import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadSheet
+import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -42,11 +49,13 @@ import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImagePager
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfo
-import com.twolskone.bakeroad.feature.bakery.detail.component.home
+import com.twolskone.bakeroad.feature.bakery.detail.component.review
+import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
 private val TopAppBarHeight = 56.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BakeryDetailScreen(
     modifier: Modifier = Modifier
@@ -89,6 +98,7 @@ internal fun BakeryDetailScreen(
         targetValue = BakeRoadTheme.colorScheme.White.copy(alpha = topBarColorTransition),
         label = "TopBarColorAnimation"
     )
+    var showBottomSheet by remember { mutableStateOf(false) }
 
     LaunchedEffect(topBarColor) {
         Timber.e("topBarColor : $topBarColor")
@@ -124,7 +134,11 @@ internal fun BakeryDetailScreen(
                 BakeRoadScrollableTabRow(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .shadow(elevation = 1.dp, ambientColor = BakeRoadTheme.colorScheme.Gray500, spotColor = BakeRoadTheme.colorScheme.Gray500),
+                        .shadow(
+                            elevation = 4.dp,
+                            ambientColor = BakeRoadTheme.colorScheme.Gray500,
+                            spotColor = BakeRoadTheme.colorScheme.Gray500
+                        ),
                     containerColor = BakeRoadTheme.colorScheme.White,
                     contentColor = BakeRoadTheme.colorScheme.Gray990,
                     edgePadding = 16.dp,
@@ -152,7 +166,8 @@ internal fun BakeryDetailScreen(
                     )
                 }
             }
-            home()
+//            home()
+            review()
         }
         BakeRoadTopAppBar(
             modifier = Modifier
@@ -214,6 +229,28 @@ internal fun BakeryDetailScreen(
                 }
             }
         )
+        if (showBottomSheet) {
+            BakeRoadSheet(
+                modifier = Modifier.fillMaxWidth(),
+                buttonType = PopupButton.SHORT,
+                title = stringResource(id = R.string.feature_bakery_detail_title_sort_order),
+                primaryText = stringResource(id = R.string.feature_bakery_detail_button_sort),
+                userActionContent = {
+                    SingleCheck(
+                        modifier = Modifier.fillMaxWidth(),
+                        size = CheckSize.NORMAL,
+                        selectedOption = "좋아요 순",
+                        optionList = persistentListOf("좋아요 순", "최신 작성 순", "높은 평가 순", "낮은 평가 순"),
+                        onCheck = {}
+                    )
+                },
+                onDismissRequest = {
+                    showBottomSheet = false
+                },
+                onPrimaryAction = {},
+                onSecondaryAction = {}
+            )
+        }
     }
 }
 

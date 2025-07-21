@@ -69,9 +69,9 @@ internal fun LazyListScope.review() {
     items(count = 2, contentType = { "myReview" }) {
         ReviewCard(
             modifier = Modifier
+                .fillMaxWidth()
                 .background(BakeRoadTheme.colorScheme.White)
                 .padding(vertical = 6.dp, horizontal = 16.dp)
-                .fillMaxWidth()
         )
     }
     item("allReviewHeader") {
@@ -80,9 +80,10 @@ internal fun LazyListScope.review() {
     items(count = 10, contentType = { "allReview" }) {
         ReviewCard(
             modifier = Modifier
+                .fillMaxWidth()
                 .background(BakeRoadTheme.colorScheme.White)
                 .padding(vertical = 6.dp, horizontal = 16.dp)
-                .fillMaxWidth()
+                .padding(bottom = if (it == 9) 14.dp else 0.dp)
         )
     }
 }

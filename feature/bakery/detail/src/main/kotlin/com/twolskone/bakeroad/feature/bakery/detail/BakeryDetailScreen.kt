@@ -50,6 +50,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImagePager
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.component.review
+import com.twolskone.bakeroad.feature.bakery.detail.component.tourArea
 import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
@@ -167,7 +168,8 @@ internal fun BakeryDetailScreen(
                 }
             }
 //            home()
-            review()
+//            review()
+            tourArea()
         }
         BakeRoadTopAppBar(
             modifier = Modifier

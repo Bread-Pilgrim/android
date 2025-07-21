@@ -30,12 +30,16 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
 import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.feature.bakery.detail.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 /**
  * Home tab with sections. (Menu, Review, TourArea)
@@ -44,11 +48,15 @@ import com.twolskone.bakeroad.feature.bakery.detail.R
  * @see TourAreaSection
  */
 internal fun LazyListScope.home(
-    itemModifier: Modifier = Modifier
+    itemModifier: Modifier = Modifier,
+    menuList: ImmutableList<BakeryDetail.Menu>
 ) {
     item(contentType = "home") {
         Column(modifier = itemModifier) {
-            MenuSection(modifier = Modifier.fillMaxWidth())
+            MenuSection(
+                modifier = Modifier.fillMaxWidth(),
+                menuList = menuList
+            )
             ReviewSection(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
@@ -63,7 +71,12 @@ internal fun LazyListScope.home(
  * Menu section.
  */
 @Composable
-private fun MenuSection(modifier: Modifier = Modifier) {
+private fun MenuSection(
+    modifier: Modifier = Modifier,
+    menuList: ImmutableList<BakeryDetail.Menu>
+) {
+    val lastIndex = menuList.take(4).size - 1
+
     Column(
         modifier = modifier
             .background(color = BakeRoadTheme.colorScheme.White)
@@ -76,9 +89,9 @@ private fun MenuSection(modifier: Modifier = Modifier) {
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
         }
-        (0..3).forEach { index ->
-            Menu(modifier = Modifier.fillMaxWidth())
-            if (index != 3) {
+        menuList.take(4).fastForEachIndexed { index, menu ->
+            Menu(modifier = Modifier.fillMaxWidth(), menu = menu)
+            if (index == lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = BakeRoadTheme.colorScheme.Gray50
@@ -264,7 +277,23 @@ private fun SimpleTourAreaCard(modifier: Modifier = Modifier) {
 @Composable
 private fun MenuSectionPreview() {
     BakeRoadTheme {
-        MenuSection(modifier = Modifier.fillMaxWidth())
+        MenuSection(
+            modifier = Modifier.fillMaxWidth(),
+            menuList = persistentListOf(
+                BakeryDetail.Menu(
+                    name = "에그타르트",
+                    price = 3000,
+                    isSignature = true,
+                    imageUrl = ""
+                ),
+                BakeryDetail.Menu(
+                    name = "에그타르트",
+                    price = 3000,
+                    isSignature = false,
+                    imageUrl = ""
+                )
+            )
+        )
     }
 }
 

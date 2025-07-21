@@ -47,10 +47,13 @@ import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.BakeryDetail
+import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImagePager
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfo
-import com.twolskone.bakeroad.feature.bakery.detail.component.review
-import com.twolskone.bakeroad.feature.bakery.detail.component.tourArea
+import com.twolskone.bakeroad.feature.bakery.detail.component.home
+import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
@@ -59,7 +62,10 @@ private val TopAppBarHeight = 56.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BakeryDetailScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bakeryImageList: ImmutableList<String>,
+    bakeryInfo: BakeryInfo?,
+    menuList: ImmutableList<BakeryDetail.Menu>
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -121,14 +127,16 @@ internal fun BakeryDetailScreen(
             item(contentType = "bakeryImagePager") {
                 BakeryImagePager(
                     modifier = Modifier.fillMaxWidth(),
-                    imageList = listOf("")
+                    imageList = bakeryImageList,
+                    bakeryOpenStatus = bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
                 )
             }
             item(contentType = "bakeryInfo") {
                 BakeryInfo(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(bottom = 8.dp)
+                        .padding(bottom = 8.dp),
+                    bakeryInfo = bakeryInfo
                 )
             }
             stickyHeader("tabs") {
@@ -167,9 +175,9 @@ internal fun BakeryDetailScreen(
                     )
                 }
             }
-//            home()
+            home(menuList = menuList)
 //            review()
-            tourArea()
+//            tourArea()
         }
         BakeRoadTopAppBar(
             modifier = Modifier
@@ -194,7 +202,7 @@ internal fun BakeryDetailScreen(
             },
             title = {
                 if (topBarColorTransition == 1f) {
-                    Text(text = "서라당")
+                    Text(text = bakeryInfo?.name.orEmpty())
                 }
             },
             rightActions = {
@@ -260,6 +268,10 @@ internal fun BakeryDetailScreen(
 @Composable
 private fun BakeryDetailScreenPreview() {
     BakeRoadTheme {
-        BakeryDetailScreen()
+        BakeryDetailScreen(
+            bakeryImageList = persistentListOf(),
+            bakeryInfo = null,
+            menuList = persistentListOf()
+        )
     }
 }

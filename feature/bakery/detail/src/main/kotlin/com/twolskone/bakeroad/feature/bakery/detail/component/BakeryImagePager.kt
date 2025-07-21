@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.feature.bakery.detail.component
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -14,10 +15,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.ColorPainter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -25,43 +26,50 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
 
-private val colors = listOf(Color.DarkGray, Color.LightGray)
-
 @Composable
 internal fun BakeryImagePager(
     modifier: Modifier = Modifier,
-    imageList: List<String>
+    imageList: List<String>,
+    bakeryOpenStatus: BakeryOpenStatus
 ) {
     val imagePagerState = rememberPagerState(pageCount = { imageList.size })
 
     Box(modifier = modifier.aspectRatio(3f / 2f)) {
-        HorizontalPager(
-            state = imagePagerState
-        ) { imagePage ->
-            imageList.getOrNull(imagePage)?.let { image ->
-                AsyncImage(
-                    modifier = Modifier.fillMaxSize(),
-                    model = image,
-                    contentDescription = "Bakery",
-                    contentScale = ContentScale.Crop,
-                    placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail),
-                    error = ColorPainter(colors[imagePage])
-                )
+        if (imageList.isNotEmpty()) {
+            HorizontalPager(
+                state = imagePagerState
+            ) { imagePage ->
+                imageList.getOrNull(imagePage)?.let { image ->
+                    AsyncImage(
+                        modifier = Modifier.fillMaxSize(),
+                        model = image,
+                        contentDescription = "Bakery",
+                        contentScale = ContentScale.Crop,
+                        placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
+                    )
+                }
             }
+            ImagePagerIndicator(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomEnd),
+                pageCount = imageList.size,
+                currentPageIndex = imagePagerState.currentPage
+            )
+            BakeryOpenStatusChip(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .align(Alignment.BottomStart),
+                openStatus = bakeryOpenStatus
+            )
+        } else {
+            Image(
+                modifier = Modifier.fillMaxSize(),
+                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail),
+                contentScale = ContentScale.Crop,
+                contentDescription = "BakeryPlaceholder"
+            )
         }
-        ImagePagerIndicator(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomEnd),
-            pageCount = imageList.size,
-            currentPageIndex = imagePagerState.currentPage
-        )
-        BakeryOpenStatusChip(
-            modifier = Modifier
-                .padding(16.dp)
-                .align(Alignment.BottomStart),
-            openStatus = BakeryOpenStatus.OPEN
-        )
     }
 }
 
@@ -91,7 +99,8 @@ private fun HeaderPreview() {
     BakeRoadTheme {
         BakeryImagePager(
             modifier = Modifier.fillMaxWidth(),
-            imageList = listOf("", "")
+            imageList = listOf(),
+            bakeryOpenStatus = BakeryOpenStatus.OPEN
         )
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipStyle
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
@@ -42,12 +43,14 @@ private val ImageShape = RoundedCornerShape(6.dp)
 @Composable
 internal fun RecommendBakeryCard(
     modifier: Modifier = Modifier,
-    bakery: RecommendBakery
+    bakery: RecommendBakery,
+    onClick: (RecommendBakery) -> Unit
 ) {
     Column(
         modifier = modifier
             .width(ImageSize)
             .heightIn(min = 200.dp)
+            .noRippleSingleClickable { onClick(bakery) }
     ) {
         Box(
             modifier = Modifier
@@ -125,7 +128,8 @@ private fun BakeryCardPreview() {
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.OPEN,
                     imageUrl = ""
-                )
+                ),
+                onClick = {}
             )
             RecommendBakeryCard(
                 bakery = RecommendBakery(
@@ -135,7 +139,8 @@ private fun BakeryCardPreview() {
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.CLOSED,
                     imageUrl = ""
-                )
+                ),
+                onClick = {}
             )
         }
     }

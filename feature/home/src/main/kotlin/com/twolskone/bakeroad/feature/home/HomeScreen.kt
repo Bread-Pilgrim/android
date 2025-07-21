@@ -32,6 +32,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.core.ui.TourAreaCard
@@ -46,7 +47,8 @@ internal fun HomeScreen(
     state: HomeState,
     onAreaSelect: (Boolean, Int) -> Unit,
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
-    onSeeAllBakeriesClick: (BakeryType) -> Unit
+    onSeeAllBakeriesClick: (BakeryType) -> Unit,
+    onBakeryClick: (RecommendBakery) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -138,7 +140,10 @@ internal fun HomeScreen(
                     items = state.preferenceBakeryList,
                     key = { bakery -> bakery.id }
                 ) {
-                    RecommendBakeryCard(bakery = it)
+                    RecommendBakeryCard(
+                        bakery = it,
+                        onClick = { bakery -> onBakeryClick(bakery) }
+                    )
                 }
             }
         }
@@ -164,7 +169,10 @@ internal fun HomeScreen(
                     items = state.hotBakeryList,
                     key = { bakery -> bakery.id }
                 ) {
-                    RecommendBakeryCard(bakery = it)
+                    RecommendBakeryCard(
+                        bakery = it,
+                        onClick = { bakery -> onBakeryClick(bakery) }
+                    )
                 }
             }
         }
@@ -235,7 +243,8 @@ private fun HomeScreenPreview() {
             state = HomeState(),
             onAreaSelect = { _, _ -> },
             onTourCategorySelect = { _, _ -> },
-            onSeeAllBakeriesClick = {}
+            onSeeAllBakeriesClick = {},
+            onBakeryClick = {}
         )
     }
 }

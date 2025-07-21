@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
+import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,6 +17,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var bakeryListNavigator: BakeryListNavigator
+
+    @Inject
+    lateinit var bakeryDetailNavigator: BakeryDetailNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,13 @@ class MainActivity : ComponentActivity() {
                                 putExtra("areaCode", areaCode)
                                 putExtra("bakeryType", bakeryType)
                             }
+                        )
+                    },
+                    navigateToBakeryDetail = { bakeryId ->
+                        bakeryDetailNavigator.navigateFromActivity(
+                            activity = this,
+                            withFinish = false,
+                            intentBuilder = { putExtra("bakeryId", bakeryId) }
                         )
                     }
                 )

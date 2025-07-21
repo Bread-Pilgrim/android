@@ -12,7 +12,8 @@ import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 internal fun HomeRoute(
     padding: PaddingValues,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToBakeryList: (areaCode: String, BakeryType) -> Unit
+    navigateToBakeryList: (areaCode: String, BakeryType) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -26,6 +27,7 @@ internal fun HomeRoute(
                 state.selectedAreaCodes.joinToString(separator = ","),
                 bakeryType
             )
-        }
+        },
+        onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id) }
     )
 }

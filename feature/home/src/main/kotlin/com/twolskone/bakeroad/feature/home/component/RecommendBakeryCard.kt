@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipStyle
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
@@ -74,9 +75,7 @@ internal fun RecommendBakeryCard(
             )
         }
         Text(
-            modifier = Modifier
-                .padding(top = 6.dp),
-//                .height(min = BakeRoadTheme.typography.bodyXsmallSemibold.lineHeight),
+            modifier = Modifier.padding(top = 6.dp),
             text = bakery.name,
             style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
             maxLines = 2,
@@ -97,7 +96,7 @@ internal fun RecommendBakeryCard(
             )
             Text(
                 modifier = Modifier.padding(start = 2.dp),
-                text = "(${bakery.reviewCount})",
+                text = "(${bakery.reviewCount.toCommaString()})",
                 style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
             )
         }

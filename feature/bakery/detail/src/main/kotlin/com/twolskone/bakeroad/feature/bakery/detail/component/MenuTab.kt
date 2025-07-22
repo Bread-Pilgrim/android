@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
@@ -94,7 +95,7 @@ internal fun Menu(
             )
             Text(
                 modifier = Modifier.padding(top = 2.dp),
-                text = stringResource(id = R.string.feature_bakery_detail_price, menu.price.toString()),
+                text = stringResource(id = R.string.feature_bakery_detail_price, menu.price.toCommaString()),
                 style = BakeRoadTheme.typography.bodySmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990)
             )
         }

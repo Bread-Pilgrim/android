@@ -29,6 +29,7 @@ import androidx.compose.ui.util.fastFilter
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastJoinToString
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
@@ -103,7 +104,7 @@ internal fun BakeryCard(
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = stringResource(id = R.string.feature_bakery_list_label_review_count, bakery.reviewCount),
+                    text = stringResource(id = R.string.feature_bakery_list_label_review_count, bakery.reviewCount.toCommaString()),
                     style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
                 )
             }

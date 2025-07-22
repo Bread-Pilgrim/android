@@ -20,6 +20,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
@@ -64,7 +65,7 @@ internal fun BakeryInfo(
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = stringResource(id = R.string.feature_bakery_detail_review_count, bakeryInfo.reviewCount),
+                    text = stringResource(id = R.string.feature_bakery_detail_review_count, bakeryInfo.reviewCount.toCommaString()),
                     style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
                 )
             }

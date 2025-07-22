@@ -2,5 +2,5 @@
 <resources>
     <string name="feature_bakery_list_title_preference">내 취향 빵집</string>
     <string name="feature_bakery_list_title_hot">Hot한 빵집 모음</string>
-    <string name="feature_bakery_list_label_review_count">(리뷰 %d)</string>
+    <string name="feature_bakery_list_label_review_count">(리뷰 %s)</string>
 </resources>

@@ -1,3 +1,5 @@
+@file:JvmName("ReviewTabKt")
+
 package com.twolskone.bakeroad.feature.bakery.detail.component
 
 import androidx.compose.animation.animateColorAsState

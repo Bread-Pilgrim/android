@@ -77,7 +77,7 @@ internal fun HomeScreen(
                 }
             )
         }
-        // 지역 필터.
+        // 지역 필터
         stickyHeader {
             Column(modifier = Modifier.fillMaxWidth()) {
                 LazyRow(
@@ -119,7 +119,7 @@ internal fun HomeScreen(
                 )
             }
         }
-        // 내 취향 추천 빵집 제목.
+        // 내 취향 추천 빵집 제목
         item {
             Title(
                 modifier = Modifier
@@ -129,7 +129,7 @@ internal fun HomeScreen(
                 onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.PREFERENCE) }
             )
         }
-        // 내 취향 추천 빵집 목록.
+        // 내 취향 추천 빵집 목록
         item {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -147,7 +147,7 @@ internal fun HomeScreen(
                 }
             }
         }
-        // Hot한 빵집 제목.
+        // Hot한 빵집 제목
         item {
             Title(
                 modifier = Modifier
@@ -158,7 +158,7 @@ internal fun HomeScreen(
                 onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.HOT) }
             )
         }
-        // Hot한 빵집 목록.
+        // Hot한 빵집 목록
         item {
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -176,7 +176,7 @@ internal fun HomeScreen(
                 }
             }
         }
-        // 주변 추천 관광지 제목.
+        // 주변 추천 관광지 제목
         item {
             Title(
                 modifier = Modifier
@@ -187,7 +187,7 @@ internal fun HomeScreen(
                 onSeeAllClick = {}
             )
         }
-        // 관광지 카테고리 필터.
+        // 관광지 카테고리 필터
         item {
             LazyRow(
                 modifier = Modifier
@@ -211,8 +211,11 @@ internal fun HomeScreen(
                 }
             }
         }
-        // 주변 추천 관광지 목록.
-        items(items = state.tourAreaList) {
+        // 주변 추천 관광지 목록
+        items(
+            items = state.tourAreaList,
+            key = { tourArea -> "${tourArea.title}/${tourArea.type}(${tourArea.mapX},${tourArea.mapY})" }
+        ) {
             TourAreaCard(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 10.dp)

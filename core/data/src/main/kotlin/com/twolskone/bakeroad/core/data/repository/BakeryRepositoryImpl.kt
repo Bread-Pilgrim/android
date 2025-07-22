@@ -24,7 +24,7 @@ internal class BakeryRepositoryImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : BakeryRepository {
 
-    override fun getBakeries(areaCode: String, bakeryType: BakeryType): Flow<PagingData<Bakery>> =
+    override fun getBakeries(areaCodes: String, bakeryType: BakeryType): Flow<PagingData<Bakery>> =
         Pager(
             config = PagingConfig(
                 pageSize = PageSize,
@@ -33,7 +33,7 @@ internal class BakeryRepositoryImpl @Inject constructor(
             pagingSourceFactory = {
                 BakeryPagingSource(
                     bakeryDataSource = bakeryDataSource,
-                    areaCode = areaCode,
+                    areaCodes = areaCodes,
                     bakeryType = bakeryType
                 )
             }

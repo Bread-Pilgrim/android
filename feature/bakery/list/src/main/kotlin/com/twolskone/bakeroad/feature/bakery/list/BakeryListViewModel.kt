@@ -14,7 +14,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.catch
 
-private const val AREA_CODE = "areaCode"
+private const val AREA_CODES = "areaCodes"
 private const val BAKERY_TYPE = "bakeryType"
 
 @HiltViewModel
@@ -24,7 +24,7 @@ internal class BakeryListViewModel @Inject constructor(
 ) : BaseViewModel<BakeryListState, BakeryListIntent, BakeryListSideEffect>(savedStateHandle) {
 
     val pagingFlow = getBakeriesUseCase(
-        areaCode = savedStateHandle.get<String>(AREA_CODE) ?: EntireBusan.toString(),
+        areaCodes = savedStateHandle.get<String>(AREA_CODES) ?: EntireBusan.toString(),
         bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE
     ).cachedIn(viewModelScope).catch { cause -> handleException(cause) }
 

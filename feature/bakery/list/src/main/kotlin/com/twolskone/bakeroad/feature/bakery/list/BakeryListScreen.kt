@@ -37,7 +37,8 @@ import kotlinx.coroutines.flow.flowOf
 internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
     bakeryType: BakeryType,
-    pagingItems: LazyPagingItems<Bakery>
+    pagingItems: LazyPagingItems<Bakery>,
+    onBakeryClick: (Bakery) -> Unit
 ) {
     val title = when (bakeryType) {
         BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
@@ -92,7 +93,7 @@ internal fun BakeryListScreen(
         ) {
             items(count = pagingItems.itemCount) { index ->
                 pagingItems[index]?.let { bakery ->
-                    BakeryCard(bakery = bakery)
+                    BakeryCard(bakery = bakery, onClick = onBakeryClick)
                 } ?: run {
 
                 }
@@ -110,6 +111,7 @@ private fun BakeryListScreenPreview() {
                 Bakery(
                     id = 1,
                     name = "서라당",
+                    areaCode = 14,
                     rating = 4.7f,
                     reviewCount = 20203,
                     openStatus = BakeryOpenStatus.OPEN,
@@ -124,7 +126,8 @@ private fun BakeryListScreenPreview() {
 
         BakeryListScreen(
             bakeryType = BakeryType.PREFERENCE,
-            pagingItems = lazyPagingItems
+            pagingItems = lazyPagingItems,
+            onBakeryClick = {}
         )
     }
 }

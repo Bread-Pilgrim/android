@@ -12,7 +12,7 @@ internal const val PageSize = 15
 
 internal class BakeryPagingSource(
     private val bakeryDataSource: BakeryDataSource,
-    private val areaCode: String,
+    private val areaCodes: String,
     private val bakeryType: BakeryType
 ) : PagingSource<Int, Bakery>() {
 
@@ -28,13 +28,13 @@ internal class BakeryPagingSource(
         return try {
             val response = when (bakeryType) {
                 BakeryType.PREFERENCE -> bakeryDataSource.getPreferenceBakeries(
-                    areaCode = areaCode,
+                    areaCodes = areaCodes,
                     cursorId = cursor,
                     pageSize = params.loadSize
                 )
 
                 BakeryType.HOT -> bakeryDataSource.getHotBakeries(
-                    areaCode = areaCode,
+                    areaCodes = areaCodes,
                     cursorId = cursor,
                     pageSize = params.loadSize
                 )

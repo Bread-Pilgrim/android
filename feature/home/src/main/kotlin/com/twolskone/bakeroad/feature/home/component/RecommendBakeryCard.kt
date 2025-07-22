@@ -123,6 +123,7 @@ private fun BakeryCardPreview() {
                 bakery = RecommendBakery(
                     id = 1,
                     name = "서라당",
+                    areaCode = 14,
                     rating = 4.7f,
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.OPEN,
@@ -134,6 +135,7 @@ private fun BakeryCardPreview() {
                 bakery = RecommendBakery(
                     id = 1,
                     name = "런던 베이글 뮤지엄런던 베이글 뮤지엄",
+                    areaCode = 14,
                     rating = 4.7f,
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.CLOSED,

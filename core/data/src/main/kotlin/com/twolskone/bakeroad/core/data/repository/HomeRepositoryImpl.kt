@@ -31,14 +31,14 @@ internal class HomeRepositoryImpl @Inject constructor(
 
     override fun getBakeries(areaCodes: Set<Int>, type: BakeryType): Flow<List<RecommendBakery>> {
         return when (type) {
-            BakeryType.PREFERENCE -> bakeryDataSource.getRecommendPreferenceBakeries(areaCode = areaCodes.joinToString(separator = ","))
+            BakeryType.PREFERENCE -> bakeryDataSource.getRecommendPreferenceBakeries(areaCodes = areaCodes.joinToString(separator = ","))
                 .map { bakeries ->
                     bakeries.map { bakery ->
                         bakery.toExternalModel()
                     }
                 }
 
-            BakeryType.HOT -> bakeryDataSource.getRecommendHotBakeries(areaCode = areaCodes.joinToString(separator = ","))
+            BakeryType.HOT -> bakeryDataSource.getRecommendHotBakeries(areaCodes = areaCodes.joinToString(separator = ","))
                 .map { bakeries ->
                     bakeries.map { bakery ->
                         bakery.toExternalModel()
@@ -49,8 +49,8 @@ internal class HomeRepositoryImpl @Inject constructor(
 
     override fun getTourAreas(areaCodes: Set<Int>, tourCategories: Set<TourAreaCategory>): Flow<List<TourArea>> {
         return tourDataSource.getAreas(
-            areaCode = areaCodes.joinToString(separator = ","),
-            tourCategory = tourCategories.map { category -> category.code }.joinToString(separator = ",")
+            areaCodes = areaCodes.joinToString(separator = ","),
+            tourCategories = tourCategories.map { category -> category.code }.joinToString(separator = ",")
         ).map { areas ->
             areas.map { area ->
                 area.toExternalModel()

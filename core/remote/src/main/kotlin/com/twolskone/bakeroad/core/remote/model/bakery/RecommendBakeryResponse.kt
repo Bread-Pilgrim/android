@@ -8,7 +8,9 @@ data class RecommendBakeryResponse(
     @SerialName("bakery_id")
     val bakeryId: Int = -1,
     @SerialName("bakery_name")
-    val name: String = "",
+    val bakeryName: String = "",
+    @SerialName("commercial_area_id")
+    val commercialAreaId: Int,
     @SerialName("avg_rating")
     val avgRating: Float = -1f,
     @SerialName("review_count")

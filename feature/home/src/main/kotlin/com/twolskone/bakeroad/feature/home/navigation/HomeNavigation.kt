@@ -12,8 +12,8 @@ data object HomeRoute
 
 fun NavGraphBuilder.homeScreen(
     padding: PaddingValues,
-    navigateToBakeryList: (String, BakeryType) -> Unit,
-    navigateToBakeryDetail: (bakeryId: Int) -> Unit
+    navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit
 ) {
     composable<HomeRoute> {
         HomeRoute(

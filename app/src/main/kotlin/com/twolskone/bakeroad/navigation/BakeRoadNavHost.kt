@@ -14,8 +14,8 @@ internal fun BakeRoadNavHost(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
     navController: NavHostController,
-    navigateToBakeryList: (String, BakeryType) -> Unit,
-    navigateToBakeryDetail: (bakeryId: Int) -> Unit
+    navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit
 ) {
     NavHost(
         modifier = modifier,

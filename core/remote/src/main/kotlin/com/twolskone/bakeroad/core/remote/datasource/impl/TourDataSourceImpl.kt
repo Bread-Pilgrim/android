@@ -18,11 +18,11 @@ internal class TourDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : TourDataSource {
 
-    override fun getAreas(areaCode: String, tourCategory: String): Flow<List<TourAreaResponse>> = flow {
-        emitData(api.getAreas(areaCode = areaCode, tourCategory = tourCategory))
+    override fun getAreas(areaCodes: String, tourCategories: String): Flow<List<TourAreaResponse>> = flow {
+        emitData(api.getAreas(areaCode = areaCodes, tourCategory = tourCategories))
     }.flowOn(networkDispatcher)
 
-    override fun getAreaEvent(areaCode: String): Flow<TourAreaEventResponse> = flow {
-        emitData(api.getAreaEvent(areaCode = areaCode))
+    override fun getAreaEvent(areaCodes: String): Flow<TourAreaEventResponse> = flow {
+        emitData(api.getAreaEvent(areaCode = areaCodes))
     }.flowOn(networkDispatcher)
 }

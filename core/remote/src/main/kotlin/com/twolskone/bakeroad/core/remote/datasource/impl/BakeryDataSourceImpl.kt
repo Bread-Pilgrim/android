@@ -20,30 +20,30 @@ internal class BakeryDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : BakeryDataSource {
 
-    override fun getRecommendPreferenceBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>> = flow {
-        emitData(api.getRecommendPreferenceBakeries(areaCode = areaCode))
+    override fun getRecommendPreferenceBakeries(areaCodes: String): Flow<List<RecommendBakeryResponse>> = flow {
+        emitData(api.getRecommendPreferenceBakeries(areaCode = areaCodes))
     }.flowOn(networkDispatcher)
 
-    override fun getRecommendHotBakeries(areaCode: String): Flow<List<RecommendBakeryResponse>> = flow {
-        emitData(api.getRecommendHotBakeries(areaCode = areaCode))
+    override fun getRecommendHotBakeries(areaCodes: String): Flow<List<RecommendBakeryResponse>> = flow {
+        emitData(api.getRecommendHotBakeries(areaCode = areaCodes))
     }.flowOn(networkDispatcher)
 
     override suspend fun getPreferenceBakeries(
-        areaCode: String,
+        areaCodes: String,
         cursorId: Int,
         pageSize: Int
     ): BakeriesResponse {
         val response = api.getPreferenceBakeries(
-            areaCode = areaCode,
+            areaCode = areaCodes,
             cursorId = cursorId,
             pageSize = pageSize
         )
         return response.toData()
     }
 
-    override suspend fun getHotBakeries(areaCode: String, cursorId: Int, pageSize: Int): BakeriesResponse {
+    override suspend fun getHotBakeries(areaCodes: String, cursorId: Int, pageSize: Int): BakeriesResponse {
         val response = api.getHotBakeries(
-            areaCode = areaCode,
+            areaCode = areaCodes,
             cursorId = cursorId,
             pageSize = pageSize
         )

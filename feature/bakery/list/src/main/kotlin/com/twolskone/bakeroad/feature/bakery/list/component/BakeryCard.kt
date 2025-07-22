@@ -34,6 +34,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipStyle
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
@@ -49,9 +50,13 @@ private val ImageShape = RoundedCornerShape(9.dp)
 @Composable
 internal fun BakeryCard(
     modifier: Modifier = Modifier,
-    bakery: Bakery
+    bakery: Bakery,
+    onClick: (Bakery) -> Unit
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier
+            .noRippleSingleClickable { onClick(bakery) }
+    ) {
         Box(
             modifier = Modifier
                 .width(ImageWidth)
@@ -156,6 +161,7 @@ private fun BakeryCardPreview() {
             bakery = Bakery(
                 id = 1,
                 name = "서라당",
+                areaCode = 14,
                 rating = 4.7f,
                 reviewCount = 20203,
                 openStatus = BakeryOpenStatus.CLOSED,
@@ -163,7 +169,8 @@ private fun BakeryCardPreview() {
                 addressGu = "관악구",
                 addressDong = "",
                 signatureMenus = listOf("소금빵", "올리브치 치아바타")
-            )
+            ),
+            onClick = {}
         )
     }
 }

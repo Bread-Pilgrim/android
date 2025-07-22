@@ -11,7 +11,8 @@ import androidx.paging.compose.collectAsLazyPagingItems
 
 @Composable
 internal fun BakeryListRoute(
-    viewModel: BakeryListViewModel = hiltViewModel()
+    viewModel: BakeryListViewModel = hiltViewModel(),
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lazyPagingItems = viewModel.pagingFlow.collectAsLazyPagingItems()
@@ -21,6 +22,7 @@ internal fun BakeryListRoute(
             .fillMaxSize()
             .systemBarsPadding(),
         bakeryType = state.bakeryType,
-        pagingItems = lazyPagingItems
+        pagingItems = lazyPagingItems,
+        onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode) }
     )
 }

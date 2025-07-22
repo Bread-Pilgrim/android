@@ -3,6 +3,9 @@ package com.twolskone.bakeroad.feature.bakery.detail
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryDetailUseCase
+import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.model.EntireBusan
+import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.feature.bakery.detail.model.toBakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailSideEffect
@@ -12,11 +15,13 @@ import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 
 private const val BAKERY_ID = "bakeryId"
+private const val AREA_CODE = "areaCode"
 
 @HiltViewModel
 internal class BakeryDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getBakeryDetailUseCase: GetBakeryDetailUseCase
+    private val getBakeryDetailUseCase: GetBakeryDetailUseCase,
+    private val getTourAreasUseCase: GetTourAreasUseCase
 ) : BaseViewModel<BakeryDetailState, BakeryDetailIntent, BakeryDetailSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): BakeryDetailState {
@@ -25,6 +30,7 @@ internal class BakeryDetailViewModel @Inject constructor(
 
     init {
         getBakeryDetail()
+        getTourAreas()
     }
 
     override fun handleException(cause: Throwable) {
@@ -47,5 +53,13 @@ internal class BakeryDetailViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    private fun getTourAreas() = launch {
+        val tourAreas = getTourAreasUseCase(
+            areaCodes = setOf(savedStateHandle[AREA_CODE] ?: EntireBusan),
+            tourCategories = TourAreaCategory.entries.toSet()
+        )
+        reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
     }
 }

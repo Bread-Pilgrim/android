@@ -7,6 +7,6 @@ import com.twolskone.bakeroad.core.model.type.BakeryType
 import kotlinx.coroutines.flow.Flow
 
 interface BakeryRepository {
-    fun getBakeries(areaCode: String, bakeryType: BakeryType): Flow<PagingData<Bakery>>
+    fun getBakeries(areaCodes: String, bakeryType: BakeryType): Flow<PagingData<Bakery>>
     fun getBakeryDetail(bakeryId: Int): Flow<BakeryDetail>
 }

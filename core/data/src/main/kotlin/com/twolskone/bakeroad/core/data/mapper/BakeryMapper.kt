@@ -11,7 +11,8 @@ import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
     RecommendBakery(
         id = bakeryId,
-        name = name,
+        name = bakeryName,
+        areaCode = commercialAreaId,
         rating = avgRating,
         reviewCount = reviewCount.toInt(),
         openStatus = runCatching {
@@ -24,6 +25,7 @@ internal fun BakeryResponse.toExternalModel(): Bakery =
     Bakery(
         id = bakeryId,
         name = name,
+        areaCode = commercialAreaId,
         rating = avgRating,
         reviewCount = reviewCount.toInt(),
         openStatus = runCatching {

@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 
 @Composable
 internal fun BakeryDetailRoute(
@@ -18,8 +19,7 @@ internal fun BakeryDetailRoute(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding(),
-        bakeryImageList = state.bakeryImageList,
-        bakeryInfo = state.bakeryInfo,
-        menuList = state.menuList
+        state = state,
+        onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) }
     )
 }

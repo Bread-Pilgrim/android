@@ -4,10 +4,13 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -22,22 +25,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.component.check.CheckSize
 import com.twolskone.bakeroad.core.designsystem.component.check.SingleCheck
 import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadSheet
@@ -47,33 +53,36 @@ import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImagePager
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.component.home
-import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
-import kotlinx.collections.immutable.ImmutableList
+import com.twolskone.bakeroad.feature.bakery.detail.component.menu
+import com.twolskone.bakeroad.feature.bakery.detail.component.review
+import com.twolskone.bakeroad.feature.bakery.detail.component.tourArea
+import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
+import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailState
 import kotlinx.collections.immutable.persistentListOf
 import timber.log.Timber
 
 private val TopAppBarHeight = 56.dp
+private const val TabsIndex = 2
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BakeryDetailScreen(
     modifier: Modifier = Modifier,
-    bakeryImageList: ImmutableList<String>,
-    bakeryInfo: BakeryInfo?,
-    menuList: ImmutableList<BakeryDetail.Menu>
+    state: BakeryDetailState,
+    onTabSelect: (BakeryDetailTab) -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
+
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val maxTopPadding = /*statusBarHeight + */TopAppBarHeight
     val headerWidthPx = windowInfo.containerSize.width
     val headerHeightPx = headerWidthPx / 3 * 2 + (with(density) { statusBarHeight.roundToPx() })
-    var selectedTabIndex by remember { mutableIntStateOf(0) }   // TODO. test
+
     val listState = rememberLazyListState()
     val scrollIndex by remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val scrollOffset by remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
@@ -106,6 +115,7 @@ internal fun BakeryDetailScreen(
         label = "TopBarColorAnimation"
     )
     var showBottomSheet by remember { mutableStateOf(false) }
+    var initComposition by remember { mutableStateOf(true) }    // Is first composition?
 
     LaunchedEffect(topBarColor) {
         Timber.e("topBarColor : $topBarColor")
@@ -115,20 +125,28 @@ internal fun BakeryDetailScreen(
         Timber.e("topBarColorTransition : $topBarColorTransition")
     }
 
+    LaunchedEffect(state.tab) {
+        if (initComposition.not()) {
+            listState.animateScrollToItem(index = TabsIndex)
+        } else {
+            initComposition = false
+        }
+    }
+
     Box(modifier = modifier) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.Gray50)
-                .padding(top = topPadding)
+                .offset { IntOffset(x = 0, y = topPadding.toPx().toInt()) } // Skip Composition. (start from Layout phrase)
                 .systemBarsPadding(),
             state = listState
         ) {
             item(contentType = "bakeryImagePager") {
                 BakeryImagePager(
                     modifier = Modifier.fillMaxWidth(),
-                    imageList = bakeryImageList,
-                    bakeryOpenStatus = bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
+                    imageList = state.bakeryImageList,
+                    bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
                 )
             }
             item(contentType = "bakeryInfo") {
@@ -136,7 +154,7 @@ internal fun BakeryDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
-                    bakeryInfo = bakeryInfo
+                    bakeryInfo = state.bakeryInfo
                 )
             }
             stickyHeader("tabs") {
@@ -151,39 +169,38 @@ internal fun BakeryDetailScreen(
                     containerColor = BakeRoadTheme.colorScheme.White,
                     contentColor = BakeRoadTheme.colorScheme.Gray990,
                     edgePadding = 16.dp,
-                    selectedTabIndex = selectedTabIndex
+                    selectedTabIndex = BakeryDetailTab.entries.indexOf(state.tab)
                 ) {
-                    BakeRoadTab(
-                        selected = selectedTabIndex == 0,
-                        onClick = { selectedTabIndex = 0 },
-                        text = { Text(text = "홈") }
-                    )
-                    BakeRoadTab(
-                        selected = selectedTabIndex == 1,
-                        onClick = { selectedTabIndex = 1 },
-                        text = { Text(text = "메뉴") }
-                    )
-                    BakeRoadTab(
-                        selected = selectedTabIndex == 2,
-                        onClick = { selectedTabIndex = 2 },
-                        text = { Text(text = "리뷰") }
-                    )
-                    BakeRoadTab(
-                        selected = selectedTabIndex == 3,
-                        onClick = { selectedTabIndex = 3 },
-                        text = { Text(text = "근처 관광지") }
-                    )
+                    BakeryDetailTab.entries.fastForEach { tab ->
+                        BakeRoadTab(
+                            selected = (tab == state.tab),
+                            onClick = { onTabSelect(tab) },
+                            text = { Text(text = stringResource(id = tab.labelId)) }
+                        )
+                    }
                 }
             }
-            home(menuList = menuList)
-//            review()
-//            tourArea()
+            when (state.tab) {
+                BakeryDetailTab.HOME -> home(menuList = state.menuList)
+                BakeryDetailTab.MENU -> menu(menuList = state.menuList)
+                BakeryDetailTab.REVIEW -> review()
+                BakeryDetailTab.TOUR_AREA -> tourArea()
+            }
+            item(contentType = "bottomSpacer") {
+                Spacer(
+                    modifier = Modifier
+                        .background(color = BakeRoadTheme.colorScheme.White)
+                        .fillMaxWidth()
+                        .height(with(density) { headerHeightPx.toDp() })
+                )
+            }
         }
         BakeRoadTopAppBar(
             modifier = Modifier
                 .fillMaxWidth()
-                .align(Alignment.TopCenter),
-            containerColor = topBarColor,
+                .align(Alignment.TopCenter)
+                .drawBehind { drawRect(color = topBarColor) },  // Skip Composition and Layout. (start from Drawing phrase)
+            containerColor = Color.Transparent,
             iconContentColor = BakeRoadTheme.colorScheme.Black,
             leftActions = {
                 Box(
@@ -202,7 +219,8 @@ internal fun BakeryDetailScreen(
             },
             title = {
                 if (topBarColorTransition == 1f) {
-                    Text(text = bakeryInfo?.name.orEmpty())
+                    Timber.i("TopAppBar composition !!")
+                    Text(text = state.bakeryInfo?.name.orEmpty())
                 }
             },
             rightActions = {
@@ -269,9 +287,8 @@ internal fun BakeryDetailScreen(
 private fun BakeryDetailScreenPreview() {
     BakeRoadTheme {
         BakeryDetailScreen(
-            bakeryImageList = persistentListOf(),
-            bakeryInfo = null,
-            menuList = persistentListOf()
+            state = BakeryDetailState(),
+            onTabSelect = {}
         )
     }
 }

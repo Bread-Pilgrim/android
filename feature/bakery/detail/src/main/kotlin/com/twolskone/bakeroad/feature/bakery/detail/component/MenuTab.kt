@@ -42,6 +42,7 @@ internal fun LazyListScope.menu(menuList: ImmutableList<BakeryDetail.Menu>) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = BakeRoadTheme.colorScheme.White)
+                .padding(horizontal = 16.dp)
                 .padding(top = 20.dp, bottom = 16.dp)
         ) {
             Text(
@@ -58,6 +59,7 @@ internal fun LazyListScope.menu(menuList: ImmutableList<BakeryDetail.Menu>) {
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = BakeRoadTheme.colorScheme.White)
+                .padding(horizontal = 16.dp)
         ) {
             Menu(modifier = Modifier.fillMaxWidth(), menu = menu)
             Spacer(modifier = Modifier.height(if (index == menuList.lastIndex) 20.dp else 16.dp))
@@ -82,6 +84,7 @@ internal fun Menu(
         ) {
             if (menu.isSignature) {
                 BakeRoadChip(
+                    modifier = Modifier.padding(bottom = 6.dp),
                     selected = false,
                     color = ChipColor.SUB,
                     size = ChipSize.SMALL,
@@ -89,7 +92,7 @@ internal fun Menu(
                 )
             }
             Text(
-                modifier = Modifier.padding(top = 6.dp),
+                modifier = Modifier,
                 text = menu.name,
                 style = BakeRoadTheme.typography.bodySmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray900)
             )

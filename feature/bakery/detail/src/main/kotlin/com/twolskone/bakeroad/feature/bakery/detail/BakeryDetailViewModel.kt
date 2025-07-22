@@ -31,6 +31,9 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     override suspend fun handleIntent(intent: BakeryDetailIntent) {
+        when (intent) {
+            is BakeryDetailIntent.SelectTab -> reduce { copy(tab = intent.tab) }
+        }
     }
 
     private fun getBakeryDetail() = launch {

@@ -91,7 +91,7 @@ private fun MenuSection(
         }
         menuList.take(4).fastForEachIndexed { index, menu ->
             Menu(modifier = Modifier.fillMaxWidth(), menu = menu)
-            if (index == lastIndex) {
+            if (index != lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
                     color = BakeRoadTheme.colorScheme.Gray50

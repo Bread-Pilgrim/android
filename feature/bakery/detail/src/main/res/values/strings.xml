@@ -17,8 +17,17 @@
     <string name="feature_bakery_detail_my_review">내가 쓴 리뷰</string>
     <string name="feature_bakery_detail_title_tour_area">근처 추천 관광지</string>
     <string name="feature_bakery_detail_label_signature_menu">대표메뉴</string>
+    <string name="feature_bakery_detail_label_day_off">%s요일 휴무</string>
+    <string name="feature_bakery_detail_label_no_day_off">휴무 없음</string>
     <string name="feature_bakery_detail_description_empty_review">아직 등록된 리뷰가 없습니다!\n방문하셨다면 리뷰를 남겨주세요 🥨</string>
     <string name="feature_bakery_detail_review_count">(%s개)</string>
     <string name="feature_bakery_detail_like">좋아요</string>
     <string name="feature_bakery_detail_price">%s원</string>
+    <string name="feature_bakery_detail_monday">월</string>
+    <string name="feature_bakery_detail_tuesday">화</string>
+    <string name="feature_bakery_detail_wednesday">수</string>
+    <string name="feature_bakery_detail_thursday">목</string>
+    <string name="feature_bakery_detail_friday">금</string>
+    <string name="feature_bakery_detail_saturday">토</string>
+    <string name="feature_bakery_detail_sunday">일</string>
 </resources>

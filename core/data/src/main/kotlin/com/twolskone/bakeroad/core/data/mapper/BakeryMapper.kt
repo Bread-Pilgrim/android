@@ -4,6 +4,7 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
+import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
@@ -49,6 +50,16 @@ internal fun BakeryDetailResponse.toExternalModel(): BakeryDetail =
             BakeryOpenStatus.ofStatus(openStatus) ?: BakeryOpenStatus.OPEN
         }.getOrDefault(BakeryOpenStatus.OPEN),
         isLike = isLike,
+        openingHours = operatingHours
+            .sortedBy { it.dayOfWeek }
+            .map {
+                BakeryDetail.OpeningHour(
+                    dayOfWeek = DayOfWeek.ofValue(it.dayOfWeek) ?: DayOfWeek.MONDAY,
+                    openTime = it.openTime,
+                    closeTime = it.closeTime,
+                    isOpened = it.isOpened
+                )
+            },
         imageUrls = bakeryImgUrls,
         menus = menus.map { menu ->
             BakeryDetail.Menu(

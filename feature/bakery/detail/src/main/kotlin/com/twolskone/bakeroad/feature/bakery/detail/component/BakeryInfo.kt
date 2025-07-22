@@ -1,19 +1,25 @@
 package com.twolskone.bakeroad.feature.bakery.detail.component
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -30,27 +36,34 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
+import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
+import com.twolskone.bakeroad.feature.bakery.detail.model.openingHourLabel
 
 @Composable
 internal fun BakeryInfo(
     modifier: Modifier = Modifier,
-    bakeryInfo: BakeryInfo?
+    bakeryInfo: BakeryInfo?,
+    expandOpeningHour: Boolean,
+    rotateOpeningHourIconAngle: Float,
+    onExpandOpeningHourClick: () -> Unit
 ) {
     if (bakeryInfo != null) {
         Column(
             modifier = modifier
                 .background(color = BakeRoadTheme.colorScheme.White)
-                .padding(horizontal = 16.dp, vertical = 20.dp),
+                .padding(vertical = 20.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Text(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 text = bakeryInfo.name,
                 style = BakeRoadTheme.typography.bodyXlargeSemibold
             )
             Row(
-                modifier = Modifier.padding(top = 6.dp),
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -71,7 +84,8 @@ internal fun BakeryInfo(
             }
             BakeRoadSolidButton(
                 modifier = Modifier
-                    .padding(top = 16.dp)
+                    .padding(top = 10.dp)
+                    .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
                 style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.MEDIUM,
@@ -82,11 +96,15 @@ internal fun BakeryInfo(
             )
             HorizontalDivider(
                 modifier = Modifier
-                    .padding(vertical = 16.dp)
+                    .padding(16.dp)
                     .fillMaxWidth(),
                 color = BakeRoadTheme.colorScheme.Gray50
             )
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            // 위치
+            Row(
+                modifier = Modifier.padding(horizontal = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_location),
                     contentDescription = "Location",
@@ -109,40 +127,84 @@ internal fun BakeryInfo(
                     )
                 )
             }
+            // 영업 시간
+            Column(
+                modifier = Modifier
+                    .padding(vertical = 8.dp)
+                    .animateContentSize()
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(start = 16.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_clock),
+                        contentDescription = "Location",
+                        tint = BakeRoadTheme.colorScheme.Gray800
+                    )
+                    Text(
+                        modifier = Modifier.padding(horizontal = 4.dp),
+                        text = bakeryInfo.openingHour.firstOrNull()?.openingHourLabel.orEmpty(),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                    )
+                    BakeRoadChip(
+                        modifier = Modifier.padding(horizontal = 6.dp),
+                        selected = false,
+                        color = ChipColor.LIGHT_GRAY,
+                        size = ChipSize.SMALL,
+                        label = {
+                            Text(
+                                text = if (bakeryInfo.dayOff.isEmpty()) {
+                                    stringResource(id = R.string.feature_bakery_detail_label_no_day_off)
+                                } else {
+                                    stringResource(id = R.string.feature_bakery_detail_label_day_off, bakeryInfo.dayOff.joinToString(separator = ","))
+                                }
+                            )
+                        }
+                    )
+                    Spacer(modifier = Modifier.weight(1f))
+                    Box(
+                        modifier = Modifier
+                            .padding(end = 12.dp)
+                            .clip(CircleShape)
+                            .singleClickable { onExpandOpeningHourClick() }
+                            .padding(4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            modifier = Modifier.rotate(rotateOpeningHourIconAngle),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_down_arrow),
+                            contentDescription = "Location",
+                            tint = BakeRoadTheme.colorScheme.Gray800
+                        )
+                    }
+                }
+                if (expandOpeningHour) {
+                    for (i in 1 until bakeryInfo.openingHour.size) {
+                        val item = bakeryInfo.openingHour[i]
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 3.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                modifier = Modifier
+                                    .padding(start = 20.dp),
+                                text = item.openingHourLabel,
+                                style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(5.dp))
+                }
+            }
+            // 전화
             Row(
-                modifier = Modifier.padding(vertical = 8.dp),
+                modifier = Modifier.padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_clock),
-                    contentDescription = "Location",
-                    tint = BakeRoadTheme.colorScheme.Gray800
-                )
-                Text(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp),
-                    text = "월 10:00 ~ 20:00",
-                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
-                )
-                BakeRoadChip(
-                    modifier = Modifier.padding(start = 6.dp),
-                    selected = false,
-                    color = ChipColor.LIGHT_GRAY,
-                    size = ChipSize.SMALL,
-                    label = { Text("휴무 없음") }
-                )
-                Spacer(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .weight(1f)
-                )
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_down_arrow),
-                    contentDescription = "Location",
-                    tint = BakeRoadTheme.colorScheme.Gray800
-                )
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_telephone),
                     contentDescription = "Location",
@@ -171,6 +233,18 @@ internal fun BakeryInfo(
     }
 }
 
+internal val DayOfWeek.toLabel: String
+    @Composable
+    get() = when (this) {
+        DayOfWeek.MONDAY -> stringResource(R.string.feature_bakery_detail_monday)
+        DayOfWeek.TUESDAY -> stringResource(R.string.feature_bakery_detail_tuesday)
+        DayOfWeek.WEDNESDAY -> stringResource(R.string.feature_bakery_detail_wednesday)
+        DayOfWeek.THURSDAY -> stringResource(R.string.feature_bakery_detail_thursday)
+        DayOfWeek.FRIDAY -> stringResource(R.string.feature_bakery_detail_friday)
+        DayOfWeek.SATURDAY -> stringResource(R.string.feature_bakery_detail_saturday)
+        DayOfWeek.SUNDAY -> stringResource(R.string.feature_bakery_detail_sunday)
+    }
+
 @Preview
 @Composable
 private fun BakeryInfoPreview() {
@@ -183,8 +257,19 @@ private fun BakeryInfoPreview() {
                 address = "서울시 관악구 신사로 120-1 1층 서라당",
                 phone = "010-1234-5678",
                 openStatus = BakeryOpenStatus.OPEN,
+                openingHour = listOf(
+                    BakeryInfo.OpeningHour(
+                        dayOffWeek = DayOfWeek.MONDAY,
+                        openTime = "10:00",
+                        closeTime = "20:00"
+                    )
+                ),
+                dayOff = listOf(),
                 isLike = true
-            )
+            ),
+            expandOpeningHour = false,
+            rotateOpeningHourIconAngle = 0f,
+            onExpandOpeningHourClick = {}
         )
     }
 }

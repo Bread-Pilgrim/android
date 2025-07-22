@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.core.model
 
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
+import com.twolskone.bakeroad.core.model.type.DayOfWeek
 
 /**
  * 빵집 상세
@@ -11,6 +12,7 @@ import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
  * @param rating        평균 평점
  * @param reviewCount   리뷰 개수
  * @param isLike        찜 여부
+ * @param openingHours  요일별 영업 시간
  * @param imageUrls     썸네일 리스트
  * @param menus         메뉴
  */
@@ -23,9 +25,24 @@ data class BakeryDetail(
     val reviewCount: Int,
     val openStatus: BakeryOpenStatus,
     val isLike: Boolean,
+    val openingHours: List<OpeningHour>,
     val imageUrls: List<String>,
     val menus: List<Menu>
 ) {
+
+    /**
+     * 영업 시간
+     * @param dayOfWeek 요일
+     * @param openTime  오픈 시간
+     * @param closeTime 종료 시간
+     * @param isOpened  오픈 여부
+     */
+    data class OpeningHour(
+        val dayOfWeek: DayOfWeek,
+        val openTime: String,
+        val closeTime: String,
+        val isOpened: Boolean
+    )
 
     /**
      * 빵집 메뉴

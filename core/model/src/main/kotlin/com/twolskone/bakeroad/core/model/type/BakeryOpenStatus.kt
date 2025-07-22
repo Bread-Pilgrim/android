@@ -12,6 +12,6 @@ enum class BakeryOpenStatus(val status: String) {
     DAY_OFF("D");
 
     companion object {
-        fun ofStatus(status: String): BakeryOpenStatus? = entries.firstOrNull { it.status == status }
+        fun ofStatus(status: String): BakeryOpenStatus? = entries.find { it.status == status }
     }
 }

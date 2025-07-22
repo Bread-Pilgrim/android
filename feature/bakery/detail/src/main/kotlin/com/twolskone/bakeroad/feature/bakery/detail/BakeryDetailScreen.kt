@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.bakery.detail
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -116,6 +117,11 @@ internal fun BakeryDetailScreen(
     )
     var showBottomSheet by remember { mutableStateOf(false) }
     var initComposition by remember { mutableStateOf(true) }    // Is first composition?
+    var expandOpeningHour by remember { mutableStateOf(false) }
+    val rotateOpeningHourIconAngle by animateFloatAsState(
+        targetValue = if (expandOpeningHour) -180f else 0f,
+        label = "OpeningHourRotationAnimation"
+    )
 
     LaunchedEffect(topBarColor) {
         Timber.e("topBarColor : $topBarColor")
@@ -154,7 +160,10 @@ internal fun BakeryDetailScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
-                    bakeryInfo = state.bakeryInfo
+                    bakeryInfo = state.bakeryInfo,
+                    expandOpeningHour = expandOpeningHour,
+                    rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
+                    onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour }
                 )
             }
             stickyHeader("tabs") {
@@ -181,7 +190,7 @@ internal fun BakeryDetailScreen(
                 }
             }
             when (state.tab) {
-                BakeryDetailTab.HOME -> home(menuList = state.menuList)
+                BakeryDetailTab.HOME -> home(menuList = state.menuList, tourAreaList = state.tourAreaList)
                 BakeryDetailTab.MENU -> menu(menuList = state.menuList)
                 BakeryDetailTab.REVIEW -> review()
                 BakeryDetailTab.TOUR_AREA -> tourArea()

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -66,12 +67,14 @@ internal fun RecommendBakeryCard(
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
             )
-            Image(
+            Icon(
                 modifier = Modifier
                     .padding(6.dp)
+                    .size(20.dp)
                     .align(Alignment.TopEnd),
                 imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
-                contentDescription = "Bookmark"
+                contentDescription = "Bookmark",
+                tint = BakeRoadTheme.colorScheme.White
             )
         }
         Text(

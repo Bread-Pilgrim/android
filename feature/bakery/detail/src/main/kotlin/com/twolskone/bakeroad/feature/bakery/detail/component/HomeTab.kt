@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -35,8 +37,12 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
+import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
+import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
+import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -49,7 +55,8 @@ import kotlinx.collections.immutable.persistentListOf
  */
 internal fun LazyListScope.home(
     itemModifier: Modifier = Modifier,
-    menuList: ImmutableList<BakeryDetail.Menu>
+    menuList: ImmutableList<BakeryDetail.Menu>,
+    tourAreaList: ImmutableList<TourArea>
 ) {
     item(contentType = "home") {
         Column(modifier = itemModifier) {
@@ -62,7 +69,10 @@ internal fun LazyListScope.home(
                     .padding(vertical = 8.dp)
                     .fillMaxWidth()
             )
-            TourAreaSection(modifier = Modifier.fillMaxWidth())
+            TourAreaSection(
+                modifier = Modifier.fillMaxWidth(),
+                tourAreaList = tourAreaList
+            )
         }
     }
 }
@@ -165,7 +175,10 @@ private fun ReviewSection(modifier: Modifier = Modifier) {
  * TourArea section.
  */
 @Composable
-private fun TourAreaSection(modifier: Modifier = Modifier) {
+private fun TourAreaSection(
+    modifier: Modifier = Modifier,
+    tourAreaList: ImmutableList<TourArea>
+) {
     Column(
         modifier = modifier
             .background(color = BakeRoadTheme.colorScheme.White)
@@ -188,8 +201,14 @@ private fun TourAreaSection(modifier: Modifier = Modifier) {
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(count = 5) {
-                SimpleTourAreaCard()
+            items(
+                items = tourAreaList,
+                key = { tourArea -> "${tourArea.title}/${tourArea.type}(${tourArea.mapX},${tourArea.mapY})" }
+            ) {
+                SimpleTourAreaCard(
+                    modifier = Modifier.width(TourAreaImageSize),
+                    tourArea = it
+                )
             }
         }
     }
@@ -244,30 +263,46 @@ private fun ReviewPagerIndicator(
     }
 }
 
+private val TourAreaImageSize = 100.dp
+
 @Composable
-private fun SimpleTourAreaCard(modifier: Modifier = Modifier) {
+private fun SimpleTourAreaCard(
+    modifier: Modifier = Modifier,
+    tourArea: TourArea
+) {
     Column(modifier = modifier) {
-        AsyncImage(
-            modifier = Modifier
-                .clip(RoundedCornerShape(8.dp))
-                .size(100.dp),
-            model = "",
-            contentDescription = "TourArea",
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
-        )
+        Box {
+            AsyncImage(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .size(TourAreaImageSize),
+                model = tourArea.imagePath,
+                contentDescription = "TourArea",
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
+            )
+            BakeRoadChip(
+                modifier = Modifier
+                    .padding(4.dp)
+                    .align(Alignment.TopStart),
+                color = ChipColor.SUB,
+                size = ChipSize.SMALL,
+                selected = true,
+                label = { Text(text = tourArea.type) }
+            )
+        }
         Text(
             modifier = Modifier.padding(top = 6.dp),
-            text = "부평 깡통시장",
+            text = tourArea.title,
             style = BakeRoadTheme.typography.bodySmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
-            maxLines = 1,
+            maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
         Text(
             modifier = Modifier.padding(top = 3.dp),
-            text = "전통시장, 광복동",
+            text = tourArea.address,
             style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400),
-            maxLines = 1,
+            maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
     }
@@ -309,6 +344,18 @@ private fun ReviewSectionPreview() {
 @Composable
 private fun TourAreaSectionPreview() {
     BakeRoadTheme {
-        TourAreaSection(modifier = Modifier.fillMaxWidth())
+        TourAreaSection(
+            modifier = Modifier.fillMaxWidth(),
+            tourAreaList = persistentListOf(
+                TourArea(
+                    title = "관광지명\n관광지명",
+                    type = "타입",
+                    address = "주소주소주소주소",
+                    imagePath = "",
+                    mapY = 0f,
+                    mapX = 0f
+                )
+            )
+        )
     }
 }

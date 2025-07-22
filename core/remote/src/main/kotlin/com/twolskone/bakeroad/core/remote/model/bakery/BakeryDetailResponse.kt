@@ -19,6 +19,8 @@ data class BakeryDetailResponse(
     val reviewCount: Int = 0,
     @SerialName("open_status")
     val openStatus: String,
+    @SerialName("operating_hours")
+    val operatingHours: List<OperatingHour>,
     @SerialName("is_like")
     val isLike: Boolean = false,
     @SerialName("bakery_img_urls")
@@ -27,6 +29,18 @@ data class BakeryDetailResponse(
     val menus: List<Menu> = emptyList()
 
 ) {
+
+    @Serializable
+    data class OperatingHour(
+        @SerialName("day_of_week")
+        val dayOfWeek: Int = 0,     // 0: 월
+        @SerialName("open_time")
+        val openTime: String = "",
+        @SerialName("close_time")
+        val closeTime: String = "",
+        @SerialName("is_opened")
+        val isOpened: Boolean = false
+    )
 
     @Serializable
     data class Menu(

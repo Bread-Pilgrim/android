@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -71,12 +73,14 @@ internal fun BakeryCard(
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
             )
-            Image(
+            Icon(
                 modifier = Modifier
                     .padding(8.dp)
+                    .size(20.dp)
                     .align(Alignment.TopEnd),
                 imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
-                contentDescription = "Bookmark"
+                contentDescription = "Bookmark",
+                tint = BakeRoadTheme.colorScheme.White
             )
             BakeryOpenStatusChip(
                 modifier = Modifier
@@ -139,7 +143,7 @@ internal fun BakeryCard(
                 horizontalArrangement = Arrangement.spacedBy(6.dp),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                bakery.signatureMenus.fastForEach { menu ->
+                bakery.signatureMenus.take(3).fastForEach { menu ->
                     BakeRoadChip(
                         size = ChipSize.SMALL,
                         color = ChipColor.LIGHT_GRAY,

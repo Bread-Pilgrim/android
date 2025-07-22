@@ -4,7 +4,6 @@ import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryDetailUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
-import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.feature.bakery.detail.model.toBakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
@@ -56,10 +55,12 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     private fun getTourAreas() = launch {
-        val tourAreas = getTourAreasUseCase(
-            areaCodes = setOf(savedStateHandle[AREA_CODE] ?: EntireBusan),
-            tourCategories = TourAreaCategory.entries.toSet()
-        )
-        reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
+        savedStateHandle.get<Int>(AREA_CODE)?.let { areaCode ->
+            val tourAreas = getTourAreasUseCase(
+                areaCodes = setOf(areaCode),
+                tourCategories = TourAreaCategory.entries.toSet()
+            )
+            reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
+        }
     }
 }

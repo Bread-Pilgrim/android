@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -151,9 +151,9 @@ internal fun BakeryDetailScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.Gray50)
-                .offset { IntOffset(x = 0, y = topPadding.toPx().toInt()) } // Skip Composition. (start from Layout phrase)
-                .systemBarsPadding(),
-            state = listState
+                .offset { IntOffset(x = 0, y = topPadding.toPx().toInt()) },    // Skip Composition. (start from Layout phrase)
+            state = listState,
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
             item(contentType = "bakeryImagePager") {
                 BakeryImageHeader(
@@ -213,7 +213,7 @@ internal fun BakeryDetailScreen(
                     onReviewTabSelect = onReviewTabSelect
                 )
 
-                BakeryDetailTab.TOUR_AREA -> tourArea()
+                BakeryDetailTab.TOUR_AREA -> tourArea(tourList = state.tourAreaList)
             }
         }
         BakeRoadTopAppBar(

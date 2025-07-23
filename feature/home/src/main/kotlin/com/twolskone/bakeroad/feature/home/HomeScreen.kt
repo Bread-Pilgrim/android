@@ -139,7 +139,7 @@ internal fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState())
-                    .padding(PaddingValues(horizontal = 16.dp, vertical = 12.dp)),
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 state.preferenceBakeryList.fastForEach {
@@ -167,7 +167,7 @@ internal fun HomeScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .horizontalScroll(rememberScrollState())
-                    .padding(PaddingValues(horizontal = 16.dp, vertical = 12.dp)),
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 state.preferenceBakeryList.fastForEach {

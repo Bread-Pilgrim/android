@@ -2,19 +2,17 @@ package com.twolskone.bakeroad.feature.bakery.detail.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
@@ -201,8 +199,8 @@ private fun TourAreaSection(
     ) {
         Row(
             modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -210,70 +208,29 @@ private fun TourAreaSection(
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
         }
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            contentPadding = PaddingValues(horizontal = 16.dp),
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .horizontalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(
-                items = tourAreaList,
-                key = { tourArea -> "${tourArea.title}/${tourArea.type}(${tourArea.mapX},${tourArea.mapY})" }
-            ) {
+            tourAreaList.take(5).fastForEach { tourArea ->
                 SimpleTourAreaCard(
                     modifier = Modifier.width(TourAreaImageSize),
-                    tourArea = it
+                    tourArea = tourArea
                 )
             }
         }
-    }
-}
-
-//@Composable
-//private fun ReviewPager(
-//    modifier: Modifier = Modifier,
-//    reviewList: List<String>
-//) {
-//    val pagerState = rememberPagerState(pageCount = { reviewList.size })
-//
-//    Column {
-//        HorizontalPager(
-//            modifier = modifier,
-//            state = pagerState,
-//            contentPadding = PaddingValues(horizontal = 16.dp),
-//            pageSpacing = 8.dp
-//        ) {
-//            ReviewCard()
-//        }
-//        ReviewPagerIndicator(
-//            modifier = Modifier
-//                .padding(top = 12.dp)
-//                .fillMaxWidth(),
-//            pageCount = reviewList.size,
-//            currentPageIndex = 0
-//        )
-//    }
-//}
-
-@Composable
-private fun ReviewPagerIndicator(
-    modifier: Modifier = Modifier,
-    pageCount: Int,
-    currentPageIndex: Int
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.Center
-    ) {
-        repeat(pageCount) { iteration ->
-            val color = if (currentPageIndex == iteration) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray100
-            Box(
-                modifier = Modifier
-                    .padding(3.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .size(8.dp)
-            )
-        }
+        BakeRoadOutlinedButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            style = OutlinedButtonStyle.ASSISTIVE,
+            size = ButtonSize.MEDIUM,
+            onClick = {},
+            content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_tour_area)) }
+        )
     }
 }
 

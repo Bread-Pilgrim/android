@@ -3,35 +3,37 @@ package com.twolskone.bakeroad.core.data.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.twolskone.bakeroad.core.data.mapper.toExternalModel
-import com.twolskone.bakeroad.core.model.Bakery
-import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 
-internal class BakeryPagingSource(
+internal class BakeryReviewPagingSource(
     private val bakeryDataSource: BakeryDataSource,
-    private val areaCodes: String,
-    private val bakeryType: BakeryType
-) : PagingSource<Int, Bakery>() {
+    private val myReview: Boolean,
+    private val bakeryId: Int,
+    private val sort: ReviewSortType?
+) : PagingSource<Int, BakeryReview>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Bakery>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, BakeryReview>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey
         }
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Bakery> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BakeryReview> {
         val cursor = params.key ?: 0
 
         return try {
-            val response = when (bakeryType) {
-                BakeryType.PREFERENCE -> bakeryDataSource.getPreferenceBakeries(
-                    areaCodes = areaCodes,
+            val response = if (myReview) {
+                bakeryDataSource.getMyReviews(
+                    bakeryId = bakeryId,
                     cursorId = cursor,
                     pageSize = params.loadSize
                 )
-
-                BakeryType.HOT -> bakeryDataSource.getHotBakeries(
-                    areaCodes = areaCodes,
+            } else {
+                bakeryDataSource.getReviews(
+                    bakeryId = bakeryId,
+                    sort = sort?.value ?: ReviewSortType.LIKE_COUNT_DESC.value,
                     cursorId = cursor,
                     pageSize = params.loadSize
                 )

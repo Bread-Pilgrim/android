@@ -14,8 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
@@ -32,8 +30,10 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
@@ -42,6 +42,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
+import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import kotlinx.collections.immutable.ImmutableList
@@ -55,7 +56,9 @@ import kotlinx.collections.immutable.persistentListOf
  */
 internal fun LazyListScope.home(
     itemModifier: Modifier = Modifier,
+    reviewCount: Int,
     menuList: ImmutableList<BakeryDetail.Menu>,
+    reviewList: ImmutableList<BakeryReview>,
     tourAreaList: ImmutableList<TourArea>
 ) {
     item(contentType = "home") {
@@ -67,7 +70,9 @@ internal fun LazyListScope.home(
             ReviewSection(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                reviewCount = reviewCount,
+                reviewList = reviewList
             )
             TourAreaSection(
                 modifier = Modifier.fillMaxWidth(),
@@ -123,17 +128,19 @@ private fun MenuSection(
  * Review section with pager.
  */
 @Composable
-private fun ReviewSection(modifier: Modifier = Modifier) {
+private fun ReviewSection(
+    modifier: Modifier = Modifier,
+    reviewCount: Int,
+    reviewList: ImmutableList<BakeryReview>
+) {
     Column(
         modifier = modifier
             .background(color = BakeRoadTheme.colorScheme.White)
-            .padding(vertical = 20.dp),
+            .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
@@ -144,7 +151,7 @@ private fun ReviewSection(modifier: Modifier = Modifier) {
                 modifier = Modifier
                     .padding(start = 2.dp)
                     .weight(1f),
-                text = stringResource(R.string.feature_bakery_detail_review_count, "100"),
+                text = stringResource(R.string.feature_bakery_detail_review_count, reviewCount.toCommaString()),
                 style = BakeRoadTheme.typography.bodySmallMedium
             )
             Image(
@@ -154,20 +161,27 @@ private fun ReviewSection(modifier: Modifier = Modifier) {
             )
             Text(
                 modifier = Modifier.padding(start = 5.dp),
-                text = "5.0",
+                text = (reviewList.firstOrNull()?.avgRating ?: 0.0f).toString(),
                 style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray950)
             )
         }
-        ReviewPager(reviewList = listOf("", "", ""))
-        BakeRoadOutlinedButton(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .fillMaxWidth(),
-            style = OutlinedButtonStyle.ASSISTIVE,
-            size = ButtonSize.MEDIUM,
-            onClick = {},
-            content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_review)) }
-        )
+        if (reviewList.isNotEmpty()) {
+            reviewList.fastForEach { review ->
+                ReviewCard(
+                    modifier = Modifier.fillMaxWidth(),
+                    review = review
+                )
+            }
+            BakeRoadOutlinedButton(
+                modifier = Modifier.fillMaxWidth(),
+                style = OutlinedButtonStyle.ASSISTIVE,
+                size = ButtonSize.MEDIUM,
+                onClick = {},
+                content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_review)) }
+            )
+        } else {
+            EmptyReviewCard(modifier = Modifier.fillMaxWidth())
+        }
     }
 }
 
@@ -214,31 +228,31 @@ private fun TourAreaSection(
     }
 }
 
-@Composable
-private fun ReviewPager(
-    modifier: Modifier = Modifier,
-    reviewList: List<String>
-) {
-    val pagerState = rememberPagerState(pageCount = { reviewList.size })
-
-    Column {
-        HorizontalPager(
-            modifier = modifier,
-            state = pagerState,
-            contentPadding = PaddingValues(horizontal = 16.dp),
-            pageSpacing = 8.dp
-        ) {
-            ReviewCard()
-        }
-        ReviewPagerIndicator(
-            modifier = Modifier
-                .padding(top = 12.dp)
-                .fillMaxWidth(),
-            pageCount = reviewList.size,
-            currentPageIndex = 0
-        )
-    }
-}
+//@Composable
+//private fun ReviewPager(
+//    modifier: Modifier = Modifier,
+//    reviewList: List<String>
+//) {
+//    val pagerState = rememberPagerState(pageCount = { reviewList.size })
+//
+//    Column {
+//        HorizontalPager(
+//            modifier = modifier,
+//            state = pagerState,
+//            contentPadding = PaddingValues(horizontal = 16.dp),
+//            pageSpacing = 8.dp
+//        ) {
+//            ReviewCard()
+//        }
+//        ReviewPagerIndicator(
+//            modifier = Modifier
+//                .padding(top = 12.dp)
+//                .fillMaxWidth(),
+//            pageCount = reviewList.size,
+//            currentPageIndex = 0
+//        )
+//    }
+//}
 
 @Composable
 private fun ReviewPagerIndicator(
@@ -336,7 +350,24 @@ private fun MenuSectionPreview() {
 @Composable
 private fun ReviewSectionPreview() {
     BakeRoadTheme {
-        ReviewSection(modifier = Modifier.fillMaxWidth())
+        ReviewSection(
+            modifier = Modifier.fillMaxWidth(),
+            reviewCount = 0,
+            reviewList = persistentListOf(
+                BakeryReview(
+                    id = 1,
+                    avgRating = 4.7f,
+                    userName = "서빵글",
+                    profileUrl = "",
+                    isLike = false,
+                    content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
+                    rating = 5.0f,
+                    likeCount = 100,
+                    menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
+                    photos = emptyList()
+                )
+            )
+        )
     }
 }
 

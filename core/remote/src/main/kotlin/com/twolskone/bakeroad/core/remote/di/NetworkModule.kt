@@ -28,6 +28,7 @@ internal object NetworkModule {
     private const val BASE_URL = BuildConfig.BASE_URL
     private val json = Json {
         ignoreUnknownKeys = true
+        coerceInputValues = true
     }
 
     @Provides

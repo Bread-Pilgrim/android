@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 
 @Composable
@@ -20,6 +21,9 @@ internal fun BakeryDetailRoute(
             .fillMaxSize()
             .systemBarsPadding(),
         state = state,
-        onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) }
+        myReviewPaging = viewModel.myReviewPagingFlow.collectAsLazyPagingItems(),
+        reviewPaging = viewModel.reviewPagingFlow.collectAsLazyPagingItems(),
+        onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
+        onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) }
     )
 }

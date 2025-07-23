@@ -2,11 +2,13 @@ package com.twolskone.bakeroad.core.data.mapper
 
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
+import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 
 internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
@@ -69,4 +71,18 @@ internal fun BakeryDetailResponse.toExternalModel(): BakeryDetail =
                 imageUrl = menu.imgUrl
             )
         }
+    )
+
+internal fun BakeryReviewResponse.toExternalModel(): BakeryReview =
+    BakeryReview(
+        id = reviewId,
+        avgRating = avgRating,
+        userName = userName,
+        profileUrl = profileImg,
+        isLike = isLike,
+        content = reviewContent,
+        rating = reviewRating,
+        likeCount = reviewLikeCount,
+        menus = reviewMenus.map { it.menuName },
+        photos = reviewPhotos.map { it.imgUrl }
     )

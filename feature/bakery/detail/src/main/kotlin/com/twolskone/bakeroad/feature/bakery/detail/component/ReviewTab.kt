@@ -6,17 +6,21 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -39,6 +43,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEach
+import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
@@ -52,7 +58,12 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.ui.ProfileImage
 import com.twolskone.bakeroad.feature.bakery.detail.R
+import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
+import com.twolskone.bakeroad.feature.bakery.detail.mvi.ReviewState
+import kotlinx.collections.immutable.toImmutableList
 
 private val CardPadding = 12.dp
 private val RawContentSpacing = 6.dp
@@ -61,32 +72,70 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
 /**
  * Review tab.
  */
-internal fun LazyListScope.review() {
-    item("myReviewHeader") {
-        MyReviewHeaderSection(
-            modifier = Modifier.fillMaxWidth(),
-            reviewList = listOf()
-        )
+internal fun LazyListScope.review(
+    reviewState: ReviewState,
+    myReviewPaging: LazyPagingItems<BakeryReview>,
+    reviewPaging: LazyPagingItems<BakeryReview>,
+    onReviewTabSelect: (ReviewTab) -> Unit
+) {
+    item {
+        Box(modifier = Modifier.background(color = BakeRoadTheme.colorScheme.White)) {
+            ReviewMultiToggleButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .padding(top = 12.dp, bottom = 4.dp)
+                    .height(48.dp),
+                selectedOptionIndex = reviewState.tab.ordinal,
+                optionList = ReviewTab.entries.map { stringResource(id = it.labelId) }.toImmutableList(),
+                onSelect = { index ->
+                    val selectedReviewTab = runCatching { ReviewTab.entries[index] }.getOrDefault(ReviewTab.ALL_REVIEW)
+                    onReviewTabSelect(selectedReviewTab)
+                    when (selectedReviewTab) {
+                        ReviewTab.MY_REVIEW -> myReviewPaging.refresh()
+                        ReviewTab.ALL_REVIEW -> reviewPaging.refresh()
+                    }
+                }
+            )
+        }
     }
-    items(count = 2, contentType = { "myReview" }) {
-        ReviewCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(BakeRoadTheme.colorScheme.White)
-                .padding(vertical = 6.dp, horizontal = 16.dp)
-        )
-    }
-    item("allReviewHeader") {
-        AllReviewHeaderSection(modifier = Modifier.fillMaxWidth())
-    }
-    items(count = 10, contentType = { "allReview" }) {
-        ReviewCard(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(BakeRoadTheme.colorScheme.White)
-                .padding(vertical = 6.dp, horizontal = 16.dp)
-                .padding(bottom = if (it == 9) 14.dp else 0.dp)
-        )
+    when (reviewState.tab) {
+        ReviewTab.MY_REVIEW -> {
+            item("myReviewHeader") {
+                MyReviewHeaderSection(
+                    modifier = Modifier.fillMaxWidth(),
+                    reviewList = listOf()
+                )
+            }
+            items(count = myReviewPaging.itemCount, contentType = { "myReview" }) { index ->
+                myReviewPaging[index]?.let { review ->
+                    ReviewCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(BakeRoadTheme.colorScheme.White)
+                            .padding(vertical = 6.dp, horizontal = 16.dp),
+                        review = review
+                    )
+                }
+            }
+        }
+
+        ReviewTab.ALL_REVIEW -> {
+            item("allReviewHeader") {
+                AllReviewHeaderSection(modifier = Modifier.fillMaxWidth())
+            }
+            items(count = reviewPaging.itemCount, contentType = { "allReview" }) { index ->
+                reviewPaging[index]?.let { review ->
+                    ReviewCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(BakeRoadTheme.colorScheme.White)
+                            .padding(vertical = 6.dp, horizontal = 16.dp),
+                        review = review
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -95,7 +144,8 @@ internal fun LazyListScope.review() {
  */
 @Composable
 internal fun ReviewCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    review: BakeryReview
 ) {
     var likeState by remember { mutableStateOf(false) }
     val likeColor by animateColorAsState(
@@ -115,25 +165,21 @@ internal fun ReviewCard(
     ) {
         Row(
             modifier = Modifier
-                .padding(
-                    top = CardPadding,
-                    start = CardPadding,
-                    end = CardPadding
-                )
+                .padding(top = CardPadding, start = CardPadding, end = CardPadding)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_person_image),
-                contentDescription = "Profile"
-            )
+            // 프로필
+            ProfileImage(profileUrl = review.profileUrl)
+            // 작성자 이름
             Text(
                 modifier = Modifier
                     .padding(start = 6.dp)
                     .weight(1f),
-                text = "서빵글",
+                text = review.userName,
                 style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray600)
             )
+            // 별점
             Image(
                 modifier = Modifier.size(16.dp),
                 imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
@@ -141,58 +187,65 @@ internal fun ReviewCard(
             )
             Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = "4.7",
+                text = review.rating.toString(),
                 style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
             )
         }
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val cardWidth = (maxWidth / 2) - CardPadding - (RawContentSpacing / 2)
-            LazyRow(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(6.dp),
-                contentPadding = contentPadding
-            ) {
-                items(count = 3) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(8.dp))
-                            .width(cardWidth)
-                            .aspectRatio(3f / 2f),
-                        model = "",
-                        contentDescription = "ReviewImage",
-                        contentScale = ContentScale.Crop,
-                        placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
-                    )
+        // 사진
+        if (review.photos.isNotEmpty()) {
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val cardWidth = (maxWidth / 2) - CardPadding - (RawContentSpacing / 2)
+                LazyRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    contentPadding = contentPadding
+                ) {
+                    items(
+                        items = review.photos,
+                        key = { url -> url }
+                    ) { url ->
+                        AsyncImage(
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(8.dp))
+                                .width(cardWidth)
+                                .aspectRatio(3f / 2f),
+                            model = url,
+                            contentDescription = "ReviewImage",
+                            placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail),
+                            contentScale = ContentScale.Crop
+                        )
+                    }
                 }
             }
         }
+        // 내용
         Text(
             modifier = Modifier
                 .padding(contentPadding)
                 .fillMaxWidth(),
-            text = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
+            text = review.content,
             style = BakeRoadTheme.typography.bodyXsmallRegular
         )
-        LazyRow(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(6.dp),
-            contentPadding = contentPadding
-        ) {
-            items(count = 10) {
-                BakeRoadChip(
-                    selected = false,
-                    size = ChipSize.SMALL,
-                    label = { Text(text = "꿀고구마휘낭시에") }
-                )
+        if (review.menus.isNotEmpty()) {
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(contentPadding),
+                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                review.menus.fastForEach { menu ->
+                    BakeRoadChip(
+                        selected = false,
+                        size = ChipSize.SMALL,
+                        label = { Text(text = menu) }
+                    )
+                }
             }
         }
         Row(
             modifier = Modifier
-                .padding(
-                    top = 16.dp,
-                    bottom = CardPadding,
-                    start = CardPadding
-                )
+                .padding(top = 16.dp, bottom = CardPadding, start = CardPadding)
                 .noRippleSingleClickable { likeState = !likeState },
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -215,9 +268,7 @@ internal fun ReviewCard(
  * Shown when there are no reviews.
  */
 @Composable
-internal fun EmptyReviewCard(
-    modifier: Modifier = Modifier
-) {
+internal fun EmptyReviewCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
@@ -263,7 +314,7 @@ private fun MyReviewHeaderSection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(R.string.feature_bakery_detail_my_review),
+                text = stringResource(R.string.feature_bakery_detail_title_my_review),
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
             Text(
@@ -380,7 +431,21 @@ private fun EmptyReviewSection(
 @Composable
 private fun ReviewCardPreview() {
     BakeRoadTheme {
-        ReviewCard()
+        ReviewCard(
+            modifier = Modifier.fillMaxWidth(),
+            review = BakeryReview(
+                id = 1,
+                avgRating = 4.7f,
+                userName = "서빵글",
+                profileUrl = "",
+                isLike = false,
+                content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
+                rating = 5.0f,
+                likeCount = 100,
+                menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
+                photos = emptyList()
+            )
+        )
     }
 }
 

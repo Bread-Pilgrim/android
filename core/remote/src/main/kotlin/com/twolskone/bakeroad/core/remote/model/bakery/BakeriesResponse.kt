@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BakeriesResponse(
+    @SerialName("paging")
     val paging: Paging = Paging(),
+    @SerialName("items")
     val items: List<BakeryResponse> = emptyList()
 )
 

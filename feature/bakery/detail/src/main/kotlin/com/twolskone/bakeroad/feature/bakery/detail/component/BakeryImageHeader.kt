@@ -27,7 +27,7 @@ import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
 
 @Composable
-internal fun BakeryImagePager(
+internal fun BakeryImageHeader(
     modifier: Modifier = Modifier,
     imageList: List<String>,
     bakeryOpenStatus: BakeryOpenStatus
@@ -95,9 +95,9 @@ private fun ImagePagerIndicator(
 
 @Preview
 @Composable
-private fun HeaderPreview() {
+private fun BakeryImageHeaderPreview() {
     BakeRoadTheme {
-        BakeryImagePager(
+        BakeryImageHeader(
             modifier = Modifier.fillMaxWidth(),
             imageList = listOf(),
             bakeryOpenStatus = BakeryOpenStatus.OPEN

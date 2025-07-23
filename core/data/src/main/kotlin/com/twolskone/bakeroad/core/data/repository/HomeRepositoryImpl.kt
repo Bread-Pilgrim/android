@@ -50,7 +50,7 @@ internal class HomeRepositoryImpl @Inject constructor(
     override fun getTourAreas(areaCodes: Set<Int>, tourCategories: Set<TourAreaCategory>): Flow<List<TourArea>> {
         return tourDataSource.getAreas(
             areaCodes = areaCodes.joinToString(separator = ","),
-            tourCategories = tourCategories.map { category -> category.code }.joinToString(separator = ",")
+            tourCategories = tourCategories.joinToString(separator = ",") { category -> category.code }
         ).map { areas ->
             areas.map { area ->
                 area.toExternalModel()

@@ -5,12 +5,10 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -45,6 +43,9 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.compose.ui.util.fastForEach
+import androidx.paging.PagingData
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.designsystem.component.check.CheckSize
 import com.twolskone.bakeroad.core.designsystem.component.check.SingleCheck
 import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadSheet
@@ -54,16 +55,19 @@ import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
-import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImagePager
+import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImageHeader
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.component.home
 import com.twolskone.bakeroad.feature.bakery.detail.component.menu
 import com.twolskone.bakeroad.feature.bakery.detail.component.review
 import com.twolskone.bakeroad.feature.bakery.detail.component.tourArea
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
+import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
 private val TopAppBarHeight = 56.dp
@@ -74,7 +78,10 @@ private const val TabsIndex = 2
 internal fun BakeryDetailScreen(
     modifier: Modifier = Modifier,
     state: BakeryDetailState,
-    onTabSelect: (BakeryDetailTab) -> Unit
+    myReviewPaging: LazyPagingItems<BakeryReview>,
+    reviewPaging: LazyPagingItems<BakeryReview>,
+    onTabSelect: (BakeryDetailTab) -> Unit,
+    onReviewTabSelect: (ReviewTab) -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -149,7 +156,7 @@ internal fun BakeryDetailScreen(
             state = listState
         ) {
             item(contentType = "bakeryImagePager") {
-                BakeryImagePager(
+                BakeryImageHeader(
                     modifier = Modifier.fillMaxWidth(),
                     imageList = state.bakeryImageList,
                     bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
@@ -190,18 +197,23 @@ internal fun BakeryDetailScreen(
                 }
             }
             when (state.tab) {
-                BakeryDetailTab.HOME -> home(menuList = state.menuList, tourAreaList = state.tourAreaList)
-                BakeryDetailTab.MENU -> menu(menuList = state.menuList)
-                BakeryDetailTab.REVIEW -> review()
-                BakeryDetailTab.TOUR_AREA -> tourArea()
-            }
-            item(contentType = "bottomSpacer") {
-                Spacer(
-                    modifier = Modifier
-                        .background(color = BakeRoadTheme.colorScheme.White)
-                        .fillMaxWidth()
-                        .height(with(density) { headerHeightPx.toDp() })
+                BakeryDetailTab.HOME -> home(
+                    reviewCount = state.reviewState.reviewCount,
+                    menuList = state.menuList,
+                    reviewList = state.reviewState.previewReviewList,
+                    tourAreaList = state.tourAreaList
                 )
+
+                BakeryDetailTab.MENU -> menu(menuList = state.menuList)
+
+                BakeryDetailTab.REVIEW -> review(
+                    reviewState = state.reviewState,
+                    myReviewPaging = myReviewPaging,
+                    reviewPaging = reviewPaging,
+                    onReviewTabSelect = onReviewTabSelect
+                )
+
+                BakeryDetailTab.TOUR_AREA -> tourArea()
             }
         }
         BakeRoadTopAppBar(
@@ -295,9 +307,30 @@ internal fun BakeryDetailScreen(
 @Composable
 private fun BakeryDetailScreenPreview() {
     BakeRoadTheme {
+        val pagingData = PagingData.from(
+            listOf(
+                BakeryReview(
+                    id = 1,
+                    avgRating = 4.7f,
+                    userName = "서빵글",
+                    profileUrl = "",
+                    isLike = false,
+                    content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
+                    rating = 5.0f,
+                    likeCount = 100,
+                    menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
+                    photos = emptyList()
+                )
+            )
+        )
+        val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
+
         BakeryDetailScreen(
             state = BakeryDetailState(),
-            onTabSelect = {}
+            myReviewPaging = lazyPagingItems,
+            reviewPaging = lazyPagingItems,
+            onTabSelect = {},
+            onReviewTabSelect = {}
         )
     }
 }

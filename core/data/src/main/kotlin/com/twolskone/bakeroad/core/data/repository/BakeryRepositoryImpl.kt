@@ -7,11 +7,13 @@ import com.twolskone.bakeroad.core.common.kotlin.network.BakeRoadDispatcher
 import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
 import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.data.paging.BakeryPagingSource
-import com.twolskone.bakeroad.core.data.paging.PageSize
+import com.twolskone.bakeroad.core.data.paging.BakeryReviewPagingSource
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
+import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -27,7 +29,7 @@ internal class BakeryRepositoryImpl @Inject constructor(
     override fun getBakeries(areaCodes: String, bakeryType: BakeryType): Flow<PagingData<Bakery>> =
         Pager(
             config = PagingConfig(
-                pageSize = PageSize,
+                pageSize = 15,
                 enablePlaceholders = true
             ),
             pagingSourceFactory = {
@@ -40,7 +42,36 @@ internal class BakeryRepositoryImpl @Inject constructor(
         ).flow.flowOn(networkDispatcher)
 
     override fun getBakeryDetail(bakeryId: Int): Flow<BakeryDetail> {
-        return bakeryDataSource.getBakeryDetail(bakeryId)
+        return bakeryDataSource.getBakeryDetail(bakeryId = bakeryId)
             .map { bakeryDetail -> bakeryDetail.toExternalModel() }
     }
+
+    override fun getPreviewReviews(bakeryId: Int): Flow<List<BakeryReview>> {
+        return bakeryDataSource.getPreviewReviews(bakeryId = bakeryId)
+            .map { bakeryReviews ->
+                bakeryReviews.map { bakeryReview ->
+                    bakeryReview.toExternalModel()
+                }
+            }
+    }
+
+    override fun getReviews(
+        myReview: Boolean,
+        bakeryId: Int,
+        sort: ReviewSortType?
+    ): Flow<PagingData<BakeryReview>> =
+        Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                enablePlaceholders = true
+            ),
+            pagingSourceFactory = {
+                BakeryReviewPagingSource(
+                    bakeryDataSource = bakeryDataSource,
+                    myReview = myReview,
+                    bakeryId = bakeryId,
+                    sort = sort
+                )
+            }
+        ).flow.flowOn(networkDispatcher)
 }

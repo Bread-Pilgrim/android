@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.first
 
 class GetBakeryDetailUseCase @Inject constructor(private val bakeryRepository: BakeryRepository) {
 
-    suspend operator fun invoke(bakeryId: Int): BakeryDetail {
-        return bakeryRepository.getBakeryDetail(bakeryId).first()
-    }
+    suspend operator fun invoke(bakeryId: Int): BakeryDetail =
+        bakeryRepository.getBakeryDetail(bakeryId).first()
 }

@@ -1,10 +1,19 @@
-package com.twolskone.bakeroad.core.remote.model.review
+package com.twolskone.bakeroad.core.remote.model.bakery
 
+import com.twolskone.bakeroad.core.remote.model.Paging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ReviewByBakeryResponse(
+data class BakeryReviewsResponse(
+    @SerialName("paging")
+    val paging: Paging = Paging(),
+    @SerialName("items")
+    val items: List<BakeryReviewResponse> = emptyList()
+)
+
+@Serializable
+data class BakeryReviewResponse(
     @SerialName("avg_rating")
     val avgRating: Float = 0f,
     @SerialName("user_name")

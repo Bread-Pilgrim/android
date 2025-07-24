@@ -5,11 +5,13 @@ import com.twolskone.bakeroad.core.data.repository.BakeryRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.HomeRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.OnboardingRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.PreferRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.TourRepositoryImpl
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.domain.repository.HomeRepository
 import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
 import com.twolskone.bakeroad.core.domain.repository.PreferRepository
+import com.twolskone.bakeroad.core.domain.repository.TourRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -39,4 +41,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsBakeryRepository(bakeryRepository: BakeryRepositoryImpl): BakeryRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsTourRepository(tourRepository: TourRepositoryImpl): TourRepository
 }

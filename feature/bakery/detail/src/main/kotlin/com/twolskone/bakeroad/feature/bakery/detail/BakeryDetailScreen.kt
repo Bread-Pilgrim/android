@@ -54,7 +54,7 @@ import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImageHeader
-import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfoItem
+import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfoSection
 import com.twolskone.bakeroad.feature.bakery.detail.component.ReviewSortBottomSheet
 import com.twolskone.bakeroad.feature.bakery.detail.component.home
 import com.twolskone.bakeroad.feature.bakery.detail.component.menu
@@ -126,9 +126,9 @@ internal fun BakeryDetailScreen(
         targetValue = if (expandOpeningHour) -180f else 0f,
         label = "OpeningHourRotationAnimation"
     )
+
     LaunchedEffect(topBarColor) { Timber.e("topBarColor : $topBarColor") }
     LaunchedEffect(topBarColorTransition) { Timber.e("topBarColorTransition : $topBarColorTransition") }
-
     LaunchedEffect(state.tab) {
         if (initComposition.not()) {
             listState.animateScrollToItem(index = TabsIndex)
@@ -146,7 +146,7 @@ internal fun BakeryDetailScreen(
             state = listState,
             contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
-            item(contentType = "bakeryImagePager") {
+            item(contentType = "bakeryImageHeader") {
                 BakeryImageHeader(
                     modifier = Modifier.fillMaxWidth(),
                     imageList = state.bakeryImageList,
@@ -154,7 +154,7 @@ internal fun BakeryDetailScreen(
                 )
             }
             item(contentType = "bakeryInfo") {
-                BakeryInfoItem(
+                BakeryInfoSection(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
@@ -285,7 +285,7 @@ internal fun BakeryDetailScreen(
 
         if (showReviewSortBottomSheet) {
             ReviewSortBottomSheet(
-                sort = reviewSort,
+                sortType = reviewSort,
                 onDismissRequest = { showReviewSortBottomSheet = false },
                 onSortSelect = { sort ->
                     if (sort != reviewSort) onReviewSortSelect(sort)

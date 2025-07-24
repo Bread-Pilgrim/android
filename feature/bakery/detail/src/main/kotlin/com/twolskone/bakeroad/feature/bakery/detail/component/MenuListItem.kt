@@ -3,14 +3,9 @@ package com.twolskone.bakeroad.feature.bakery.detail.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,48 +25,13 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.feature.bakery.detail.R
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.persistentListOf
 
 /**
- * Menu tab.
- */
-internal fun LazyListScope.menu(menuList: ImmutableList<BakeryDetail.Menu>) {
-    item(contentType = "menuTitle") {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = BakeRoadTheme.colorScheme.White)
-                .padding(horizontal = 16.dp)
-                .padding(top = 20.dp, bottom = 16.dp)
-        ) {
-            Text(
-                text = stringResource(R.string.feature_bakery_detail_title_all_menu),
-                style = BakeRoadTheme.typography.bodyLargeSemibold
-            )
-        }
-    }
-    itemsIndexed(
-        items = menuList,
-        contentType = { _, _ -> "menu" }
-    ) { index, menu ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = BakeRoadTheme.colorScheme.White)
-                .padding(horizontal = 16.dp)
-        ) {
-            Menu(modifier = Modifier.fillMaxWidth(), menu = menu)
-            Spacer(modifier = Modifier.height(if (index == menuList.lastIndex) 20.dp else 16.dp))
-        }
-    }
-}
-
-/**
- * Menu item.
+ * Menu list item
+ * used in Home and Menu section.
  */
 @Composable
-internal fun Menu(
+internal fun MenuListItem(
     modifier: Modifier = Modifier,
     menu: BakeryDetail.Menu
 ) {
@@ -117,11 +77,12 @@ internal fun Menu(
     }
 }
 
+
 @Preview
 @Composable
-private fun MenuPreview() {
+private fun MenuListItemPreview() {
     BakeRoadTheme {
-        Menu(
+        MenuListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = BakeRoadTheme.colorScheme.White),
@@ -132,34 +93,5 @@ private fun MenuPreview() {
                 imageUrl = ""
             )
         )
-    }
-}
-
-@Preview
-@Composable
-private fun MenuTabPreview() {
-    BakeRoadTheme {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(color = BakeRoadTheme.colorScheme.Gray40)
-        ) {
-            menu(
-                menuList = persistentListOf(
-                    BakeryDetail.Menu(
-                        name = "에그타르트",
-                        price = 3000,
-                        isSignature = true,
-                        imageUrl = ""
-                    ),
-                    BakeryDetail.Menu(
-                        name = "에그타르트",
-                        price = 3000,
-                        isSignature = false,
-                        imageUrl = ""
-                    )
-                )
-            )
-        }
     }
 }

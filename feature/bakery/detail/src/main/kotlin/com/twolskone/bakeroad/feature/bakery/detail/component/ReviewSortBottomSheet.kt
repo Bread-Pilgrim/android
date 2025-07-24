@@ -28,13 +28,13 @@ import kotlinx.coroutines.launch
 @Composable
 internal fun ReviewSortBottomSheet(
     onDismissRequest: () -> Unit,
-    sort: ReviewSortType,
+    sortType: ReviewSortType,
     onSortSelect: (ReviewSortType) -> Unit,
     onCancel: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
     val sheetState = rememberModalBottomSheetState()
-    var selectedSort by remember { mutableStateOf(sort) }
+    var selectedSort by remember { mutableStateOf(sortType) }
 
     BakeRoadSheet(
         modifier = Modifier.fillMaxWidth(),

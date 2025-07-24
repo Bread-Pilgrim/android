@@ -4,40 +4,29 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.compose.ui.util.fastForEachIndexed
-import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
-import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
-import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
-import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
@@ -46,11 +35,14 @@ import com.twolskone.bakeroad.feature.bakery.detail.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+private const val MenuMaxCount = 4
+private const val TourAreaMaxCount = 5
+
 /**
- * Home tab with sections. (Menu, Review, TourArea)
- * @see MenuSection
- * @see ReviewSection
- * @see TourAreaSection
+ * Home section (Menu, Review, TourArea)
+ * @see MenuContent
+ * @see ReviewContent
+ * @see TourAreaContent
  */
 internal fun LazyListScope.home(
     itemModifier: Modifier = Modifier,
@@ -64,12 +56,12 @@ internal fun LazyListScope.home(
 ) {
     item(contentType = "home") {
         Column(modifier = itemModifier) {
-            MenuSection(
+            MenuContent(
                 modifier = Modifier.fillMaxWidth(),
                 menuList = menuList,
                 onViewAllClick = onViewAllMenuClick
             )
-            ReviewSection(
+            ReviewContent(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .fillMaxWidth(),
@@ -77,7 +69,7 @@ internal fun LazyListScope.home(
                 reviewList = reviewList,
                 onViewAllClick = onViewAllReviewClick
             )
-            TourAreaSection(
+            TourAreaContent(
                 modifier = Modifier.fillMaxWidth(),
                 tourAreaList = tourAreaList,
                 onViewAllClick = onViewAllTourAreaClick
@@ -87,10 +79,11 @@ internal fun LazyListScope.home(
 }
 
 /**
- * Menu section.
+ * Menu content
+ * 최대 4개
  */
 @Composable
-private fun MenuSection(
+private fun MenuContent(
     modifier: Modifier = Modifier,
     menuList: ImmutableList<BakeryDetail.Menu>,
     onViewAllClick: () -> Unit
@@ -109,8 +102,8 @@ private fun MenuSection(
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
         }
-        menuList.take(4).fastForEachIndexed { index, menu ->
-            Menu(modifier = Modifier.fillMaxWidth(), menu = menu)
+        menuList.take(MenuMaxCount).fastForEachIndexed { index, menu ->
+            MenuListItem(modifier = Modifier.fillMaxWidth(), menu = menu)
             if (index != lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
@@ -132,10 +125,11 @@ private fun MenuSection(
 }
 
 /**
- * Review section with pager.
+ * Review content
+ * 최대 3개
  */
 @Composable
-private fun ReviewSection(
+private fun ReviewContent(
     modifier: Modifier = Modifier,
     reviewCount: Int,
     reviewList: ImmutableList<BakeryReview>,
@@ -194,10 +188,11 @@ private fun ReviewSection(
 }
 
 /**
- * TourArea section.
+ * TourArea
+ * 최대 5개
  */
 @Composable
-private fun TourAreaSection(
+private fun TourAreaContent(
     modifier: Modifier = Modifier,
     tourAreaList: ImmutableList<TourArea>,
     onViewAllClick: () -> Unit
@@ -227,11 +222,8 @@ private fun TourAreaSection(
                     .padding(horizontal = 16.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                tourAreaList.take(5).fastForEach { tourArea ->
-                    SimpleTourAreaCard(
-                        modifier = Modifier.width(TourAreaImageSize),
-                        tourArea = tourArea
-                    )
+                tourAreaList.take(TourAreaMaxCount).fastForEach { tourArea ->
+                    SimpleTourAreaCard(tourArea = tourArea)
                 }
             }
             BakeRoadOutlinedButton(
@@ -247,56 +239,11 @@ private fun TourAreaSection(
     }
 }
 
-private val TourAreaImageSize = 100.dp
-
-@Composable
-private fun SimpleTourAreaCard(
-    modifier: Modifier = Modifier,
-    tourArea: TourArea
-) {
-    Column(modifier = modifier) {
-        Box {
-            AsyncImage(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(8.dp))
-                    .size(TourAreaImageSize),
-                model = tourArea.imagePath,
-                contentDescription = "TourArea",
-                contentScale = ContentScale.Crop,
-                placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
-            )
-            BakeRoadChip(
-                modifier = Modifier
-                    .padding(4.dp)
-                    .align(Alignment.TopStart),
-                color = ChipColor.SUB,
-                size = ChipSize.SMALL,
-                selected = true,
-                label = { Text(text = tourArea.type) }
-            )
-        }
-        Text(
-            modifier = Modifier.padding(top = 6.dp),
-            text = tourArea.title,
-            style = BakeRoadTheme.typography.bodySmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-        Text(
-            modifier = Modifier.padding(top = 3.dp),
-            text = tourArea.address,
-            style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
 @Preview
 @Composable
-private fun MenuSectionPreview() {
+private fun MenuContentPreview() {
     BakeRoadTheme {
-        MenuSection(
+        MenuContent(
             modifier = Modifier.fillMaxWidth(),
             menuList = persistentListOf(
                 BakeryDetail.Menu(
@@ -319,9 +266,9 @@ private fun MenuSectionPreview() {
 
 @Preview
 @Composable
-private fun ReviewSectionPreview() {
+private fun ReviewContentPreview() {
     BakeRoadTheme {
-        ReviewSection(
+        ReviewContent(
             modifier = Modifier.fillMaxWidth(),
             reviewCount = 0,
             reviewList = persistentListOf(
@@ -345,9 +292,9 @@ private fun ReviewSectionPreview() {
 
 @Preview
 @Composable
-private fun TourAreaSectionPreview() {
+private fun TourAreaContentPreview() {
     BakeRoadTheme {
-        TourAreaSection(
+        TourAreaContent(
             modifier = Modifier.fillMaxWidth(),
             tourAreaList = persistentListOf(
                 TourArea(

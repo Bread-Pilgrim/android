@@ -15,7 +15,7 @@ import com.twolskone.bakeroad.core.ui.TourAreaCard
 import kotlinx.collections.immutable.ImmutableList
 
 /**
- * TourArea tab.
+ * TourArea section
  */
 internal fun LazyListScope.tourArea(tourList: ImmutableList<TourArea>) {
     items(

@@ -201,31 +201,33 @@ internal fun BakeryInfoItem(
                 }
             }
             // 전화
-            Row(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_telephone),
-                    contentDescription = "Location",
-                    tint = BakeRoadTheme.colorScheme.Gray800
-                )
-                Text(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(horizontal = 4.dp),
-                    text = bakeryInfo.phone,
-                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
-                )
-                Text(
-                    modifier = Modifier
-                        .singleClickable { },
-                    text = stringResource(R.string.feature_bakery_detail_button_call),
-                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(
-                        color = BakeRoadTheme.colorScheme.Gray950,
-                        textDecoration = TextDecoration.Underline
+            if (bakeryInfo.phone.isNotBlank()) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_telephone),
+                        contentDescription = "Location",
+                        tint = BakeRoadTheme.colorScheme.Gray800
                     )
-                )
+                    Text(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 4.dp),
+                        text = bakeryInfo.phone,
+                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                    )
+                    Text(
+                        modifier = Modifier
+                            .singleClickable { },
+                        text = stringResource(R.string.feature_bakery_detail_button_call),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(
+                            color = BakeRoadTheme.colorScheme.Gray950,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    )
+                }
             }
         }
     } else {

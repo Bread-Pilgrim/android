@@ -57,24 +57,30 @@ internal fun LazyListScope.home(
     reviewCount: Int,
     menuList: ImmutableList<BakeryDetail.Menu>,
     reviewList: ImmutableList<BakeryReview>,
-    tourAreaList: ImmutableList<TourArea>
+    tourAreaList: ImmutableList<TourArea>,
+    onViewAllMenuClick: () -> Unit,
+    onViewAllReviewClick: () -> Unit,
+    onViewAllTourAreaClick: () -> Unit
 ) {
     item(contentType = "home") {
         Column(modifier = itemModifier) {
             MenuSection(
                 modifier = Modifier.fillMaxWidth(),
-                menuList = menuList
+                menuList = menuList,
+                onViewAllClick = onViewAllMenuClick
             )
             ReviewSection(
                 modifier = Modifier
                     .padding(vertical = 8.dp)
                     .fillMaxWidth(),
                 reviewCount = reviewCount,
-                reviewList = reviewList
+                reviewList = reviewList,
+                onViewAllClick = onViewAllReviewClick
             )
             TourAreaSection(
                 modifier = Modifier.fillMaxWidth(),
-                tourAreaList = tourAreaList
+                tourAreaList = tourAreaList,
+                onViewAllClick = onViewAllTourAreaClick
             )
         }
     }
@@ -86,7 +92,8 @@ internal fun LazyListScope.home(
 @Composable
 private fun MenuSection(
     modifier: Modifier = Modifier,
-    menuList: ImmutableList<BakeryDetail.Menu>
+    menuList: ImmutableList<BakeryDetail.Menu>,
+    onViewAllClick: () -> Unit
 ) {
     val lastIndex = menuList.take(4).size - 1
 
@@ -111,14 +118,16 @@ private fun MenuSection(
                 )
             }
         }
-        BakeRoadOutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth(),
-            style = OutlinedButtonStyle.ASSISTIVE,
-            size = ButtonSize.MEDIUM,
-            onClick = {},
-            content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_menu)) }
-        )
+        if (menuList.isNotEmpty()) {
+            BakeRoadOutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                style = OutlinedButtonStyle.ASSISTIVE,
+                size = ButtonSize.MEDIUM,
+                onClick = onViewAllClick,
+                content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_menu)) }
+            )
+        }
     }
 }
 
@@ -129,7 +138,8 @@ private fun MenuSection(
 private fun ReviewSection(
     modifier: Modifier = Modifier,
     reviewCount: Int,
-    reviewList: ImmutableList<BakeryReview>
+    reviewList: ImmutableList<BakeryReview>,
+    onViewAllClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -174,7 +184,7 @@ private fun ReviewSection(
                 modifier = Modifier.fillMaxWidth(),
                 style = OutlinedButtonStyle.ASSISTIVE,
                 size = ButtonSize.MEDIUM,
-                onClick = {},
+                onClick = onViewAllClick,
                 content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_review)) }
             )
         } else {
@@ -189,7 +199,8 @@ private fun ReviewSection(
 @Composable
 private fun TourAreaSection(
     modifier: Modifier = Modifier,
-    tourAreaList: ImmutableList<TourArea>
+    tourAreaList: ImmutableList<TourArea>,
+    onViewAllClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -208,29 +219,31 @@ private fun TourAreaSection(
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .horizontalScroll(rememberScrollState())
-                .padding(horizontal = 16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            tourAreaList.take(5).fastForEach { tourArea ->
-                SimpleTourAreaCard(
-                    modifier = Modifier.width(TourAreaImageSize),
-                    tourArea = tourArea
-                )
+        if (tourAreaList.isNotEmpty()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 16.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                tourAreaList.take(5).fastForEach { tourArea ->
+                    SimpleTourAreaCard(
+                        modifier = Modifier.width(TourAreaImageSize),
+                        tourArea = tourArea
+                    )
+                }
             }
+            BakeRoadOutlinedButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                style = OutlinedButtonStyle.ASSISTIVE,
+                size = ButtonSize.MEDIUM,
+                onClick = onViewAllClick,
+                content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_tour_area)) }
+            )
         }
-        BakeRoadOutlinedButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            style = OutlinedButtonStyle.ASSISTIVE,
-            size = ButtonSize.MEDIUM,
-            onClick = {},
-            content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_tour_area)) }
-        )
     }
 }
 
@@ -298,7 +311,8 @@ private fun MenuSectionPreview() {
                     isSignature = false,
                     imageUrl = ""
                 )
-            )
+            ),
+            onViewAllClick = {}
         )
     }
 }
@@ -323,7 +337,8 @@ private fun ReviewSectionPreview() {
                     menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                     photos = emptyList()
                 )
-            )
+            ),
+            onViewAllClick = {}
         )
     }
 }
@@ -343,7 +358,8 @@ private fun TourAreaSectionPreview() {
                     mapY = 0f,
                     mapX = 0f
                 )
-            )
+            ),
+            onViewAllClick = {}
         )
     }
 }

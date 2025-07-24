@@ -67,6 +67,7 @@ import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
 private val TopAppBarHeight = 56.dp
+
 private const val TabsIndex = 2
 
 @Composable
@@ -125,14 +126,8 @@ internal fun BakeryDetailScreen(
         targetValue = if (expandOpeningHour) -180f else 0f,
         label = "OpeningHourRotationAnimation"
     )
-
-    LaunchedEffect(topBarColor) {
-        Timber.e("topBarColor : $topBarColor")
-    }
-
-    LaunchedEffect(topBarColorTransition) {
-        Timber.e("topBarColorTransition : $topBarColorTransition")
-    }
+    LaunchedEffect(topBarColor) { Timber.e("topBarColor : $topBarColor") }
+    LaunchedEffect(topBarColorTransition) { Timber.e("topBarColorTransition : $topBarColorTransition") }
 
     LaunchedEffect(state.tab) {
         if (initComposition.not()) {
@@ -198,7 +193,10 @@ internal fun BakeryDetailScreen(
                         reviewCount = state.reviewState.count,
                         menuList = state.menuList,
                         reviewList = state.reviewState.previewReviewList,
-                        tourAreaList = state.tourAreaList
+                        tourAreaList = state.tourAreaList,
+                        onViewAllMenuClick = { onTabSelect(BakeryDetailTab.MENU) },
+                        onViewAllReviewClick = { onTabSelect(BakeryDetailTab.REVIEW) },
+                        onViewAllTourAreaClick = { onTabSelect(BakeryDetailTab.TOUR_AREA) }
                     )
                 }
 
@@ -209,7 +207,7 @@ internal fun BakeryDetailScreen(
                 BakeryDetailTab.REVIEW -> {
                     review(
                         state = state.reviewState,
-                        sort = reviewSort,
+                        sortType = reviewSort,
                         myReviewPaging = myReviewPaging,
                         reviewPaging = reviewPaging,
                         onReviewTabSelect = onReviewTabSelect,
@@ -236,7 +234,7 @@ internal fun BakeryDetailScreen(
                         .clip(CircleShape)
                         .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
                         .singleClickable {}
-                        .padding(6.dp),
+                        .padding(6.dp)
                 ) {
                     Icon(
                         modifier = Modifier.size(20.dp),
@@ -247,7 +245,6 @@ internal fun BakeryDetailScreen(
             },
             title = {
                 if (topBarColorTransition == 1f) {
-                    Timber.i("TopAppBar composition !!")
                     Text(text = state.bakeryInfo?.name.orEmpty())
                 }
             },

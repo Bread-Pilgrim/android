@@ -1,5 +1,3 @@
-@file:JvmName("ReviewTabKt")
-
 package com.twolskone.bakeroad.feature.bakery.detail.component
 
 import androidx.compose.animation.animateColorAsState
@@ -46,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.common.android.base.extension.emptyState
 import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
@@ -76,7 +75,7 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
  */
 internal fun LazyListScope.review(
     state: ReviewState,
-    sort: ReviewSortType,
+    sortType: ReviewSortType,
     myReviewPaging: LazyPagingItems<BakeryReview>,
     reviewPaging: LazyPagingItems<BakeryReview>,
     onReviewTabSelect: (ReviewTab) -> Unit,
@@ -95,11 +94,11 @@ internal fun LazyListScope.review(
                 onSelect = { index ->
                     val selectedReviewTab = runCatching { ReviewTab.entries[index] }.getOrDefault(ReviewTab.ALL_REVIEW)
                     if (index != state.tab.ordinal) {
-                        onReviewTabSelect(selectedReviewTab)
                         when (selectedReviewTab) {
                             ReviewTab.MY_REVIEW -> myReviewPaging.refresh()
                             ReviewTab.ALL_REVIEW -> reviewPaging.refresh()
                         }
+                        onReviewTabSelect(selectedReviewTab)
                     }
                 }
             )
@@ -110,18 +109,29 @@ internal fun LazyListScope.review(
             item("myReviewHeader") {
                 MyReviewHeaderSection(
                     modifier = Modifier.fillMaxWidth(),
-                    reviewList = listOf()
+                    state = state
                 )
             }
-            items(count = myReviewPaging.itemCount, contentType = { "myReview" }) { index ->
-                myReviewPaging[index]?.let { review ->
-                    ReviewCard(
+            if (myReviewPaging.emptyState) {
+                item {
+                    EmptyReviewCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 6.dp, horizontal = 16.dp),
-                        review = review
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
                     )
+                }
+            } else {
+                items(count = myReviewPaging.itemCount, contentType = { "myReview" }) { index ->
+                    myReviewPaging[index]?.let { review ->
+                        ReviewCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(BakeRoadTheme.colorScheme.White)
+                                .padding(vertical = 6.dp, horizontal = 16.dp),
+                            review = review
+                        )
+                    }
                 }
             }
         }
@@ -131,19 +141,30 @@ internal fun LazyListScope.review(
                 AllReviewHeaderSection(
                     modifier = Modifier.fillMaxWidth(),
                     state = state,
-                    reviewSort = sort,
+                    reviewSort = sortType,
                     onSortClick = onSortClick
                 )
             }
-            items(count = reviewPaging.itemCount, contentType = { "allReview" }) { index ->
-                reviewPaging[index]?.let { review ->
-                    ReviewCard(
+            if (reviewPaging.emptyState) {
+                item {
+                    EmptyReviewCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 6.dp, horizontal = 16.dp),
-                        review = review
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
                     )
+                }
+            } else {
+                items(count = reviewPaging.itemCount, contentType = { "allReview" }) { index ->
+                    reviewPaging[index]?.let { review ->
+                        ReviewCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(BakeRoadTheme.colorScheme.White)
+                                .padding(vertical = 6.dp, horizontal = 16.dp),
+                            review = review
+                        )
+                    }
                 }
             }
         }
@@ -308,10 +329,8 @@ internal fun EmptyReviewCard(modifier: Modifier = Modifier) {
 @Composable
 private fun MyReviewHeaderSection(
     modifier: Modifier = Modifier,
-    reviewList: List<String>
+    state: ReviewState
 ) {
-//    val pagerState = rememberPagerState(pageCount = { reviewList.size })
-
     Column(
         modifier = modifier
             .background(color = BakeRoadTheme.colorScheme.White)
@@ -332,7 +351,7 @@ private fun MyReviewHeaderSection(
                 modifier = Modifier
                     .padding(start = 2.dp)
                     .weight(1f),
-                text = stringResource(R.string.feature_bakery_detail_review_count, "100"),
+                text = stringResource(R.string.feature_bakery_detail_review_count, state.count.toCommaString()),
                 style = BakeRoadTheme.typography.bodySmallMedium
             )
             BakeRoadOutlinedButton(
@@ -343,14 +362,6 @@ private fun MyReviewHeaderSection(
                 content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
             )
         }
-//        HorizontalPager(
-//            modifier = modifier,
-//            state = pagerState,
-//            contentPadding = PaddingValues(horizontal = 16.dp),
-//            pageSpacing = 8.dp
-//        ) {
-//            ReviewCard()
-//        }
     }
 }
 
@@ -386,6 +397,13 @@ private fun AllReviewHeaderSection(
                     .weight(1f),
                 text = stringResource(R.string.feature_bakery_detail_review_count, state.count.toCommaString()),
                 style = BakeRoadTheme.typography.bodySmallMedium
+            )
+            BakeRoadOutlinedButton(
+                modifier = Modifier,
+                style = OutlinedButtonStyle.ASSISTIVE,
+                size = ButtonSize.SMALL,
+                onClick = {},
+                content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
             )
         }
         Row(
@@ -477,7 +495,7 @@ private fun MyReviewSectionPreview() {
     BakeRoadTheme {
         MyReviewHeaderSection(
             modifier = Modifier.fillMaxWidth(),
-            reviewList = listOf("", "")
+            state = ReviewState()
         )
     }
 }

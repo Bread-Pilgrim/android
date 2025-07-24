@@ -42,7 +42,7 @@ import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.model.openingHourLabel
 
 @Composable
-internal fun BakeryInfo(
+internal fun BakeryInfoItem(
     modifier: Modifier = Modifier,
     bakeryInfo: BakeryInfo?,
     expandOpeningHour: Boolean,
@@ -247,9 +247,9 @@ internal val DayOfWeek.toLabel: String
 
 @Preview
 @Composable
-private fun BakeryInfoPreview() {
+private fun BakeryInfoItemPreview() {
     BakeRoadTheme {
-        BakeryInfo(
+        BakeryInfoItem(
             bakeryInfo = BakeryInfo(
                 name = "서라당",
                 rating = 4.7f,

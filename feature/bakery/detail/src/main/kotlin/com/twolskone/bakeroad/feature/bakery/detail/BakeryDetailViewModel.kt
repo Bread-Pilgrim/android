@@ -10,6 +10,7 @@ import com.twolskone.bakeroad.core.domain.usecase.GetBakeryMyReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryPreviewReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.feature.bakery.detail.model.toBakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
@@ -18,7 +19,12 @@ import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flatMapLatest
 import timber.log.Timber
 
 private const val BAKERY_ID = "bakeryId"
@@ -38,6 +44,10 @@ internal class BakeryDetailViewModel @Inject constructor(
         return BakeryDetailState()
     }
 
+    private val _reviewSort = MutableStateFlow(state.value.reviewState.sortType)
+    val reviewSort: StateFlow<ReviewSortType>
+        get() = _reviewSort.asStateFlow()
+
     val myReviewPagingFlow by lazy {
         getBakeryMyReviewsUseCase(
             bakeryId = savedStateHandle.get<Int>(BAKERY_ID).orZero()
@@ -45,10 +55,14 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     val reviewPagingFlow by lazy {
-        getBakeryReviewsUseCase(
-            bakeryId = savedStateHandle.get<Int>(BAKERY_ID).orZero(),
-            reviewSortType = state.value.reviewState.reviewSortType
-        ).cachedIn(viewModelScope).catch { cause -> handleException(cause) }
+        reviewSort
+            .distinctUntilChanged { oldSort, newSort -> oldSort.value == newSort.value }
+            .flatMapLatest { reviewSort ->
+                getBakeryReviewsUseCase(
+                    bakeryId = savedStateHandle.get<Int>(BAKERY_ID).orZero(),
+                    reviewSortType = reviewSort
+                ).cachedIn(viewModelScope).catch { cause -> handleException(cause) }
+            }
     }
 
     init {
@@ -72,6 +86,8 @@ internal class BakeryDetailViewModel @Inject constructor(
                     )
                 )
             }
+
+            is BakeryDetailIntent.SelectReviewSort -> _reviewSort.value = intent.sort
         }
     }
 
@@ -83,7 +99,10 @@ internal class BakeryDetailViewModel @Inject constructor(
                     bakeryImageList = bakeryDetail.imageUrls.toImmutableList(),
                     bakeryInfo = bakeryDetail.toBakeryInfo(),
                     menuList = bakeryDetail.menus.toImmutableList(),
-                    reviewState = reviewState.copy(reviewCount = bakeryDetail.reviewCount)
+                    reviewState = reviewState.copy(
+                        count = bakeryDetail.reviewCount,
+                        avgRating = bakeryDetail.rating
+                    )
                 )
             }
         }

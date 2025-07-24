@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,10 +45,6 @@ import androidx.compose.ui.util.fastForEach
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.twolskone.bakeroad.core.designsystem.component.check.CheckSize
-import com.twolskone.bakeroad.core.designsystem.component.check.SingleCheck
-import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadSheet
-import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -57,8 +52,10 @@ import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
+import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImageHeader
-import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfo
+import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfoItem
+import com.twolskone.bakeroad.feature.bakery.detail.component.ReviewSortBottomSheet
 import com.twolskone.bakeroad.feature.bakery.detail.component.home
 import com.twolskone.bakeroad.feature.bakery.detail.component.menu
 import com.twolskone.bakeroad.feature.bakery.detail.component.review
@@ -66,31 +63,29 @@ import com.twolskone.bakeroad.feature.bakery.detail.component.tourArea
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailState
-import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
 private val TopAppBarHeight = 56.dp
 private const val TabsIndex = 2
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun BakeryDetailScreen(
     modifier: Modifier = Modifier,
     state: BakeryDetailState,
+    reviewSort: ReviewSortType,
     myReviewPaging: LazyPagingItems<BakeryReview>,
     reviewPaging: LazyPagingItems<BakeryReview>,
     onTabSelect: (BakeryDetailTab) -> Unit,
-    onReviewTabSelect: (ReviewTab) -> Unit
+    onReviewTabSelect: (ReviewTab) -> Unit,
+    onReviewSortSelect: (ReviewSortType) -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
-
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
     val maxTopPadding = /*statusBarHeight + */TopAppBarHeight
     val headerWidthPx = windowInfo.containerSize.width
     val headerHeightPx = headerWidthPx / 3 * 2 + (with(density) { statusBarHeight.roundToPx() })
-
     val listState = rememberLazyListState()
     val scrollIndex by remember { derivedStateOf { listState.firstVisibleItemIndex } }
     val scrollOffset by remember { derivedStateOf { listState.firstVisibleItemScrollOffset } }
@@ -115,6 +110,7 @@ internal fun BakeryDetailScreen(
                 scrollIndex == 0 -> (scrollOffset / headerHeightPx.toFloat()).coerceIn(0f, 1f)
                 else -> 1f
             }
+
             transition.coerceIn(0f, 1f)
         }
     }
@@ -122,7 +118,7 @@ internal fun BakeryDetailScreen(
         targetValue = BakeRoadTheme.colorScheme.White.copy(alpha = topBarColorTransition),
         label = "TopBarColorAnimation"
     )
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showReviewSortBottomSheet by remember { mutableStateOf(false) }
     var initComposition by remember { mutableStateOf(true) }    // Is first composition?
     var expandOpeningHour by remember { mutableStateOf(false) }
     val rotateOpeningHourIconAngle by animateFloatAsState(
@@ -163,7 +159,7 @@ internal fun BakeryDetailScreen(
                 )
             }
             item(contentType = "bakeryInfo") {
-                BakeryInfo(
+                BakeryInfoItem(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
@@ -197,25 +193,36 @@ internal fun BakeryDetailScreen(
                 }
             }
             when (state.tab) {
-                BakeryDetailTab.HOME -> home(
-                    reviewCount = state.reviewState.reviewCount,
-                    menuList = state.menuList,
-                    reviewList = state.reviewState.previewReviewList,
-                    tourAreaList = state.tourAreaList
-                )
+                BakeryDetailTab.HOME -> {
+                    home(
+                        reviewCount = state.reviewState.count,
+                        menuList = state.menuList,
+                        reviewList = state.reviewState.previewReviewList,
+                        tourAreaList = state.tourAreaList
+                    )
+                }
 
-                BakeryDetailTab.MENU -> menu(menuList = state.menuList)
+                BakeryDetailTab.MENU -> {
+                    menu(menuList = state.menuList)
+                }
 
-                BakeryDetailTab.REVIEW -> review(
-                    reviewState = state.reviewState,
-                    myReviewPaging = myReviewPaging,
-                    reviewPaging = reviewPaging,
-                    onReviewTabSelect = onReviewTabSelect
-                )
+                BakeryDetailTab.REVIEW -> {
+                    review(
+                        state = state.reviewState,
+                        sort = reviewSort,
+                        myReviewPaging = myReviewPaging,
+                        reviewPaging = reviewPaging,
+                        onReviewTabSelect = onReviewTabSelect,
+                        onSortClick = { showReviewSortBottomSheet = true }
+                    )
+                }
 
-                BakeryDetailTab.TOUR_AREA -> tourArea(tourList = state.tourAreaList)
+                BakeryDetailTab.TOUR_AREA -> {
+                    tourArea(tourList = state.tourAreaList)
+                }
             }
         }
+
         BakeRoadTopAppBar(
             modifier = Modifier
                 .fillMaxWidth()
@@ -278,26 +285,16 @@ internal fun BakeryDetailScreen(
                 }
             }
         )
-        if (showBottomSheet) {
-            BakeRoadSheet(
-                modifier = Modifier.fillMaxWidth(),
-                buttonType = PopupButton.SHORT,
-                title = stringResource(id = R.string.feature_bakery_detail_title_sort_order),
-                primaryText = stringResource(id = R.string.feature_bakery_detail_button_sort),
-                userActionContent = {
-                    SingleCheck(
-                        modifier = Modifier.fillMaxWidth(),
-                        size = CheckSize.NORMAL,
-                        selectedOption = "좋아요 순",
-                        optionList = persistentListOf("좋아요 순", "최신 작성 순", "높은 평가 순", "낮은 평가 순"),
-                        onCheck = {}
-                    )
+
+        if (showReviewSortBottomSheet) {
+            ReviewSortBottomSheet(
+                sort = reviewSort,
+                onDismissRequest = { showReviewSortBottomSheet = false },
+                onSortSelect = { sort ->
+                    if (sort != reviewSort) onReviewSortSelect(sort)
+                    showReviewSortBottomSheet = false
                 },
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                onPrimaryAction = {},
-                onSecondaryAction = {}
+                onCancel = { showReviewSortBottomSheet = false }
             )
         }
     }
@@ -327,10 +324,12 @@ private fun BakeryDetailScreenPreview() {
 
         BakeryDetailScreen(
             state = BakeryDetailState(),
+            reviewSort = ReviewSortType.LIKE_COUNT_DESC,
             myReviewPaging = lazyPagingItems,
             reviewPaging = lazyPagingItems,
             onTabSelect = {},
-            onReviewTabSelect = {}
+            onReviewTabSelect = {},
+            onReviewSortSelect = {}
         )
     }
 }

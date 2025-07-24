@@ -24,8 +24,9 @@ internal data class BakeryDetailState(
 
 @Immutable
 internal data class ReviewState(
-    val reviewCount: Int = 0,
+    val count: Int = 0,
+    val avgRating: Float = 0.0f,
     val tab: ReviewTab = ReviewTab.MY_REVIEW,
-    val reviewSortType: ReviewSortType = ReviewSortType.LIKE_COUNT_DESC,
+    val sortType: ReviewSortType = ReviewSortType.LIKE_COUNT_DESC,
     val previewReviewList: ImmutableList<BakeryReview> = persistentListOf()
 )

@@ -1,12 +1,10 @@
-package com.twolskone.bakeroad.core.designsystem.component.check
+package com.twolskone.bakeroad.core.designsystem.component.button
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,44 +15,16 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.R
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import kotlinx.collections.immutable.ImmutableList
-
-/**
- * A singe-select check component group, like a RadioButton.
- */
-@Composable
-fun SingleCheck(
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
-    size: CheckSize,
-    selectedOption: String,
-    optionList: ImmutableList<String>,
-    onCheck: (String) -> Unit
-) {
-    Column(modifier = modifier.selectableGroup()) {
-        optionList.fastForEach { option ->
-            Check(
-                role = Role.RadioButton,
-                size = size,
-                enabled = enabled,
-                checked = (option == selectedOption),
-                onCheck = onCheck,
-                option = option
-            )
-        }
-    }
-}
 
 @Composable
-private fun Check(
+private fun BakeRoadCheckButton(
     role: Role,
-    size: CheckSize,
+    size: CheckButtonSize,
     checked: Boolean,
     enabled: Boolean = true,
-    onCheck: (String) -> Unit,
+    onCheck: () -> Unit,
     option: String
 ) {
     val checkColor = (if (checked) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray200).copy(
@@ -71,7 +41,7 @@ private fun Check(
             .fillMaxWidth()
             .selectable(
                 selected = checked,
-                onClick = { onCheck(option) },
+                onClick = onCheck,
                 role = role,
                 interactionSource = null,
                 indication = null
@@ -93,7 +63,7 @@ private fun Check(
     }
 }
 
-enum class CheckSize {
+enum class CheckButtonSize {
     NORMAL, SMALL;
 
     val iconSize: Dp

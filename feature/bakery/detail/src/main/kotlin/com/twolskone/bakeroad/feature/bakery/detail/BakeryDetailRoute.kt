@@ -15,15 +15,18 @@ internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val reviewSort by viewModel.reviewSort.collectAsStateWithLifecycle()
 
     BakeryDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding(),
         state = state,
+        reviewSort = reviewSort,
         myReviewPaging = viewModel.myReviewPagingFlow.collectAsLazyPagingItems(),
         reviewPaging = viewModel.reviewPagingFlow.collectAsLazyPagingItems(),
         onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
-        onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) }
+        onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) },
+        onReviewSortSelect = { sort -> viewModel.intent(BakeryDetailIntent.SelectReviewSort(sort)) }
     )
 }

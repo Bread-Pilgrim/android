@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
@@ -59,6 +60,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.ui.ProfileImage
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
@@ -73,10 +75,12 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
  * Review tab.
  */
 internal fun LazyListScope.review(
-    reviewState: ReviewState,
+    state: ReviewState,
+    sort: ReviewSortType,
     myReviewPaging: LazyPagingItems<BakeryReview>,
     reviewPaging: LazyPagingItems<BakeryReview>,
-    onReviewTabSelect: (ReviewTab) -> Unit
+    onReviewTabSelect: (ReviewTab) -> Unit,
+    onSortClick: () -> Unit
 ) {
     item {
         Box(modifier = Modifier.background(color = BakeRoadTheme.colorScheme.White)) {
@@ -86,20 +90,22 @@ internal fun LazyListScope.review(
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp, bottom = 4.dp)
                     .height(48.dp),
-                selectedOptionIndex = reviewState.tab.ordinal,
+                selectedOptionIndex = state.tab.ordinal,
                 optionList = ReviewTab.entries.map { stringResource(id = it.labelId) }.toImmutableList(),
                 onSelect = { index ->
                     val selectedReviewTab = runCatching { ReviewTab.entries[index] }.getOrDefault(ReviewTab.ALL_REVIEW)
-                    onReviewTabSelect(selectedReviewTab)
-                    when (selectedReviewTab) {
-                        ReviewTab.MY_REVIEW -> myReviewPaging.refresh()
-                        ReviewTab.ALL_REVIEW -> reviewPaging.refresh()
+                    if (index != state.tab.ordinal) {
+                        onReviewTabSelect(selectedReviewTab)
+                        when (selectedReviewTab) {
+                            ReviewTab.MY_REVIEW -> myReviewPaging.refresh()
+                            ReviewTab.ALL_REVIEW -> reviewPaging.refresh()
+                        }
                     }
                 }
             )
         }
     }
-    when (reviewState.tab) {
+    when (state.tab) {
         ReviewTab.MY_REVIEW -> {
             item("myReviewHeader") {
                 MyReviewHeaderSection(
@@ -122,7 +128,12 @@ internal fun LazyListScope.review(
 
         ReviewTab.ALL_REVIEW -> {
             item("allReviewHeader") {
-                AllReviewHeaderSection(modifier = Modifier.fillMaxWidth())
+                AllReviewHeaderSection(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = state,
+                    reviewSort = sort,
+                    onSortClick = onSortClick
+                )
             }
             items(count = reviewPaging.itemCount, contentType = { "allReview" }) { index ->
                 reviewPaging[index]?.let { review ->
@@ -348,7 +359,10 @@ private fun MyReviewHeaderSection(
  */
 @Composable
 private fun AllReviewHeaderSection(
-    modifier: Modifier
+    modifier: Modifier,
+    state: ReviewState,
+    reviewSort: ReviewSortType,
+    onSortClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -370,7 +384,7 @@ private fun AllReviewHeaderSection(
                 modifier = Modifier
                     .padding(start = 2.dp)
                     .weight(1f),
-                text = stringResource(R.string.feature_bakery_detail_review_count, "100"),
+                text = stringResource(R.string.feature_bakery_detail_review_count, state.count.toCommaString()),
                 style = BakeRoadTheme.typography.bodySmallMedium
             )
         }
@@ -390,14 +404,14 @@ private fun AllReviewHeaderSection(
                 modifier = Modifier
                     .padding(start = 5.dp)
                     .weight(1f),
-                text = "5.0",
+                text = state.avgRating.toString(),
                 style = BakeRoadTheme.typography.bodyMediumMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
             )
             BakeRoadTextButton(
                 style = TextButtonStyle.ASSISTIVE,
                 size = TextButtonSize.SMALL,
-                onClick = {},
-                content = { Text(text = "좋아요 순") }
+                onClick = onSortClick,
+                content = { Text(text = reviewSort.label) }
             )
         }
     }
@@ -472,7 +486,12 @@ private fun MyReviewSectionPreview() {
 @Composable
 private fun AllReviewHeaderSectionPreview() {
     BakeRoadTheme {
-        AllReviewHeaderSection(modifier = Modifier.fillMaxWidth())
+        AllReviewHeaderSection(
+            modifier = Modifier.fillMaxWidth(),
+            state = ReviewState(),
+            reviewSort = ReviewSortType.LIKE_COUNT_DESC,
+            onSortClick = {}
+        )
     }
 }
 

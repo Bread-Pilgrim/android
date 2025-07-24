@@ -21,6 +21,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
+private const val BakeryMaxCount = 20
+private const val TourAreaMaxCount = 5
+
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -111,30 +114,31 @@ internal class HomeViewModel @Inject constructor(
     }
 
     /**
-     * 내 취향 추천 빵집
+     * 내 취향 추천 빵집 (최대 20개)
      */
     private fun refreshPreferenceBakeries() = launch {
         val preferenceBakeries = getPreferenceBakeriesUseCase(areaCodes = state.value.selectedAreaCodes)
+            .take(BakeryMaxCount)
         reduce { copy(preferenceBakeryList = preferenceBakeries.toImmutableList()) }
     }
 
-
     /**
-     * Hot한 빵집 모음
+     * Hot한 빵집 모음 (최대 20개)
      */
     private fun refreshHotBakeries() = launch {
         val hotBakeries = getHotBakeriesUseCase(areaCodes = state.value.selectedAreaCodes)
+            .take(BakeryMaxCount)
         reduce { copy(hotBakeryList = hotBakeries.toImmutableList()) }
     }
 
     /**
-     * 같이 가볼만한 관광지
+     * 같이 가볼만한 관광지 (최대 5개)
      */
     private fun refreshTourAreas() = launch {
         val tourAreas = getTourAreasUseCase(
             areaCodes = state.value.selectedAreaCodes,
             tourCategories = state.value.selectedTourAreaCategories
-        )
+        ).take(TourAreaMaxCount)
         reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
     }
 

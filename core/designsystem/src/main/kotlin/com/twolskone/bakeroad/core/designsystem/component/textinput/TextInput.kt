@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.designsystem.component.input
+package com.twolskone.bakeroad.core.designsystem.component.textinput
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -32,7 +32,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 private val TextFieldShape = RoundedCornerShape(10.dp)
 
 @Composable
-fun BakeRoadTextField(
+fun BakeRoadTextInput(
     modifier: Modifier = Modifier,
     state: TextFieldState,
     validType: TextFieldValidType = TextFieldValidType.DEFAULT,
@@ -133,9 +133,9 @@ enum class TextFieldValidType {
 
 @Preview(showBackground = true)
 @Composable
-private fun BakeRoadTextFieldPreview() {
+private fun BakeRoadTextInputPreview() {
     BakeRoadTheme {
-        BakeRoadTextField(
+        BakeRoadTextInput(
             state = rememberTextFieldState(),
             title = "Title",
             description = "디스크립션 내용입니다."

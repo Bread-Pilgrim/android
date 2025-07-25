@@ -27,9 +27,9 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
-import com.twolskone.bakeroad.core.designsystem.component.input.BakeRoadTextField
-import com.twolskone.bakeroad.core.designsystem.component.input.TextFieldValidType
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoading
+import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextInput
+import com.twolskone.bakeroad.core.designsystem.component.textinput.TextFieldValidType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
@@ -98,7 +98,7 @@ internal fun NicknameSettingsScreen(
                     text = stringResource(R.string.feature_onboarding_description_nickname_settings),
                     style = BakeRoadTheme.typography.bodySmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray800)
                 )
-                BakeRoadTextField(
+                BakeRoadTextInput(
                     modifier = Modifier
                         .padding(top = 44.dp)
                         .fillMaxWidth(),

@@ -11,4 +11,5 @@
     <string name="core_ui_label_bakery_open_status_open">영업중</string>
     <string name="core_ui_label_bakery_open_status_closed">영업종료</string>
     <string name="core_ui_label_bakery_open_status_day_off">휴무일</string>
+    <string name="core_ui_label_signature_menu">대표메뉴</string>
 </resources>

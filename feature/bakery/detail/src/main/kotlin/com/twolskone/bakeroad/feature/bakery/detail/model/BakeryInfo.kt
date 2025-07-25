@@ -7,6 +7,8 @@ import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.feature.bakery.detail.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
 internal data class BakeryInfo(
@@ -16,8 +18,8 @@ internal data class BakeryInfo(
     val address: String,
     val phone: String,
     val openStatus: BakeryOpenStatus,
-    val openingHour: List<OpeningHour>,
-    val dayOff: List<DayOfWeek>,
+    val openingHour: ImmutableList<OpeningHour>,
+    val dayOff: ImmutableList<DayOfWeek>,
     val isLike: Boolean,
 ) {
 
@@ -45,10 +47,11 @@ internal fun BakeryDetail.toBakeryInfo(): BakeryInfo =
                     openTime = it.openTime,
                     closeTime = it.closeTime
                 )
-            },
+            }.toImmutableList(),
         dayOff = openingHours
             .filter { !it.isOpened }
-            .map { it.dayOfWeek },
+            .map { it.dayOfWeek }
+            .toImmutableList(),
         isLike = isLike
     )
 

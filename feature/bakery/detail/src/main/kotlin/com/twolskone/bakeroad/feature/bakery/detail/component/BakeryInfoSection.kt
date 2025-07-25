@@ -40,6 +40,7 @@ import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.model.openingHourLabel
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun BakeryInfoSection(
@@ -247,14 +248,14 @@ private fun BakeryInfoSectionPreview() {
                 address = "서울시 관악구 신사로 120-1 1층 서라당",
                 phone = "010-1234-5678",
                 openStatus = BakeryOpenStatus.OPEN,
-                openingHour = listOf(
+                openingHour = persistentListOf(
                     BakeryInfo.OpeningHour(
                         dayOffWeek = DayOfWeek.MONDAY,
                         openTime = "10:00",
                         closeTime = "20:00"
                     )
                 ),
-                dayOff = listOf(),
+                dayOff = persistentListOf(),
                 isLike = true
             ),
             expandOpeningHour = false,

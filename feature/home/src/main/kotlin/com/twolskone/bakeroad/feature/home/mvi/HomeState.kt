@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.feature.home.mvi
 
+import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.model.Area
 import com.twolskone.bakeroad.core.model.EntireBusan
@@ -11,6 +12,7 @@ import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 
+@Immutable
 internal data class HomeState(
     val selectedAreaCodes: PersistentSet<Int> = persistentSetOf(EntireBusan),
     val selectedTourAreaCategories: PersistentSet<TourAreaCategory> = persistentSetOf(TourAreaCategory.NATURE),

@@ -29,6 +29,8 @@ android {
             isMinifyEnabled = false
             applicationIdSuffix = BakeRoadBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // TODO. To publish on the Play store a private signing key is required.
+            signingConfig = signingConfigs.named("debug").get()
         }
     }
 

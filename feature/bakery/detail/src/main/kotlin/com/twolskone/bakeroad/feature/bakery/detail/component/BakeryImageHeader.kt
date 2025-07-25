@@ -25,11 +25,13 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun BakeryImageHeader(
     modifier: Modifier = Modifier,
-    imageList: List<String>,
+    imageList: ImmutableList<String>,
     bakeryOpenStatus: BakeryOpenStatus
 ) {
     val imagePagerState = rememberPagerState(pageCount = { imageList.size })
@@ -99,7 +101,7 @@ private fun BakeryImageHeaderPreview() {
     BakeRoadTheme {
         BakeryImageHeader(
             modifier = Modifier.fillMaxWidth(),
-            imageList = listOf(),
+            imageList = persistentListOf(),
             bakeryOpenStatus = BakeryOpenStatus.OPEN
         )
     }

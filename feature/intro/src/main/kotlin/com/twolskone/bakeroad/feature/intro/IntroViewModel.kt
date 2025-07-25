@@ -13,8 +13,8 @@ import com.twolskone.bakeroad.core.exception.ClientError
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
 import com.twolskone.bakeroad.feature.intro.mvi.IntroSideEffect
+import com.twolskone.bakeroad.feature.intro.mvi.IntroState
 import com.twolskone.bakeroad.feature.intro.mvi.IntroType
-import com.twolskone.bakeroad.feature.intro.mvi.IntroUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import timber.log.Timber
@@ -26,7 +26,7 @@ internal class IntroViewModel @Inject constructor(
     private val verifyTokenUseCase: VerifyTokenUseCase,
     private val loginUseCase: LoginUseCase,
     private val getOnboardingStatusUseCase: GetOnboardingStatusUseCase
-) : BaseViewModel<IntroUiState, IntroIntent, IntroSideEffect>(savedStateHandle) {
+) : BaseViewModel<IntroState, IntroIntent, IntroSideEffect>(savedStateHandle) {
 
     init {
         launch {
@@ -40,8 +40,8 @@ internal class IntroViewModel @Inject constructor(
         }
     }
 
-    override fun initState(savedStateHandle: SavedStateHandle): IntroUiState {
-        return IntroUiState()
+    override fun initState(savedStateHandle: SavedStateHandle): IntroState {
+        return IntroState()
     }
 
     override suspend fun handleIntent(intent: IntroIntent) {

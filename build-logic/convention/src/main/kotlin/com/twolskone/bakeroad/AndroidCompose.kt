@@ -29,19 +29,22 @@ internal fun Project.configureAndroidCompose(
 
     extensions.configure<ComposeCompilerGradlePluginExtension> {
         fun Provider<String>.onlyIfTrue() = flatMap { provider { it.takeIf(String::toBoolean) } }
-        fun Provider<*>.relativeRootProject(dir: String) = map {
+        fun Provider<*>.relativeToRootProject(dir: String) = map {
             isolated.rootProject.projectDirectory
                 .dir("build")
                 .dir(projectDir.toRelativeString(rootDir))
         }.map { it.dir(dir) }
 
+        // ./gradlew assembleRelease -PenableComposeCompilerMetrics=true --rerun-tasks
         project.providers.gradleProperty("enableComposeCompilerMetrics")
             .onlyIfTrue()
-            .relativeRootProject("compose-metrics")
+            .relativeToRootProject("compose-metrics")
             .let(metricsDestination::set)
+
+        // ./gradlew assembleRelease -PenableComposeCompilerReports=true --rerun-tasks
         project.providers.gradleProperty("enableComposeCompilerReports")
             .onlyIfTrue()
-            .relativeRootProject("compose-reports")
+            .relativeToRootProject("compose-reports")
             .let(reportsDestination::set)
 
         stabilityConfigurationFiles

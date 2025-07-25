@@ -39,3 +39,7 @@ captures/
 
 # Kotlin
 .kotlin
+
+# Compose metrics, reports
+compose-metrics/
+compose-reports/

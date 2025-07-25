@@ -1,0 +1,2 @@
+// Always use immutable classes for our model, to avoid running the Compose compiler.
+com.twolskone.bakeroad.core.model.*

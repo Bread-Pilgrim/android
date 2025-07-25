@@ -17,7 +17,6 @@
     <string name="feature_bakery_detail_title_sort_order">정렬 순서</string>
     <string name="feature_bakery_detail_title_my_review">내가 쓴 리뷰</string>
     <string name="feature_bakery_detail_title_tour_area">근처 추천 관광지</string>
-    <string name="feature_bakery_detail_label_signature_menu">대표메뉴</string>
     <string name="feature_bakery_detail_label_day_off">%s요일 휴무</string>
     <string name="feature_bakery_detail_label_no_day_off">휴무 없음</string>
     <string name="feature_bakery_detail_label_sort_like_count">좋아요 순</string>

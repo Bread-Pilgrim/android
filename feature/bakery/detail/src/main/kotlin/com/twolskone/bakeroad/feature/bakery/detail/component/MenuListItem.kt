@@ -48,7 +48,7 @@ internal fun MenuListItem(
                     selected = false,
                     color = ChipColor.SUB,
                     size = ChipSize.SMALL,
-                    label = { Text(text = stringResource(id = R.string.feature_bakery_detail_label_signature_menu)) }
+                    label = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_signature_menu)) }
                 )
             }
             Text(

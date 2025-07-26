@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.bakery.review
+package com.twolskone.bakeroad.feature.review.write
 
 import org.junit.Test
 

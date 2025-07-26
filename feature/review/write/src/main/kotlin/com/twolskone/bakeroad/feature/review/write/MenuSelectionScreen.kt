@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.bakery.review
+package com.twolskone.bakeroad.feature.review.write
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -34,12 +34,24 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 @Composable
-internal fun MenuSelectionScreen() {
-
+internal fun MenuSelectionScreen(
+    modifier: Modifier = Modifier
+) {
+    Column(modifier = modifier) {
+        BakeRoadTopAppBar(
+            modifier = Modifier.fillMaxWidth(),
+            leftActions = {},
+            title = {
+                Text(text = "")
+            },
+            rightActions = {}
+        )
+    }
 }
 
 private const val MenuAnimationDuration = 50
@@ -87,7 +99,7 @@ private fun MenuSelectionListItem(
             )
             Image(
                 modifier = Modifier.padding(start = 6.dp),
-                imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_review_ic_check),
+                imageVector = ImageVector.vectorResource(id = R.drawable.feature_review_write_ic_check),
                 contentDescription = "Check"
             )
         }
@@ -101,7 +113,7 @@ private fun MenuSelectionListItem(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = stringResource(R.string.feature_bakery_review_description_select_purchase_quantity),
+                    text = stringResource(R.string.feature_review_write_description_select_purchase_quantity),
                     style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = contentColor)
                 )
                 QuantityCounter(
@@ -153,7 +165,7 @@ private fun QuantityCounter(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_review_ic_minus),
+                imageVector = ImageVector.vectorResource(id = R.drawable.feature_review_write_ic_minus),
                 contentDescription = "Remove",
                 tint = removeIconColor
             )
@@ -181,7 +193,7 @@ private fun QuantityCounter(
             contentAlignment = Alignment.Center
         ) {
             Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_review_ic_plus),
+                imageVector = ImageVector.vectorResource(id = R.drawable.feature_review_write_ic_plus),
                 contentDescription = "Add",
                 tint = addIconColor
             )

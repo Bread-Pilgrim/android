@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.twolskone.bakeroad.feature.bakery.review"
+    namespace = "com.twolskone.bakeroad.feature.review.write"
 }
 
 dependencies {

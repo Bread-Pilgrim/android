@@ -45,7 +45,7 @@ fun BakeRoadSwitch(
 ) {
     val density = LocalDensity.current
     val interactionSource = remember { MutableInteractionSource() }
-    val trackColor = if (checked) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray200
+    val trackColor = if (checked) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray100
     val thumbsStartX = with(density) { size.padding.toPx() }
     val thumbEndX = with(density) { (size.trackSize.width - size.thumbSize.width - size.padding).toPx() }
     val thumbOffsetX by animateFloatAsState(

@@ -20,24 +20,24 @@ internal fun NicknameSettingsRoute(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val nicknameState = state.nicknameSettingsState
-    val textFieldState = rememberTextFieldState(initialText = nicknameState.nicknameText)
+    val nicknameTextState = rememberTextFieldState(initialText = nicknameState.nicknameText)
     val description = nicknameState.errorMessage.ifBlank {
-        if (textFieldState.text.length == 1) {
+        if (nicknameTextState.text.length == 1) {
             stringResource(id = R.string.feature_onboarding_description_nickname_min_length)
-        } else if (textFieldState.text.length > 8) {
+        } else if (nicknameTextState.text.length > 8) {
             stringResource(id = R.string.feature_onboarding_description_nickname_max_length)
         } else {
             ""
         }
     }
 
-    LaunchedEffect(textFieldState.text) {
-        viewModel.intent(OnboardingIntent.UpdateNicknameText(text = textFieldState.text.toString()))
+    LaunchedEffect(nicknameTextState.text) {
+        viewModel.intent(OnboardingIntent.UpdateNicknameText(text = nicknameTextState.text.toString()))
     }
 
     NicknameSettingsScreen(
         modifier = modifier,
-        textFieldState = textFieldState,
+        nicknameTextState = nicknameTextState,
         description = description,
         isLoading = state.isLoading,
         onBackClick = onBackClick,

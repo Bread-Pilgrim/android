@@ -4,8 +4,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -39,8 +41,8 @@ fun BakeRoadTextBox(
     state: TextFieldState,
     enabled: Boolean = true,
     maxLength: Int,
-    lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
-    inputTransformation: InputTransformation? = InputTransformation.maxLength(maxLength),
+    lineLimits: TextFieldLineLimits = if (maxLength > 1) TextFieldLineLimits.MultiLine() else TextFieldLineLimits.SingleLine,
+    inputTransformation: InputTransformation? = if (maxLength > 1) InputTransformation.maxLength(maxLength) else null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
     outputTransformation: OutputTransformation? = null,
@@ -80,10 +82,10 @@ fun BakeRoadTextBox(
                     )
                     .padding(horizontal = 12.dp, vertical = 16.dp)
             ) {
-                textInput()
+                Box(modifier = Modifier.weight(1f, fill = true)) { textInput() }
                 Text(
                     modifier = Modifier
-                        .padding(top = 24.dp)
+                        .padding(top = 12.dp)
                         .align(Alignment.End),
                     text = buildAnnotatedString {
                         withStyle(style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = counterColor).toSpanStyle()) {
@@ -104,6 +106,9 @@ fun BakeRoadTextBox(
 private fun BakeRoadTextFieldPreview() {
     BakeRoadTheme {
         BakeRoadTextBox(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(150.dp),
             state = rememberTextFieldState(),
             maxLength = 30
         )

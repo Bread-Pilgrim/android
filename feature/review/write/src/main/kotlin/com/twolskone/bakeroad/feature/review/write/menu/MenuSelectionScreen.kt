@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.review.write
+package com.twolskone.bakeroad.feature.review.write.menu
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize
@@ -8,13 +8,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,35 +30,77 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
+import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
+import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.feature.review.write.R
 
 @Composable
 internal fun MenuSelectionScreen(
     modifier: Modifier = Modifier
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         BakeRoadTopAppBar(
             modifier = Modifier.fillMaxWidth(),
-            leftActions = {},
-            title = {
-                Text(text = "")
+            leftActions = {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
+                        .singleClickable {}
+                        .padding(4.dp)
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
+                        contentDescription = "Back"
+                    )
+                }
             },
-            rightActions = {}
+            title = { Text(text = stringResource(id = R.string.feature_review_write_title_menu_selection)) },
+            rightActions = {
+                BakeRoadTextButton(
+                    style = TextButtonStyle.ASSISTIVE,
+                    size = TextButtonSize.MEDIUM,
+                    onClick = {},
+                    content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_next)) }
+                )
+            }
         )
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(count = 10) {
+                MenuSelectionListItem(
+                    selected = false,
+                    onClick = {},
+                    onAddCount = {},
+                    onRemoveCount = {}
+                )
+            }
+        }
     }
 }
 
 private const val MenuAnimationDuration = 50
+
+private val MenuSelectionListItemShape = RoundedCornerShape(12.dp)
 
 @Composable
 private fun MenuSelectionListItem(
@@ -74,8 +120,9 @@ private fun MenuSelectionListItem(
     )
     Column(
         modifier = modifier
+            .clip(MenuSelectionListItemShape)
             .singleClickable { onClick() }
-            .background(color = containerColor, shape = RoundedCornerShape(12.dp))
+            .background(color = containerColor, shape = MenuSelectionListItemShape)
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .animateContentSize()
     ) {
@@ -118,8 +165,8 @@ private fun MenuSelectionListItem(
                 )
                 QuantityCounter(
                     count = 1,
-                    onAdd = { },
-                    onRemove = { }
+                    onAdd = {},
+                    onRemove = {}
                 )
             }
         }
@@ -127,6 +174,7 @@ private fun MenuSelectionListItem(
 }
 
 private val QuantityCounterHeight = 37.dp
+
 private const val MinQuantityCount = 1
 private const val MaxQuantityCount = 99
 
@@ -198,6 +246,16 @@ private fun QuantityCounter(
                 tint = addIconColor
             )
         }
+    }
+}
+
+@Preview
+@Composable
+private fun MenuSelectionScreenPreview() {
+    BakeRoadTheme {
+        MenuSelectionScreen(
+            modifier = Modifier.fillMaxSize()
+        )
     }
 }
 

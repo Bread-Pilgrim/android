@@ -1,12 +1,14 @@
 package com.twolskone.bakeroad.core.designsystem.component.button
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,7 +23,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 private val Shape = RoundedCornerShape(5.dp)
 
 /**
- * Text button.
+ * Text button
  */
 @Composable
 fun BakeRoadTextButton(
@@ -30,7 +32,7 @@ fun BakeRoadTextButton(
     style: TextButtonStyle,
     size: TextButtonSize,
     onClick: () -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable RowScope.() -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -39,13 +41,20 @@ fun BakeRoadTextButton(
             .background(
                 color = style.getContainerColor(enabled = enabled),
                 shape = Shape
-            )
-            .padding(size.contentPadding)
+            ),
+        contentAlignment = Alignment.Center
     ) {
-        ProvideTextStyle(
-            value = size.typography.copy(color = style.getContentColor(enabled = enabled)),
-            content = content
-        )
+        ProvideContentColorTextStyle(
+            contentColor = style.getContentColor(enabled = enabled),
+            textStyle = size.typography
+        ) {
+            Row(
+                modifier = Modifier.padding(size.contentPadding),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
+                content = content
+            )
+        }
     }
 }
 
@@ -70,31 +79,29 @@ fun BakeRoadTextButton(
         size = size,
         onClick = onClick,
         content = {
-            ProvideTextStyle(value = size.typography) {
-                if (leadingIcon != null) {
-                    Box(
-                        modifier = Modifier.size(size.iconSize),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        leadingIcon()
-                    }
-                }
+            if (leadingIcon != null) {
                 Box(
-                    modifier = Modifier
-                        .padding(
-                            start = if (leadingIcon != null) 4.dp else 0.dp,
-                            end = if (trailingIcon != null) 4.dp else 0.dp,
-                        )
+                    modifier = Modifier.size(size.iconSize),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    text()
+                    leadingIcon()
                 }
-                if (trailingIcon != null) {
-                    Box(
-                        modifier = Modifier.size(size.iconSize),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        trailingIcon()
-                    }
+            }
+            Box(
+                modifier = Modifier
+                    .padding(
+                        start = if (leadingIcon != null) 4.dp else 0.dp,
+                        end = if (trailingIcon != null) 4.dp else 0.dp,
+                    )
+            ) {
+                text()
+            }
+            if (trailingIcon != null) {
+                Box(
+                    modifier = Modifier.size(size.iconSize),
+                    contentAlignment = Alignment.Center
+                ) {
+                    trailingIcon()
                 }
             }
         }

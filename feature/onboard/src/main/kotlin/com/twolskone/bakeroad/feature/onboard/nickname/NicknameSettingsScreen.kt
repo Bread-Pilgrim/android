@@ -29,7 +29,7 @@ import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoading
 import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextInput
-import com.twolskone.bakeroad.core.designsystem.component.textinput.TextFieldValidType
+import com.twolskone.bakeroad.core.designsystem.component.textinput.TextInputType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
@@ -39,18 +39,18 @@ import com.twolskone.bakeroad.feature.onboard.R
 @Composable
 internal fun NicknameSettingsScreen(
     modifier: Modifier = Modifier,
-    textFieldState: TextFieldState,
+    nicknameTextState: TextFieldState,
     description: String,
     isLoading: Boolean,
     onBackClick: () -> Unit,
     onStartClick: () -> Unit
 ) {
-    val textFieldValidType = if (textFieldState.text.isEmpty()) {
-        TextFieldValidType.DEFAULT
+    val nicknameTextInputType = if (nicknameTextState.text.isEmpty()) {
+        TextInputType.DEFAULT
     } else if (description.isNotEmpty()) {
-        TextFieldValidType.ERROR
+        TextInputType.ERROR
     } else {
-        TextFieldValidType.SUCCESS
+        TextInputType.SUCCESS
     }
 
     Column(
@@ -102,8 +102,8 @@ internal fun NicknameSettingsScreen(
                     modifier = Modifier
                         .padding(top = 44.dp)
                         .fillMaxWidth(),
-                    state = textFieldState,
-                    validType = textFieldValidType,
+                    state = nicknameTextState,
+                    type = nicknameTextInputType,
                     title = stringResource(R.string.feature_onboarding_title_nickname),
                     description = description,
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
@@ -114,7 +114,7 @@ internal fun NicknameSettingsScreen(
                     modifier = Modifier
                         .padding(bottom = 24.dp)
                         .fillMaxWidth(),
-                    enabled = textFieldValidType == TextFieldValidType.SUCCESS,
+                    enabled = nicknameTextInputType == TextInputType.SUCCESS,
                     style = SolidButtonStyle.PRIMARY,
                     size = ButtonSize.XLARGE,
                     trailingIcon = if (isLoading) {
@@ -146,7 +146,7 @@ private fun NicknameSettingsScreenPreview() {
 
         NicknameSettingsScreen(
             modifier = Modifier.fillMaxSize(),
-            textFieldState = textFieldState,
+            nicknameTextState = textFieldState,
             description = "",
             isLoading = false,
             onBackClick = {},

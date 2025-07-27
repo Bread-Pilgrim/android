@@ -35,7 +35,7 @@ private val TextFieldShape = RoundedCornerShape(10.dp)
 fun BakeRoadTextInput(
     modifier: Modifier = Modifier,
     state: TextFieldState,
-    validType: TextFieldValidType = TextFieldValidType.DEFAULT,
+    type: TextInputType = TextInputType.DEFAULT,
     enabled: Boolean = true,
     lineLimits: TextFieldLineLimits = TextFieldLineLimits.SingleLine,
     inputTransformation: InputTransformation? = null,
@@ -54,7 +54,7 @@ fun BakeRoadTextInput(
         enabled = enabled,
         lineLimits = lineLimits,
         inputTransformation = inputTransformation,
-        textStyle = BakeRoadTheme.typography.bodySmallRegular.copy(color = validType.labelColor),
+        textStyle = BakeRoadTheme.typography.bodySmallRegular.copy(color = type.labelColor),
         keyboardOptions = keyboardOptions,
         onKeyboardAction = onKeyboardAction,
         cursorBrush = SolidColor(value = BakeRoadTheme.colorScheme.Primary500),
@@ -80,7 +80,7 @@ fun BakeRoadTextInput(
                         .background(color = BakeRoadTheme.colorScheme.White, shape = TextFieldShape)
                         .border(
                             width = 1.dp,
-                            color = validType.getBorderColor(isFocus = isFocus),
+                            color = type.getBorderColor(isFocus = isFocus),
                             shape = TextFieldShape
                         )
                         .padding(horizontal = 16.dp, vertical = 13.5.dp)
@@ -94,7 +94,7 @@ fun BakeRoadTextInput(
                             .padding(top = 8.dp),
                         text = description,
                         style = BakeRoadTheme.typography.bodyXsmallRegular.copy(
-                            color = validType.descriptionColor
+                            color = type.descriptionColor
                         )
                     )
                 }
@@ -103,7 +103,7 @@ fun BakeRoadTextInput(
     )
 }
 
-enum class TextFieldValidType {
+enum class TextInputType {
     DEFAULT, SUCCESS, ERROR;    // ACTIVE 타입은 focus 로 판별.
 
     @Composable

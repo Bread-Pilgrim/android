@@ -46,7 +46,8 @@ internal fun LazyListScope.review(
     myReviewPaging: LazyPagingItems<BakeryReview>,
     reviewPaging: LazyPagingItems<BakeryReview>,
     onReviewTabSelect: (ReviewTab) -> Unit,
-    onSortClick: () -> Unit
+    onSortClick: () -> Unit,
+    onWriteReviewClick: () -> Unit
 ) {
     item {
         Box(modifier = Modifier.background(color = BakeRoadTheme.colorScheme.White)) {
@@ -76,7 +77,8 @@ internal fun LazyListScope.review(
             item("myReviewHeader") {
                 MyReviewHeader(
                     modifier = Modifier.fillMaxWidth(),
-                    state = state
+                    state = state,
+                    onWriteReviewClick = onWriteReviewClick
                 )
             }
             if (myReviewPaging.emptyState) {
@@ -109,7 +111,8 @@ internal fun LazyListScope.review(
                     modifier = Modifier.fillMaxWidth(),
                     state = state,
                     reviewSort = sortType,
-                    onSortClick = onSortClick
+                    onSortClick = onSortClick,
+                    onWriteReviewClick = onWriteReviewClick
                 )
             }
             if (reviewPaging.emptyState) {
@@ -144,7 +147,8 @@ internal fun LazyListScope.review(
 @Composable
 private fun MyReviewHeader(
     modifier: Modifier = Modifier,
-    state: ReviewState
+    state: ReviewState,
+    onWriteReviewClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -173,7 +177,7 @@ private fun MyReviewHeader(
                 modifier = Modifier,
                 style = OutlinedButtonStyle.ASSISTIVE,
                 size = ButtonSize.SMALL,
-                onClick = {},
+                onClick = onWriteReviewClick,
                 content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
             )
         }
@@ -188,7 +192,8 @@ private fun AllReviewHeader(
     modifier: Modifier,
     state: ReviewState,
     reviewSort: ReviewSortType,
-    onSortClick: () -> Unit
+    onSortClick: () -> Unit,
+    onWriteReviewClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -217,7 +222,7 @@ private fun AllReviewHeader(
                 modifier = Modifier,
                 style = OutlinedButtonStyle.ASSISTIVE,
                 size = ButtonSize.SMALL,
-                onClick = {},
+                onClick = onWriteReviewClick,
                 content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
             )
         }
@@ -256,7 +261,8 @@ private fun MyReviewSectionPreview() {
     BakeRoadTheme {
         MyReviewHeader(
             modifier = Modifier.fillMaxWidth(),
-            state = ReviewState()
+            state = ReviewState(),
+            onWriteReviewClick = {}
         )
     }
 }
@@ -269,7 +275,8 @@ private fun AllReviewHeaderSectionPreview() {
             modifier = Modifier.fillMaxWidth(),
             state = ReviewState(),
             reviewSort = ReviewSortType.LIKE_COUNT_DESC,
-            onSortClick = {}
+            onSortClick = {},
+            onWriteReviewClick = {}
         )
     }
 }

@@ -79,7 +79,8 @@ internal fun BakeryDetailScreen(
     reviewPaging: LazyPagingItems<BakeryReview>,
     onTabSelect: (BakeryDetailTab) -> Unit,
     onReviewTabSelect: (ReviewTab) -> Unit,
-    onReviewSortSelect: (ReviewSortType) -> Unit
+    onReviewSortSelect: (ReviewSortType) -> Unit,
+    onWriteReviewClick: () -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -211,7 +212,8 @@ internal fun BakeryDetailScreen(
                         myReviewPaging = myReviewPaging,
                         reviewPaging = reviewPaging,
                         onReviewTabSelect = onReviewTabSelect,
-                        onSortClick = { showReviewSortBottomSheet = true }
+                        onSortClick = { showReviewSortBottomSheet = true },
+                        onWriteReviewClick = onWriteReviewClick
                     )
                 }
 
@@ -234,10 +236,10 @@ internal fun BakeryDetailScreen(
                         .clip(CircleShape)
                         .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
                         .singleClickable {}
-                        .padding(6.dp)
+                        .padding(4.dp)
                 ) {
                     Icon(
-                        modifier = Modifier.size(20.dp),
+                        modifier = Modifier.size(24.dp),
                         imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
                         contentDescription = "Back"
                     )
@@ -255,11 +257,11 @@ internal fun BakeryDetailScreen(
                             .clip(CircleShape)
                             .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
                             .singleClickable {}
-                            .padding(6.dp),
+                            .padding(4.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            modifier = Modifier.size(20.dp),
+                            modifier = Modifier.size(24.dp),
                             imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_share),
                             contentDescription = "Back"
                         )
@@ -270,11 +272,11 @@ internal fun BakeryDetailScreen(
                             .clip(CircleShape)
                             .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
                             .singleClickable {}
-                            .padding(6.dp),
+                            .padding(4.dp),
                         contentAlignment = Alignment.Center
                     ) {
                         Icon(
-                            modifier = Modifier.size(20.dp),
+                            modifier = Modifier.size(24.dp),
                             imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
                             contentDescription = "Back"
                         )
@@ -326,7 +328,8 @@ private fun BakeryDetailScreenPreview() {
             reviewPaging = lazyPagingItems,
             onTabSelect = {},
             onReviewTabSelect = {},
-            onReviewSortSelect = {}
+            onReviewSortSelect = {},
+            onWriteReviewClick = {}
         )
     }
 }

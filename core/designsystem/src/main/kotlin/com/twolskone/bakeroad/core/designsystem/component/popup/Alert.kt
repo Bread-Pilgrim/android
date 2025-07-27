@@ -55,19 +55,17 @@ fun BakeRoadAlert(
         onDismissRequest = onDismissRequest,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            // Title.
             Text(
+                modifier = Modifier.padding(top = 4.dp),
                 text = title,
                 style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Gray990)
             )
-            Spacer(modifier = Modifier.height(8.dp))
-            // Content.
+            Spacer(modifier = Modifier.height(4.dp))
             Text(
                 text = content,
                 style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            // Buttons.
+            Spacer(modifier = Modifier.height(20.dp))
             BakeRoadPopupButtons(
                 buttonType = buttonType,
                 primaryText = primaryText,

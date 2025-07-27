@@ -20,14 +20,14 @@ internal interface BakeryApi {
     @GET("bakeries/preference")
     suspend fun getPreferenceBakeries(
         @Query("area_code") areaCode: String,
-        @Query("cursor_id") cursorId: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
     @GET("bakeries/hot")
     suspend fun getHotBakeries(
         @Query("area_code") areaCode: String,
-        @Query("cursor_id") cursorId: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
@@ -37,15 +37,15 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getPreviewReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_id") cursorId: Int = 0,
+        @Query("cursor_value") cursorValue: String = "0:0",
         @Query("page_size") pageSize: Int = 5,
-//        @Query("sort_clause") sort: String = "LIKE_COUNT.DESC"
+        @Query("sort_clause") sort: String = "LIKE_COUNT.DESC"
     ): BaseResponse<BakeryReviewsResponse>
 
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_id") cursorId: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeryReviewsResponse>
@@ -53,7 +53,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/my-review")
     suspend fun getMyReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_id") cursorId: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeryReviewsResponse>
 }

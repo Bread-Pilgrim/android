@@ -5,15 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Paging(
-    @SerialName("cursor")
-    val cursor: Cursor = Cursor()
-) {
-
-    @Serializable
-    data class Cursor(
-        @SerialName("before")
-        val before: Int = 0,
-        @SerialName("after")
-        val after: Int = 0
-    )
-}
+    @SerialName("next_cursor")
+    val nextCursor: String = "",
+    @SerialName("has_next")
+    val hasNext: Boolean = false
+)

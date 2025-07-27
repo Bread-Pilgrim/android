@@ -12,39 +12,38 @@ internal class BakeryReviewPagingSource(
     private val myReview: Boolean,
     private val bakeryId: Int,
     private val sort: ReviewSortType?
-) : PagingSource<Int, BakeryReview>() {
+) : PagingSource<String, BakeryReview>() {
 
-    override fun getRefreshKey(state: PagingState<Int, BakeryReview>): Int? {
-        return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey
-        }
+    override fun getRefreshKey(state: PagingState<String, BakeryReview>): String? {
+//        return state.anchorPosition?.let { anchorPosition ->
+//            state.closestPageToPosition(anchorPosition)?.prevKey
+//        }
+        return null
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BakeryReview> {
-        val cursor = params.key ?: 0
-
+    override suspend fun load(params: LoadParams<String>): LoadResult<String, BakeryReview> {
         return try {
             val response = if (myReview) {
                 bakeryDataSource.getMyReviews(
                     bakeryId = bakeryId,
-                    cursorId = cursor,
+                    cursorValue = params.key ?: "0",
                     pageSize = params.loadSize
                 )
             } else {
                 bakeryDataSource.getReviews(
                     bakeryId = bakeryId,
                     sort = sort?.value ?: ReviewSortType.LIKE_COUNT_DESC.value,
-                    cursorId = cursor,
+                    cursorValue = params.key ?: "0:0",
                     pageSize = params.loadSize
                 )
             }
-            val beforeCursor = response.paging.cursor.before
-            val afterCursor = response.paging.cursor.after
+            val hasNextCursor = response.paging.hasNext
+            val nextCursor = response.paging.nextCursor
 
             LoadResult.Page(
                 data = response.items.map { it.toExternalModel() },
-                prevKey = if (cursor == 0) null else beforeCursor,
-                nextKey = if (afterCursor == -1) null else afterCursor
+                prevKey = /*if (cursor == "0:0") null else beforeCursor*/null,
+                nextKey = if (!hasNextCursor) null else nextCursor
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

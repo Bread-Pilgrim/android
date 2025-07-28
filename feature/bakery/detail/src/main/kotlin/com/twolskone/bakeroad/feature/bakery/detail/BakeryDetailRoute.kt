@@ -13,7 +13,7 @@ import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 @Composable
 internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel(),
-    navigateToWriteReview: () -> Unit
+    navigateToWriteReview: (Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val reviewSort by viewModel.reviewSort.collectAsStateWithLifecycle()
@@ -29,6 +29,6 @@ internal fun BakeryDetailRoute(
         onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
         onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) },
         onReviewSortSelect = { sort -> viewModel.intent(BakeryDetailIntent.SelectReviewSort(sort)) },
-        onWriteReviewClick = navigateToWriteReview
+        onWriteReviewClick = { navigateToWriteReview(viewModel.bakeryId) }
     )
 }

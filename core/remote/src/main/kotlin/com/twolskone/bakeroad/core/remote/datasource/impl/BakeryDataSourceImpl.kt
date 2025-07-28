@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.remote.api.BakeryApi
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
@@ -93,4 +94,8 @@ internal class BakeryDataSourceImpl @Inject constructor(
         )
         return response.toData()
     }
+
+    override fun getMenus(bakeryId: Int): Flow<List<BakeryMenuResponse>> = flow {
+        emitData(api.getMenus(bakeryId = bakeryId))
+    }.flowOn(networkDispatcher)
 }

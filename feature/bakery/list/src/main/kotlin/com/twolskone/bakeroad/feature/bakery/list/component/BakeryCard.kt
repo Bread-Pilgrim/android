@@ -25,6 +25,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastFilter
@@ -148,7 +149,13 @@ internal fun BakeryCard(
                         size = ChipSize.SMALL,
                         color = ChipColor.LIGHT_GRAY,
                         selected = false,
-                        label = { Text(text = menu) }
+                        label = {
+                            Text(
+                                text = menu,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis
+                            )
+                        }
                     )
                 }
             }
@@ -172,7 +179,7 @@ private fun BakeryCardPreview() {
                 imageUrl = "",
                 addressGu = "관악구",
                 addressDong = "",
-                signatureMenus = listOf("소금빵", "올리브치 치아바타")
+                signatureMenus = listOf("소금빵", "올리브치 치아바타", "겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴")
             ),
             onClick = {}
         )

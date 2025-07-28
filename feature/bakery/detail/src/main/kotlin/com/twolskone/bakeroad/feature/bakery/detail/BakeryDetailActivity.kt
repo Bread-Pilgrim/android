@@ -22,10 +22,11 @@ internal class BakeryDetailActivity : ComponentActivity() {
             BakeRoadTheme {
                 SystemBarColorTheme(lightTheme = true)
                 BakeryDetailRoute(
-                    navigateToWriteReview = {
+                    navigateToWriteReview = { bakeryId ->
                         writeReviewNavigator.navigateFromActivity(
                             activity = this,
-                            withFinish = false
+                            withFinish = false,
+                            intentBuilder = { putExtra("bakeryId", bakeryId) }
                         )
                     }
                 )

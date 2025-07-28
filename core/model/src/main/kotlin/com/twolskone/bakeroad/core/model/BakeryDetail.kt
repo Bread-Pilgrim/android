@@ -3,6 +3,8 @@ package com.twolskone.bakeroad.core.model
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
 
+internal const val OtherMenu = "기타메뉴"
+
 /**
  * 빵집 상세
  * @param id            빵집 ID
@@ -58,3 +60,5 @@ data class BakeryDetail(
         val imageUrl: String
     )
 }
+
+fun BakeryDetail.Menu.isOtherMenu(): Boolean = (name == OtherMenu)  // TODO. 하드코딩으로 판별.. 맞나?

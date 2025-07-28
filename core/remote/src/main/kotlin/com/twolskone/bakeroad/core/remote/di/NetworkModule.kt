@@ -1,10 +1,6 @@
 package com.twolskone.bakeroad.core.remote.di
 
-import com.twolskone.bakeroad.core.remote.AuthOkHttpClient
-import com.twolskone.bakeroad.core.remote.AuthRetrofit
 import com.twolskone.bakeroad.core.remote.BuildConfig
-import com.twolskone.bakeroad.core.remote.CommonOkHttpClient
-import com.twolskone.bakeroad.core.remote.CommonRetrofit
 import com.twolskone.bakeroad.core.remote.interceptor.HeaderInterceptor
 import com.twolskone.bakeroad.core.remote.interceptor.ResponseInterceptor
 import dagger.Module

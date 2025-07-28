@@ -4,9 +4,12 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.RecommendBakery
+import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
+import com.twolskone.bakeroad.core.remote.BuildConfig
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
@@ -84,5 +87,13 @@ internal fun BakeryReviewResponse.toExternalModel(): BakeryReview =
         rating = reviewRating,
         likeCount = reviewLikeCount,
         menus = reviewMenus.map { it.menuName },
-        photos = reviewPhotos.map { it.imgUrl }
+        photos = reviewPhotos.map { "${BuildConfig.UPLOADED_IMAGE_URL}${it.imgUrl}" }
+    )
+
+internal fun BakeryMenuResponse.toReviewMenu(): ReviewMenu =
+    ReviewMenu(
+        id = menuId,
+        name = menuName,
+        isSignature = isSignature,
+        count = 0
     )

@@ -1,7 +1,5 @@
 package com.twolskone.bakeroad.core.remote.di
 
-import com.twolskone.bakeroad.core.remote.AuthRetrofit
-import com.twolskone.bakeroad.core.remote.CommonRetrofit
 import com.twolskone.bakeroad.core.remote.api.AreaApi
 import com.twolskone.bakeroad.core.remote.api.AuthApi
 import com.twolskone.bakeroad.core.remote.api.BakeryApi

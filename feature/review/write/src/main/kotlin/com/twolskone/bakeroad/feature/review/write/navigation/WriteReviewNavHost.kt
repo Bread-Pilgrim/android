@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.twolskone.bakeroad.feature.review.write.WriteReviewViewModel
 import com.twolskone.bakeroad.feature.review.write.menu.navigation.MenuSelectionRoute
-import com.twolskone.bakeroad.feature.review.write.menu.navigation.menuSelection
+import com.twolskone.bakeroad.feature.review.write.menu.navigation.menuSelectionScreen
 
 @Composable
 internal fun WriteReviewNavHost(
@@ -20,6 +20,6 @@ internal fun WriteReviewNavHost(
         navController = navController,
         startDestination = MenuSelectionRoute
     ) {
-        menuSelection(viewModel = viewModel)
+        menuSelectionScreen(viewModel = viewModel)
     }
 }

@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data object MenuSelectionRoute
 
-internal fun NavGraphBuilder.menuSelection(
+internal fun NavGraphBuilder.menuSelectionScreen(
     viewModel: WriteReviewViewModel
 ) {
     composable<MenuSelectionRoute> {

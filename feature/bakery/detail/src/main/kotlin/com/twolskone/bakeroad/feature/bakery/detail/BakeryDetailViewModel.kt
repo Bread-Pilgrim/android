@@ -44,24 +44,25 @@ internal class BakeryDetailViewModel @Inject constructor(
         return BakeryDetailState()
     }
 
+    val bakeryId: Int = savedStateHandle.get<Int>(BAKERY_ID).orZero()
+
     private val _reviewSort = MutableStateFlow(state.value.reviewState.sortType)
     val reviewSort: StateFlow<ReviewSortType>
         get() = _reviewSort.asStateFlow()
 
     val myReviewPagingFlow by lazy {
-        getBakeryMyReviewsUseCase(
-            bakeryId = savedStateHandle.get<Int>(BAKERY_ID).orZero()
-        ).cachedIn(viewModelScope).catch { cause -> handleException(cause) }
+        getBakeryMyReviewsUseCase(bakeryId = bakeryId)
+            .cachedIn(viewModelScope)
+            .catch { cause -> handleException(cause) }
     }
 
     val reviewPagingFlow by lazy {
         reviewSort
             .distinctUntilChanged { oldSort, newSort -> oldSort.value == newSort.value }
             .flatMapLatest { reviewSort ->
-                getBakeryReviewsUseCase(
-                    bakeryId = savedStateHandle.get<Int>(BAKERY_ID).orZero(),
-                    reviewSortType = reviewSort
-                ).cachedIn(viewModelScope).catch { cause -> handleException(cause) }
+                getBakeryReviewsUseCase(bakeryId = bakeryId, reviewSortType = reviewSort)
+                    .cachedIn(viewModelScope)
+                    .catch { cause -> handleException(cause) }
             }
     }
 
@@ -92,32 +93,28 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     private fun getBakeryDetail() = launch {
-        savedStateHandle.get<Int>(BAKERY_ID)?.let { id ->
-            val bakeryDetail = getBakeryDetailUseCase(bakeryId = id)
-            reduce {
-                copy(
-                    bakeryImageList = bakeryDetail.imageUrls.toImmutableList(),
-                    bakeryInfo = bakeryDetail.toBakeryInfo(),
-                    menuList = bakeryDetail.menus.toImmutableList(),
-                    reviewState = reviewState.copy(
-                        count = bakeryDetail.reviewCount,
-                        avgRating = bakeryDetail.rating
-                    )
+        val bakeryDetail = getBakeryDetailUseCase(bakeryId = bakeryId)
+        reduce {
+            copy(
+                bakeryImageList = bakeryDetail.imageUrls.toImmutableList(),
+                bakeryInfo = bakeryDetail.toBakeryInfo(),
+                menuList = bakeryDetail.menus.toImmutableList(),
+                reviewState = reviewState.copy(
+                    count = bakeryDetail.reviewCount,
+                    avgRating = bakeryDetail.rating
                 )
-            }
+            )
         }
     }
 
     private fun getPreviewReviews() = launch {
-        savedStateHandle.get<Int>(BAKERY_ID)?.let { id ->
-            val reviews = getBakeryPreviewReviewsUseCase(bakeryId = id)
-            reduce {
-                copy(
-                    reviewState = reviewState.copy(
-                        previewReviewList = reviews.toImmutableList()
-                    )
+        val reviews = getBakeryPreviewReviewsUseCase(bakeryId = bakeryId)
+        reduce {
+            copy(
+                reviewState = reviewState.copy(
+                    previewReviewList = reviews.toImmutableList()
                 )
-            }
+            )
         }
     }
 

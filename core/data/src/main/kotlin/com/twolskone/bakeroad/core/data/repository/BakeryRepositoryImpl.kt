@@ -6,12 +6,14 @@ import androidx.paging.PagingData
 import com.twolskone.bakeroad.core.common.kotlin.network.BakeRoadDispatcher
 import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
 import com.twolskone.bakeroad.core.data.mapper.toExternalModel
+import com.twolskone.bakeroad.core.data.mapper.toReviewMenu
 import com.twolskone.bakeroad.core.data.paging.BakeryPagingSource
 import com.twolskone.bakeroad.core.data.paging.BakeryReviewPagingSource
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
@@ -74,4 +76,13 @@ internal class BakeryRepositoryImpl @Inject constructor(
                 )
             }
         ).flow.flowOn(networkDispatcher)
+
+    override fun getReviewMenus(bakeryId: Int): Flow<List<ReviewMenu>> {
+        return bakeryDataSource.getMenus(bakeryId = bakeryId)
+            .map { menus ->
+                menus.map { menu ->
+                    menu.toReviewMenu()
+                }
+            }
+    }
 }

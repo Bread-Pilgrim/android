@@ -18,11 +18,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -45,11 +47,19 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.ReviewMenu
+import com.twolskone.bakeroad.core.model.isOtherMenu
 import com.twolskone.bakeroad.feature.review.write.R
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun MenuSelectionScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    menuList: ImmutableList<ReviewMenu>,
+    onMenuSelect: (ReviewMenu, Boolean) -> Unit,
+    onAddMenuCount: (ReviewMenu) -> Unit,
+    onRemoveMenuCount: (ReviewMenu) -> Unit
 ) {
     Column(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         BakeRoadTopAppBar(
@@ -86,12 +96,15 @@ internal fun MenuSelectionScreen(
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(count = 10) {
+            items(
+                items = menuList,
+                key = { menu -> menu.id }
+            ) { menu ->
                 MenuSelectionListItem(
-                    selected = false,
-                    onClick = {},
-                    onAddCount = {},
-                    onRemoveCount = {}
+                    menu = menu,
+                    onClick = onMenuSelect,
+                    onAddCount = onAddMenuCount,
+                    onRemoveCount = onRemoveMenuCount
                 )
             }
         }
@@ -105,11 +118,12 @@ private val MenuSelectionListItemShape = RoundedCornerShape(12.dp)
 @Composable
 private fun MenuSelectionListItem(
     modifier: Modifier = Modifier,
-    selected: Boolean,
-    onClick: () -> Unit,
-    onAddCount: () -> Unit,
-    onRemoveCount: () -> Unit
+    menu: ReviewMenu,
+    onClick: (ReviewMenu, Boolean) -> Unit,
+    onAddCount: (ReviewMenu) -> Unit,
+    onRemoveCount: (ReviewMenu) -> Unit
 ) {
+    val selected by remember { derivedStateOf { menu.count > 0 } }
     val containerColor by animateColorAsState(
         targetValue = if (selected) BakeRoadTheme.colorScheme.Secondary500 else BakeRoadTheme.colorScheme.Gray40,
         animationSpec = tween(durationMillis = MenuAnimationDuration)
@@ -121,7 +135,7 @@ private fun MenuSelectionListItem(
     Column(
         modifier = modifier
             .clip(MenuSelectionListItemShape)
-            .singleClickable { onClick() }
+            .singleClickable { onClick(menu, !selected) }
             .background(color = containerColor, shape = MenuSelectionListItemShape)
             .padding(horizontal = 12.dp, vertical = 12.dp)
             .animateContentSize()
@@ -134,14 +148,14 @@ private fun MenuSelectionListItem(
                 modifier = Modifier
                     .padding(horizontal = 4.dp)
                     .padding(end = 2.dp),
-                selected = false,
+                selected = selected,
                 color = ChipColor.SUB,
                 size = ChipSize.SMALL,
                 label = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_signature_menu)) }
             )
             Text(
                 modifier = Modifier.weight(1f),
-                text = "꿀고구마 휘낭시에",
+                text = if (menu.isOtherMenu()) stringResource(id = R.string.feature_review_write_button_other_menu) else menu.name,
                 style = BakeRoadTheme.typography.bodySmallMedium.copy(color = contentColor)
             )
             Image(
@@ -150,7 +164,7 @@ private fun MenuSelectionListItem(
                 contentDescription = "Check"
             )
         }
-        if (selected) {
+        if (selected && !menu.isOtherMenu()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -164,9 +178,9 @@ private fun MenuSelectionListItem(
                     style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = contentColor)
                 )
                 QuantityCounter(
-                    count = 1,
-                    onAdd = {},
-                    onRemove = {}
+                    count = menu.count,
+                    onAdd = { onAddCount(menu) },
+                    onRemove = { onRemoveCount(menu) }
                 )
             }
         }
@@ -182,8 +196,8 @@ private const val MaxQuantityCount = 99
 private fun QuantityCounter(
     modifier: Modifier = Modifier,
     count: Int,
-    onRemove: () -> Unit,
-    onAdd: () -> Unit
+    onAdd: () -> Unit,
+    onRemove: () -> Unit
 ) {
     val removeIconColor by animateColorAsState(
         targetValue = if (count > MinQuantityCount) BakeRoadTheme.colorScheme.Black else BakeRoadTheme.colorScheme.Gray200,
@@ -254,7 +268,36 @@ private fun QuantityCounter(
 private fun MenuSelectionScreenPreview() {
     BakeRoadTheme {
         MenuSelectionScreen(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
+            menuList = persistentListOf(
+                ReviewMenu(
+                    id = 1,
+                    name = "꿀고구마 휘낭시에 1",
+                    isSignature = true,
+                    count = 1
+                ),
+                ReviewMenu(
+                    id = 1,
+                    name = "꿀고구마 휘낭시에 2",
+                    isSignature = true,
+                    count = 0
+                ),
+                ReviewMenu(
+                    id = 1,
+                    name = "꿀고구마 휘낭시에 3",
+                    isSignature = false,
+                    count = 10
+                ),
+                ReviewMenu(
+                    id = 1,
+                    name = "꿀고구마 휘낭시에 4",
+                    isSignature = false,
+                    count = 0
+                )
+            ),
+            onMenuSelect = { _, _ -> },
+            onAddMenuCount = {},
+            onRemoveMenuCount = {}
         )
     }
 }
@@ -268,8 +311,13 @@ private fun MenuSelectionListItemPreview() {
         Box(modifier = Modifier.fillMaxSize()) {
             MenuSelectionListItem(
                 modifier = Modifier.fillMaxWidth(),
-                selected = selected,
-                onClick = { selected = !selected },
+                menu = ReviewMenu(
+                    id = 1,
+                    name = "꿀고구마 휘낭시에 3",
+                    isSignature = false,
+                    count = 10
+                ),
+                onClick = { _, isSelected -> selected = isSelected },
                 onAddCount = {},
                 onRemoveCount = {}
             )

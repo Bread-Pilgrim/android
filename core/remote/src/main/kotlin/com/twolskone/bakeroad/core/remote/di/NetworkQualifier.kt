@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.remote
+package com.twolskone.bakeroad.core.remote.di
 
 import javax.inject.Qualifier
 

@@ -37,7 +37,13 @@ fun BakeRoadTextButton(
     Box(
         modifier = modifier
             .clip(Shape)
-            .singleClickable { onClick() }
+            .then(
+                if (enabled) {
+                    Modifier.singleClickable { onClick() }
+                } else {
+                    Modifier
+                }
+            )
             .background(
                 color = style.getContainerColor(enabled = enabled),
                 shape = Shape

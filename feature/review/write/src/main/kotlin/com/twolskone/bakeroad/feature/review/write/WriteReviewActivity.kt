@@ -25,7 +25,8 @@ internal class WriteReviewActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .imePadding(),
-                    navController = rememberNavController()
+                    navController = rememberNavController(),
+                    finish = { finish() }
                 )
             }
         }

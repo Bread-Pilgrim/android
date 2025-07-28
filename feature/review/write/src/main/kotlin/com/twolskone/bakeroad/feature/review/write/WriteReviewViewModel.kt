@@ -12,6 +12,7 @@ import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
 
 private const val BAKERY_ID = "bakeryId"
+internal const val MaxPickImages = 5
 
 @HiltViewModel
 internal class WriteReviewViewModel @Inject constructor(
@@ -28,7 +29,7 @@ internal class WriteReviewViewModel @Inject constructor(
     init {
         launch {
             val menus = getBakeryReviewMenusUseCase(bakeryId = bakeryId)
-            reduce { copy(menus = menus.toImmutableList()) }
+            reduce { copy(menuList = menus.toImmutableList()) }
         }
     }
 
@@ -40,7 +41,7 @@ internal class WriteReviewViewModel @Inject constructor(
         when (intent) {
             is WriteReviewIntent.SelectMenu -> reduce {
                 copy(
-                    menus = menus.map { menu ->
+                    menuList = menuList.map { menu ->
                         if (menu.id == intent.menuId) {
                             menu.copy(count = if (intent.selected) 1 else 0)
                         } else {
@@ -52,7 +53,7 @@ internal class WriteReviewViewModel @Inject constructor(
 
             is WriteReviewIntent.AddMenuCount -> reduce {
                 copy(
-                    menus = menus.map { menu ->
+                    menuList = menuList.map { menu ->
                         if (menu.id == intent.menuId) {
                             menu.copy(count = menu.count + 1)
                         } else {
@@ -64,7 +65,7 @@ internal class WriteReviewViewModel @Inject constructor(
 
             is WriteReviewIntent.RemoveMenuCount -> reduce {
                 copy(
-                    menus = menus.map { menu ->
+                    menuList = menuList.map { menu ->
                         if (menu.id == intent.menuId) {
                             menu.copy(count = menu.count - 1)
                         } else {
@@ -73,6 +74,12 @@ internal class WriteReviewViewModel @Inject constructor(
                     }.toImmutableList()
                 )
             }
+
+            is WriteReviewIntent.ChangeRating -> reduce { copy(rating = intent.rating) }
+
+            is WriteReviewIntent.AddPhotos -> reduce { copy(photoList = photoList.addAll(intent.photos)) }
+
+            is WriteReviewIntent.DeletePhoto -> reduce { copy(photoList = photoList.removeAt(intent.index)) }
         }
     }
 }

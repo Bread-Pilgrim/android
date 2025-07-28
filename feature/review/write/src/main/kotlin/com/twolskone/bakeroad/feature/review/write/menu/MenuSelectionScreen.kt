@@ -59,7 +59,9 @@ internal fun MenuSelectionScreen(
     menuList: ImmutableList<ReviewMenu>,
     onMenuSelect: (ReviewMenu, Boolean) -> Unit,
     onAddMenuCount: (ReviewMenu) -> Unit,
-    onRemoveMenuCount: (ReviewMenu) -> Unit
+    onRemoveMenuCount: (ReviewMenu) -> Unit,
+    onNextClick: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     Column(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         BakeRoadTopAppBar(
@@ -69,7 +71,7 @@ internal fun MenuSelectionScreen(
                     modifier = Modifier
                         .clip(CircleShape)
                         .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                        .singleClickable {}
+                        .singleClickable { onBackClick() }
                         .padding(4.dp)
                 ) {
                     Icon(
@@ -84,7 +86,7 @@ internal fun MenuSelectionScreen(
                 BakeRoadTextButton(
                     style = TextButtonStyle.ASSISTIVE,
                     size = TextButtonSize.MEDIUM,
-                    onClick = {},
+                    onClick = onNextClick,
                     content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_next)) }
                 )
             }
@@ -123,7 +125,7 @@ private fun MenuSelectionListItem(
     onAddCount: (ReviewMenu) -> Unit,
     onRemoveCount: (ReviewMenu) -> Unit
 ) {
-    val selected by remember { derivedStateOf { menu.count > 0 } }
+    val selected by remember(menu.count) { derivedStateOf { menu.count > 0 } }
     val containerColor by animateColorAsState(
         targetValue = if (selected) BakeRoadTheme.colorScheme.Secondary500 else BakeRoadTheme.colorScheme.Gray40,
         animationSpec = tween(durationMillis = MenuAnimationDuration)
@@ -144,15 +146,17 @@ private fun MenuSelectionListItem(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            BakeRoadChip(
-                modifier = Modifier
-                    .padding(horizontal = 4.dp)
-                    .padding(end = 2.dp),
-                selected = selected,
-                color = ChipColor.SUB,
-                size = ChipSize.SMALL,
-                label = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_signature_menu)) }
-            )
+            if (menu.isSignature) {
+                BakeRoadChip(
+                    modifier = Modifier
+                        .padding(horizontal = 4.dp)
+                        .padding(end = 2.dp),
+                    selected = false,
+                    color = ChipColor.SUB,
+                    size = ChipSize.SMALL,
+                    label = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_signature_menu)) }
+                )
+            }
             Text(
                 modifier = Modifier.weight(1f),
                 text = if (menu.isOtherMenu()) stringResource(id = R.string.feature_review_write_button_other_menu) else menu.name,
@@ -297,7 +301,9 @@ private fun MenuSelectionScreenPreview() {
             ),
             onMenuSelect = { _, _ -> },
             onAddMenuCount = {},
-            onRemoveMenuCount = {}
+            onRemoveMenuCount = {},
+            onNextClick = {},
+            onBackClick = {}
         )
     }
 }

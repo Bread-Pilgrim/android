@@ -15,9 +15,13 @@ internal fun NavController.navigateToWriteReview(navOptions: NavOptions? = null)
     navigate(route = WriteReviewRoute, navOptions = navOptions)
 
 internal fun NavGraphBuilder.writeReviewScreen(
-    viewModel: WriteReviewViewModel
+    viewModel: WriteReviewViewModel,
+    onBackClick: () -> Unit
 ) {
     composable<WriteReviewRoute> {
-        WriteReviewRoute(viewModel = viewModel)
+        WriteReviewRoute(
+            viewModel = viewModel,
+            onBackClick = onBackClick
+        )
     }
 }

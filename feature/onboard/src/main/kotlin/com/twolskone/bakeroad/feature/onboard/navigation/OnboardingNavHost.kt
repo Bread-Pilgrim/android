@@ -38,7 +38,8 @@ internal fun OnBoardingNavHost(
             onBackClick = {
                 val canBack = navController.currentDestination.isRouteInHierarchy(route = NicknameSettingsRoute::class)
                 if (canBack) {
-                    navController.navigateToPreferenceOptions()
+//                    navController.navigateToPreferenceOptions()
+                    navController.popBackStack()
                 }
             }
         )

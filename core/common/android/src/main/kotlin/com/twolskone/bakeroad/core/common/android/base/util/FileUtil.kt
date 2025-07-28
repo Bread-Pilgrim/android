@@ -5,6 +5,7 @@ import android.graphics.Bitmap.CompressFormat
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
+import android.provider.OpenableColumns
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -16,6 +17,7 @@ import timber.log.Timber
 object FileUtil {
 
     private const val TAG = "FileUtil"
+    private const val MAX_SIZE_IMAGE = 20   // MB.
 
     @Throws(
         FileNotFoundException::class,
@@ -83,4 +85,22 @@ object FileUtil {
             throw IOException(errorMessage)
         }
     }
+
+    fun validateImageSizeFromUri(context: Context, uri: Uri): Boolean {
+        context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
+            val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
+            if (sizeIndex != -1) {
+                cursor.moveToFirst()
+                return (bytesToMegaBytes(cursor.getLong(sizeIndex)) < MAX_SIZE_IMAGE)
+            }
+        }
+
+        context.contentResolver.openInputStream(uri)?.use { inputStream ->
+            return (bytesToMegaBytes(inputStream.available().toLong()) < MAX_SIZE_IMAGE)
+        }
+
+        return false
+    }
+
+    private fun bytesToMegaBytes(bytes: Long): Double = bytes.toDouble() / (1024 * 1024)
 }

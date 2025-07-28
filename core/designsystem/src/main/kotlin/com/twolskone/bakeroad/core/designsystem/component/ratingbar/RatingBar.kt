@@ -4,7 +4,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -40,9 +39,12 @@ fun BakeRoadRatingBar(
     val starStates by remember(rating) {
         derivedStateOf {
             List(starCount) { index ->
+                val currentCount = index + 1
+                // rating : 2.5
+                // currentCount: 3
                 when {
-                    (index + 0.5f) == rating -> RatingStarType.HALF
-                    (index) <= rating -> RatingStarType.FULL
+                    currentCount <= rating -> RatingStarType.FULL
+                    (currentCount - 0.5f) == rating -> RatingStarType.HALF
                     else -> RatingStarType.EMPTY
                 }
             }
@@ -64,13 +66,17 @@ fun BakeRoadRatingBar(
 //                }
                 detectTapGestures { offset ->
                     val ratingOffset = offset.x / (starSize + starSpacing).toPx()
-                    val ratingIndex = floor(ratingOffset)
-                    val isHalf = ratingOffset >= ratingOffset.fastRoundToInt()
+                    val ratingIndex = floor(ratingOffset).toInt()
+                    val ratingFraction = when {
+                        ratingOffset < ratingOffset.fastRoundToInt() -> 1f
+                        ratingIndex == ratingOffset.fastRoundToInt() -> 0.5f
+                        else -> 0f
+
+                    }
                     Timber.i("xxxx ratingOffset: $ratingOffset")
                     Timber.i("xxxx ratingIndex: $ratingIndex")
-                    Timber.i("xxxx isHalf: $isHalf")
 
-                    onRatingChange(ratingIndex + if (isHalf) 0.5f else 0f)
+                    onRatingChange(ratingIndex + ratingFraction)
                 }
             },
         horizontalArrangement = Arrangement.spacedBy(space = starSpacing, alignment = Alignment.CenterHorizontally),
@@ -107,7 +113,6 @@ private fun BakeRoadRatingBarPreview() {
         var rating by remember { mutableFloatStateOf(0f) }
 
         BakeRoadRatingBar(
-            modifier = Modifier.fillMaxWidth(),
             rating = rating,
             onRatingChange = { rating = it }
         )

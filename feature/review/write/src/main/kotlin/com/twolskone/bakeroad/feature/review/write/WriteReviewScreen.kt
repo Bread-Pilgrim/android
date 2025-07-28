@@ -13,7 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,65 +51,76 @@ import com.twolskone.bakeroad.core.designsystem.component.switch.BakeRoadSwitch
 import com.twolskone.bakeroad.core.designsystem.component.switch.SwitchSize
 import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextBox
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.feature.review.write.mvi.WriteReviewState
 
 private const val ReviewContentMaxLength = 300
 
 @Composable
 internal fun WriteReviewScreen(
     modifier: Modifier = Modifier,
-    onAddPhotoClick: () -> Unit
+    state: WriteReviewState,
+    onAddPhotoClick: () -> Unit,
+    onBackClick: () -> Unit,
+    onRatingChange: (Float) -> Unit,
+    onDeletePhotoClick: (Int) -> Unit
 ) {
     val contentTextState = rememberTextFieldState(initialText = "")
 
-    Box(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(color = BakeRoadTheme.colorScheme.White)
+            .systemBarsPadding()
+    ) {
+        BakeRoadTopAppBar(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.TopCenter),
+            leftActions = {
+                Box(
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
+                        .singleClickable { onBackClick() }
+                        .padding(4.dp)
+                ) {
+                    Icon(
+                        modifier = Modifier.size(24.dp),
+                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
+                        contentDescription = "Back"
+                    )
+                }
+            },
+            title = {
+                Text(text = stringResource(id = R.string.feature_review_write_title_write_review))
+            },
+            rightActions = {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                ) {
+                    BakeRoadSwitch(
+                        checked = false,
+                        size = SwitchSize.SMALL,
+                        onCheckedChange = {}
+                    )
+                    BakeRoadTextButton(
+                        style = TextButtonStyle.ASSISTIVE,
+                        size = TextButtonSize.MEDIUM,
+                        onClick = {},
+                        content = { Text(text = stringResource(id = R.string.feature_review_write_button_private_review)) }
+                    )
+                }
+            }
+        )
         Column(
             modifier = modifier
-                .fillMaxSize()
-                .padding(bottom = 100.dp)
-                .verticalScroll(rememberScrollState())
-                .systemBarsPadding(),
+                .padding(top = 56.dp, bottom = 100.dp)
+                .verticalScroll(rememberScrollState()),
         ) {
-            BakeRoadTopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                leftActions = {
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                            .singleClickable {}
-                            .padding(4.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
-                            contentDescription = "Back"
-                        )
-                    }
-                },
-                title = {
-                    Text(text = stringResource(id = R.string.feature_review_write_title_write_review))
-                },
-                rightActions = {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(2.dp)
-                    ) {
-                        BakeRoadSwitch(
-                            checked = false,
-                            size = SwitchSize.SMALL,
-                            onCheckedChange = {}
-                        )
-                        BakeRoadTextButton(
-                            style = TextButtonStyle.ASSISTIVE,
-                            size = TextButtonSize.MEDIUM,
-                            onClick = {},
-                            content = { Text(text = stringResource(id = R.string.feature_review_write_button_private_review)) }
-                        )
-                    }
-                }
-            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -115,11 +129,12 @@ internal fun WriteReviewScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BakeRoadRatingBar(
-                    rating = 2.5f,
-                    onRatingChange = {}
+                    rating = state.rating,
+                    onRatingChange = onRatingChange
                 )
                 Text(
-                    text = "2.5",
+                    modifier = Modifier.width(30.dp),
+                    text = state.rating.toString(),
                     style = BakeRoadTheme.typography.bodyXlargeMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
                 )
             }
@@ -128,12 +143,15 @@ internal fun WriteReviewScreen(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                items(count = 10) {
+                items(
+                    items = state.selectedMenuList,
+                    key = { menu -> menu.id }
+                ) { menu ->
                     BakeRoadChip(
                         selected = false,
                         color = ChipColor.LIGHT_GRAY,
                         size = ChipSize.LARGE,
-                        label = { Text(text = "꿀고구마 휘낭시에") }
+                        label = { Text(text = menu.name) }
                     )
                 }
             }
@@ -154,7 +172,7 @@ internal fun WriteReviewScreen(
                 modifier = Modifier
                     .padding(16.dp)
                     .fillMaxWidth(),
-//            enabled = false,
+                enabled = state.photoList.size < 5,
                 style = TextButtonStyle.PRIMARY,
                 size = TextButtonSize.MEDIUM,
                 onClick = onAddPhotoClick,
@@ -173,8 +191,12 @@ internal fun WriteReviewScreen(
                 contentPadding = PaddingValues(horizontal = 15.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(count = 10) {
-                    ReviewPhoto("")
+                itemsIndexed(items = state.photoList) { index, url ->
+                    ReviewPhoto(
+                        index = index,
+                        url = url,
+                        onDeleteClick = onDeletePhotoClick
+                    )
                 }
             }
         }
@@ -195,7 +217,11 @@ private val PhotoSize = 100.dp
 private val PhotoShape = RoundedCornerShape(12.dp)
 
 @Composable
-private fun ReviewPhoto(url: String) {
+private fun ReviewPhoto(
+    index: Int,
+    url: String,
+    onDeleteClick: (Int) -> Unit
+) {
     Box(modifier = Modifier.size(PhotoSize)) {
         AsyncImage(
             modifier = Modifier
@@ -206,13 +232,17 @@ private fun ReviewPhoto(url: String) {
             contentScale = ContentScale.Crop,
             placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
         )
-        Image(
+        Box(
             modifier = Modifier
                 .align(Alignment.TopEnd)
-                .padding(6.dp),
-            imageVector = ImageVector.vectorResource(id = R.drawable.feature_review_write_ic_circle_close),
-            contentDescription = "Delete"
-        )
+                .noRippleSingleClickable { onDeleteClick(index) }
+                .padding(6.dp)
+        ) {
+            Image(
+                imageVector = ImageVector.vectorResource(id = R.drawable.feature_review_write_ic_circle_close),
+                contentDescription = "Delete"
+            )
+        }
     }
 }
 
@@ -222,7 +252,11 @@ private fun WriteReviewScreenPreview() {
     BakeRoadTheme {
         WriteReviewScreen(
             modifier = Modifier.fillMaxSize(),
-            onAddPhotoClick = {}
+            state = WriteReviewState(),
+            onAddPhotoClick = {},
+            onBackClick = {},
+            onRatingChange = {},
+            onDeletePhotoClick = {}
         )
     }
 }

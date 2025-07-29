@@ -14,9 +14,11 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.ReviewMenu
+import com.twolskone.bakeroad.core.model.WriteBakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
+import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -84,5 +86,16 @@ internal class BakeryRepositoryImpl @Inject constructor(
                     menu.toReviewMenu()
                 }
             }
+    }
+
+    override fun writeReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit> {
+        val request = WriteBakeryReviewRequest(
+            rating = review.rating,
+            content = review.content,
+            isPrivate = review.isPrivate,
+            consumedMenus = review.menus.map { WriteBakeryReviewRequest.Menu(menuId = it.id, quantity = it.quantity) },
+            reviewImgs = review.photos
+        )
+        return bakeryDataSource.writeReview(bakeryId = bakeryId, request = request)
     }
 }

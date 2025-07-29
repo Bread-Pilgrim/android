@@ -5,24 +5,27 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastFilteredMap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.common.android.base.util.FileUtil
-import com.twolskone.bakeroad.feature.review.write.mvi.WriteReviewIntent
+import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewIntent
 import timber.log.Timber
 
 @Composable
-internal fun WriteReviewRoute(
+internal fun WriteBakeryReviewRoute(
     modifier: Modifier = Modifier,
     viewModel: WriteReviewViewModel,
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val contentTextState = rememberTextFieldState(initialText = state.content)
     val availablePickImageCount = MaxPickImages - state.photoList.size
     val imagePickerLauncher = rememberLauncherForActivityResult(
         contract = if (availablePickImageCount > 1) {
@@ -42,14 +45,18 @@ internal fun WriteReviewRoute(
             transform = { uri -> uri.toString() }
         )
         if (photos.isNotEmpty()) {
-            viewModel.intent(WriteReviewIntent.AddPhotos(photos = photos))
+            viewModel.intent(WriteBakeryReviewIntent.AddPhotos(photos = photos))
         }
         if (photos.size < uris.size) {
             Toast.makeText(context, "20MB 미만의 사진만 업로드할 수 있어요.", Toast.LENGTH_SHORT).show()
         }
     }
 
-    WriteReviewScreen(
+    LaunchedEffect(contentTextState.text) {
+        viewModel.intent(WriteBakeryReviewIntent.UpdateContent(content = contentTextState.text.toString()))
+    }
+
+    WriteBakeryReviewScreen(
         modifier = modifier,
         state = state,
         onAddPhotoClick = {
@@ -58,7 +65,9 @@ internal fun WriteReviewRoute(
             imagePickerLauncher.launch(mediaRequest)
         },
         onBackClick = onBackClick,
-        onRatingChange = { rating -> viewModel.intent(WriteReviewIntent.ChangeRating(rating = rating)) },
-        onDeletePhotoClick = { index -> viewModel.intent(WriteReviewIntent.DeletePhoto(index = index)) }
+        onRatingChange = { rating -> viewModel.intent(WriteBakeryReviewIntent.ChangeRating(rating = rating)) },
+        onDeletePhotoClick = { index -> viewModel.intent(WriteBakeryReviewIntent.DeletePhoto(index = index)) },
+        onPrivateCheck = { checked -> viewModel.intent(WriteBakeryReviewIntent.CheckPrivate(checked = checked)) },
+        onSubmit = { viewModel.intent(WriteBakeryReviewIntent.CompleteWrite) }
     )
 }

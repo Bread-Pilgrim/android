@@ -54,18 +54,20 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.feature.review.write.mvi.WriteReviewState
+import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewState
 
 private const val ReviewContentMaxLength = 300
 
 @Composable
-internal fun WriteReviewScreen(
+internal fun WriteBakeryReviewScreen(
     modifier: Modifier = Modifier,
-    state: WriteReviewState,
+    state: WriteBakeryReviewState,
     onAddPhotoClick: () -> Unit,
     onBackClick: () -> Unit,
     onRatingChange: (Float) -> Unit,
-    onDeletePhotoClick: (Int) -> Unit
+    onDeletePhotoClick: (Int) -> Unit,
+    onPrivateCheck: (Boolean) -> Unit,
+    onSubmit: () -> Unit
 ) {
     val contentTextState = rememberTextFieldState(initialText = "")
 
@@ -99,19 +101,18 @@ internal fun WriteReviewScreen(
             },
             rightActions = {
                 Row(
+                    modifier = Modifier.padding(end = 6.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(2.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     BakeRoadSwitch(
-                        checked = false,
+                        checked = state.isPrivate,
                         size = SwitchSize.SMALL,
-                        onCheckedChange = {}
+                        onCheckedChange = onPrivateCheck
                     )
-                    BakeRoadTextButton(
-                        style = TextButtonStyle.ASSISTIVE,
-                        size = TextButtonSize.MEDIUM,
-                        onClick = {},
-                        content = { Text(text = stringResource(id = R.string.feature_review_write_button_private_review)) }
+                    Text(
+                        text = stringResource(id = R.string.feature_review_write_button_private_review),
+                        style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray800)
                     )
                 }
             }
@@ -207,7 +208,7 @@ internal fun WriteReviewScreen(
                 .align(Alignment.BottomCenter),
             style = SolidButtonStyle.PRIMARY,
             size = ButtonSize.XLARGE,
-            onClick = {},
+            onClick = onSubmit,
             content = { Text(text = stringResource(id = R.string.feature_review_write_button_write_complete)) }
         )
     }
@@ -248,15 +249,17 @@ private fun ReviewPhoto(
 
 @Preview
 @Composable
-private fun WriteReviewScreenPreview() {
+private fun WriteBakeryReviewScreenPreview() {
     BakeRoadTheme {
-        WriteReviewScreen(
+        WriteBakeryReviewScreen(
             modifier = Modifier.fillMaxSize(),
-            state = WriteReviewState(),
+            state = WriteBakeryReviewState(),
             onAddPhotoClick = {},
             onBackClick = {},
             onRatingChange = {},
-            onDeletePhotoClick = {}
+            onDeletePhotoClick = {},
+            onPrivateCheck = {},
+            onSubmit = {}
         )
     }
 }

@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
 import kotlinx.coroutines.flow.Flow
 
 interface BakeryDataSource {
@@ -18,4 +19,5 @@ interface BakeryDataSource {
     suspend fun getReviews(bakeryId: Int, sort: String, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     suspend fun getMyReviews(bakeryId: Int, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     fun getMenus(bakeryId: Int): Flow<List<BakeryMenuResponse>>
+    fun writeReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit>
 }

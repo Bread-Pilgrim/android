@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.feature.review.write.WriteReviewViewModel
-import com.twolskone.bakeroad.feature.review.write.mvi.WriteReviewIntent
+import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewIntent
 
 @Composable
 internal fun MenuSelectionRoute(
@@ -16,9 +16,9 @@ internal fun MenuSelectionRoute(
 
     MenuSelectionScreen(
         menuList = state.menuList,
-        onMenuSelect = { menu, selected -> viewModel.intent(WriteReviewIntent.SelectMenu(menuId = menu.id, selected = selected)) },
-        onAddMenuCount = { menu -> viewModel.intent(WriteReviewIntent.AddMenuCount(menuId = menu.id)) },
-        onRemoveMenuCount = { menu -> viewModel.intent(WriteReviewIntent.RemoveMenuCount(menuId = menu.id)) },
+        onMenuSelect = { menu, selected -> viewModel.intent(WriteBakeryReviewIntent.SelectMenu(menuId = menu.id, selected = selected)) },
+        onAddMenuCount = { menu -> viewModel.intent(WriteBakeryReviewIntent.AddMenuCount(menuId = menu.id)) },
+        onRemoveMenuCount = { menu -> viewModel.intent(WriteBakeryReviewIntent.RemoveMenuCount(menuId = menu.id)) },
         onNextClick = onNextClick,
         onBackClick = onBackClick
     )

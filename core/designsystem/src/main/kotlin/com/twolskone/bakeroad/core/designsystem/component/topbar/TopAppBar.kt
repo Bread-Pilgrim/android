@@ -31,8 +31,8 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 /**
  * BakeRoad TopAppBar
- * * Height : 56.dp
- * * HorizontalPadding : 10.dp
+ * * Height : 56dp
+ * * HorizontalPadding : 10dp
  *
  * Actions 내 컴포넌트 자체 패딩을 주어 최종 디자인 가이드에 맞게 재배치 필요.
  * (디자인 가이드는 IconPadding 에 대한 고려가 되어있지 않기 때문)

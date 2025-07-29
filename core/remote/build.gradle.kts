@@ -15,6 +15,7 @@ android {
 dependencies {
     api(projects.core.exception)
     implementation(projects.core.common.kotlin)
+    implementation(projects.core.common.android)
     implementation(projects.core.datastore)
 
     implementation(libs.okhttp.logging)

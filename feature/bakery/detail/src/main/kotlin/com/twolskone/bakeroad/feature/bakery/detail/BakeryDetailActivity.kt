@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
-import com.twolskone.bakeroad.core.navigator.WriteReviewNavigator
+import com.twolskone.bakeroad.core.navigator.WriteBakeryReviewNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -13,7 +13,7 @@ import javax.inject.Inject
 internal class BakeryDetailActivity : ComponentActivity() {
 
     @Inject
-    lateinit var writeReviewNavigator: WriteReviewNavigator
+    lateinit var writeBakeryReviewNavigator: WriteBakeryReviewNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,11 +22,11 @@ internal class BakeryDetailActivity : ComponentActivity() {
             BakeRoadTheme {
                 SystemBarColorTheme(lightTheme = true)
                 BakeryDetailRoute(
-                    navigateToWriteReview = { bakeryId ->
-                        writeReviewNavigator.navigateFromActivity(
+                    navigateToWriteBakeryReview = { bakeryId, launcher ->
+                        writeBakeryReviewNavigator.navigateFromLauncher(
                             activity = this,
-                            withFinish = false,
-                            intentBuilder = { putExtra("bakeryId", bakeryId) }
+                            intentBuilder = { putExtra("bakeryId", bakeryId) },
+                            launcher = launcher
                         )
                     }
                 )

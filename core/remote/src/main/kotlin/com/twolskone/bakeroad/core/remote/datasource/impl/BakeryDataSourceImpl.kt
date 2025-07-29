@@ -1,5 +1,8 @@
 package com.twolskone.bakeroad.core.remote.datasource.impl
 
+import android.content.Context
+import androidx.core.net.toUri
+import com.twolskone.bakeroad.core.common.android.base.util.FileUtil
 import com.twolskone.bakeroad.core.common.kotlin.network.BakeRoadDispatcher
 import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
 import com.twolskone.bakeroad.core.remote.api.BakeryApi
@@ -10,19 +13,29 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
 import com.twolskone.bakeroad.core.remote.model.emitData
+import com.twolskone.bakeroad.core.remote.model.emitUnit
 import com.twolskone.bakeroad.core.remote.model.toData
+import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 private const val PreviewReviewCount = 3
 
 internal class BakeryDataSourceImpl @Inject constructor(
     private val api: BakeryApi,
-    @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
+    @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher,
+    @ApplicationContext private val context: Context
 ) : BakeryDataSource {
 
     override fun getRecommendPreferenceBakeries(areaCodes: String): Flow<List<RecommendBakeryResponse>> = flow {
@@ -98,4 +111,23 @@ internal class BakeryDataSourceImpl @Inject constructor(
     override fun getMenus(bakeryId: Int): Flow<List<BakeryMenuResponse>> = flow {
         emitData(api.getMenus(bakeryId = bakeryId))
     }.flowOn(networkDispatcher)
+
+    override fun writeReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit> = flow {
+        val imageMultipartList = request.reviewImgs.map {
+            val uri = it.toUri()
+            val imageFile = FileUtil.getImageFileFromUri(context = context, uri = uri)
+            val imageRequestBody = imageFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("review_imgs", imageFile.name, imageRequestBody)
+        }
+        emitUnit(
+            api.writeReview(
+                bakeryId = bakeryId,
+                rating = request.rating.toString().toRequestBody(contentType = "text/plain".toMediaType()),
+                content = request.content.toRequestBody(contentType = "text/plain".toMediaType()),
+                isPrivate = request.isPrivate.toString().toRequestBody(contentType = "text/plain".toMediaType()),
+                consumedMenus = Json.encodeToString(request.consumedMenus).toRequestBody(contentType = "application/json".toMediaType()),
+                reviewImgs = imageMultipartList
+            )
+        )
+    }
 }

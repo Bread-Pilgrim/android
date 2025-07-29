@@ -9,11 +9,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
-import com.twolskone.bakeroad.feature.review.write.navigation.WriteReviewNavHost
+import com.twolskone.bakeroad.feature.review.write.navigation.WriteBakeryReviewNavHost
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-internal class WriteReviewActivity : ComponentActivity() {
+internal class WriteBakeryReviewActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +21,7 @@ internal class WriteReviewActivity : ComponentActivity() {
         setContent {
             BakeRoadTheme {
                 SystemBarColorTheme(lightTheme = true)
-                WriteReviewNavHost(
+                WriteBakeryReviewNavHost(
                     modifier = Modifier
                         .fillMaxSize()
                         .imePadding(),

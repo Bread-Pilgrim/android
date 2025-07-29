@@ -4,22 +4,22 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.twolskone.bakeroad.feature.review.write.WriteReviewRoute
+import com.twolskone.bakeroad.feature.review.write.WriteBakeryReviewRoute
 import com.twolskone.bakeroad.feature.review.write.WriteReviewViewModel
 import kotlinx.serialization.Serializable
 
 @Serializable
-internal data object WriteReviewRoute
+internal data object WriteBakeryReviewRoute
 
-internal fun NavController.navigateToWriteReview(navOptions: NavOptions? = null) =
-    navigate(route = WriteReviewRoute, navOptions = navOptions)
+internal fun NavController.navigateToWriteBakeryReview(navOptions: NavOptions? = null) =
+    navigate(route = WriteBakeryReviewRoute, navOptions = navOptions)
 
-internal fun NavGraphBuilder.writeReviewScreen(
+internal fun NavGraphBuilder.writeBakeryReviewScreen(
     viewModel: WriteReviewViewModel,
     onBackClick: () -> Unit
 ) {
-    composable<WriteReviewRoute> {
-        WriteReviewRoute(
+    composable<WriteBakeryReviewRoute> {
+        WriteBakeryReviewRoute(
             viewModel = viewModel,
             onBackClick = onBackClick
         )

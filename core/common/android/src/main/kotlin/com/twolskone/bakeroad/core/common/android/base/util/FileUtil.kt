@@ -19,6 +19,10 @@ object FileUtil {
     private const val TAG = "FileUtil"
     private const val MAX_SIZE_IMAGE = 20   // MB.
 
+    /**
+     * 이미지 파일 생성 (URI 사용)
+     * @param extension 이미지 확장자
+     */
     @Throws(
         FileNotFoundException::class,
         SecurityException::class,
@@ -34,6 +38,10 @@ object FileUtil {
         file
     }
 
+    /**
+     * 임시 파일 생성
+     * @param extension 생성할 파일 확장자
+     */
     @Throws(IOException::class)
     private fun createTempImageFile(
         context: Context,
@@ -50,6 +58,11 @@ object FileUtil {
         )
     }
 
+    /**
+     * 파일 압축 (URI 이용)
+     * @param compressFormat    압축 포멧 - default: JPEG
+     * @param quality           품질 (0 ~ 100) - default: 50
+     */
     @Throws(
         FileNotFoundException::class,
         SecurityException::class,
@@ -86,17 +99,22 @@ object FileUtil {
         }
     }
 
+    /**
+     * 업로드 할 이미지 크기 검사 (이미지 URI 사용)
+     * @see MAX_SIZE_IMAGE  최대 이미지 크기 (20MB)
+     * @param uri           이미지 URI
+     */
     fun validateImageSizeFromUri(context: Context, uri: Uri): Boolean {
         context.contentResolver.query(uri, null, null, null, null)?.use { cursor ->
             val sizeIndex = cursor.getColumnIndex(OpenableColumns.SIZE)
             if (sizeIndex != -1) {
                 cursor.moveToFirst()
-                return (bytesToMegaBytes(cursor.getLong(sizeIndex)) < MAX_SIZE_IMAGE)
+                return (bytesToMegaBytes(cursor.getLong(sizeIndex)) <= MAX_SIZE_IMAGE)
             }
         }
 
         context.contentResolver.openInputStream(uri)?.use { inputStream ->
-            return (bytesToMegaBytes(inputStream.available().toLong()) < MAX_SIZE_IMAGE)
+            return (bytesToMegaBytes(inputStream.available().toLong()) <= MAX_SIZE_IMAGE)
         }
 
         return false

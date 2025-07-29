@@ -29,7 +29,6 @@ internal class OnboardingRepositoryImpl @Inject constructor(
             atmospheres = selectedPreferenceOptions.atmospheres,
             commercialAreas = selectedPreferenceOptions.commercialAreas
         )
-
         return userDataSource.setOnboarding(request = request)
     }
 }

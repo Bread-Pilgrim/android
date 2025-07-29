@@ -55,7 +55,6 @@ internal class BakeryDetailViewModel @Inject constructor(
             .cachedIn(viewModelScope)
             .catch { cause -> handleException(cause) }
     }
-
     val reviewPagingFlow by lazy {
         reviewSort
             .distinctUntilChanged { oldSort, newSort -> oldSort.value == newSort.value }

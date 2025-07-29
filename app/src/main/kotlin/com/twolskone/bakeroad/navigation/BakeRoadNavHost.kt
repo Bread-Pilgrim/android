@@ -1,10 +1,13 @@
 package com.twolskone.bakeroad.navigation
 
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.HomeRoute
 import com.twolskone.bakeroad.feature.home.navigation.homeScreen
@@ -14,8 +17,10 @@ internal fun BakeRoadNavHost(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
     navController: NavHostController,
+    showSnackbar: (SnackbarState) -> Unit,
     navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
-    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
+    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -24,8 +29,10 @@ internal fun BakeRoadNavHost(
     ) {
         homeScreen(
             padding = padding,
+            showSnackbar = showSnackbar,
             navigateToBakeryList = navigateToBakeryList,
-            navigateToBakeryDetail = navigateToBakeryDetail
+            navigateToBakeryDetail = navigateToBakeryDetail,
+            navigateToEditPreference = navigateToEditPreference
         )
     }
 }

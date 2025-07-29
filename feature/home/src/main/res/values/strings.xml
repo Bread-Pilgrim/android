@@ -11,4 +11,5 @@
     <string name="feature_home_label_tour_area_category_leisure">레포츠</string>
     <string name="feature_home_label_tour_area_category_shopping">쇼핑</string>
     <string name="feature_home_label_tour_area_category_recommend_course">추천코스</string>
+    <string name="feature_home_snackbar_complete_edit_preference">내 빵 취향이 변경되었습니다!</string>
 </resources>

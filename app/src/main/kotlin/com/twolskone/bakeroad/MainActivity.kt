@@ -8,6 +8,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
+import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,6 +21,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var bakeryDetailNavigator: BakeryDetailNavigator
+
+    @Inject
+    lateinit var onboardingNavigator: OnboardingNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +51,13 @@ class MainActivity : ComponentActivity() {
                                 putExtra("bakeryId", bakeryId)
                                 putExtra("areaCode", areaCode)
                             }
+                        )
+                    },
+                    navigateToEditPreference = { launcher ->
+                        onboardingNavigator.navigateFromLauncher(
+                            activity = this,
+                            intentBuilder = { putExtra("isEditPreference", true) },
+                            launcher = launcher
                         )
                     }
                 )

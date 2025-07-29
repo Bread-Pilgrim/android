@@ -105,6 +105,6 @@ internal class WriteReviewViewModel @Inject constructor(
             )
         }
         writeBakeryReviewUseCase(bakeryId = bakeryId, review = review)
-        postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK))
+        postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
     }
 }

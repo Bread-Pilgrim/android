@@ -2,4 +2,5 @@
 <resources>
     <string name="core_designsystem_button_cancel">취소</string>
     <string name="core_designsystem_button_confirm">확인</string>
+    <string name="core_designsystem_button_exit">나기기</string>
 </resources>

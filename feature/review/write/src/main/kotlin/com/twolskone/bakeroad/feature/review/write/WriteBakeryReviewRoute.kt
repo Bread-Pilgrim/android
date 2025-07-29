@@ -15,13 +15,15 @@ import androidx.compose.ui.util.fastFilteredMap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.common.android.base.util.FileUtil
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewIntent
+import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewSideEffect
 import timber.log.Timber
 
 @Composable
 internal fun WriteBakeryReviewRoute(
     modifier: Modifier = Modifier,
     viewModel: WriteReviewViewModel,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    setResult: (code: Int, withFinish: Boolean) -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -54,6 +56,14 @@ internal fun WriteBakeryReviewRoute(
 
     LaunchedEffect(contentTextState.text) {
         viewModel.intent(WriteBakeryReviewIntent.UpdateContent(content = contentTextState.text.toString()))
+    }
+
+    LaunchedEffect(viewModel) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                is WriteBakeryReviewSideEffect.SetResult -> setResult(it.code, it.withFinish)
+            }
+        }
     }
 
     WriteBakeryReviewScreen(

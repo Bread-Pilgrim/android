@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.onboard
 
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.domain.usecase.GetPreferenceOptionsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingUseCase
@@ -19,6 +20,7 @@ import kotlinx.coroutines.delay
 import timber.log.Timber
 
 private const val DELAY_START_BAKE_ROAD = 1_500L
+private const val IS_EDIT_PREFERENCE = "isEditPreference"
 
 @HiltViewModel
 internal class OnboardingViewModel @Inject constructor(
@@ -28,15 +30,17 @@ internal class OnboardingViewModel @Inject constructor(
     private val setOnboardingStatusUseCase: SetOnboardingStatusUseCase
 ) : BaseViewModel<OnboardingState, OnboardingIntent, OnboardingSideEffect>(savedStateHandle) {
 
+    override fun initState(savedStateHandle: SavedStateHandle): OnboardingState {
+        return OnboardingState()
+    }
+
+    val isEditPreference: Boolean = savedStateHandle.get<Boolean>(IS_EDIT_PREFERENCE).orFalse()
+
     init {
         launch {
             val options = getPreferenceOptionsUseCase()
             reduce { copy(preferenceOptionsState = preferenceOptionsState.copy(preferenceOptions = options)) }
         }
-    }
-
-    override fun initState(savedStateHandle: SavedStateHandle): OnboardingState {
-        return OnboardingState()
     }
 
     override suspend fun handleIntent(intent: OnboardingIntent) {

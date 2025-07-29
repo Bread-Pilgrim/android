@@ -91,18 +91,18 @@ private fun BakeRoadPopupButtons(
                 BakeRoadOutlinedButton(
                     modifier = Modifier.weight(1f),
                     style = OutlinedButtonStyle.SECONDARY,
-                    size = ButtonSize.XLARGE,
+                    size = ButtonSize.LARGE,
                     onClick = onSecondaryClick,
-                    content = { Text(text = primaryText) }
+                    content = { Text(text = secondaryText) }
                 )
                 BakeRoadSolidButton(
                     modifier = Modifier
                         .padding(start = 8.dp)
                         .weight(1f),
                     style = SolidButtonStyle.PRIMARY,
-                    size = ButtonSize.XLARGE,
+                    size = ButtonSize.LARGE,
                     onClick = onPrimaryClick,
-                    content = { Text(text = secondaryText) }
+                    content = { Text(text = primaryText) }
                 )
             }
         }
@@ -133,7 +133,7 @@ private fun BakeRoadPopupButtons(
 private fun BakeRoadAlertPreview() {
     BakeRoadTheme {
         BakeRoadAlert(
-            buttonType = PopupButton.LONG,
+            buttonType = PopupButton.SHORT,
             title = "제목",
             content = "내용",
             primaryText = "권장행동",

@@ -18,12 +18,14 @@ internal fun NavGraphBuilder.preferenceOptionsScreen(
     viewModel: OnboardingViewModel,
     navigateToNicknameSettings: () -> Unit,
     finish: () -> Unit,
+    setResult: (Int, withFinish: Boolean) -> Unit
 ) {
     composable<PreferenceRoute> {
         PreferenceOptionsRoute(
             viewModel = viewModel,
             navigateToNicknameSettings = navigateToNicknameSettings,
-            finish = finish
+            finish = finish,
+            setResult = setResult
         )
     }
 }

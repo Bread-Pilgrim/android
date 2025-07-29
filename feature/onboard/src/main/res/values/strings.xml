@@ -3,7 +3,9 @@
     <string name="feature_onboarding_title_nickname_settings">회원님의 닉네임을 설정해주세요.</string>
     <string name="feature_onboarding_description_nickname_settings">취향이 담긴 닉네임을 추천드려요!</string>
     <string name="feature_onboarding_title_nickname">닉네임</string>
+    <string name="feature_onboarding_title_cancel_edit_preference">취향을 저장하지 않고 나가시나요?</string>
     <string name="feature_onboarding_button_bakeroad_start">빵글 시작하기</string>
     <string name="feature_onboarding_description_nickname_max_length">8자 이하로 설정해주세요.</string>
     <string name="feature_onboarding_description_nickname_min_length">최소 두글자 입력해주세요.</string>
+    <string name="feature_onboarding_description_cancel_edit_preference">변경한 취향은 모두 저장되지 않아요 😂</string>
 </resources>

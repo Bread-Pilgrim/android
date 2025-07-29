@@ -7,12 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
@@ -42,8 +40,12 @@ import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 
-private val PageIndicatorWidth = 234.dp
-private const val TotalPage = 4
+private val PageIndicatorWidth = 164.dp
+private const val TotalPage = 3
+
+enum class PreferenceOptionType {
+
+}
 
 /**
  * 빵 취향 옵션 설정
@@ -56,6 +58,7 @@ fun PreferenceOptionsPage(
     totalPage: Int = TotalPage,
     page: Int,
     title: String,
+    completionText: String = stringResource(id = R.string.core_ui_button_save),
     optionList: ImmutableList<PreferenceOption>,
     selectedOptions: ImmutableSet<Int>,
     onOptionSelected: (Boolean, PreferenceOption) -> Unit,
@@ -64,18 +67,14 @@ fun PreferenceOptionsPage(
     onComplete: () -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = BakeRoadTheme.colorScheme.White)
-            .padding(horizontal = 16.dp)
-            .systemBarsPadding(),
+        modifier = modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.Start
     ) {
         // Title.
         Text(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 67.dp, bottom = 6.dp),
+                .padding(top = 11.dp, bottom = 6.dp),
             text = title,
             style = BakeRoadTheme.typography.headingLargeBold
         )
@@ -141,7 +140,7 @@ fun PreferenceOptionsPage(
                 }
             ) {
                 Text(
-                    text = stringResource(R.string.core_ui_button_next),
+                    text = if (page == totalPage) completionText else stringResource(R.string.core_ui_button_next),
                     style = BakeRoadTheme.typography.bodyMediumSemibold
                 )
             }

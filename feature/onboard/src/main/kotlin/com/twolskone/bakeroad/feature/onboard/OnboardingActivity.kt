@@ -24,7 +24,11 @@ internal class OnboardingActivity : ComponentActivity() {
                     .fillMaxSize()
                     .imePadding(),
                 navController = rememberNavController(),
-                finish = { finish() }
+                finish = { finish() },
+                setResult = { code, finish ->
+                    setResult(code)
+                    if (finish) finish()
+                }
             )
         }
     }

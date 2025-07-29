@@ -52,7 +52,8 @@ internal fun HomeScreen(
     onAreaSelect: (Boolean, Int) -> Unit,
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
     onSeeAllBakeriesClick: (BakeryType) -> Unit,
-    onBakeryClick: (RecommendBakery) -> Unit
+    onBakeryClick: (RecommendBakery) -> Unit,
+    onEditPreferenceClick: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -76,7 +77,7 @@ internal fun HomeScreen(
                         style = TextButtonStyle.ASSISTIVE,
                         size = TextButtonSize.SMALL,
                         content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change)) },
-                        onClick = {}
+                        onClick = onEditPreferenceClick
                     )
                 }
             )
@@ -249,7 +250,8 @@ private fun HomeScreenPreview() {
             onAreaSelect = { _, _ -> },
             onTourCategorySelect = { _, _ -> },
             onSeeAllBakeriesClick = {},
-            onBakeryClick = {}
+            onBakeryClick = {},
+            onEditPreferenceClick = {}
         )
     }
 }

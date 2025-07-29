@@ -11,7 +11,6 @@ import com.twolskone.bakeroad.feature.onboard.nickname.navigation.NicknameSettin
 import com.twolskone.bakeroad.feature.onboard.nickname.navigation.navigateToNicknameSettings
 import com.twolskone.bakeroad.feature.onboard.nickname.navigation.nicknameSettingsScreen
 import com.twolskone.bakeroad.feature.onboard.preference.navigation.PreferenceRoute
-import com.twolskone.bakeroad.feature.onboard.preference.navigation.navigateToPreferenceOptions
 import com.twolskone.bakeroad.feature.onboard.preference.navigation.preferenceOptionsScreen
 
 @Composable
@@ -19,7 +18,8 @@ internal fun OnBoardingNavHost(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navController: NavHostController,
-    finish: () -> Unit
+    finish: () -> Unit,
+    setResult: (code: Int, withFinish: Boolean) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -30,7 +30,8 @@ internal fun OnBoardingNavHost(
         preferenceOptionsScreen(
             viewModel = viewModel,
             navigateToNicknameSettings = navController::navigateToNicknameSettings,
-            finish = finish
+            finish = finish,
+            setResult = setResult
         )
         // 닉네임 설정
         nicknameSettingsScreen(

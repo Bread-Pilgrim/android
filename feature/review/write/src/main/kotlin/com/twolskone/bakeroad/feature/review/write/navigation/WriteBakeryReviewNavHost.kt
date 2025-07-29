@@ -15,7 +15,8 @@ internal fun WriteBakeryReviewNavHost(
     modifier: Modifier = Modifier,
     viewModel: WriteReviewViewModel = hiltViewModel(),
     navController: NavHostController,
-    finish: () -> Unit
+    finish: () -> Unit,
+    setResult: (code: Int, withFinish: Boolean) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -35,7 +36,8 @@ internal fun WriteBakeryReviewNavHost(
 //                    navController.navigateToMenuSelection()
                     navController.popBackStack()
                 }
-            }
+            },
+            setResult = setResult
         )
     }
 }

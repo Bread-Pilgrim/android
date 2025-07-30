@@ -5,13 +5,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orZero
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryDetailUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryMyReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryPreviewReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
+import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
+import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.toBakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailSideEffect
@@ -22,8 +27,9 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import timber.log.Timber
 
@@ -46,22 +52,34 @@ internal class BakeryDetailViewModel @Inject constructor(
 
     val bakeryId: Int = savedStateHandle.get<Int>(BAKERY_ID).orZero()
 
-    private val _reviewSort = MutableStateFlow(state.value.reviewState.sortType)
-    val reviewSort: StateFlow<ReviewSortType>
-        get() = _reviewSort.asStateFlow()
+    private val _tabState = MutableStateFlow(BakeryDetailTab.HOME)
+    val tabState: StateFlow<BakeryDetailTab>
+        get() = _tabState.asStateFlow()
+
+    private val _reviewTabState = MutableStateFlow(ReviewTab.MY_REVIEW)
+    val reviewTabState: StateFlow<ReviewTab>
+        get() = _reviewTabState.asStateFlow()
+
+    private val _reviewSortState = MutableStateFlow(ReviewSortType.LIKE_COUNT_DESC)
+    val reviewSortState: StateFlow<ReviewSortType>
+        get() = _reviewSortState.asStateFlow()
 
     val myReviewPagingFlow by lazy {
-        getBakeryMyReviewsUseCase(bakeryId = bakeryId)
-            .cachedIn(viewModelScope)
-            .catch { cause -> handleException(cause) }
+        combine(tabState, reviewTabState) { currentTab, currentReviewTab ->
+            currentTab == BakeryDetailTab.REVIEW && currentReviewTab == ReviewTab.MY_REVIEW
+        }.distinctUntilChanged()
+            .filter { it }
+            .flatMapLatest {
+                getBakeryMyReviewsUseCase(bakeryId = bakeryId).cachedIn(viewModelScope)
+            }
     }
     val reviewPagingFlow by lazy {
-        reviewSort
-            .distinctUntilChanged { oldSort, newSort -> oldSort.value == newSort.value }
-            .flatMapLatest { reviewSort ->
-                getBakeryReviewsUseCase(bakeryId = bakeryId, reviewSortType = reviewSort)
-                    .cachedIn(viewModelScope)
-                    .catch { cause -> handleException(cause) }
+        combine(tabState, reviewTabState, reviewSortState) { tab, reviewTab, reviewSort ->
+            Triple(tab, reviewTab, reviewSort)
+        }.distinctUntilChanged()
+            .filter { (tab, reviewTab, _) -> tab == BakeryDetailTab.REVIEW && reviewTab == ReviewTab.ALL_REVIEW }
+            .flatMapLatest { (_, _, reviewSort) ->
+                getBakeryReviewsUseCase(bakeryId = bakeryId, reviewSortType = reviewSort).cachedIn(viewModelScope)
             }
     }
 
@@ -73,21 +91,26 @@ internal class BakeryDetailViewModel @Inject constructor(
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause)
+        when (cause) {
+            is ClientException -> {
+                showSnackbar(
+                    type = SnackbarType.ERROR,
+                    message = cause.message,
+                    messageRes = cause.error?.messageId
+                )
+            }
+
+            is BakeRoadException -> {
+                showSnackbar(type = SnackbarType.ERROR, message = cause.message)
+            }
+        }
     }
 
     override suspend fun handleIntent(intent: BakeryDetailIntent) {
         when (intent) {
-            is BakeryDetailIntent.SelectTab -> reduce { copy(tab = intent.tab) }
-
-            is BakeryDetailIntent.SelectReviewTab -> reduce {
-                copy(
-                    reviewState = reviewState.copy(
-                        tab = intent.tab
-                    )
-                )
-            }
-
-            is BakeryDetailIntent.SelectReviewSort -> _reviewSort.value = intent.sort
+            is BakeryDetailIntent.SelectTab -> _tabState.value = intent.tab
+            is BakeryDetailIntent.SelectReviewTab -> _reviewTabState.value = intent.tab
+            is BakeryDetailIntent.SelectReviewSort -> _reviewSortState.value = intent.sort
         }
     }
 

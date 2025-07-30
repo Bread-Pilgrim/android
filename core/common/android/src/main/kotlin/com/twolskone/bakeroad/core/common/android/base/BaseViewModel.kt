@@ -3,6 +3,8 @@ package com.twolskone.bakeroad.core.common.android.base
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -31,6 +33,10 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
     private val _sideEffect = MutableSharedFlow<SE>()
     val sideEffect: SharedFlow<SE>
         get() = _sideEffect.asSharedFlow()
+
+    private val _snackbarEffect = MutableSharedFlow<SnackbarState>()
+    val snackbarEffect: SharedFlow<SnackbarState>
+        get() = _snackbarEffect.asSharedFlow()
 
     protected val ceh = CoroutineExceptionHandler { _, throwable ->
         handleException(cause = throwable)
@@ -70,4 +76,12 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
     }
 
     abstract fun handleException(cause: Throwable)
+
+    fun showSnackbar(
+        type: SnackbarType,
+        message: String,
+        messageRes: Int? = null
+    ) = launch {
+        _snackbarEffect.emit(SnackbarState(type = type, message = message, messageRes = messageRes))
+    }
 }

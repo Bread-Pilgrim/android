@@ -5,6 +5,7 @@ import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.LoginUseCase
 import com.twolskone.bakeroad.core.domain.usecase.VerifyTokenUseCase
@@ -65,6 +66,9 @@ internal class IntroViewModel @Inject constructor(
 
                     is AuthError -> {
                         Timber.e("카카오 로그인 에러 : [${cause.response.error}] ${cause.response.errorDescription} // $cause")
+                        cause.response.errorDescription?.let {
+                            showSnackbar(type = SnackbarType.ERROR, message = it)
+                        }
                     }
 
                     else -> {
@@ -76,18 +80,22 @@ internal class IntroViewModel @Inject constructor(
             is ClientException -> {
                 when (cause.error) {
                     ClientError.EmptyToken -> showLoginScreen() // 저장된 토큰이 없음 : 로그인 화면
-                    else -> {}  // TODO. Alert
+                    else -> {
+                        showSnackbar(
+                            type = SnackbarType.ERROR,
+                            message = cause.message,
+                            messageRes = cause.error?.messageId
+                        )
+                    }
                 }
             }
 
             is BakeRoadException -> {
                 when (cause.statusCode) {
                     BakeRoadException.STATUS_CODE_INVALID_TOKEN -> showLoginScreen()    // 유효하지 않은 토큰 : 로그인 화면
-                    else -> {}  // TODO. Alert
+                    else -> showSnackbar(type = SnackbarType.ERROR, message = cause.message)
                 }
             }
-
-            else -> {}  // Unknown error? how?
         }
     }
 

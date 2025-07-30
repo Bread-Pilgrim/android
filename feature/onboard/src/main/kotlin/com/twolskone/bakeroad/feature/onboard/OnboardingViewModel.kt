@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.onboard
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetPreferenceOptionsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingUseCase
@@ -96,7 +97,7 @@ internal class OnboardingViewModel @Inject constructor(
                     }
                 )
                 setOnboardingStatusUseCase(isOnboardingCompleted = true)
-                // TODO. Navigate to home.
+                postSideEffect(OnboardingSideEffect.NavigateToMain)
             }
         }
     }
@@ -106,24 +107,20 @@ internal class OnboardingViewModel @Inject constructor(
         reduce { copy(isLoading = false) }
         when (cause) {
             is ClientException -> {
-                // TODO. Alert
+                showSnackbar(
+                    type = SnackbarType.ERROR,
+                    message = cause.message,
+                    messageRes = cause.error?.messageId
+                )
             }
 
             is BakeRoadException -> {
                 when (cause.error) {
-                    BakeRoadError.DuplicateNickname -> {
-                        reduce { copy(nicknameSettingsState = nicknameSettingsState.copy(errorMessage = cause.message)) }
-                    }
-
-                    BakeRoadError.AlreadyOnboarding -> {
-                        // TODO. Navigate to home.
-                    }
-
-                    else -> {}  // TODO. Alert
+                    BakeRoadError.DuplicateNickname -> reduce { copy(nicknameSettingsState = nicknameSettingsState.copy(errorMessage = cause.message)) }
+                    BakeRoadError.AlreadyOnboarding -> postSideEffect(OnboardingSideEffect.NavigateToMain)
+                    else -> showSnackbar(type = SnackbarType.ERROR, message = cause.message)
                 }
             }
-
-            else -> {}  // Unknown case? how?
         }
     }
 }

@@ -13,6 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
+import com.twolskone.bakeroad.core.common.android.extension.ObserveError
+import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 import timber.log.Timber
 
@@ -22,31 +25,43 @@ internal fun BakeryDetailRoute(
     navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val reviewSort by viewModel.reviewSort.collectAsStateWithLifecycle()
+    val tabState by viewModel.tabState.collectAsStateWithLifecycle()
+    val reviewTabState by viewModel.reviewTabState.collectAsStateWithLifecycle()
+    val reviewSortState by viewModel.reviewSortState.collectAsStateWithLifecycle()
+    val myReviewPagingItems = viewModel.myReviewPagingFlow.collectAsLazyPagingItems()
+    val reviewPagingItems = viewModel.reviewPagingFlow.collectAsLazyPagingItems()
     val writeReviewLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             Timber.i("xxx writeReviewLauncher :: Completed write review")
-            result.data?.let { intent ->
-
+            when (reviewTabState) {
+                ReviewTab.MY_REVIEW -> myReviewPagingItems.refresh()
+                ReviewTab.ALL_REVIEW -> reviewPagingItems.refresh()
             }
         } else {
             Timber.i("xxx writeReviewLauncher :: Canceled write review")
         }
     }
 
-    BakeryDetailScreen(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
-        state = state,
-        reviewSort = reviewSort,
-        myReviewPaging = viewModel.myReviewPagingFlow.collectAsLazyPagingItems(),
-        reviewPaging = viewModel.reviewPagingFlow.collectAsLazyPagingItems(),
-        onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
-        onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) },
-        onReviewSortSelect = { sort -> viewModel.intent(BakeryDetailIntent.SelectReviewSort(sort)) },
-        onWriteReviewClick = { navigateToWriteBakeryReview(viewModel.bakeryId, writeReviewLauncher) }
-    )
+    reviewPagingItems.ObserveError(viewModel)
+    myReviewPagingItems.ObserveError(viewModel)
+
+    BaseComposable(baseViewModel = viewModel) {
+        BakeryDetailScreen(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
+            state = state,
+            tabState = tabState,
+            reviewTabState = reviewTabState,
+            reviewSortState = reviewSortState,
+            myReviewPagingItems = myReviewPagingItems,
+            reviewPagingItems = reviewPagingItems,
+            onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
+            onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) },
+            onReviewSortSelect = { sort -> viewModel.intent(BakeryDetailIntent.SelectReviewSort(sort)) },
+            onWriteReviewClick = { navigateToWriteBakeryReview(viewModel.bakeryId, writeReviewLauncher) }
+        )
+    }
 }

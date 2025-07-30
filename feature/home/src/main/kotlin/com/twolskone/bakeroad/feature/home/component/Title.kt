@@ -22,7 +22,7 @@ import com.twolskone.bakeroad.feature.home.R
 internal fun Title(
     modifier: Modifier = Modifier,
     title: String,
-    onSeeAllClick: () -> Unit
+    onSeeAllClick: (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier,
@@ -34,13 +34,15 @@ internal fun Title(
             text = title,
             style = BakeRoadTheme.typography.headingMediumBold
         )
-        BakeRoadTextButton(
-            modifier = Modifier.padding(start = 6.dp),
-            style = TextButtonStyle.ASSISTIVE,
-            size = TextButtonSize.SMALL,
-            onClick = onSeeAllClick,
-            text = { Text(text = stringResource(R.string.feature_home_button_see_all)) }
-        )
+        onSeeAllClick?.let { onClick ->
+            BakeRoadTextButton(
+                modifier = Modifier.padding(start = 6.dp),
+                style = TextButtonStyle.ASSISTIVE,
+                size = TextButtonSize.SMALL,
+                onClick = onClick,
+                text = { Text(text = stringResource(R.string.feature_home_button_see_all)) }
+            )
+        }
     }
 }
 

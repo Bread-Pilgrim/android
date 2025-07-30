@@ -186,8 +186,7 @@ internal fun HomeScreen(
                     .padding(top = 28.dp)
                     .padding(horizontal = 10.dp)
                     .fillMaxWidth(),
-                title = stringResource(id = R.string.feature_home_title_tour_area),
-                onSeeAllClick = {}
+                title = stringResource(id = R.string.feature_home_title_tour_area)
             )
         }
         // 관광지 카테고리 필터

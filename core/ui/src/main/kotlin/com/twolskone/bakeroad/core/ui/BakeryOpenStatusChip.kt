@@ -23,13 +23,14 @@ fun BakeryOpenStatusChip(
 ) {
     val color = when (openStatus) {
         BakeryOpenStatus.OPEN -> ChipColor.MAIN
-        BakeryOpenStatus.CLOSED, BakeryOpenStatus.DAY_OFF -> ChipColor.LIGHT_GRAY
+        BakeryOpenStatus.CLOSED, BakeryOpenStatus.DAY_OFF, BakeryOpenStatus.BEFORE_OPEN -> ChipColor.LIGHT_GRAY
     }
     val label = stringResource(
         id = when (openStatus) {
             BakeryOpenStatus.OPEN -> R.string.core_ui_label_bakery_open_status_open
             BakeryOpenStatus.CLOSED -> R.string.core_ui_label_bakery_open_status_closed
             BakeryOpenStatus.DAY_OFF -> R.string.core_ui_label_bakery_open_status_day_off
+            BakeryOpenStatus.BEFORE_OPEN -> R.string.core_ui_label_bakery_open_status_before_open
         }
     )
 

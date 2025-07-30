@@ -15,6 +15,9 @@ class BakeRoadException(
         const val STATUS_CODE_UNKNOWN = 1000            // 알 수 없는 오류
         const val STATUS_CODE_INVALID_TOKEN = 1001      // 토큰 만료 또는 유효하지 않은 토큰
         const val STATUS_CODE_MISSING_REQUEST = 1002    // 요청 누락
+        const val STATUS_CODE_NOT_FOUND = 1004          // 데이터를 찾을 수 없음
+        const val STATUS_CODE_INVALID_AREA_CODE = 1005  // 잘못된 지역코드 요청
+        const val STATUS_CODE_INVALID_SORT_DATA = 1006  // 잘못된 정렬 데이터 요청
         const val STATUS_CODE_DUPLICATE_DATA = 1009     // 중복 데이터
     }
 }

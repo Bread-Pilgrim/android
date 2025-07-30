@@ -3,10 +3,13 @@ package com.twolskone.bakeroad.feature.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendHotBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendPreferenceBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import com.twolskone.bakeroad.feature.home.mvi.HomeSideEffect
@@ -91,6 +94,19 @@ internal class HomeViewModel @Inject constructor(
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause)
+        when (cause) {
+            is ClientException -> {
+                showSnackbar(
+                    type = SnackbarType.ERROR,
+                    message = cause.message,
+                    messageRes = cause.error?.messageId
+                )
+            }
+
+            is BakeRoadException -> {
+                showSnackbar(type = SnackbarType.ERROR, message = cause.message)
+            }
+        }
     }
 
     /**

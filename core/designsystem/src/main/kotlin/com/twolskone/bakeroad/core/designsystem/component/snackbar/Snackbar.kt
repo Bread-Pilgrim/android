@@ -13,16 +13,13 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarData
-import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,51 +31,8 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.R
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.filter
 
 private val SnackbarRadius = 12.dp
-
-@Composable
-fun BakeRoadSnackbarBox(
-    modifier: Modifier = Modifier,
-    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    snackbarState: SnackbarState?,
-    duration: SnackbarDuration = SnackbarDuration.Indefinite,
-    durationMills: Long? = 2_000L,
-    onDismissed: () -> Unit = {},
-    onActionPerformed: () -> Unit = {}
-) {
-    LaunchedEffect(snackbarState) {
-        snapshotFlow { snackbarState }
-            .filter { snackbarState != null }
-            .collect { state ->
-                val result = snackbarHostState.showSnackbar(
-                    message = state?.message.orEmpty(),
-                    withDismissAction = true,
-                    duration = duration
-                )
-                when (result) {
-                    SnackbarResult.Dismissed -> onDismissed()
-                    SnackbarResult.ActionPerformed -> onActionPerformed()
-                }
-            }
-    }
-
-    snackbarState?.let { state ->
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            BakeRoadSnackbarHost(
-                snackbarHostState = snackbarHostState,
-                type = state.type,
-                durationMills = durationMills
-            )
-        }
-    }
-}
 
 @Composable
 fun BakeRoadSnackbarHost(
@@ -165,7 +119,9 @@ enum class SnackbarTheme {
 @Immutable
 data class SnackbarState(
     val type: SnackbarType,
-    val message: String
+    val message: String,
+    val messageRes: Int? = null,
+    val duration: Long = 2_000L
 )
 
 enum class SnackbarType(val iconRes: Int) {
@@ -177,11 +133,17 @@ enum class SnackbarType(val iconRes: Int) {
 @Composable
 private fun BakeRoadSnackbarBoxPreview() {
     BakeRoadTheme {
-        BakeRoadSnackbarBox(
-            snackbarState = SnackbarState(
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .windowInsetsPadding(WindowInsets.navigationBars),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            BakeRoadSnackbarHost(
+                snackbarHostState = remember { SnackbarHostState() },
                 type = SnackbarType.SUCCESS,
-                message = "메세지를 내용을 입력하세요."
+                durationMills = 2_000L
             )
-        )
+        }
     }
 }

@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -62,6 +63,7 @@ private const val ReviewContentMaxLength = 300
 internal fun WriteBakeryReviewScreen(
     modifier: Modifier = Modifier,
     state: WriteBakeryReviewState,
+    contentTextState: TextFieldState,
     onAddPhotoClick: () -> Unit,
     onBackClick: () -> Unit,
     onRatingChange: (Float) -> Unit,
@@ -69,8 +71,6 @@ internal fun WriteBakeryReviewScreen(
     onPrivateCheck: (Boolean) -> Unit,
     onSubmit: () -> Unit
 ) {
-    val contentTextState = rememberTextFieldState(initialText = "")
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -206,6 +206,7 @@ internal fun WriteBakeryReviewScreen(
                 .padding(horizontal = 15.dp, vertical = 24.dp)
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
+            enabled = contentTextState.text.isNotEmpty(),
             style = SolidButtonStyle.PRIMARY,
             size = ButtonSize.XLARGE,
             onClick = onSubmit,
@@ -254,6 +255,7 @@ private fun WriteBakeryReviewScreenPreview() {
         WriteBakeryReviewScreen(
             modifier = Modifier.fillMaxSize(),
             state = WriteBakeryReviewState(),
+            contentTextState = rememberTextFieldState(),
             onAddPhotoClick = {},
             onBackClick = {},
             onRatingChange = {},

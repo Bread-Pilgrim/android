@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.util.fastFilteredMap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.twolskone.bakeroad.core.common.android.base.util.FileUtil
+import com.twolskone.bakeroad.core.common.android.util.FileUtil
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewIntent
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewSideEffect
 import timber.log.Timber
@@ -55,6 +55,7 @@ internal fun WriteBakeryReviewRoute(
     }
 
     LaunchedEffect(contentTextState.text) {
+
         viewModel.intent(WriteBakeryReviewIntent.UpdateContent(content = contentTextState.text.toString()))
     }
 
@@ -69,6 +70,7 @@ internal fun WriteBakeryReviewRoute(
     WriteBakeryReviewScreen(
         modifier = modifier,
         state = state,
+        contentTextState = contentTextState,
         onAddPhotoClick = {
             // Image picker does not require special permissions and can be activated right away.
             val mediaRequest = PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)

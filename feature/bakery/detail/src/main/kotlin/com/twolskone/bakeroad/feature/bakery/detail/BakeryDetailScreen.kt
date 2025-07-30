@@ -74,9 +74,11 @@ private const val TabsIndex = 2
 internal fun BakeryDetailScreen(
     modifier: Modifier = Modifier,
     state: BakeryDetailState,
-    reviewSort: ReviewSortType,
-    myReviewPaging: LazyPagingItems<BakeryReview>,
-    reviewPaging: LazyPagingItems<BakeryReview>,
+    tabState: BakeryDetailTab,
+    reviewTabState: ReviewTab,
+    reviewSortState: ReviewSortType,
+    myReviewPagingItems: LazyPagingItems<BakeryReview>,
+    reviewPagingItems: LazyPagingItems<BakeryReview>,
     onTabSelect: (BakeryDetailTab) -> Unit,
     onReviewTabSelect: (ReviewTab) -> Unit,
     onReviewSortSelect: (ReviewSortType) -> Unit,
@@ -130,7 +132,7 @@ internal fun BakeryDetailScreen(
 
     LaunchedEffect(topBarColor) { Timber.e("topBarColor : $topBarColor") }
     LaunchedEffect(topBarColorTransition) { Timber.e("topBarColorTransition : $topBarColorTransition") }
-    LaunchedEffect(state.tab) {
+    LaunchedEffect(tabState) {
         if (initComposition.not()) {
             listState.animateScrollToItem(index = TabsIndex)
         } else {
@@ -162,7 +164,8 @@ internal fun BakeryDetailScreen(
                     bakeryInfo = state.bakeryInfo,
                     expandOpeningHour = expandOpeningHour,
                     rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
-                    onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour }
+                    onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour },
+                    onWriteReviewClick = onWriteReviewClick
                 )
             }
             stickyHeader("tabs") {
@@ -177,18 +180,18 @@ internal fun BakeryDetailScreen(
                     containerColor = BakeRoadTheme.colorScheme.White,
                     contentColor = BakeRoadTheme.colorScheme.Gray990,
                     edgePadding = 16.dp,
-                    selectedTabIndex = BakeryDetailTab.entries.indexOf(state.tab)
+                    selectedTabIndex = BakeryDetailTab.entries.indexOf(tabState)
                 ) {
                     BakeryDetailTab.entries.fastForEach { tab ->
                         BakeRoadTab(
-                            selected = (tab == state.tab),
+                            selected = (tab == tabState),
                             onClick = { onTabSelect(tab) },
                             text = { Text(text = stringResource(id = tab.labelId)) }
                         )
                     }
                 }
             }
-            when (state.tab) {
+            when (tabState) {
                 BakeryDetailTab.HOME -> {
                     home(
                         reviewCount = state.reviewState.count,
@@ -208,9 +211,10 @@ internal fun BakeryDetailScreen(
                 BakeryDetailTab.REVIEW -> {
                     review(
                         state = state.reviewState,
-                        sortType = reviewSort,
-                        myReviewPaging = myReviewPaging,
-                        reviewPaging = reviewPaging,
+                        tabState = reviewTabState,
+                        sortState = reviewSortState,
+                        myReviewPaging = myReviewPagingItems,
+                        reviewPaging = reviewPagingItems,
                         onReviewTabSelect = onReviewTabSelect,
                         onSortClick = { showReviewSortBottomSheet = true },
                         onWriteReviewClick = onWriteReviewClick
@@ -287,10 +291,10 @@ internal fun BakeryDetailScreen(
 
         if (showReviewSortBottomSheet) {
             ReviewSortBottomSheet(
-                sortType = reviewSort,
+                sortType = reviewSortState,
                 onDismissRequest = { showReviewSortBottomSheet = false },
                 onSortSelect = { sort ->
-                    if (sort != reviewSort) onReviewSortSelect(sort)
+                    if (sort != reviewSortState) onReviewSortSelect(sort)
                     showReviewSortBottomSheet = false
                 },
                 onCancel = { showReviewSortBottomSheet = false }
@@ -323,9 +327,11 @@ private fun BakeryDetailScreenPreview() {
 
         BakeryDetailScreen(
             state = BakeryDetailState(),
-            reviewSort = ReviewSortType.LIKE_COUNT_DESC,
-            myReviewPaging = lazyPagingItems,
-            reviewPaging = lazyPagingItems,
+            tabState = BakeryDetailTab.HOME,
+            reviewTabState = ReviewTab.MY_REVIEW,
+            reviewSortState = ReviewSortType.LIKE_COUNT_DESC,
+            myReviewPagingItems = lazyPagingItems,
+            reviewPagingItems = lazyPagingItems,
             onTabSelect = {},
             onReviewTabSelect = {},
             onReviewSortSelect = {},

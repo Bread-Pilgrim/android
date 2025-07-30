@@ -18,6 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.user.UserApiClient
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.intro.login.LoginScreen
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
@@ -52,30 +53,32 @@ internal fun IntroRoute(
         }
     }
 
-    when (state.type) {
-        IntroType.SPLASH -> {
-            Timber.e("SPLASH")
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(color = BakeRoadTheme.colorScheme.White),
-                contentAlignment = Alignment.Center
-            ) {
-                Image(
-                    imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_logo_splash),
-                    contentDescription = "Logo"
+    BaseComposable(baseViewModel = viewModel) {
+        when (state.type) {
+            IntroType.SPLASH -> {
+                Timber.e("SPLASH")
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(color = BakeRoadTheme.colorScheme.White),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_logo_splash),
+                        contentDescription = "Logo"
+                    )
+                }
+            }
+
+            IntroType.LOGIN -> {
+                Timber.e("LOGIN")
+                LoginScreen(
+                    modifier = Modifier.fillMaxSize(),
+                    onKakaoLoginClick = {
+                        loginKakao(context = context, callback = kakaoLoginCallback)
+                    }
                 )
             }
-        }
-
-        IntroType.LOGIN -> {
-            Timber.e("LOGIN")
-            LoginScreen(
-                modifier = Modifier.fillMaxSize(),
-                onKakaoLoginClick = {
-                    loginKakao(context = context, callback = kakaoLoginCallback)
-                }
-            )
         }
     }
 }

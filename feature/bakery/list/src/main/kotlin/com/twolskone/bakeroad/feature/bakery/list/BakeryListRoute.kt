@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 
 @Composable
 internal fun BakeryListRoute(
@@ -17,12 +18,14 @@ internal fun BakeryListRoute(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lazyPagingItems = viewModel.pagingFlow.collectAsLazyPagingItems()
 
-    BakeryListScreen(
-        modifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding(),
-        bakeryType = state.bakeryType,
-        pagingItems = lazyPagingItems,
-        onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode) }
-    )
+    BaseComposable(baseViewModel = viewModel) {
+        BakeryListScreen(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
+            bakeryType = state.bakeryType,
+            pagingItems = lazyPagingItems,
+            onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode) }
+        )
+    }
 }

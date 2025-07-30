@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.common.android.base.extension
+package com.twolskone.bakeroad.core.common.android.extension
 
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute

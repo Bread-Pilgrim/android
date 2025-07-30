@@ -4,7 +4,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeriesUseCase
+import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListIntent
@@ -32,7 +35,21 @@ internal class BakeryListViewModel @Inject constructor(
         return BakeryListState(bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE)
     }
 
-    override fun handleException(cause: Throwable) {}
+    override fun handleException(cause: Throwable) {
+        when (cause) {
+            is ClientException -> {
+                showSnackbar(
+                    type = SnackbarType.ERROR,
+                    message = cause.message,
+                    messageRes = cause.error?.messageId
+                )
+            }
+
+            is BakeRoadException -> {
+                showSnackbar(type = SnackbarType.ERROR, message = cause.message)
+            }
+        }
+    }
 
     override suspend fun handleIntent(intent: BakeryListIntent) {}
 }

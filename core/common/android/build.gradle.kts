@@ -1,5 +1,6 @@
 plugins {
     alias(libs.plugins.bakeroad.android.library)
+    alias(libs.plugins.bakeroad.android.library.compose)
 }
 
 android {
@@ -7,6 +8,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designsystem)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.viewmodelCompose)

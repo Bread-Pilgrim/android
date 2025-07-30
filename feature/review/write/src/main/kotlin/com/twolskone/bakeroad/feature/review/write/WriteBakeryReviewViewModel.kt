@@ -4,8 +4,11 @@ import android.app.Activity
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orZero
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryReviewMenusUseCase
 import com.twolskone.bakeroad.core.domain.usecase.WriteBakeryReviewUseCase
+import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewIntent
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewSideEffect
@@ -40,6 +43,19 @@ internal class WriteReviewViewModel @Inject constructor(
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause)
+        when (cause) {
+            is ClientException -> {
+                showSnackbar(
+                    type = SnackbarType.ERROR,
+                    message = cause.message,
+                    messageRes = cause.error?.messageId
+                )
+            }
+
+            is BakeRoadException -> {
+                showSnackbar(type = SnackbarType.ERROR, message = cause.message)
+            }
+        }
     }
 
     override suspend fun handleIntent(intent: WriteBakeryReviewIntent) {
@@ -100,7 +116,9 @@ internal class WriteReviewViewModel @Inject constructor(
                 rating = rating,
                 content = content,
                 isPrivate = isPrivate,
-                menus = menuList.map { WriteBakeryReview.Menu(id = it.id, quantity = it.count) },
+                menus = menuList
+                    .filter { menu -> menu.count > 0 }
+                    .map { WriteBakeryReview.Menu(id = it.id, quantity = it.count) },
                 photos = photoList
             )
         }

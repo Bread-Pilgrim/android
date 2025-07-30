@@ -48,7 +48,8 @@ internal fun BakeryInfoSection(
     bakeryInfo: BakeryInfo?,
     expandOpeningHour: Boolean,
     rotateOpeningHourIconAngle: Float,
-    onExpandOpeningHourClick: () -> Unit
+    onExpandOpeningHourClick: () -> Unit,
+    onWriteReviewClick: () -> Unit
 ) {
     if (bakeryInfo != null) {
         Column(
@@ -90,10 +91,8 @@ internal fun BakeryInfoSection(
                     .fillMaxWidth(),
                 style = SolidButtonStyle.PRIMARY,
                 size = ButtonSize.MEDIUM,
-                onClick = {},
-                content = {
-                    Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review))
-                }
+                onClick = onWriteReviewClick,
+                content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
             )
             HorizontalDivider(
                 modifier = Modifier
@@ -260,7 +259,8 @@ private fun BakeryInfoSectionPreview() {
             ),
             expandOpeningHour = false,
             rotateOpeningHourIconAngle = 0f,
-            onExpandOpeningHourClick = {}
+            onExpandOpeningHourClick = {},
+            onWriteReviewClick = {}
         )
     }
 }

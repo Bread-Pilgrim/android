@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.common.android.base.util
+package com.twolskone.bakeroad.core.common.android.util
 
 import android.content.Context
 import android.graphics.Bitmap.CompressFormat

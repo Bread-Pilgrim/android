@@ -21,7 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.twolskone.bakeroad.core.common.android.base.extension.emptyState
+import com.twolskone.bakeroad.core.common.android.extension.emptyState
 import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
@@ -42,7 +42,8 @@ import kotlinx.collections.immutable.toImmutableList
  */
 internal fun LazyListScope.review(
     state: ReviewState,
-    sortType: ReviewSortType,
+    tabState: ReviewTab,
+    sortState: ReviewSortType,
     myReviewPaging: LazyPagingItems<BakeryReview>,
     reviewPaging: LazyPagingItems<BakeryReview>,
     onReviewTabSelect: (ReviewTab) -> Unit,
@@ -57,22 +58,18 @@ internal fun LazyListScope.review(
                     .padding(horizontal = 16.dp)
                     .padding(top = 12.dp, bottom = 4.dp)
                     .height(48.dp),
-                selectedOptionIndex = state.tab.ordinal,
+                selectedOptionIndex = tabState.ordinal,
                 optionList = ReviewTab.entries.map { stringResource(id = it.labelId) }.toImmutableList(),
                 onSelect = { index ->
                     val selectedReviewTab = runCatching { ReviewTab.entries[index] }.getOrDefault(ReviewTab.ALL_REVIEW)
-                    if (index != state.tab.ordinal) {
-                        when (selectedReviewTab) {
-                            ReviewTab.MY_REVIEW -> myReviewPaging.refresh()
-                            ReviewTab.ALL_REVIEW -> reviewPaging.refresh()
-                        }
+                    if (index != tabState.ordinal) {
                         onReviewTabSelect(selectedReviewTab)
                     }
                 }
             )
         }
     }
-    when (state.tab) {
+    when (tabState) {
         ReviewTab.MY_REVIEW -> {
             item("myReviewHeader") {
                 MyReviewHeader(
@@ -110,7 +107,7 @@ internal fun LazyListScope.review(
                 AllReviewHeader(
                     modifier = Modifier.fillMaxWidth(),
                     state = state,
-                    reviewSort = sortType,
+                    reviewSort = sortState,
                     onSortClick = onSortClick,
                     onWriteReviewClick = onWriteReviewClick
                 )

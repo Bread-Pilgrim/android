@@ -63,6 +63,8 @@ internal fun MenuSelectionScreen(
     onNextClick: () -> Unit,
     onBackClick: () -> Unit
 ) {
+    val isMenusSelected = menuList.any { menu -> menu.count > 0 }
+
     Column(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         BakeRoadTopAppBar(
             modifier = Modifier.fillMaxWidth(),
@@ -86,6 +88,7 @@ internal fun MenuSelectionScreen(
                 BakeRoadTextButton(
                     style = TextButtonStyle.ASSISTIVE,
                     size = TextButtonSize.MEDIUM,
+                    enabled = isMenusSelected,
                     onClick = onNextClick,
                     content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_next)) }
                 )

@@ -2,7 +2,7 @@ package com.twolskone.bakeroad.core.remote.datasource.impl
 
 import android.content.Context
 import androidx.core.net.toUri
-import com.twolskone.bakeroad.core.common.android.base.util.FileUtil
+import com.twolskone.bakeroad.core.common.android.util.FileUtil
 import com.twolskone.bakeroad.core.common.kotlin.network.BakeRoadDispatcher
 import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
 import com.twolskone.bakeroad.core.remote.api.BakeryApi

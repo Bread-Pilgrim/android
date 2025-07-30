@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
+import com.twolskone.bakeroad.core.remote.model.initialSortCursor
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.GET
@@ -49,7 +50,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getPreviewReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_value") cursorValue: String = "0:0",
+        @Query("cursor_value") cursorValue: String = initialSortCursor,
         @Query("page_size") pageSize: Int = 5,
         @Query("sort_clause") sort: String = "LIKE_COUNT.DESC"
     ): BaseResponse<BakeryReviewsResponse>

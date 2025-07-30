@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.core.exception.extension
 
+import com.twolskone.bakeroad.core.exception.ClientError
 import com.twolskone.bakeroad.core.exception.ClientException
 import java.io.InterruptedIOException
 import java.net.SocketException
@@ -22,6 +23,7 @@ fun Exception.handleNetworkException(): Nothing =
             in 400..499 -> {
                 ClientException(
                     code = code,
+                    error = ClientError.Client,
                     message = "$[$code] 클라이언트 오류가 발생했습니다."
                 )
             }
@@ -30,6 +32,7 @@ fun Exception.handleNetworkException(): Nothing =
             500, 501, 502, 503, 504 -> {
                 ClientException(
                     code = code,
+                    error = ClientError.TemporaryServer,
                     message = "$[$code] 이용에 불편을 드려 죄송합니다.\n잠시 후 다시 이용해주세요."
                 )
             }
@@ -38,6 +41,7 @@ fun Exception.handleNetworkException(): Nothing =
             else -> {
                 ClientException(
                     code = code,
+                    error = ClientError.Unknown,
                     message = "$[$code] 알 수 없는 오류가 발생했습니다."
                 )
             }
@@ -48,6 +52,7 @@ fun Exception.handleNetworkException(): Nothing =
         is SSLPeerUnverifiedException -> {
             ClientException(
                 code = 500,
+                error = ClientError.TemporaryServer,
                 message = "이용에 불편을 드려 죄송합니다.\n잠시 후 다시 이용해주세요."
             )
         }
@@ -60,6 +65,7 @@ fun Exception.handleNetworkException(): Nothing =
         is InterruptedIOException -> {
             ClientException(
                 code = ClientException.ERROR_CODE_NETWORK,
+                error = ClientError.Network,
                 message = "네트워크 연결이 불안해요.\n잠시 후 다시 이용해주세요."
             )
         }
@@ -68,6 +74,7 @@ fun Exception.handleNetworkException(): Nothing =
         else -> {
             ClientException(
                 code = ClientException.ERROR_CODE_UNKNOWN,
+                error = ClientError.Unknown,
                 message = "알 수 없는 오류가 발생했습니다."
             )
         }

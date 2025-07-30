@@ -18,7 +18,8 @@ internal fun BakeRoadNavHost(
     navController: NavHostController,
     navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
-    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit
+    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    showSnackbar: (SnackbarState) -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -29,7 +30,8 @@ internal fun BakeRoadNavHost(
             padding = padding,
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
-            navigateToEditPreference = navigateToEditPreference
+            navigateToEditPreference = navigateToEditPreference,
+            showSnackbar = showSnackbar
         )
     }
 }

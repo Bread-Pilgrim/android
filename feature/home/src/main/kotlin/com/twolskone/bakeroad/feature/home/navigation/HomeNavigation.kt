@@ -16,14 +16,16 @@ fun NavGraphBuilder.homeScreen(
     padding: PaddingValues,
     navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
-    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit
+    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    showSnackbar: (SnackbarState) -> Unit
 ) {
     composable<HomeRoute> {
         HomeRoute(
             padding = padding,
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
-            navigateToEditPreference = navigateToEditPreference
+            navigateToEditPreference = navigateToEditPreference,
+            showSnackbar = showSnackbar
         )
     }
 }

@@ -79,7 +79,7 @@ abstract class BaseViewModel<US : BaseUiState, I : BaseUiIntent, SE : BaseUiSide
 
     fun showSnackbar(
         type: SnackbarType,
-        message: String,
+        message: String = "",
         messageRes: Int? = null
     ) = launch {
         _snackbarEffect.emit(SnackbarState(type = type, message = message, messageRes = messageRes))

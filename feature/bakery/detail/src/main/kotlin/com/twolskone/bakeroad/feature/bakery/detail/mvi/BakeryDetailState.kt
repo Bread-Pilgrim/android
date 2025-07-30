@@ -7,7 +7,9 @@ import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 
 @Immutable
 internal data class BakeryDetailState(
@@ -22,5 +24,6 @@ internal data class BakeryDetailState(
 internal data class ReviewState(
     val count: Int = 0,
     val avgRating: Float = 0.0f,
-    val previewReviewList: ImmutableList<BakeryReview> = persistentListOf()
+    val previewReviewList: ImmutableList<BakeryReview> = persistentListOf(),
+    val localLikeMap: PersistentMap<Int, Boolean> = persistentMapOf()
 )

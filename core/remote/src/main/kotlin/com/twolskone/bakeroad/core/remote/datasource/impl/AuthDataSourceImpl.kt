@@ -43,7 +43,7 @@ internal class AuthDataSourceImpl @Inject constructor(
             throw ClientException(
                 code = ClientException.ERROR_CODE_EMPTY_TOKEN,
                 error = ClientError.EmptyToken,
-                message = context.getString(ClientError.EmptyToken.messageId)
+                message = context.getString(ClientError.EmptyToken.messageRes)
             )
         }
 

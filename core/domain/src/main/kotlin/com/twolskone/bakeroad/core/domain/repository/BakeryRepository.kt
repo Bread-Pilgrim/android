@@ -16,5 +16,7 @@ interface BakeryRepository {
     fun getPreviewReviews(bakeryId: Int): Flow<List<BakeryReview>>
     fun getReviews(myReview: Boolean, bakeryId: Int, sort: ReviewSortType?): Flow<PagingData<BakeryReview>>
     fun getReviewMenus(bakeryId: Int): Flow<List<ReviewMenu>>
-    fun writeReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit>
+    fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit>
+    fun postLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
+    fun deleteLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
 }

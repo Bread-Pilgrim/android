@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.HomeRoute
 import com.twolskone.bakeroad.feature.home.navigation.homeScreen
@@ -16,8 +17,8 @@ internal fun BakeRoadNavHost(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
     navController: NavHostController,
-    navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
-    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
+    navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {

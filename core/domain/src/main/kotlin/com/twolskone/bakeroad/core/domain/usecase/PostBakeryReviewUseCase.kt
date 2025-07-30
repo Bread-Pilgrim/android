@@ -7,10 +7,10 @@ import javax.inject.Inject
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 
-class WriteBakeryReviewUseCase @Inject constructor(private val bakeryRepository: BakeryRepository) {
+class PostBakeryReviewUseCase @Inject constructor(private val bakeryRepository: BakeryRepository) {
 
     suspend operator fun invoke(bakeryId: Int, review: WriteBakeryReview): Boolean =
-        bakeryRepository.writeReview(bakeryId = bakeryId, review = review)
+        bakeryRepository.postReview(bakeryId = bakeryId, review = review)
             .map { true }
             .firstOrNull()
             .orFalse()

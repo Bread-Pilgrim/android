@@ -6,11 +6,15 @@ import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orZero
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.DeleteBakeryLikeUseCase
+import com.twolskone.bakeroad.core.domain.usecase.DeleteReviewLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryDetailUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryMyReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryPreviewReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.domain.usecase.PostBakeryLikeUseCase
+import com.twolskone.bakeroad.core.domain.usecase.PostReviewLikeUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
@@ -43,7 +47,11 @@ internal class BakeryDetailViewModel @Inject constructor(
     private val getBakeryPreviewReviewsUseCase: GetBakeryPreviewReviewsUseCase,
     private val getTourAreasUseCase: GetTourAreasUseCase,
     private val getBakeryMyReviewsUseCase: GetBakeryMyReviewsUseCase,
-    private val getBakeryReviewsUseCase: GetBakeryReviewsUseCase
+    private val getBakeryReviewsUseCase: GetBakeryReviewsUseCase,
+    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
+    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase,
+    private val postReviewLikeUseCase: PostReviewLikeUseCase,
+    private val deleteReviewLikeUseCase: DeleteReviewLikeUseCase
 ) : BaseViewModel<BakeryDetailState, BakeryDetailIntent, BakeryDetailSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): BakeryDetailState {
@@ -56,7 +64,7 @@ internal class BakeryDetailViewModel @Inject constructor(
     val tabState: StateFlow<BakeryDetailTab>
         get() = _tabState.asStateFlow()
 
-    private val _reviewTabState = MutableStateFlow(ReviewTab.MY_REVIEW)
+    private val _reviewTabState = MutableStateFlow(ReviewTab.ALL_REVIEW)
     val reviewTabState: StateFlow<ReviewTab>
         get() = _reviewTabState.asStateFlow()
 
@@ -65,10 +73,10 @@ internal class BakeryDetailViewModel @Inject constructor(
         get() = _reviewSortState.asStateFlow()
 
     val myReviewPagingFlow by lazy {
-        combine(tabState, reviewTabState) { currentTab, currentReviewTab ->
-            currentTab == BakeryDetailTab.REVIEW && currentReviewTab == ReviewTab.MY_REVIEW
+        combine(tabState, reviewTabState) { tab, reviewTab ->
+            tab to reviewTab
         }.distinctUntilChanged()
-            .filter { it }
+            .filter { (tab, reviewTab) -> tab == BakeryDetailTab.REVIEW && reviewTab == ReviewTab.MY_REVIEW }
             .flatMapLatest {
                 getBakeryMyReviewsUseCase(bakeryId = bakeryId).cachedIn(viewModelScope)
             }
@@ -96,7 +104,7 @@ internal class BakeryDetailViewModel @Inject constructor(
                 showSnackbar(
                     type = SnackbarType.ERROR,
                     message = cause.message,
-                    messageRes = cause.error?.messageId
+                    messageRes = cause.error?.messageRes
                 )
             }
 
@@ -111,6 +119,31 @@ internal class BakeryDetailViewModel @Inject constructor(
             is BakeryDetailIntent.SelectTab -> _tabState.value = intent.tab
             is BakeryDetailIntent.SelectReviewTab -> _reviewTabState.value = intent.tab
             is BakeryDetailIntent.SelectReviewSort -> _reviewSortState.value = intent.sort
+
+            is BakeryDetailIntent.ClickBakeryLike -> {
+                reduce { copy(bakeryInfo = bakeryInfo?.copy(isLike = intent.isLike)) }
+                if (intent.isLike) {
+                    val (_, resultLike) = postBakeryLikeUseCase(bakeryId = bakeryId)
+                    if (resultLike) showSnackbar(type = SnackbarType.SUCCESS, messageRes = R.string.feature_bakery_detail_snackbar_like_bakery)
+                } else {
+                    deleteBakeryLikeUseCase(bakeryId = bakeryId)
+                }
+            }
+
+            is BakeryDetailIntent.ClickReviewLike -> {
+                reduce {
+                    copy(
+                        reviewState = reviewState.copy(
+                            localLikeMap = reviewState.localLikeMap.put(intent.reviewId, intent.isLike)
+                        )
+                    )
+                }
+                if (intent.isLike) {
+                    postReviewLikeUseCase(reviewId = intent.reviewId)
+                } else {
+                    deleteReviewLikeUseCase(reviewId = intent.reviewId)
+                }
+            }
         }
     }
 
@@ -133,9 +166,7 @@ internal class BakeryDetailViewModel @Inject constructor(
         val reviews = getBakeryPreviewReviewsUseCase(bakeryId = bakeryId)
         reduce {
             copy(
-                reviewState = reviewState.copy(
-                    previewReviewList = reviews.toImmutableList()
-                )
+                reviewState = reviewState.copy(previewReviewList = reviews.toImmutableList())
             )
         }
     }

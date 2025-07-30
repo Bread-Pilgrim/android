@@ -14,6 +14,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -22,8 +23,8 @@ import timber.log.Timber
 internal fun HomeRoute(
     padding: PaddingValues,
     viewModel: HomeViewModel = hiltViewModel(),
-    navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
-    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
+    navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
@@ -32,17 +33,41 @@ internal fun HomeRoute(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            Timber.i("xxx changePreferenceLauncher :: Completed change preference")
-            viewModel.showSnackbar(
-                type = SnackbarType.SUCCESS,
-                messageRes = R.string.feature_home_snackbar_complete_edit_preference,
+            Timber.i("xxx changePreferenceLauncher :: Refresh bakery list with snackbar")
+            viewModel.intent(
+                HomeIntent.RefreshBakeries(
+                    completeSnackbarState = SnackbarState(
+                        type = SnackbarType.SUCCESS,
+                        messageRes = R.string.feature_home_snackbar_complete_edit_preference,
+                    )
+                )
             )
         } else {
             Timber.i("xxx changePreferenceLauncher :: Canceled change preference")
         }
     }
+    val bakeryListLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
+            Timber.i("xxx bakeryListLauncher :: Refresh bakery list")
+            viewModel.intent(HomeIntent.RefreshBakeries())
+        } else {
+            Timber.i("xxx bakeryListLauncher :: Canceled")
+        }
+    }
+    val bakeryDetailLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
+            Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
+            viewModel.intent(HomeIntent.RefreshBakeries())
+        } else {
+            Timber.i("xxx bakeryDetailLauncher :: Canceled")
+        }
+    }
 
-    LaunchedEffect(viewModel.snackbarEffect) {
+    LaunchedEffect(Unit) {
         viewModel.snackbarEffect.collectLatest { state ->
             showSnackbar(state)
         }
@@ -55,11 +80,20 @@ internal fun HomeRoute(
         onTourCategorySelect = { selected, category -> viewModel.intent(HomeIntent.SelectTourAreaCategory(selected = selected, category = category)) },
         onSeeAllBakeriesClick = { bakeryType ->
             navigateToBakeryList(
-                state.selectedAreaCodes.joinToString(separator = ","),
-                bakeryType
+                /* areaCode*/ state.selectedAreaCodes.joinToString(separator = ","),
+                /* bakeryType*/ bakeryType,
+                /* launcher*/ bakeryListLauncher
             )
         },
-        onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode) },
-        onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) }
+        onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
+        onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) },
+        onBakeryLikeClick = { bakeryId, isLike ->
+            viewModel.intent(
+                HomeIntent.ClickBakeryLike(
+                    bakeryId = bakeryId,
+                    isLike = isLike
+                )
+            )
+        }
     )
 }

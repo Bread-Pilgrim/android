@@ -32,6 +32,8 @@ data class BakeryResponse(
     val gu: String = "",
     @SerialName("dong")
     val dong: String = "",
+    @SerialName("is_like")
+    val isLike: Boolean = false,
     @SerialName("signature_menus")
     val signatureMenus: List<SignatureMenu> = emptyList()
 ) {

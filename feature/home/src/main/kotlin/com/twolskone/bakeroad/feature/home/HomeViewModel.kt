@@ -4,10 +4,12 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.DeleteBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendHotBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetRecommendPreferenceBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.domain.usecase.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
@@ -22,6 +24,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.joinAll
 import timber.log.Timber
 
 private const val BakeryMaxCount = 20
@@ -33,7 +36,9 @@ internal class HomeViewModel @Inject constructor(
     private val getAreasUseCase: GetAreasUseCase,
     private val getPreferenceBakeriesUseCase: GetRecommendPreferenceBakeriesUseCase,
     private val getHotBakeriesUseCase: GetRecommendHotBakeriesUseCase,
-    private val getTourAreasUseCase: GetTourAreasUseCase
+    private val getTourAreasUseCase: GetTourAreasUseCase,
+    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
+    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
 ) : BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): HomeState {
@@ -41,7 +46,6 @@ internal class HomeViewModel @Inject constructor(
     }
 
     private val areaTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
-
     private val tourAreaCategoryTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
     init {
@@ -89,6 +93,45 @@ internal class HomeViewModel @Inject constructor(
                 tourAreaCategoryTrigger.tryEmit(Unit)
                 copy(selectedTourAreaCategories = selectedTourCategories)
             }
+
+            is HomeIntent.ClickBakeryLike -> {
+                reduce {
+                    copy(
+                        preferenceBakeryList = preferenceBakeryList.map { bakery ->
+                            if (bakery.id == intent.bakeryId) {
+                                bakery.copy(isLike = intent.isLike)
+                            } else {
+                                bakery
+                            }
+                        }.toImmutableList(),
+                        hotBakeryList = hotBakeryList.map { bakery ->
+                            if (bakery.id == intent.bakeryId) {
+                                bakery.copy(isLike = intent.isLike)
+                            } else {
+                                bakery
+                            }
+                        }.toImmutableList()
+                    )
+                }
+                if (intent.isLike) {
+                    postBakeryLikeUseCase(bakeryId = intent.bakeryId)
+                } else {
+                    deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
+                }
+            }
+
+            is HomeIntent.RefreshBakeries -> {
+                val preferenceBakeriesJob = refreshPreferenceBakeries()
+                val hotBakeriesJob = refreshHotBakeries()
+                joinAll(preferenceBakeriesJob, hotBakeriesJob)
+                intent.completeSnackbarState?.let { snackbarState ->
+                    showSnackbar(
+                        type = snackbarState.type,
+                        message = snackbarState.message,
+                        messageRes = snackbarState.messageRes
+                    )
+                }
+            }
         }
     }
 
@@ -99,7 +142,7 @@ internal class HomeViewModel @Inject constructor(
                 showSnackbar(
                     type = SnackbarType.ERROR,
                     message = cause.message,
-                    messageRes = cause.error?.messageId
+                    messageRes = cause.error?.messageRes
                 )
             }
 

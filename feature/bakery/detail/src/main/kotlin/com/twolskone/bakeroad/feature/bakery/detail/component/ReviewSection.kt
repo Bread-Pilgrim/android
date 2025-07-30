@@ -48,7 +48,8 @@ internal fun LazyListScope.review(
     reviewPaging: LazyPagingItems<BakeryReview>,
     onReviewTabSelect: (ReviewTab) -> Unit,
     onSortClick: () -> Unit,
-    onWriteReviewClick: () -> Unit
+    onWriteReviewClick: () -> Unit,
+    onReviewLikeClick: (Int, Boolean) -> Unit
 ) {
     item {
         Box(modifier = Modifier.background(color = BakeRoadTheme.colorScheme.White)) {
@@ -70,40 +71,8 @@ internal fun LazyListScope.review(
         }
     }
     when (tabState) {
-        ReviewTab.MY_REVIEW -> {
-            item("myReviewHeader") {
-                MyReviewHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    state = state,
-                    onWriteReviewClick = onWriteReviewClick
-                )
-            }
-            if (myReviewPaging.emptyState) {
-                item {
-                    EmptyReviewCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
-                    )
-                }
-            } else {
-                items(count = myReviewPaging.itemCount, contentType = { "myReview" }) { index ->
-                    myReviewPaging[index]?.let { review ->
-                        ReviewCard(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(BakeRoadTheme.colorScheme.White)
-                                .padding(vertical = 6.dp, horizontal = 16.dp),
-                            review = review
-                        )
-                    }
-                }
-            }
-        }
-
         ReviewTab.ALL_REVIEW -> {
-            item("allReviewHeader") {
+            item {
                 AllReviewHeader(
                     modifier = Modifier.fillMaxWidth(),
                     state = state,
@@ -113,7 +82,7 @@ internal fun LazyListScope.review(
                 )
             }
             if (reviewPaging.emptyState) {
-                item {
+                item("emptyReview") {
                     EmptyReviewCard(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -122,14 +91,55 @@ internal fun LazyListScope.review(
                     )
                 }
             } else {
-                items(count = reviewPaging.itemCount, contentType = { "allReview" }) { index ->
+                items(
+                    count = reviewPaging.itemCount,
+                    key = { index -> reviewPaging[index]?.id ?: "placeholder_$index" }
+                ) { index ->
                     reviewPaging[index]?.let { review ->
                         ReviewCard(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .background(BakeRoadTheme.colorScheme.White)
                                 .padding(vertical = 6.dp, horizontal = 16.dp),
-                            review = review
+                            review = review,
+                            localLikeMap = state.localLikeMap,
+                            onLikeClick = onReviewLikeClick
+                        )
+                    }
+                }
+            }
+        }
+
+        ReviewTab.MY_REVIEW -> {
+            item {
+                MyReviewHeader(
+                    modifier = Modifier.fillMaxWidth(),
+                    onWriteReviewClick = onWriteReviewClick
+                )
+            }
+            if (myReviewPaging.emptyState) {
+                item("emptyReview") {
+                    EmptyReviewCard(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(BakeRoadTheme.colorScheme.White)
+                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                    )
+                }
+            } else {
+                items(
+                    count = myReviewPaging.itemCount,
+                    key = { index -> myReviewPaging[index]?.id ?: "placeholder_$index" }
+                ) { index ->
+                    myReviewPaging[index]?.let { review ->
+                        ReviewCard(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(BakeRoadTheme.colorScheme.White)
+                                .padding(vertical = 6.dp, horizontal = 16.dp),
+                            review = review,
+                            localLikeMap = state.localLikeMap,
+                            onLikeClick = onReviewLikeClick
                         )
                     }
                 }
@@ -144,7 +154,6 @@ internal fun LazyListScope.review(
 @Composable
 private fun MyReviewHeader(
     modifier: Modifier = Modifier,
-    state: ReviewState,
     onWriteReviewClick: () -> Unit
 ) {
     Column(
@@ -160,15 +169,9 @@ private fun MyReviewHeader(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                modifier = Modifier.weight(1f),
                 text = stringResource(R.string.feature_bakery_detail_title_my_review),
                 style = BakeRoadTheme.typography.bodyLargeSemibold
-            )
-            Text(
-                modifier = Modifier
-                    .padding(start = 2.dp)
-                    .weight(1f),
-                text = stringResource(R.string.feature_bakery_detail_review_count, state.count.toCommaString()),
-                style = BakeRoadTheme.typography.bodySmallMedium
             )
             BakeRoadOutlinedButton(
                 modifier = Modifier,
@@ -258,7 +261,6 @@ private fun MyReviewSectionPreview() {
     BakeRoadTheme {
         MyReviewHeader(
             modifier = Modifier.fillMaxWidth(),
-            state = ReviewState(),
             onWriteReviewClick = {}
         )
     }

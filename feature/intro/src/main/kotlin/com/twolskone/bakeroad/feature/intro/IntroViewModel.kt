@@ -84,7 +84,7 @@ internal class IntroViewModel @Inject constructor(
                         showSnackbar(
                             type = SnackbarType.ERROR,
                             message = cause.message,
-                            messageRes = cause.error?.messageId
+                            messageRes = cause.error?.messageRes
                         )
                     }
                 }

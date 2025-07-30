@@ -18,19 +18,19 @@ class ClientException(
     }
 }
 
-enum class ClientError(val messageId: Int) {
+enum class ClientError(val messageRes: Int) {
     // 클라이언트 오류 (4xx)
-    Client(messageId = R.string.core_exception_client_error_client),
+    Client(messageRes = R.string.core_exception_client_error_client),
 
     // 일시적 서버 오류 (5xx)
-    TemporaryServer(messageId = R.string.core_exception_client_error_temporary_server),
+    TemporaryServer(messageRes = R.string.core_exception_client_error_temporary_server),
 
     // 네트워크 연결 오류
-    Network(messageId = R.string.core_exception_client_error_network),
+    Network(messageRes = R.string.core_exception_client_error_network),
 
     // 알 수 없는 오류
-    Unknown(messageId = R.string.core_exception_client_error_unknown),
+    Unknown(messageRes = R.string.core_exception_client_error_unknown),
 
     // 저장된 토큰이 없는 오류
-    EmptyToken(messageId = R.string.core_exception_client_error_empty_token)
+    EmptyToken(messageRes = R.string.core_exception_client_error_empty_token)
 }

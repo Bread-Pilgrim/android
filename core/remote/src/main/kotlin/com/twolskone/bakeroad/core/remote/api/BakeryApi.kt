@@ -3,12 +3,14 @@ package com.twolskone.bakeroad.core.remote.api
 import com.twolskone.bakeroad.core.remote.model.BaseResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import com.twolskone.bakeroad.core.remote.model.initialSortCursor
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
@@ -76,9 +78,10 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/menus")
     suspend fun getMenus(@Path("bakery_id") bakeryId: Int): BaseResponse<List<BakeryMenuResponse>>
 
+    /* 빵집 리뷰 작성 */
     @Multipart
     @POST("bakeries/{bakery_id}/reviews")
-    suspend fun writeReview(
+    suspend fun postReview(
         @Path("bakery_id") bakeryId: Int,
         @Part("rating") rating: RequestBody,
         @Part("content") content: RequestBody,
@@ -86,4 +89,12 @@ internal interface BakeryApi {
         @Part("consumed_menus") consumedMenus: RequestBody,
         @Part reviewImgs: List<MultipartBody.Part>
     ): BaseResponse<Unit>
+
+    /* 빵집 좋아요 */
+    @POST("bakeries/{bakery_id}/like")
+    suspend fun postLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse>
+
+    /* 빵집 좋아요 취소 */
+    @DELETE("bakeries/{bakery_id}/like")
+    suspend fun deleteLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse>
 }

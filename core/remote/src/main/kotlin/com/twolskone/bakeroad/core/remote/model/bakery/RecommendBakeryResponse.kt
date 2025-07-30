@@ -18,5 +18,7 @@ data class RecommendBakeryResponse(
     @SerialName("open_status")
     val openStatus: String = "O",  // O : 영업중, C : 영업종료, D : 휴무일
     @SerialName("img_url")
-    val imgUrl: String = ""
+    val imgUrl: String = "",
+    @SerialName("is_like")
+    val isLike: Boolean = false
 )

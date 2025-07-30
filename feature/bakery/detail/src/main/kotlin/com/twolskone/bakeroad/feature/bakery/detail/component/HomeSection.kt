@@ -33,7 +33,9 @@ import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 
 private const val MenuMaxCount = 4
 private const val TourAreaMaxCount = 5
@@ -50,11 +52,13 @@ internal fun LazyListScope.home(
     menuList: ImmutableList<BakeryDetail.Menu>,
     reviewList: ImmutableList<BakeryReview>,
     tourAreaList: ImmutableList<TourArea>,
+    localReviewLikeMap: PersistentMap<Int, Boolean>,
     onViewAllMenuClick: () -> Unit,
     onViewAllReviewClick: () -> Unit,
-    onViewAllTourAreaClick: () -> Unit
+    onViewAllTourAreaClick: () -> Unit,
+    onReviewLikeClick: (Int, Boolean) -> Unit
 ) {
-    item(contentType = "home") {
+    item {
         Column(modifier = itemModifier) {
             MenuContent(
                 modifier = Modifier.fillMaxWidth(),
@@ -67,7 +71,9 @@ internal fun LazyListScope.home(
                     .fillMaxWidth(),
                 reviewCount = reviewCount,
                 reviewList = reviewList,
-                onViewAllClick = onViewAllReviewClick
+                onViewAllClick = onViewAllReviewClick,
+                localReviewLikeMap = localReviewLikeMap,
+                onLikeClick = onReviewLikeClick
             )
             TourAreaContent(
                 modifier = Modifier.fillMaxWidth(),
@@ -133,7 +139,9 @@ private fun ReviewContent(
     modifier: Modifier = Modifier,
     reviewCount: Int,
     reviewList: ImmutableList<BakeryReview>,
-    onViewAllClick: () -> Unit
+    localReviewLikeMap: PersistentMap<Int, Boolean>,
+    onViewAllClick: () -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -171,7 +179,9 @@ private fun ReviewContent(
             reviewList.fastForEach { review ->
                 ReviewCard(
                     modifier = Modifier.fillMaxWidth(),
-                    review = review
+                    review = review,
+                    localLikeMap = localReviewLikeMap,
+                    onLikeClick = onLikeClick
                 )
             }
             BakeRoadOutlinedButton(
@@ -285,7 +295,9 @@ private fun ReviewContentPreview() {
                     photos = emptyList()
                 )
             ),
-            onViewAllClick = {}
+            localReviewLikeMap = persistentMapOf(),
+            onViewAllClick = {},
+            onLikeClick = { _, _ -> }
         )
     }
 }

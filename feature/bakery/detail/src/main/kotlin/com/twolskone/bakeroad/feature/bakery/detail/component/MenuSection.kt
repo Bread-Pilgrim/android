@@ -26,7 +26,7 @@ import kotlinx.collections.immutable.persistentListOf
  * Menu section
  */
 internal fun LazyListScope.menu(menuList: ImmutableList<BakeryDetail.Menu>) {
-    item(contentType = "menuTitle") {
+    item {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -40,10 +40,7 @@ internal fun LazyListScope.menu(menuList: ImmutableList<BakeryDetail.Menu>) {
             )
         }
     }
-    itemsIndexed(
-        items = menuList,
-        contentType = { _, _ -> "menu" }
-    ) { index, menu ->
+    itemsIndexed(items = menuList) { index, menu ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()

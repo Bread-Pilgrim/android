@@ -33,20 +33,20 @@ class MainActivity : ComponentActivity() {
             BakeRoadTheme {
                 BakeRoadApp(
                     navController = rememberNavController(),
-                    navigateToBakeryList = { areaCodes, bakeryType ->
-                        bakeryListNavigator.navigateFromActivity(
+                    navigateToBakeryList = { areaCodes, bakeryType, launcher ->
+                        bakeryListNavigator.navigateFromLauncher(
                             activity = this,
-                            withFinish = false,
+                            launcher = launcher,
                             intentBuilder = {
                                 putExtra("areaCodes", areaCodes)
                                 putExtra("bakeryType", bakeryType)
                             }
                         )
                     },
-                    navigateToBakeryDetail = { bakeryId, areaCode ->
-                        bakeryDetailNavigator.navigateFromActivity(
+                    navigateToBakeryDetail = { bakeryId, areaCode, launcher ->
+                        bakeryDetailNavigator.navigateFromLauncher(
                             activity = this,
-                            withFinish = false,
+                            launcher = launcher,
                             intentBuilder = {
                                 putExtra("bakeryId", bakeryId)
                                 putExtra("areaCode", areaCode)

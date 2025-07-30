@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.bakery.detail
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -15,6 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
+import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 import timber.log.Timber
@@ -22,7 +24,8 @@ import timber.log.Timber
 @Composable
 internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel(),
-    navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit
+    navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit,
+    setResult: (code: Int, withFinish: Boolean) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
@@ -44,6 +47,10 @@ internal fun BakeryDetailRoute(
         }
     }
 
+    BackHandler {
+        setResult(RESULT_REFRESH_BAKERY_LIST, true)
+    }
+
     reviewPagingItems.ObserveError(viewModel)
     myReviewPagingItems.ObserveError(viewModel)
 
@@ -61,7 +68,9 @@ internal fun BakeryDetailRoute(
             onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
             onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) },
             onReviewSortSelect = { sort -> viewModel.intent(BakeryDetailIntent.SelectReviewSort(sort)) },
-            onWriteReviewClick = { navigateToWriteBakeryReview(viewModel.bakeryId, writeReviewLauncher) }
+            onWriteReviewClick = { navigateToWriteBakeryReview(viewModel.bakeryId, writeReviewLauncher) },
+            onBakeryLikeClick = { isLike -> viewModel.intent(BakeryDetailIntent.ClickBakeryLike(isLike = isLike)) },
+            onReviewLikeClick = { id, isLike -> viewModel.intent(BakeryDetailIntent.ClickReviewLike(reviewId = id, isLike = isLike)) }
         )
     }
 }

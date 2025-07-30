@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -42,7 +40,10 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
+import com.twolskone.bakeroad.core.ui.LikeIcon
 import com.twolskone.bakeroad.feature.bakery.list.R
+import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.persistentMapOf
 
 private val ImageWidth = 148.dp
 private val ImageShape = RoundedCornerShape(9.dp)
@@ -54,12 +55,13 @@ private val ImageShape = RoundedCornerShape(9.dp)
 internal fun BakeryCard(
     modifier: Modifier = Modifier,
     bakery: Bakery,
-    onClick: (Bakery) -> Unit
+    likeMap: PersistentMap<Int, Boolean>,
+    onCardClick: (Bakery) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
-    Row(
-        modifier = modifier
-            .noRippleSingleClickable { onClick(bakery) }
-    ) {
+    val isLike = likeMap[bakery.id] ?: bakery.isLike
+
+    Row(modifier = modifier.noRippleSingleClickable { onCardClick(bakery) }) {
         Box(
             modifier = Modifier
                 .width(ImageWidth)
@@ -74,14 +76,12 @@ internal fun BakeryCard(
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
             )
-            Icon(
-                modifier = Modifier
-                    .padding(8.dp)
-                    .size(20.dp)
-                    .align(Alignment.TopEnd),
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
-                contentDescription = "Bookmark",
-                tint = BakeRoadTheme.colorScheme.White
+            LikeIcon(
+                modifier = Modifier.align(Alignment.TopEnd),
+                size = 20.dp,
+                padding = 8.dp,
+                isLike = isLike,
+                onClick = { result -> onLikeClick(bakery.id, result) }
             )
             BakeryOpenStatusChip(
                 modifier = Modifier
@@ -169,6 +169,7 @@ private fun BakeryCardPreview() {
     BakeRoadTheme {
         BakeryCard(
             modifier = Modifier.fillMaxWidth(),
+            likeMap = persistentMapOf(1 to true),
             bakery = Bakery(
                 id = 1,
                 name = "서라당",
@@ -179,9 +180,11 @@ private fun BakeryCardPreview() {
                 imageUrl = "",
                 addressGu = "관악구",
                 addressDong = "",
+                isLike = true,
                 signatureMenus = listOf("소금빵", "올리브치 치아바타", "겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴")
             ),
-            onClick = {}
+            onCardClick = {},
+            onLikeClick = { _, _ -> }
         )
     }
 }

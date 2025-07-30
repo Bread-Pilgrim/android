@@ -24,7 +24,8 @@ internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
         openStatus = runCatching {
             BakeryOpenStatus.ofStatus(openStatus) ?: BakeryOpenStatus.OPEN
         }.getOrDefault(BakeryOpenStatus.OPEN),
-        imageUrl = imgUrl
+        imageUrl = imgUrl,
+        isLike = isLike
     )
 
 internal fun BakeryResponse.toExternalModel(): Bakery =
@@ -40,6 +41,7 @@ internal fun BakeryResponse.toExternalModel(): Bakery =
         imageUrl = imgUrl,
         addressGu = gu,
         addressDong = dong,
+        isLike = isLike,
         signatureMenus = signatureMenus.map { it.menuName }
     )
 

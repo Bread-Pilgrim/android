@@ -119,7 +119,7 @@ enum class SnackbarTheme {
 @Immutable
 data class SnackbarState(
     val type: SnackbarType,
-    val message: String,
+    val message: String = "",
     val messageRes: Int? = null,
     val duration: Long = 2_000L
 )

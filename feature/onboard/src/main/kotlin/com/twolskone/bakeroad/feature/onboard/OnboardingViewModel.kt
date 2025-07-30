@@ -6,7 +6,7 @@ import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetPreferenceOptionsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingStatusUseCase
-import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingUseCase
+import com.twolskone.bakeroad.core.domain.usecase.PostOnboardingUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadError
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
@@ -27,7 +27,7 @@ private const val IS_EDIT_PREFERENCE = "isEditPreference"
 internal class OnboardingViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getPreferenceOptionsUseCase: GetPreferenceOptionsUseCase,
-    private val setOnboardingUseCase: SetOnboardingUseCase,
+    private val postOnboardingUseCase: PostOnboardingUseCase,
     private val setOnboardingStatusUseCase: SetOnboardingStatusUseCase
 ) : BaseViewModel<OnboardingState, OnboardingIntent, OnboardingSideEffect>(savedStateHandle) {
 
@@ -85,7 +85,7 @@ internal class OnboardingViewModel @Inject constructor(
             OnboardingIntent.StartBakeRoad -> {
                 reduce { copy(isLoading = true) }
                 delay(DELAY_START_BAKE_ROAD)
-                setOnboardingUseCase(
+                postOnboardingUseCase(
                     nickname = state.value.nicknameSettingsState.nicknameText,
                     selectedPreferenceOptions = with(state.value.preferenceOptionsState) {
                         SelectedPreferenceOptions(
@@ -110,7 +110,7 @@ internal class OnboardingViewModel @Inject constructor(
                 showSnackbar(
                     type = SnackbarType.ERROR,
                     message = cause.message,
-                    messageRes = cause.error?.messageId
+                    messageRes = cause.error?.messageRes
                 )
             }
 

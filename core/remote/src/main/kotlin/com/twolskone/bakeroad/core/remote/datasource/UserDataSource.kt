@@ -4,5 +4,5 @@ import com.twolskone.bakeroad.core.remote.model.user.UserOnboardingRequest
 import kotlinx.coroutines.flow.Flow
 
 interface UserDataSource {
-    fun setOnboarding(request: UserOnboardingRequest): Flow<String>
+    fun postOnboarding(request: UserOnboardingRequest): Flow<String>
 }

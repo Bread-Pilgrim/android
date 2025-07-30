@@ -6,7 +6,7 @@ import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orZero
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeryReviewMenusUseCase
-import com.twolskone.bakeroad.core.domain.usecase.WriteBakeryReviewUseCase
+import com.twolskone.bakeroad.core.domain.usecase.PostBakeryReviewUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
@@ -25,7 +25,7 @@ internal const val MaxPickImages = 5
 internal class WriteReviewViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val getBakeryReviewMenusUseCase: GetBakeryReviewMenusUseCase,
-    private val writeBakeryReviewUseCase: WriteBakeryReviewUseCase
+    private val postBakeryReviewUseCase: PostBakeryReviewUseCase
 ) : BaseViewModel<WriteBakeryReviewState, WriteBakeryReviewIntent, WriteBakeryReviewSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): WriteBakeryReviewState {
@@ -48,7 +48,7 @@ internal class WriteReviewViewModel @Inject constructor(
                 showSnackbar(
                     type = SnackbarType.ERROR,
                     message = cause.message,
-                    messageRes = cause.error?.messageId
+                    messageRes = cause.error?.messageRes
                 )
             }
 
@@ -122,7 +122,7 @@ internal class WriteReviewViewModel @Inject constructor(
                 photos = photoList
             )
         }
-        writeBakeryReviewUseCase(bakeryId = bakeryId, review = review)
+        postBakeryReviewUseCase(bakeryId = bakeryId, review = review)
         postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
     }
 }

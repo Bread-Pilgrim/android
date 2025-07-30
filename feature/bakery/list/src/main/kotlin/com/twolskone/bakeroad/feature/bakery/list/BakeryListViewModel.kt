@@ -5,7 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.DeleteBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.GetBakeriesUseCase
+import com.twolskone.bakeroad.core.domain.usecase.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
@@ -23,7 +25,9 @@ private const val BAKERY_TYPE = "bakeryType"
 @HiltViewModel
 internal class BakeryListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getBakeriesUseCase: GetBakeriesUseCase
+    getBakeriesUseCase: GetBakeriesUseCase,
+    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
+    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
 ) : BaseViewModel<BakeryListState, BakeryListIntent, BakeryListSideEffect>(savedStateHandle) {
 
     val pagingFlow = getBakeriesUseCase(
@@ -41,7 +45,7 @@ internal class BakeryListViewModel @Inject constructor(
                 showSnackbar(
                     type = SnackbarType.ERROR,
                     message = cause.message,
-                    messageRes = cause.error?.messageId
+                    messageRes = cause.error?.messageRes
                 )
             }
 
@@ -51,5 +55,16 @@ internal class BakeryListViewModel @Inject constructor(
         }
     }
 
-    override suspend fun handleIntent(intent: BakeryListIntent) {}
+    override suspend fun handleIntent(intent: BakeryListIntent) {
+        when (intent) {
+            is BakeryListIntent.ClickBakeryLike -> {
+                reduce { copy(localLikeMap = localLikeMap.put(intent.bakeryId, intent.isLike)) }
+                if (intent.isLike) {
+                    postBakeryLikeUseCase(bakeryId = intent.bakeryId)
+                } else {
+                    deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
+                }
+            }
+        }
+    }
 }

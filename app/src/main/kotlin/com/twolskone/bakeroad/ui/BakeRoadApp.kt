@@ -38,8 +38,8 @@ import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 @Composable
 internal fun BakeRoadApp(
     navController: NavHostController,
-    navigateToBakeryList: (areaCodes: String, BakeryType) -> Unit,
-    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
+    navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit
 ) {
     val context = LocalContext.current

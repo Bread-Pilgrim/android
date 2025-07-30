@@ -13,6 +13,7 @@ import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
  * @param imageUrl          썸네일
  * @param addressGu         자치구
  * @param addressDong       동
+ * @param isLike            찜 여부
  * @param signatureMenus    메뉴
  */
 data class Bakery(
@@ -25,5 +26,6 @@ data class Bakery(
     val imageUrl: String,
     val addressGu: String,
     val addressDong: String,
+    val isLike: Boolean,
     val signatureMenus: List<String>
 )

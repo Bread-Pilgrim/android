@@ -88,7 +88,7 @@ internal class BakeryRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun writeReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit> {
+    override fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit> {
         val request = WriteBakeryReviewRequest(
             rating = review.rating,
             content = review.content,
@@ -96,6 +96,16 @@ internal class BakeryRepositoryImpl @Inject constructor(
             consumedMenus = review.menus.map { WriteBakeryReviewRequest.Menu(menuId = it.id, quantity = it.quantity) },
             reviewImgs = review.photos
         )
-        return bakeryDataSource.writeReview(bakeryId = bakeryId, request = request)
+        return bakeryDataSource.postReview(bakeryId = bakeryId, request = request)
+    }
+
+    override fun postLike(bakeryId: Int): Flow<Pair<Int, Boolean>> {
+        return bakeryDataSource.postLike(bakeryId = bakeryId)
+            .map { it.bakeryId to it.isLike }
+    }
+
+    override fun deleteLike(bakeryId: Int): Flow<Pair<Int, Boolean>> {
+        return bakeryDataSource.deleteLike(bakeryId = bakeryId)
+            .map { it.bakeryId to it.isLike }
     }
 }

@@ -45,6 +45,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -53,6 +54,8 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
+import com.twolskone.bakeroad.core.ui.LikeIcon
+import com.twolskone.bakeroad.core.ui.LikeIconColors
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImageHeader
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfoSection
 import com.twolskone.bakeroad.feature.bakery.detail.component.ReviewSortBottomSheet
@@ -82,7 +85,9 @@ internal fun BakeryDetailScreen(
     onTabSelect: (BakeryDetailTab) -> Unit,
     onReviewTabSelect: (ReviewTab) -> Unit,
     onReviewSortSelect: (ReviewSortType) -> Unit,
-    onWriteReviewClick: () -> Unit
+    onWriteReviewClick: () -> Unit,
+    onBakeryLikeClick: (Boolean) -> Unit,
+    onReviewLikeClick: (Int, Boolean) -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -149,14 +154,14 @@ internal fun BakeryDetailScreen(
             state = listState,
             contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
-            item(contentType = "bakeryImageHeader") {
+            item {
                 BakeryImageHeader(
                     modifier = Modifier.fillMaxWidth(),
                     imageList = state.bakeryImageList,
                     bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
                 )
             }
-            item(contentType = "bakeryInfo") {
+            item {
                 BakeryInfoSection(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -168,7 +173,7 @@ internal fun BakeryDetailScreen(
                     onWriteReviewClick = onWriteReviewClick
                 )
             }
-            stickyHeader("tabs") {
+            stickyHeader {
                 BakeRoadScrollableTabRow(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -198,9 +203,11 @@ internal fun BakeryDetailScreen(
                         menuList = state.menuList,
                         reviewList = state.reviewState.previewReviewList,
                         tourAreaList = state.tourAreaList,
+                        localReviewLikeMap = state.reviewState.localLikeMap,
                         onViewAllMenuClick = { onTabSelect(BakeryDetailTab.MENU) },
                         onViewAllReviewClick = { onTabSelect(BakeryDetailTab.REVIEW) },
-                        onViewAllTourAreaClick = { onTabSelect(BakeryDetailTab.TOUR_AREA) }
+                        onViewAllTourAreaClick = { onTabSelect(BakeryDetailTab.TOUR_AREA) },
+                        onReviewLikeClick = onReviewLikeClick
                     )
                 }
 
@@ -217,7 +224,8 @@ internal fun BakeryDetailScreen(
                         reviewPaging = reviewPagingItems,
                         onReviewTabSelect = onReviewTabSelect,
                         onSortClick = { showReviewSortBottomSheet = true },
-                        onWriteReviewClick = onWriteReviewClick
+                        onWriteReviewClick = onWriteReviewClick,
+                        onReviewLikeClick = onReviewLikeClick
                     )
                 }
 
@@ -267,24 +275,21 @@ internal fun BakeryDetailScreen(
                         Icon(
                             modifier = Modifier.size(24.dp),
                             imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_share),
-                            contentDescription = "Back"
+                            contentDescription = "Share"
                         )
                     }
-                    Box(
-                        modifier = Modifier
-                            .padding(start = 12.dp)
-                            .clip(CircleShape)
-                            .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                            .singleClickable {}
-                            .padding(4.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
-                            contentDescription = "Back"
-                        )
-                    }
+                    LikeIcon(
+                        modifier = Modifier.padding(start = 12.dp),
+                        size = 24.dp,
+                        padding = 4.dp,
+                        colors = LikeIconColors(
+                            containerColor = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f),
+                            likeIconContentColor = BakeRoadTheme.colorScheme.Error500,
+                            unlikeIconContentColor = BakeRoadTheme.colorScheme.Black
+                        ),
+                        isLike = state.bakeryInfo?.isLike.orFalse(),
+                        onClick = { result -> onBakeryLikeClick(result) }
+                    )
                 }
             }
         )
@@ -335,7 +340,9 @@ private fun BakeryDetailScreenPreview() {
             onTabSelect = {},
             onReviewTabSelect = {},
             onReviewSortSelect = {},
-            onWriteReviewClick = {}
+            onWriteReviewClick = {},
+            onBakeryLikeClick = {},
+            onReviewLikeClick = { _, _ -> }
         )
     }
 }

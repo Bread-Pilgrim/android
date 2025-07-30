@@ -20,7 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
 internal fun LazyListScope.tourArea(tourList: ImmutableList<TourArea>) {
     items(
         items = tourList,
-        key = { tourArea -> "${tourArea.title}/${tourArea.type}(${tourArea.mapX},${tourArea.mapY})" }
+        key = { tourArea -> "${tourArea.title}_${tourArea.type}_${tourArea.mapX}_${tourArea.mapY}" }
     ) { tour ->
         TourAreaCard(
             modifier = Modifier

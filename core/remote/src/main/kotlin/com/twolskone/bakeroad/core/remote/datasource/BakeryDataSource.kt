@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.core.remote.datasource
 
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
@@ -19,5 +20,7 @@ interface BakeryDataSource {
     suspend fun getReviews(bakeryId: Int, sort: String, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     suspend fun getMyReviews(bakeryId: Int, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     fun getMenus(bakeryId: Int): Flow<List<BakeryMenuResponse>>
-    fun writeReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit>
+    fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit>
+    fun postLike(bakeryId: Int): Flow<BakeryLikeResponse>
+    fun deleteLike(bakeryId: Int): Flow<BakeryLikeResponse>
 }

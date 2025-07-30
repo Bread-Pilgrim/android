@@ -21,7 +21,7 @@ internal class OnboardingRepositoryImpl @Inject constructor(
         cacheDataSource.setOnboardingCompleted(value)
     }
 
-    override fun setOnboarding(nickname: String, selectedPreferenceOptions: SelectedPreferenceOptions): Flow<String> {
+    override fun postOnboarding(nickname: String, selectedPreferenceOptions: SelectedPreferenceOptions): Flow<String> {
         val request = UserOnboardingRequest(
             nickname = nickname,
             breadTypes = selectedPreferenceOptions.breadTypes,
@@ -29,6 +29,6 @@ internal class OnboardingRepositoryImpl @Inject constructor(
             atmospheres = selectedPreferenceOptions.atmospheres,
             commercialAreas = selectedPreferenceOptions.commercialAreas
         )
-        return userDataSource.setOnboarding(request = request)
+        return userDataSource.postOnboarding(request = request)
     }
 }

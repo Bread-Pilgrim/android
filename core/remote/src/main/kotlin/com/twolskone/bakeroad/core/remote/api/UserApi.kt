@@ -8,5 +8,5 @@ import retrofit2.http.POST
 internal interface UserApi {
 
     @POST("users/me/onboarding")
-    suspend fun setOnboarding(@Body request: UserOnboardingRequest): BaseResponse<String>
+    suspend fun postOnboarding(@Body request: UserOnboardingRequest): BaseResponse<String>
 }

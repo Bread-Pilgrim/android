@@ -34,4 +34,5 @@
     <string name="feature_bakery_detail_friday">금</string>
     <string name="feature_bakery_detail_saturday">토</string>
     <string name="feature_bakery_detail_sunday">일</string>
+    <string name="feature_bakery_detail_snackbar_like_bakery">내 빵집에 저장했어요.</string>
 </resources>

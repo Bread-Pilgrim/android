@@ -22,9 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +42,8 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.ui.ProfileImage
 import com.twolskone.bakeroad.feature.bakery.detail.R
+import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.persistentMapOf
 
 private val CardPadding = 12.dp
 private val RawContentSpacing = 6.dp
@@ -57,11 +56,23 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
 @Composable
 internal fun ReviewCard(
     modifier: Modifier = Modifier,
-    review: BakeryReview
+    review: BakeryReview,
+    localLikeMap: PersistentMap<Int, Boolean>,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
-    var likeState by remember { mutableStateOf(false) }
+    val isLike = localLikeMap[review.id] ?: review.isLike
+    val likeDiff = when {
+        review.isLike && !isLike -> -1
+        !review.isLike && isLike -> +1
+        else -> 0
+    }
+    val likeCount = (review.likeCount + likeDiff).coerceAtLeast(0)
     val likeColor by animateColorAsState(
-        targetValue = if (likeState) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray300.copy()
+        targetValue = if (isLike) {
+            BakeRoadTheme.colorScheme.Primary500
+        } else {
+            BakeRoadTheme.colorScheme.Gray300
+        }
     )
 
     Card(
@@ -158,7 +169,7 @@ internal fun ReviewCard(
         Row(
             modifier = Modifier
                 .padding(top = 16.dp, bottom = CardPadding, start = CardPadding)
-                .noRippleSingleClickable { likeState = !likeState },
+                .noRippleSingleClickable { onLikeClick(review.id, !isLike) },
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -169,7 +180,11 @@ internal fun ReviewCard(
             )
             Text(
                 modifier = Modifier.padding(start = 4.dp),
-                text = stringResource(id = R.string.feature_bakery_detail_like),
+                text = if (likeCount <= 0) {
+                    stringResource(R.string.feature_bakery_detail_like)
+                } else {
+                    likeCount.toString()
+                },
                 style = BakeRoadTheme.typography.bodyXsmallRegular.copy(color = likeColor)
             )
         }
@@ -220,7 +235,9 @@ private fun ReviewCardPreview() {
                 likeCount = 100,
                 menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                 photos = emptyList()
-            )
+            ),
+            localLikeMap = persistentMapOf(),
+            onLikeClick = { _, _ -> }
         )
     }
 }

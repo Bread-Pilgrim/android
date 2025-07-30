@@ -2,12 +2,10 @@ package com.twolskone.bakeroad.feature.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
@@ -53,7 +49,8 @@ internal fun HomeScreen(
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
     onSeeAllBakeriesClick: (BakeryType) -> Unit,
     onBakeryClick: (RecommendBakery) -> Unit,
-    onEditPreferenceClick: () -> Unit
+    onEditPreferenceClick: () -> Unit,
+    onBakeryLikeClick: (bakeryId: Int, isLike: Boolean) -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -125,7 +122,7 @@ internal fun HomeScreen(
             }
         }
         // 내 취향 추천 빵집 제목
-        item {
+        item(contentType = "titleWithSeeAll") {
             Title(
                 modifier = Modifier
                     .padding(horizontal = 10.dp)
@@ -135,24 +132,27 @@ internal fun HomeScreen(
             )
         }
         // 내 취향 추천 빵집 목록
-        item {
-            Row(
+        item(contentType = "bakeries") {
+            LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                state.preferenceBakeryList.fastForEach {
+                items(
+                    items = state.preferenceBakeryList,
+                    key = { bakery -> bakery.id }
+                ) {
                     RecommendBakeryCard(
                         bakery = it,
-                        onClick = { bakery -> onBakeryClick(bakery) }
+                        onCardClick = { bakery -> onBakeryClick(bakery) },
+                        onLikeClick = { id, isLike -> onBakeryLikeClick(id, isLike) }
                     )
                 }
             }
         }
         // Hot한 빵집 제목
-        item {
+        item(contentType = "titleWithSeeAll") {
             Title(
                 modifier = Modifier
                     .padding(top = 28.dp)
@@ -163,18 +163,21 @@ internal fun HomeScreen(
             )
         }
         // Hot한 빵집 목록
-        item {
-            Row(
+        item(contentType = "bakeries") {
+            LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .horizontalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                state.preferenceBakeryList.fastForEach {
+                items(
+                    items = state.hotBakeryList,
+                    key = { bakery -> bakery.id }
+                ) {
                     RecommendBakeryCard(
                         bakery = it,
-                        onClick = { bakery -> onBakeryClick(bakery) }
+                        onCardClick = { bakery -> onBakeryClick(bakery) },
+                        onLikeClick = { id, isLike -> onBakeryLikeClick(id, isLike) }
                     )
                 }
             }
@@ -216,7 +219,7 @@ internal fun HomeScreen(
         // 주변 추천 관광지 목록
         items(
             items = state.tourAreaList,
-            key = { tourArea -> "${tourArea.title}/${tourArea.type}(${tourArea.mapX},${tourArea.mapY})" }
+            key = { tourArea -> "${tourArea.type}_${tourArea.title}_${tourArea.mapX}_${tourArea.mapY}" }
         ) {
             TourAreaCard(
                 modifier = Modifier
@@ -250,7 +253,8 @@ private fun HomeScreenPreview() {
             onTourCategorySelect = { _, _ -> },
             onSeeAllBakeriesClick = {},
             onBakeryClick = {},
-            onEditPreferenceClick = {}
+            onEditPreferenceClick = {},
+            onBakeryLikeClick = { _, _ -> }
         )
     }
 }

@@ -22,15 +22,19 @@ internal class BakeryListActivity : ComponentActivity() {
             BakeRoadTheme {
                 SystemBarColorTheme(lightTheme = true)
                 BakeryListRoute(
-                    navigateToBakeryDetail = { bakeryId, areaCode ->
-                        bakeryDetailNavigator.navigateFromActivity(
+                    navigateToBakeryDetail = { bakeryId, areaCode, launcher ->
+                        bakeryDetailNavigator.navigateFromLauncher(
                             activity = this,
-                            withFinish = false,
+                            launcher = launcher,
                             intentBuilder = {
                                 putExtra("bakeryId", bakeryId)
                                 putExtra("areaCode", areaCode)
                             }
                         )
+                    },
+                    setResult = { code, finish ->
+                        setResult(code)
+                        if (finish) finish()
                     }
                 )
             }

@@ -9,6 +9,7 @@ import com.twolskone.bakeroad.core.remote.api.BakeryApi
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
@@ -112,7 +113,7 @@ internal class BakeryDataSourceImpl @Inject constructor(
         emitData(api.getMenus(bakeryId = bakeryId))
     }.flowOn(networkDispatcher)
 
-    override fun writeReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit> = flow {
+    override fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit> = flow {
         val imageMultipartList = request.reviewImgs.map {
             val uri = it.toUri()
             val imageFile = FileUtil.getImageFileFromUri(context = context, uri = uri)
@@ -120,7 +121,7 @@ internal class BakeryDataSourceImpl @Inject constructor(
             MultipartBody.Part.createFormData("review_imgs", imageFile.name, imageRequestBody)
         }
         emitUnit(
-            api.writeReview(
+            api.postReview(
                 bakeryId = bakeryId,
                 rating = request.rating.toString().toRequestBody(contentType = "text/plain".toMediaType()),
                 content = request.content.toRequestBody(contentType = "text/plain".toMediaType()),
@@ -129,5 +130,13 @@ internal class BakeryDataSourceImpl @Inject constructor(
                 reviewImgs = imageMultipartList
             )
         )
-    }
+    }.flowOn(networkDispatcher)
+
+    override fun postLike(bakeryId: Int): Flow<BakeryLikeResponse> = flow {
+        emitData(api.postLike(bakeryId = bakeryId))
+    }.flowOn(networkDispatcher)
+
+    override fun deleteLike(bakeryId: Int): Flow<BakeryLikeResponse> = flow {
+        emitData(api.deleteLike(bakeryId = bakeryId))
+    }.flowOn(networkDispatcher)
 }

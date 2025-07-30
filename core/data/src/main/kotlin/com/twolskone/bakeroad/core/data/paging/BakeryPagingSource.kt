@@ -17,7 +17,8 @@ internal class BakeryPagingSource(
 
     override fun getRefreshKey(state: PagingState<String, Bakery>): String? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.nextKey
+            val anchorPageIndex = state.pages.indexOf(state.closestPageToPosition(anchorPosition))
+            state.pages.getOrNull(anchorPageIndex + 1)?.prevKey ?: state.pages.getOrNull(anchorPageIndex - 1)?.nextKey
         }
     }
 

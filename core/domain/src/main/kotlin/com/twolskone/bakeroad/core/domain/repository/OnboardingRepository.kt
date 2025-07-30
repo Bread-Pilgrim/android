@@ -6,5 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface OnboardingRepository {
     suspend fun isOnboardingCompleted(): Boolean
     suspend fun setOnboardingCompleted(value: Boolean)
-    fun setOnboarding(nickname: String, selectedPreferenceOptions: SelectedPreferenceOptions): Flow<String>
+    fun postOnboarding(nickname: String, selectedPreferenceOptions: SelectedPreferenceOptions): Flow<String>
 }

@@ -28,6 +28,10 @@ internal class BakeryDetailActivity : ComponentActivity() {
                             intentBuilder = { putExtra("bakeryId", bakeryId) },
                             launcher = launcher
                         )
+                    },
+                    setResult = { code, finish ->
+                        setResult(code)
+                        if (finish) finish()
                     }
                 )
             }

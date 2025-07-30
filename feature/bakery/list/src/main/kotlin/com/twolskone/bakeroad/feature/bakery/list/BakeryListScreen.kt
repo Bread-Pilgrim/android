@@ -31,6 +31,8 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.bakery.list.component.BakeryCard
+import kotlinx.collections.immutable.PersistentMap
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -38,7 +40,9 @@ internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
     bakeryType: BakeryType,
     pagingItems: LazyPagingItems<Bakery>,
-    onBakeryClick: (Bakery) -> Unit
+    localLikeMap: PersistentMap<Int, Boolean>,
+    onBakeryClick: (Bakery) -> Unit,
+    onBakeryLikeClick: (Int, Boolean) -> Unit
 ) {
     val title = when (bakeryType) {
         BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
@@ -66,20 +70,7 @@ internal fun BakeryListScreen(
                     )
                 }
             },
-            title = { Text(text = title) },
-//            rightActions = {
-//                // 내 취향 변경 버튼.
-//                if (bakeryType == BakeryType.PREFERENCE) {
-//                    BakeRoadTextButton(
-//                        style = TextButtonStyle.ASSISTIVE,
-//                        size = TextButtonSize.SMALL,
-//                        onClick = {},
-//                        content = {
-//                            Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change))
-//                        }
-//                    )
-//                }
-//            }
+            title = { Text(text = title) }
         )
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
@@ -93,9 +84,14 @@ internal fun BakeryListScreen(
         ) {
             items(count = pagingItems.itemCount) { index ->
                 pagingItems[index]?.let { bakery ->
-                    BakeryCard(bakery = bakery, onClick = onBakeryClick)
+                    BakeryCard(
+                        bakery = bakery,
+                        likeMap = localLikeMap,
+                        onCardClick = onBakeryClick,
+                        onLikeClick = onBakeryLikeClick
+                    )
                 } ?: run {
-
+                    // TODO. Skeleton.
                 }
             }
         }
@@ -118,6 +114,7 @@ private fun BakeryListScreenPreview() {
                     imageUrl = "",
                     addressGu = "",
                     addressDong = "",
+                    isLike = true,
                     signatureMenus = emptyList()
                 )
             )
@@ -127,7 +124,9 @@ private fun BakeryListScreenPreview() {
         BakeryListScreen(
             bakeryType = BakeryType.PREFERENCE,
             pagingItems = lazyPagingItems,
-            onBakeryClick = {}
+            localLikeMap = persistentMapOf(),
+            onBakeryClick = {},
+            onBakeryLikeClick = { _, _ -> }
         )
     }
 }

@@ -11,6 +11,7 @@ import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
  * @param reviewCount   리뷰 개수
  * @param openStatus    영업 상태
  * @param imageUrl      썸네일
+ * @param isLike        찜 여부
  */
 data class RecommendBakery(
     val id: Int,
@@ -19,5 +20,6 @@ data class RecommendBakery(
     val rating: Float,
     val reviewCount: Int,
     val openStatus: BakeryOpenStatus,
-    val imageUrl: String
+    val imageUrl: String,
+    val isLike: Boolean
 )

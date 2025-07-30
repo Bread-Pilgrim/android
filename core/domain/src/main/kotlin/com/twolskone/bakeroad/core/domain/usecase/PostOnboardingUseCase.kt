@@ -5,10 +5,10 @@ import com.twolskone.bakeroad.core.model.SelectedPreferenceOptions
 import javax.inject.Inject
 import kotlinx.coroutines.flow.first
 
-class SetOnboardingUseCase @Inject constructor(private val onboardingRepository: OnboardingRepository) {
+class PostOnboardingUseCase @Inject constructor(private val onboardingRepository: OnboardingRepository) {
 
     suspend operator fun invoke(nickname: String, selectedPreferenceOptions: SelectedPreferenceOptions): String =
-        onboardingRepository.setOnboarding(
+        onboardingRepository.postOnboarding(
             nickname = nickname,
             selectedPreferenceOptions = selectedPreferenceOptions
         ).first()

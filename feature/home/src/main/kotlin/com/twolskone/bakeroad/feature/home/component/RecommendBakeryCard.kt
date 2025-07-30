@@ -8,11 +8,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,9 +34,11 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
+import com.twolskone.bakeroad.core.ui.LikeIcon
 
 private val ImageSize = 116.dp
 private val ImageShape = RoundedCornerShape(6.dp)
+private val CardHeight = 213.dp
 
 /**
  * 빵집 추천 카드
@@ -45,12 +47,14 @@ private val ImageShape = RoundedCornerShape(6.dp)
 internal fun RecommendBakeryCard(
     modifier: Modifier = Modifier,
     bakery: RecommendBakery,
-    onClick: (RecommendBakery) -> Unit
+    onCardClick: (RecommendBakery) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
             .width(ImageSize)
-            .noRippleSingleClickable { onClick(bakery) }
+            .height(CardHeight)
+            .noRippleSingleClickable { onCardClick(bakery) }
     ) {
         Box(
             modifier = Modifier
@@ -65,18 +69,18 @@ internal fun RecommendBakeryCard(
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
             )
-            Icon(
-                modifier = Modifier
-                    .padding(6.dp)
-                    .size(20.dp)
-                    .align(Alignment.TopEnd),
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_stroke),
-                contentDescription = "Bookmark",
-                tint = BakeRoadTheme.colorScheme.White
+            LikeIcon(
+                modifier = Modifier.align(Alignment.TopEnd),
+                size = 20.dp,
+                padding = 6.dp,
+                isLike = bakery.isLike,
+                onClick = { result -> onLikeClick(bakery.id, result) }
             )
         }
         Text(
-            modifier = Modifier.padding(top = 6.dp),
+            modifier = Modifier
+                .weight(1f, fill = false)
+                .padding(top = 6.dp),
             text = bakery.name,
             style = BakeRoadTheme.typography.bodyXsmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray990),
             maxLines = 2,
@@ -128,9 +132,11 @@ private fun BakeryCardPreview() {
                     rating = 4.7f,
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.OPEN,
-                    imageUrl = ""
+                    imageUrl = "",
+                    isLike = false
                 ),
-                onClick = {}
+                onCardClick = {},
+                onLikeClick = { _, _ -> }
             )
             RecommendBakeryCard(
                 bakery = RecommendBakery(
@@ -140,9 +146,11 @@ private fun BakeryCardPreview() {
                     rating = 4.7f,
                     reviewCount = 10,
                     openStatus = BakeryOpenStatus.CLOSED,
-                    imageUrl = ""
+                    imageUrl = "",
+                    isLike = true
                 ),
-                onClick = {}
+                onCardClick = {},
+                onLikeClick = { _, _ -> }
             )
         }
     }

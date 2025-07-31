@@ -64,7 +64,7 @@ fun BakeRoadTopAppBar(
     )
 }
 
-private val TopAppBarMaxHeight = 56.dp
+internal val TopAppBarMaxHeight = 56.dp
 private val TopAppBarHorizontalPadding = 10.dp
 
 @Composable

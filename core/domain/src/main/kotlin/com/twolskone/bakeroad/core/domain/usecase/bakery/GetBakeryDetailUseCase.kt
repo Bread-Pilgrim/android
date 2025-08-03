@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.bakery
 
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.BakeryDetail

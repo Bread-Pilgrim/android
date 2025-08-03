@@ -4,9 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
-import com.twolskone.bakeroad.core.domain.usecase.GetPreferenceOptionsUseCase
-import com.twolskone.bakeroad.core.domain.usecase.SetOnboardingStatusUseCase
-import com.twolskone.bakeroad.core.domain.usecase.PostOnboardingUseCase
+import com.twolskone.bakeroad.core.domain.usecase.prefer.GetPreferenceOptionsUseCase
+import com.twolskone.bakeroad.core.domain.usecase.user.PostOnboardingUseCase
+import com.twolskone.bakeroad.core.domain.usecase.user.SetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadError
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException

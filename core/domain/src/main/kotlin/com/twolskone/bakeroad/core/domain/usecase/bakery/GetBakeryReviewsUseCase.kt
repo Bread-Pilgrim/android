@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.bakery
 
 import androidx.paging.PagingData
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository

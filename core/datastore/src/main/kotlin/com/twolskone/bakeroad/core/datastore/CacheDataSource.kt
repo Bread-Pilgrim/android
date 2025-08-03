@@ -29,23 +29,25 @@ class CacheDataSource @Inject constructor(@CacheDataStore private val dataStore:
 
     suspend fun setOnboardingCompleted(value: Boolean) {
         runCatching {
-            Timber.i("setOnboardingCompleted >> $value")
             dataStore.edit { preferences -> preferences[KEY_IS_ONBOARDING_COMPLETED] = value }
         }.getOrElse { cause ->
             Timber.e(cause)
         }
     }
 
-    suspend fun getRecentSearchQueries(): List<Pair<String, Long>> {
+    suspend fun getRecentSearchQueries(): List<Pair<String, String>> {
         val string = dataStore.data.firstOrNull()?.get(KEY_RECENT_SEARCH_QUERY).orEmpty()
         return runCatching {
             val queries = if (string.isNotEmpty()) {
-                gson.fromJson<List<Pair<String, Long>>>(string, object : TypeToken<List<Pair<String, String>>>() {}.type)
+                gson.fromJson<List<Pair<String, String>>>(string, object : TypeToken<List<Pair<String, String>>>() {}.type)
             } else {
                 emptyList()
             }
             queries.sortedByDescending { it.second }
-        }.getOrElse { emptyList() }
+        }.getOrElse { cause ->
+            Timber.e(cause)
+            emptyList()
+        }
     }
 
     suspend fun putRecentSearchQuery(query: String) {
@@ -53,9 +55,9 @@ class CacheDataSource @Inject constructor(@CacheDataStore private val dataStore:
             val mutableSearchQueries = getRecentSearchQueries().toMutableList()
             val index = mutableSearchQueries.indexOfFirst { it.first == query }
             if (index >= 0) {
-                mutableSearchQueries[index] = (query to System.currentTimeMillis())
+                mutableSearchQueries[index] = (query to System.currentTimeMillis().toString())
             } else {
-                mutableSearchQueries.add(0, query to System.currentTimeMillis())
+                mutableSearchQueries.add(0, query to System.currentTimeMillis().toString())
             }
             if (mutableSearchQueries.size > MAX_COUNT_RECENT_SEARCH_QUERY) {
                 mutableSearchQueries.removeLastOrNull()

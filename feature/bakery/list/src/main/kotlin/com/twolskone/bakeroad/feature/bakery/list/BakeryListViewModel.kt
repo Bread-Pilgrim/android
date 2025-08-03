@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
-import com.twolskone.bakeroad.core.domain.usecase.DeleteBakeryLikeUseCase
-import com.twolskone.bakeroad.core.domain.usecase.GetBakeriesUseCase
-import com.twolskone.bakeroad.core.domain.usecase.PostBakeryLikeUseCase
+import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteBakeryLikeUseCase
+import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeriesUseCase
+import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan

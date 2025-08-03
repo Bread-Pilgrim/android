@@ -1,7 +1,6 @@
 package com.twolskone.bakeroad.core.designsystem.component.topbar
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
@@ -11,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -31,16 +29,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.R
-import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
+import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
+import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
+import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 @Composable
@@ -49,48 +50,38 @@ fun BakeRoadSearchTopAppBar(
     state: TextFieldState,
     hint: String = "",
     containerColor: Color = BakeRoadTheme.colorScheme.White,
-    iconContentColor: Color = BakeRoadTheme.colorScheme.Gray950,
     searchTextInputColors: SearchTextInputColors = BakeRoadSearchTopAppBarDefaults.searchBarColors(),
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    showBackIcon: Boolean = false,
-    onBackClick: (() -> Unit)? = null
+    onKeyboardAction: KeyboardActionHandler,
+    showCancelButton: Boolean = false,
+    onCancelClick: (() -> Unit)? = null
 ) {
     Row(
         modifier = modifier
             .statusBarsPadding()
             .background(containerColor)
             .heightIn(max = TopAppBarMaxHeight)
-            .padding(horizontal = 4.dp, vertical = 6.dp),
+            .padding(horizontal = 10.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        AnimatedVisibility(visible = showBackIcon) {
-            CompositionLocalProvider(
-                LocalContentColor provides iconContentColor
-            ) {
-                Box(
-                    modifier = Modifier
-                        .padding(start = 12.dp)
-                        .clip(CircleShape)
-                        .singleClickable { onBackClick?.invoke() }
-                        .padding(4.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.core_designsystem_ic_back),
-                        contentDescription = "Back"
-                    )
-                }
-            }
-        }
         SearchTextInput(
             modifier = Modifier
                 .weight(1f)
-                .padding(horizontal = 12.dp),
+                .padding(horizontal = 6.dp),
             state = state,
             searchTextInputColors = searchTextInputColors,
             interactionSource = interactionSource,
-            hint = hint
+            hint = hint,
+            onKeyboardAction = onKeyboardAction
         )
+        AnimatedVisibility(visible = showCancelButton) {
+            BakeRoadTextButton(
+                style = TextButtonStyle.ASSISTIVE,
+                size = TextButtonSize.SMALL,
+                onClick = { onCancelClick?.invoke() },
+                text = { Text(text = stringResource(id = R.string.core_designsystem_button_cancel)) }
+            )
+        }
     }
 }
 
@@ -103,8 +94,8 @@ private fun SearchTextInput(
     enabled: Boolean = true,
     searchTextInputColors: SearchTextInputColors,
     inputTransformation: InputTransformation? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
-    onKeyboardAction: KeyboardActionHandler? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+    onKeyboardAction: KeyboardActionHandler,
     outputTransformation: OutputTransformation? = null,
     interactionSource: MutableInteractionSource,
     hint: String = ""
@@ -192,10 +183,9 @@ private fun BakeRoadSearchTopAppBarPreview() {
         BakeRoadSearchTopAppBar(
             state = rememberTextFieldState(),
             hint = "가고 싶은 빵집이나 메뉴를 검색해보세요.",
-            showBackIcon = true,
-            onBackClick = {
-                focusManager.clearFocus(force = true)
-            }
+            showCancelButton = true,
+            onCancelClick = { focusManager.clearFocus(force = true) },
+            onKeyboardAction = {}
         )
     }
 }

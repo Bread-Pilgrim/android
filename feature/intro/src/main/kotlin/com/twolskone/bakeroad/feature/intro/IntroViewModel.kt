@@ -6,9 +6,9 @@ import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
-import com.twolskone.bakeroad.core.domain.usecase.GetOnboardingStatusUseCase
-import com.twolskone.bakeroad.core.domain.usecase.LoginUseCase
-import com.twolskone.bakeroad.core.domain.usecase.VerifyTokenUseCase
+import com.twolskone.bakeroad.core.domain.usecase.auth.LoginUseCase
+import com.twolskone.bakeroad.core.domain.usecase.auth.VerifyTokenUseCase
+import com.twolskone.bakeroad.core.domain.usecase.user.GetOnboardingStatusUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientError
 import com.twolskone.bakeroad.core.exception.ClientException

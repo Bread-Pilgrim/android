@@ -14,6 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
+import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListIntent
 import timber.log.Timber
@@ -40,6 +41,8 @@ internal fun BakeryListRoute(
     BackHandler {
         setResult(RESULT_REFRESH_BAKERY_LIST, true)
     }
+
+    lazyPagingItems.ObserveError(viewModel = viewModel)
 
     BaseComposable(baseViewModel = viewModel) {
         BakeryListScreen(

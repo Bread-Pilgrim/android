@@ -31,7 +31,7 @@ internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
 internal fun BakeryResponse.toExternalModel(): Bakery =
     Bakery(
         id = bakeryId,
-        name = name,
+        name = bakeryName,
         areaCode = commercialAreaId,
         rating = avgRating,
         reviewCount = reviewCount.toInt(),

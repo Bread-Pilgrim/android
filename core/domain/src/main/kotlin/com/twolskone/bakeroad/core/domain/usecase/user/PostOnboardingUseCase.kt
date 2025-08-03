@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.user
 
 import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
 import com.twolskone.bakeroad.core.model.SelectedPreferenceOptions

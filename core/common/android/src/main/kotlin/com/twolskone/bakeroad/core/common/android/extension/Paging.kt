@@ -10,7 +10,6 @@ import com.twolskone.bakeroad.core.common.android.base.BaseUiSideEffect
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import kotlinx.coroutines.flow.filterIsInstance
-import timber.log.Timber
 
 val <T : Any> LazyPagingItems<T>.isLoading
     get() = loadState.refresh is LoadState.Loading
@@ -29,9 +28,6 @@ fun <US : BaseUiState, I : BaseUiIntent, SE : BaseUiSideEffect> LazyPagingItems<
     LaunchedEffect(Unit) {
         snapshotFlow { loadState.refresh }
             .filterIsInstance<LoadState.Error>()
-            .collect {
-                Timber.e("!!!!!!!")
-                viewModel.handleException(it.error)
-            }
+            .collect { viewModel.handleException(it.error) }
     }
 }

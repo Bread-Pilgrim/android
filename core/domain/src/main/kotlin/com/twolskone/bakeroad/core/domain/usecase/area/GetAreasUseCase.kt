@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.area
 
 import com.twolskone.bakeroad.core.domain.repository.HomeRepository
 import com.twolskone.bakeroad.core.model.Area

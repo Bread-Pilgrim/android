@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.tour
 
 import com.twolskone.bakeroad.core.domain.repository.TourRepository
 import com.twolskone.bakeroad.core.model.TourArea

@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.prefer
 
 import com.twolskone.bakeroad.core.domain.repository.PreferRepository
 import com.twolskone.bakeroad.core.model.PreferenceOptions

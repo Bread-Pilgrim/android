@@ -82,7 +82,10 @@ internal fun BakeryListScreen(
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            items(count = pagingItems.itemCount) { index ->
+            items(
+                count = pagingItems.itemCount,
+                key = { index -> pagingItems[index]?.id ?: "placeholder_$index" }
+            ) { index ->
                 pagingItems[index]?.let { bakery ->
                     BakeryCard(
                         bakery = bakery,

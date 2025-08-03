@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.domain.usecase
+package com.twolskone.bakeroad.core.domain.usecase.review
 
 import com.twolskone.bakeroad.core.domain.repository.ReviewRepository
 import javax.inject.Inject

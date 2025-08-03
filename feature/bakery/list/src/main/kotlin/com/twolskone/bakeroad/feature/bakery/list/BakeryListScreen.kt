@@ -30,7 +30,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.BakeryType
-import com.twolskone.bakeroad.feature.bakery.list.component.BakeryCard
+import com.twolskone.bakeroad.core.ui.BakeryCard
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.flowOf

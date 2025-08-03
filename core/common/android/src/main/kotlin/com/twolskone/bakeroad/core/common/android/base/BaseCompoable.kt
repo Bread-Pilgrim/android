@@ -27,11 +27,11 @@ fun <US : BaseUiState, I : BaseUiIntent, SE : BaseUiSideEffect> BaseComposable(
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
-    var snackbarState: SnackbarState? by remember { mutableStateOf(null) }
+    var snackbarTrigger: Pair<SnackbarState, Long>? by remember { mutableStateOf(null) }
 
     LaunchedEffect(baseViewModel) {
         baseViewModel.snackbarEffect.collectLatest { state ->
-            snackbarState = state
+            snackbarTrigger = state to System.currentTimeMillis()
             snackbarHostState.showSnackbar(
                 message = state.messageRes?.let { context.getString(it) } ?: state.message,
                 withDismissAction = true,
@@ -42,7 +42,7 @@ fun <US : BaseUiState, I : BaseUiIntent, SE : BaseUiSideEffect> BaseComposable(
 
     content()
 
-    snackbarState?.let { state ->
+    snackbarTrigger?.let { (state, timeMillis) ->
         Box(
             modifier = Modifier
                 .fillMaxSize()

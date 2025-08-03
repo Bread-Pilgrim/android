@@ -22,12 +22,12 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.PreferenceOption
-import com.twolskone.bakeroad.core.ui.PreferenceOptionsPage
+import com.twolskone.bakeroad.core.ui.PreferenceOptionListPage
 import com.twolskone.bakeroad.core.ui.R
 import com.twolskone.bakeroad.feature.onboard.preference.model.PreferenceOptionsState
 
 @Composable
-internal fun PreferenceOptionsScreen(
+internal fun PreferenceOptionListScreen(
     modifier: Modifier = Modifier,
     state: PreferenceOptionsState,
     isEdit: Boolean,
@@ -85,7 +85,7 @@ internal fun PreferenceOptionsScreen(
                 }
             }
         )
-        PreferenceOptionsPage(
+        PreferenceOptionListPage(
             modifier = Modifier.fillMaxSize(),
             page = state.page,
             title = title,

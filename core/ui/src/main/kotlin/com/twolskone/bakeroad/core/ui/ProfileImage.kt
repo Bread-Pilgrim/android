@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
+/**
+ * 사용자 프로필
+ */
 @Composable
 fun ProfileImage(
     size: Dp = 32.dp,

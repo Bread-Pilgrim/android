@@ -41,7 +41,7 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
@@ -207,7 +207,7 @@ internal fun WriteBakeryReviewScreen(
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
             enabled = contentTextState.text.isNotEmpty(),
-            style = SolidButtonStyle.PRIMARY,
+            role = SolidButtonRole.PRIMARY,
             size = ButtonSize.XLARGE,
             onClick = onSubmit,
             content = { Text(text = stringResource(id = R.string.feature_review_write_button_write_complete)) }

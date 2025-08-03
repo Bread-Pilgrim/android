@@ -6,14 +6,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import com.twolskone.bakeroad.feature.home.navigation.HomeRoute
+import com.twolskone.bakeroad.feature.search.navigation.SearchRoute
+import com.twolskone.bakeroad.navigation.BakeRoadDestination.HOME
+import com.twolskone.bakeroad.navigation.BakeRoadDestination.SEARCH
 import kotlin.reflect.KClass
 import com.twolskone.bakeroad.feature.home.R as homeR
+import com.twolskone.bakeroad.feature.search.R as searchR
 
 /**
  * 빵글 메인 메뉴
  * @property HOME   홈
+ * @property SEARCH 검색
  */
-internal enum class BakeRoadMenu(
+internal enum class BakeRoadDestination(
     val route: KClass<*>,
     val icon: @Composable () -> Unit,
     val selectedIcon: @Composable () -> Unit,
@@ -35,7 +40,20 @@ internal enum class BakeRoadMenu(
         },
         labelId = homeR.string.feature_home
     ),
-//    SEARCH,
-//    MY_BAKERY,
-//    MY_PAGE
+    SEARCH(
+        route = SearchRoute::class,
+        icon = {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = searchR.drawable.feature_search_ic_menu_stroke),
+                contentDescription = "Search"
+            )
+        },
+        selectedIcon = {
+            Icon(
+                imageVector = ImageVector.vectorResource(id = searchR.drawable.feature_search_ic_menu_fill),
+                contentDescription = "SearchSelected"
+            )
+        },
+        labelId = searchR.string.feature_search
+    ),
 }

@@ -12,4 +12,5 @@ dependencies {
 
     api(libs.androidx.datastore.preferences)
     implementation(libs.timber)
+    implementation(libs.gson)
 }

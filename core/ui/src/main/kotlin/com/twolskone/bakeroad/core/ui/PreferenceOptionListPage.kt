@@ -27,8 +27,8 @@ import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonRole
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
@@ -43,17 +43,16 @@ import kotlinx.collections.immutable.toImmutableList
 private val PageIndicatorWidth = 164.dp
 private const val TotalPage = 3
 
-enum class PreferenceOptionType {
-
-}
-
 /**
- * 빵 취향 옵션 설정
+ * 취향 설정 페이지
+ * @param totalPage         총 페이지 (default: 3)
+ * @param page              현재 페이지
+ * @param completionText    마지막 페이지 완료 버튼 텍스트 (default: 저장)
  * @param optionList        취향 옵션 목록
  * @param selectedOptions   선택된 취향 옵션 IDs
  */
 @Composable
-fun PreferenceOptionsPage(
+fun PreferenceOptionListPage(
     modifier: Modifier = Modifier,
     totalPage: Int = TotalPage,
     page: Int,
@@ -119,7 +118,7 @@ fun PreferenceOptionsPage(
             if (page > 1) {
                 BakeRoadOutlinedButton(
                     modifier = Modifier.align(Alignment.CenterStart),
-                    style = OutlinedButtonStyle.PRIMARY,
+                    role = OutlinedButtonRole.PRIMARY,
                     size = ButtonSize.LARGE,
                     onClick = { onPreviousPage(page - 1) }
                 ) {
@@ -129,7 +128,7 @@ fun PreferenceOptionsPage(
             BakeRoadSolidButton(
                 modifier = Modifier.align(Alignment.CenterEnd),
                 enabled = selectedOptions.isNotEmpty(),
-                style = SolidButtonStyle.PRIMARY,
+                role = SolidButtonRole.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = {
                     if (page == totalPage) {
@@ -233,9 +232,9 @@ private val DummyPreferenceOptions = listOf(
 
 @Preview(showBackground = true)
 @Composable
-private fun PreferenceOptionsPagePreview() {
+private fun PreferenceOptionListPagePreview() {
     BakeRoadTheme {
-        PreferenceOptionsPage(
+        PreferenceOptionListPage(
             page = 2,
             title = "빵 취향을 알려주세요!",
             optionList = DummyPreferenceOptions.toImmutableList(),

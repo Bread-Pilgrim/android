@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.datastore
+package com.twolskone.bakeroad.core.datastore.di
 
 import android.content.Context
 import androidx.datastore.core.DataStore

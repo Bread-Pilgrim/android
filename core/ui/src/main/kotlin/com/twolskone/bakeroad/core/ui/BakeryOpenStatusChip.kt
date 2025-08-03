@@ -11,8 +11,8 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipStyle
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 
 /**
- * 빵집 영업 상태 Chip
- * (영업중, 영업종료, 휴무일)
+ * 영업 상태 Chip
+ * @param openStatus    영업 상태 (영업중, 영업종료, 휴무일, 영업전)
  */
 @Composable
 fun BakeryOpenStatusChip(

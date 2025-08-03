@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.bakery.list.component
+package com.twolskone.bakeroad.core.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,20 +39,20 @@ import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickabl
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
-import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
-import com.twolskone.bakeroad.core.ui.LikeIcon
-import com.twolskone.bakeroad.feature.bakery.list.R
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 
 private val ImageWidth = 148.dp
 private val ImageShape = RoundedCornerShape(9.dp)
 
+private const val ImageRatio = 4f / 3f
+
 /**
  * 빵집 카드
+ * @param likeMap   좋아요 로컬 데이터
  */
 @Composable
-internal fun BakeryCard(
+fun BakeryCard(
     modifier: Modifier = Modifier,
     bakery: Bakery,
     likeMap: PersistentMap<Int, Boolean>,
@@ -65,7 +65,7 @@ internal fun BakeryCard(
         Box(
             modifier = Modifier
                 .width(ImageWidth)
-                .aspectRatio(4f / 3f)
+                .aspectRatio(ImageRatio)
                 .clip(ImageShape)
                 .background(color = BakeRoadTheme.colorScheme.Gray50, shape = ImageShape)
         ) {
@@ -104,7 +104,7 @@ internal fun BakeryCard(
             )
             Row(modifier = Modifier.padding(top = 6.dp)) {
                 Image(
-                    imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.core_ui_ic_star_yellow),
                     contentDescription = "RatingStar"
                 )
                 Text(
@@ -114,7 +114,7 @@ internal fun BakeryCard(
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = stringResource(id = R.string.feature_bakery_list_label_review_count, bakery.reviewCount.toCommaString()),
+                    text = stringResource(id = R.string.core_ui_label_review_count, bakery.reviewCount.toCommaString()),
                     style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray400)
                 )
             }
@@ -125,7 +125,7 @@ internal fun BakeryCard(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_location),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.core_ui_ic_location),
                     contentDescription = "Location"
                 )
                 Text(

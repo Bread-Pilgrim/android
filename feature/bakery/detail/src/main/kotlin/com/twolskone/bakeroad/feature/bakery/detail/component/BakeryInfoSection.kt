@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
@@ -89,7 +89,7 @@ internal fun BakeryInfoSection(
                     .padding(top = 10.dp)
                     .padding(horizontal = 16.dp)
                     .fillMaxWidth(),
-                style = SolidButtonStyle.PRIMARY,
+                role = SolidButtonRole.PRIMARY,
                 size = ButtonSize.MEDIUM,
                 onClick = onWriteReviewClick,
                 content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }

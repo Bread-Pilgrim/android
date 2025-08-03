@@ -10,6 +10,7 @@ android {
 dependencies {
     api(projects.core.designsystem)
     implementation(projects.core.model)
+    implementation(projects.core.common.kotlin)
 
     implementation(libs.coil.kt.compose)
 }

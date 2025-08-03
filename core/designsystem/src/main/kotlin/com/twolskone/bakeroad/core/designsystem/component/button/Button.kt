@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -86,14 +87,19 @@ enum class ButtonSize {
     SMALL,
     XSMALL;
 
-    val shape: RoundedCornerShape
-        @Composable
-        get() = when (this) {
+    @Composable
+    fun shape(style: ButtonStyle): RoundedCornerShape =
+        (when (this) {
             XLARGE -> RoundedCornerShape(12.dp)
             LARGE -> RoundedCornerShape(10.dp)
             MEDIUM -> RoundedCornerShape(8.dp)
             SMALL -> RoundedCornerShape(6.dp)
             XSMALL -> RoundedCornerShape(6.dp)
+        }).run {
+            when (style) {
+                ButtonStyle.ROUND -> CircleShape
+                else -> this
+            }
         }
 
     val contentPadding: PaddingValues
@@ -131,4 +137,13 @@ enum class ButtonSize {
             MEDIUM -> 5.dp
             SMALL, XSMALL -> 4.dp
         }
+}
+
+/**
+ * Common button style
+ * @see BakeRoadSolidButton
+ * @see BakeRoadOutlinedButton
+ */
+enum class ButtonStyle {
+    DEFAULT, ROUND
 }

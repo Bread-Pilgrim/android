@@ -21,18 +21,19 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 fun BakeRoadSolidButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    style: SolidButtonStyle,
+    role: SolidButtonRole,
     size: ButtonSize,
+    style: ButtonStyle = ButtonStyle.DEFAULT,
     onClick: () -> Unit,
     content: @Composable RowScope.() -> Unit
 ) {
-    val containerColor = if (enabled) style.colors.containerColor else style.colors.disabledContainerColor
-    val contentColor = if (enabled) style.colors.contentColor else style.colors.contentColor
+    val containerColor = if (enabled) role.colors.containerColor else role.colors.disabledContainerColor
+    val contentColor = if (enabled) role.colors.contentColor else role.colors.contentColor
 
     Box(
         modifier = modifier
-            .background(color = containerColor, shape = size.shape)
-            .clip(size.shape)
+            .background(color = containerColor, shape = size.shape(style = style))
+            .clip(size.shape(style = style))
             .singleClickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
@@ -57,8 +58,9 @@ fun BakeRoadSolidButton(
 fun BakeRoadSolidButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    style: SolidButtonStyle,
+    role: SolidButtonRole,
     size: ButtonSize,
+    style: ButtonStyle = ButtonStyle.DEFAULT,
     onClick: () -> Unit,
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -68,8 +70,9 @@ fun BakeRoadSolidButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        style = style,
-        size = size
+        role = role,
+        size = size,
+        style = style
     ) {
         BakeRoadButtonContent(
             text = text,
@@ -80,7 +83,7 @@ fun BakeRoadSolidButton(
     }
 }
 
-enum class SolidButtonStyle {
+enum class SolidButtonRole {
     PRIMARY,
     SECONDARY;
 

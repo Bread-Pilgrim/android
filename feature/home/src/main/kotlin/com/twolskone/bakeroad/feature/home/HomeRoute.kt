@@ -73,6 +73,11 @@ internal fun HomeRoute(
         }
     }
 
+    // 탭 전환 마다 빵집 재조회
+    LaunchedEffect(Unit) {
+        viewModel.intent(HomeIntent.RefreshBakeries())
+    }
+
     HomeScreen(
         padding = padding,
         state = state,

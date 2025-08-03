@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -50,6 +51,7 @@ fun BakeRoadSearchTopAppBar(
     containerColor: Color = BakeRoadTheme.colorScheme.White,
     iconContentColor: Color = BakeRoadTheme.colorScheme.Gray950,
     searchTextInputColors: SearchTextInputColors = BakeRoadSearchTopAppBarDefaults.searchBarColors(),
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     showBackIcon: Boolean = false,
     onBackClick: (() -> Unit)? = null
 ) {
@@ -81,9 +83,12 @@ fun BakeRoadSearchTopAppBar(
             }
         }
         SearchTextInput(
-            modifier = Modifier.padding(horizontal = 12.dp),
+            modifier = Modifier
+                .weight(1f)
+                .padding(horizontal = 12.dp),
             state = state,
             searchTextInputColors = searchTextInputColors,
+            interactionSource = interactionSource,
             hint = hint
         )
     }
@@ -101,9 +106,9 @@ private fun SearchTextInput(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     onKeyboardAction: KeyboardActionHandler? = null,
     outputTransformation: OutputTransformation? = null,
+    interactionSource: MutableInteractionSource,
     hint: String = ""
 ) {
-    val interactionSource = remember { MutableInteractionSource() }
     val isFocus by interactionSource.collectIsFocusedAsState()
 
     BasicTextField(
@@ -182,10 +187,15 @@ data class SearchTextInputColors(
 @Composable
 private fun BakeRoadSearchTopAppBarPreview() {
     BakeRoadTheme {
+        val focusManager = LocalFocusManager.current
+
         BakeRoadSearchTopAppBar(
             state = rememberTextFieldState(),
             hint = "가고 싶은 빵집이나 메뉴를 검색해보세요.",
-            showBackIcon = true
+            showBackIcon = true,
+            onBackClick = {
+                focusManager.clearFocus(force = true)
+            }
         )
     }
 }

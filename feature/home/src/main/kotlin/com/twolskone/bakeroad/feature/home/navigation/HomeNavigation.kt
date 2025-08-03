@@ -3,7 +3,9 @@ package com.twolskone.bakeroad.feature.home.navigation
 import android.content.Intent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
@@ -30,3 +32,6 @@ fun NavGraphBuilder.homeScreen(
         )
     }
 }
+
+fun NavController.navigateToHome(navOptions: NavOptions? = null) =
+    navigate(route = HomeRoute, navOptions = navOptions)

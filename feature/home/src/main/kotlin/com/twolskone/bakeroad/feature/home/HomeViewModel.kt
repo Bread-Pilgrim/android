@@ -51,7 +51,7 @@ internal class HomeViewModel @Inject constructor(
     init {
         observeTrigger()
         getAreas()
-        refreshAll()
+        refreshTourAreas()
     }
 
     override suspend fun handleIntent(intent: HomeIntent) {

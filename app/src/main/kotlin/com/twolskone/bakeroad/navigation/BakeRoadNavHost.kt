@@ -11,6 +11,7 @@ import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.HomeRoute
 import com.twolskone.bakeroad.feature.home.navigation.homeScreen
+import com.twolskone.bakeroad.feature.search.navigation.searchScreen
 
 @Composable
 internal fun BakeRoadNavHost(
@@ -33,6 +34,9 @@ internal fun BakeRoadNavHost(
             navigateToBakeryDetail = navigateToBakeryDetail,
             navigateToEditPreference = navigateToEditPreference,
             showSnackbar = showSnackbar
+        )
+        searchScreen(
+            padding = padding
         )
     }
 }

@@ -49,6 +49,7 @@ dependencies {
     implementation(projects.feature.intro)
     implementation(projects.feature.onboard)
     implementation(projects.feature.home)
+    implementation(projects.feature.search)
     implementation(projects.feature.bakery.list)
     implementation(projects.feature.bakery.detail)
     implementation(projects.feature.review.write)

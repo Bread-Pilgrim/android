@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoading
 import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextInput
 import com.twolskone.bakeroad.core.designsystem.component.textinput.TextInputType
@@ -115,7 +115,7 @@ internal fun NicknameSettingsScreen(
                         .padding(bottom = 24.dp)
                         .fillMaxWidth(),
                     enabled = nicknameTextInputType == TextInputType.SUCCESS,
-                    style = SolidButtonStyle.PRIMARY,
+                    role = SolidButtonRole.PRIMARY,
                     size = ButtonSize.XLARGE,
                     trailingIcon = if (isLoading) {
                         { BakeRoadLoading() }

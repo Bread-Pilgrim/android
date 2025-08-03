@@ -7,7 +7,6 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 import com.twolskone.bakeroad.core.remote.model.initialCursor
-import com.twolskone.bakeroad.core.remote.model.initialSortCursor
 
 internal class BakeryPagingSource(
     private val bakeryDataSource: BakeryDataSource,
@@ -45,7 +44,7 @@ internal class BakeryPagingSource(
 
             LoadResult.Page(
                 data = response.items.map { it.toExternalModel() },
-                prevKey = if (params.key == null || params.key == initialCursor || params.key == initialSortCursor) null else prevCursor,
+                prevKey = null/*if (params.key == null || params.key == initialCursor || params.key == initialSortCursor) null else prevCursor*/,
                 nextKey = if (!hasNextCursor) null else nextCursor
             )
         } catch (e: Exception) {

@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.datastore
+package com.twolskone.bakeroad.core.datastore.di
 
 import javax.inject.Qualifier
 

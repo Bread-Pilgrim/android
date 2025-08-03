@@ -40,7 +40,7 @@ internal fun PreferenceOptionsRoute(
         }
     }
 
-    PreferenceOptionsScreen(
+    PreferenceOptionListScreen(
         modifier = modifier,
         state = state,
         isEdit = viewModel.isEditPreference,

@@ -15,4 +15,5 @@ dependencies {
     implementation(projects.core.model)
 
     implementation(libs.androidx.paging.runtime)
+    implementation(libs.timber)
 }

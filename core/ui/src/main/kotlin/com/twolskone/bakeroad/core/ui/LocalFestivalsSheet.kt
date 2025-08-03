@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadSheetButtons
@@ -144,7 +144,7 @@ private fun LocalFestivalsSheetPreview() {
                 BakeRoadSolidButton(
                     modifier = Modifier.width(200.dp),
                     onClick = { scope.launch { showSheet = true } },
-                    style = SolidButtonStyle.PRIMARY,
+                    role = SolidButtonRole.PRIMARY,
                     size = ButtonSize.LARGE
                 ) {
                     Text(text = "눌러봐")

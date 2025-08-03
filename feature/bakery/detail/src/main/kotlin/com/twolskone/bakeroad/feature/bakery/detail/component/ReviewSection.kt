@@ -26,12 +26,13 @@ import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
+import com.twolskone.bakeroad.core.ui.EmptyCard
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.ReviewState
@@ -83,11 +84,12 @@ internal fun LazyListScope.review(
             }
             if (reviewPaging.emptyState) {
                 item("emptyReview") {
-                    EmptyReviewCard(
+                    EmptyCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                            .padding(vertical = 12.dp, horizontal = 16.dp),
+                        description = stringResource(id = R.string.feature_bakery_detail_description_empty_review)
                     )
                 }
             } else {
@@ -119,11 +121,12 @@ internal fun LazyListScope.review(
             }
             if (myReviewPaging.emptyState) {
                 item("emptyReview") {
-                    EmptyReviewCard(
+                    EmptyCard(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 12.dp, horizontal = 16.dp)
+                            .padding(vertical = 12.dp, horizontal = 16.dp),
+                        description = stringResource(id = R.string.feature_bakery_detail_description_empty_review)
                     )
                 }
             } else {
@@ -175,7 +178,7 @@ private fun MyReviewHeader(
             )
             BakeRoadOutlinedButton(
                 modifier = Modifier,
-                style = OutlinedButtonStyle.ASSISTIVE,
+                role = OutlinedButtonRole.ASSISTIVE,
                 size = ButtonSize.SMALL,
                 onClick = onWriteReviewClick,
                 content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }
@@ -220,7 +223,7 @@ private fun AllReviewHeader(
             )
             BakeRoadOutlinedButton(
                 modifier = Modifier,
-                style = OutlinedButtonStyle.ASSISTIVE,
+                role = OutlinedButtonRole.ASSISTIVE,
                 size = ButtonSize.SMALL,
                 onClick = onWriteReviewClick,
                 content = { Text(text = stringResource(id = R.string.feature_bakery_detail_button_write_review)) }

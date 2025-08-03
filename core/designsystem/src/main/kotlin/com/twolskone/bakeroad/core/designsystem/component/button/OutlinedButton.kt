@@ -31,25 +31,26 @@ fun BakeRoadOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    style: OutlinedButtonStyle,
+    role: OutlinedButtonRole,
     size: ButtonSize,
+    style: ButtonStyle = ButtonStyle.DEFAULT,
     content: @Composable RowScope.() -> Unit
 ) {
-    val containerColor = if (enabled) style.colors.containerColor else style.colors.disabledContainerColor
-    val contentColor = if (enabled) style.colors.contentColor else style.colors.contentColor
-    val border = BorderStroke(width = 1.dp, color = style.outlineColor(enabled = enabled))
+    val containerColor = if (enabled) role.colors.containerColor else role.colors.disabledContainerColor
+    val contentColor = if (enabled) role.colors.contentColor else role.colors.contentColor
+    val border = BorderStroke(width = 1.dp, color = role.outlineColor(enabled = enabled))
 
     Box(
         modifier = modifier
-            .border(border, size.shape)
-            .background(color = containerColor, shape = size.shape)
-            .clip(size.shape)
+            .border(border, size.shape(style = style))
+            .background(color = containerColor, shape = size.shape(style = style))
+            .clip(size.shape(style = style))
             .singleClickable { onClick() },
         contentAlignment = Alignment.Center
     ) {
         ProvideContentColorTextStyle(
             contentColor = contentColor,
-            textStyle = style.getTypography(size)
+            textStyle = role.getTypography(size)
         ) {
             Row(
                 modifier = Modifier.padding(size.contentPadding),
@@ -69,16 +70,18 @@ fun BakeRoadOutlinedButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    style: OutlinedButtonStyle,
+    role: OutlinedButtonRole,
     size: ButtonSize,
+    style: ButtonStyle = ButtonStyle.DEFAULT,
     text: @Composable () -> Unit,
-    leadingIcon: @Composable (() -> Unit)?,
-    trailingIcon: @Composable (() -> Unit)?
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null
 ) {
     BakeRoadOutlinedButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
+        role = role,
         style = style,
         size = size
     ) {
@@ -91,7 +94,7 @@ fun BakeRoadOutlinedButton(
     }
 }
 
-enum class OutlinedButtonStyle {
+enum class OutlinedButtonRole {
     PRIMARY,
     SECONDARY,
     ASSISTIVE;

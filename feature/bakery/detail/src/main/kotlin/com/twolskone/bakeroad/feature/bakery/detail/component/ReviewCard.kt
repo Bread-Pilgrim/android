@@ -30,7 +30,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -191,33 +190,6 @@ internal fun ReviewCard(
     }
 }
 
-/**
- * Shown when there are no reviews.
- */
-@Composable
-internal fun EmptyReviewCard(modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
-        colors = CardColors(
-            containerColor = BakeRoadTheme.colorScheme.Gray40,
-            contentColor = BakeRoadTheme.colorScheme.Gray600,
-            disabledContainerColor = BakeRoadTheme.colorScheme.Gray40,
-            disabledContentColor = BakeRoadTheme.colorScheme.Gray600
-        ),
-        elevation = CardDefaults.cardElevation(0.dp),
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(vertical = 40.dp)
-                .align(Alignment.CenterHorizontally),
-            text = stringResource(id = R.string.feature_bakery_detail_description_empty_review),
-            style = BakeRoadTheme.typography.bodyXsmallRegular,
-            textAlign = TextAlign.Center
-        )
-    }
-}
-
 @Preview
 @Composable
 private fun ReviewCardPreview() {
@@ -239,13 +211,5 @@ private fun ReviewCardPreview() {
             localLikeMap = persistentMapOf(),
             onLikeClick = { _, _ -> }
         )
-    }
-}
-
-@Preview
-@Composable
-private fun EmptyReviewCardPreview() {
-    BakeRoadTheme {
-        EmptyReviewCard(modifier = Modifier.fillMaxWidth())
     }
 }

@@ -34,7 +34,8 @@ internal class BakeryRepositoryImpl @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = 15,
-                enablePlaceholders = true
+                enablePlaceholders = true,
+                initialLoadSize = 15
             ),
             pagingSourceFactory = {
                 BakeryPagingSource(
@@ -67,7 +68,8 @@ internal class BakeryRepositoryImpl @Inject constructor(
         Pager(
             config = PagingConfig(
                 pageSize = 5,
-                enablePlaceholders = true
+                enablePlaceholders = true,
+                initialLoadSize = 5
             ),
             pagingSourceFactory = {
                 BakeryReviewPagingSource(

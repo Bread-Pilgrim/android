@@ -26,11 +26,12 @@ import androidx.compose.ui.util.fastForEachIndexed
 import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonRole
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.TourArea
+import com.twolskone.bakeroad.core.ui.EmptyCard
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentMap
@@ -121,7 +122,7 @@ private fun MenuContent(
             BakeRoadOutlinedButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                style = OutlinedButtonStyle.ASSISTIVE,
+                role = OutlinedButtonRole.ASSISTIVE,
                 size = ButtonSize.MEDIUM,
                 onClick = onViewAllClick,
                 content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_menu)) }
@@ -186,13 +187,16 @@ private fun ReviewContent(
             }
             BakeRoadOutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
-                style = OutlinedButtonStyle.ASSISTIVE,
+                role = OutlinedButtonRole.ASSISTIVE,
                 size = ButtonSize.MEDIUM,
                 onClick = onViewAllClick,
                 content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_review)) }
             )
         } else {
-            EmptyReviewCard(modifier = Modifier.fillMaxWidth())
+            EmptyCard(
+                modifier = Modifier.fillMaxWidth(),
+                description = stringResource(id = R.string.feature_bakery_detail_description_empty_review)
+            )
         }
     }
 }
@@ -240,7 +244,7 @@ private fun TourAreaContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
-                style = OutlinedButtonStyle.ASSISTIVE,
+                role = OutlinedButtonRole.ASSISTIVE,
                 size = ButtonSize.MEDIUM,
                 onClick = onViewAllClick,
                 content = { Text(text = stringResource(R.string.feature_bakery_detail_button_view_all_tour_area)) }

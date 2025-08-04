@@ -117,7 +117,9 @@ internal class BakeryDetailViewModel @Inject constructor(
     override suspend fun handleIntent(intent: BakeryDetailIntent) {
         when (intent) {
             is BakeryDetailIntent.SelectTab -> _tabState.value = intent.tab
+
             is BakeryDetailIntent.SelectReviewTab -> _reviewTabState.value = intent.tab
+
             is BakeryDetailIntent.SelectReviewSort -> _reviewSortState.value = intent.sort
 
             is BakeryDetailIntent.ClickBakeryLike -> {
@@ -144,6 +146,17 @@ internal class BakeryDetailViewModel @Inject constructor(
                     deleteReviewLikeUseCase(reviewId = intent.reviewId)
                 }
             }
+
+            BakeryDetailIntent.RefreshPreviewReviews -> getPreviewReviews()
+
+            is BakeryDetailIntent.UpdateReviewInfo -> reduce {
+                copy(
+                    reviewState = reviewState.copy(
+                        avgRating = intent.avgRating,
+                        count = intent.count
+                    )
+                )
+            }
         }
     }
 
@@ -153,11 +166,7 @@ internal class BakeryDetailViewModel @Inject constructor(
             copy(
                 bakeryImageList = bakeryDetail.imageUrls.toImmutableList(),
                 bakeryInfo = bakeryDetail.toBakeryInfo(),
-                menuList = bakeryDetail.menus.toImmutableList(),
-                reviewState = reviewState.copy(
-                    count = bakeryDetail.reviewCount,
-                    avgRating = bakeryDetail.rating
-                )
+                menuList = bakeryDetail.menus.toImmutableList()
             )
         }
     }
@@ -166,7 +175,11 @@ internal class BakeryDetailViewModel @Inject constructor(
         val reviews = getBakeryPreviewReviewsUseCase(bakeryId = bakeryId)
         reduce {
             copy(
-                reviewState = reviewState.copy(previewReviewList = reviews.toImmutableList())
+                reviewState = reviewState.copy(
+                    avgRating = reviews.firstOrNull()?.avgRating.orZero(),
+                    count = reviews.firstOrNull()?.totalCount.orZero(),
+                    previewReviewList = reviews.toImmutableList(),
+                )
             )
         }
     }

@@ -6,47 +6,50 @@ import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
-import com.twolskone.bakeroad.core.remote.model.initialCursor
-import com.twolskone.bakeroad.core.remote.model.initialSortCursor
 
 internal class BakeryReviewPagingSource(
+    private val pageSize: Int,
     private val bakeryDataSource: BakeryDataSource,
     private val myReview: Boolean,
     private val bakeryId: Int,
     private val sort: ReviewSortType?
-) : PagingSource<String, BakeryReview>() {
+) : PagingSource<Int, BakeryReview>() {
 
-    override fun getRefreshKey(state: PagingState<String, BakeryReview>): String? {
+    override fun getRefreshKey(state: PagingState<Int, BakeryReview>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            val anchorPageIndex = state.pages.indexOf(state.closestPageToPosition(anchorPosition))
-            state.pages.getOrNull(anchorPageIndex + 1)?.prevKey ?: state.pages.getOrNull(anchorPageIndex - 1)?.nextKey
+            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1) ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
     }
 
-    override suspend fun load(params: LoadParams<String>): LoadResult<String, BakeryReview> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, BakeryReview> {
+        val page = params.key ?: InitialPage
+
         return try {
             val response = if (myReview) {
                 bakeryDataSource.getMyReviews(
                     bakeryId = bakeryId,
-                    cursorValue = params.key ?: initialCursor,
+                    pageNo = page,
                     pageSize = params.loadSize
                 )
             } else {
                 bakeryDataSource.getReviews(
                     bakeryId = bakeryId,
                     sort = sort?.value ?: ReviewSortType.LIKE_COUNT_DESC.value,
-                    cursorValue = params.key ?: initialSortCursor,
+                    pageNo = page,
                     pageSize = params.loadSize
                 )
             }
-            val hasNextCursor = response.paging.hasNext
-            val prevCursor = response.paging.prevCursor
-            val nextCursor = response.paging.nextCursor
+            val hasNext = response.hasNext
 
             LoadResult.Page(
-                data = response.items.map { it.toExternalModel() },
-                prevKey = null/*if (params.key == null || params.key == initialCursor || params.key == initialSortCursor) null else prevCursor*/,
-                nextKey = if (!hasNextCursor) null else nextCursor
+                data = response.items.map {
+                    it.toExternalModel(
+                        avgRating = response.avgRating,
+                        reviewCount = response.reviewCount
+                    )
+                },
+                prevKey = if (page == InitialPage) null else page - 1,
+                nextKey = if (!hasNext || response.items.size < pageSize) null else page + (params.loadSize / pageSize)
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

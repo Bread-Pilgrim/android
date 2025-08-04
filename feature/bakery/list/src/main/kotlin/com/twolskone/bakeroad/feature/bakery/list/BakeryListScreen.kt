@@ -73,7 +73,9 @@ internal fun BakeryListScreen(
             title = { Text(text = title) }
         )
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
             contentPadding = PaddingValues(
                 start = 16.dp,
                 end = 16.dp,
@@ -84,7 +86,7 @@ internal fun BakeryListScreen(
         ) {
             items(
                 count = pagingItems.itemCount,
-                key = { index -> pagingItems[index]?.id ?: "placeholder_$index" }
+                key = { index -> pagingItems.peek(index)?.id ?: "placeholder_$index" }
             ) { index ->
                 pagingItems[index]?.let { bakery ->
                     BakeryCard(

@@ -11,8 +11,6 @@ internal const val OtherMenu = "기타메뉴"
  * @param name          상호명
  * @param address       평균 평점
  * @param phone         전화번호
- * @param rating        평균 평점
- * @param reviewCount   리뷰 개수
  * @param isLike        찜 여부
  * @param openingHours  요일별 영업 시간
  * @param imageUrls     썸네일 리스트
@@ -23,8 +21,6 @@ data class BakeryDetail(
     val name: String,
     val address: String,
     val phone: String,
-    val rating: Float,
-    val reviewCount: Int,
     val openStatus: BakeryOpenStatus,
     val isLike: Boolean,
     val openingHours: List<OpeningHour>,

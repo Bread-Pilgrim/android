@@ -13,8 +13,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Immutable
 internal data class BakeryInfo(
     val name: String,
-    val rating: Float,
-    val reviewCount: Int,
     val address: String,
     val phone: String,
     val openStatus: BakeryOpenStatus,
@@ -34,8 +32,6 @@ internal data class BakeryInfo(
 internal fun BakeryDetail.toBakeryInfo(): BakeryInfo =
     BakeryInfo(
         name = name,
-        rating = rating,
-        reviewCount = reviewCount,
         address = address,
         phone = phone,
         openStatus = openStatus,

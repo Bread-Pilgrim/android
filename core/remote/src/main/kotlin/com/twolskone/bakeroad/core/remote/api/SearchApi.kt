@@ -10,7 +10,7 @@ internal interface SearchApi {
     @GET("search/bakeries")
     suspend fun searchBakery(
         @Query("keyword") keyword: String,
-        @Query("cursor_value") cursorValue: String,
+        @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int,
     ): BaseResponse<BakeriesResponse>
 }

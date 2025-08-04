@@ -199,6 +199,7 @@ private fun ReviewCardPreview() {
             review = BakeryReview(
                 id = 1,
                 avgRating = 4.7f,
+                totalCount = 0,
                 userName = "서빵글",
                 profileUrl = "",
                 isLike = false,

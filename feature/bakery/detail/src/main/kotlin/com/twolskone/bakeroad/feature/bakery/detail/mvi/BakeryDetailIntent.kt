@@ -11,4 +11,6 @@ internal sealed interface BakeryDetailIntent : BaseUiIntent {
     data class SelectReviewSort(val sort: ReviewSortType) : BakeryDetailIntent
     data class ClickBakeryLike(val isLike: Boolean) : BakeryDetailIntent
     data class ClickReviewLike(val reviewId: Int, val isLike: Boolean) : BakeryDetailIntent
+    data object RefreshPreviewReviews : BakeryDetailIntent
+    data class UpdateReviewInfo(val avgRating: Float, val count: Int) : BakeryDetailIntent
 }

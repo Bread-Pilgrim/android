@@ -1,7 +1,6 @@
 package com.twolskone.bakeroad.core.data.repository
 
 import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.twolskone.bakeroad.core.common.kotlin.network.BakeRoadDispatcher
 import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
@@ -9,6 +8,8 @@ import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.data.mapper.toReviewMenu
 import com.twolskone.bakeroad.core.data.paging.BakeryPagingSource
 import com.twolskone.bakeroad.core.data.paging.BakeryReviewPagingSource
+import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
+import com.twolskone.bakeroad.core.data.paging.defaultPagingConfig
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
@@ -32,13 +33,10 @@ internal class BakeryRepositoryImpl @Inject constructor(
 
     override fun getBakeries(areaCodes: String, bakeryType: BakeryType): Flow<PagingData<Bakery>> =
         Pager(
-            config = PagingConfig(
-                pageSize = 15,
-                enablePlaceholders = true,
-                initialLoadSize = 15
-            ),
+            config = defaultPagingConfig(),
             pagingSourceFactory = {
                 BakeryPagingSource(
+                    pageSize = DefaultPageSize,
                     bakeryDataSource = bakeryDataSource,
                     areaCodes = areaCodes,
                     bakeryType = bakeryType
@@ -52,11 +50,17 @@ internal class BakeryRepositoryImpl @Inject constructor(
     }
 
     override fun getPreviewReviews(bakeryId: Int): Flow<List<BakeryReview>> {
+        val previewReviewCount = 3
         return bakeryDataSource.getPreviewReviews(bakeryId = bakeryId)
-            .map { bakeryReviews ->
-                bakeryReviews.map { bakeryReview ->
-                    bakeryReview.toExternalModel()
-                }
+            .map { response ->
+                response.items
+                    .take(previewReviewCount)
+                    .map { bakeryReview ->
+                        bakeryReview.toExternalModel(
+                            avgRating = response.avgRating,
+                            reviewCount = response.reviewCount
+                        )
+                    }
             }
     }
 
@@ -66,13 +70,10 @@ internal class BakeryRepositoryImpl @Inject constructor(
         sort: ReviewSortType?
     ): Flow<PagingData<BakeryReview>> =
         Pager(
-            config = PagingConfig(
-                pageSize = 5,
-                enablePlaceholders = true,
-                initialLoadSize = 5
-            ),
+            config = defaultPagingConfig(pageSize = 5),
             pagingSourceFactory = {
                 BakeryReviewPagingSource(
+                    pageSize = 5,
                     bakeryDataSource = bakeryDataSource,
                     myReview = myReview,
                     bakeryId = bakeryId,

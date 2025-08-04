@@ -9,16 +9,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
+import com.twolskone.bakeroad.core.common.android.extension.isEmpty
 import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
+import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.filterIsInstance
 import timber.log.Timber
 
 @Composable
@@ -38,9 +45,15 @@ internal fun BakeryDetailRoute(
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             Timber.i("xxx writeReviewLauncher :: Completed write review")
-            when (reviewTabState) {
-                ReviewTab.MY_REVIEW -> myReviewPagingItems.refresh()
-                ReviewTab.ALL_REVIEW -> reviewPagingItems.refresh()
+            if (tabState == BakeryDetailTab.REVIEW) {
+                // 방문자 리뷰 탭 전환. (갱신)
+                when (reviewTabState) {
+                    ReviewTab.MY_REVIEW -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab = ReviewTab.ALL_REVIEW))
+                    ReviewTab.ALL_REVIEW -> reviewPagingItems.refresh()
+                }
+            } else {
+                // 리뷰 프리뷰 갱신. (리뷰 데이터 fetch)
+                viewModel.intent(BakeryDetailIntent.RefreshPreviewReviews)
             }
         } else {
             Timber.i("xxx writeReviewLauncher :: Canceled write review")
@@ -49,6 +62,17 @@ internal fun BakeryDetailRoute(
 
     BackHandler {
         setResult(RESULT_REFRESH_BAKERY_LIST, true)
+    }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { reviewPagingItems.loadState.refresh }
+            .filterIsInstance<LoadState.NotLoading>()
+            .filter { !reviewPagingItems.isEmpty }
+            .collect {
+                reviewPagingItems.peek(0)?.let {
+                    viewModel.intent(BakeryDetailIntent.UpdateReviewInfo(avgRating = it.avgRating, count = it.totalCount))
+                }
+            }
     }
 
     reviewPagingItems.ObserveError(viewModel)

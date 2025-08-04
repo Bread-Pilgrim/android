@@ -5,11 +5,8 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -46,9 +43,6 @@ internal fun BakeryListRoute(
 
     BaseComposable(baseViewModel = viewModel) {
         BakeryListScreen(
-            modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding(),
             bakeryType = state.bakeryType,
             pagingItems = lazyPagingItems,
             localLikeMap = state.localLikeMap,

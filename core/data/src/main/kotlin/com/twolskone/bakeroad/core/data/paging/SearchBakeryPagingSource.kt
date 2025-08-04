@@ -6,42 +6,40 @@ import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.datastore.CacheDataSource
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.remote.datasource.SearchDataSource
-import com.twolskone.bakeroad.core.remote.model.initialCursor
 
 internal class SearchBakeryPagingSource(
+    private val pageSize: Int,
     private val searchDataSource: SearchDataSource,
     private val cacheDataSource: CacheDataSource,
     private val query: String
-) : PagingSource<String, Bakery>() {
+) : PagingSource<Int, Bakery>() {
 
-    override fun getRefreshKey(state: PagingState<String, Bakery>): String? {
+    override fun getRefreshKey(state: PagingState<Int, Bakery>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
             val anchorPageIndex = state.pages.indexOf(state.closestPageToPosition(anchorPosition))
             state.pages.getOrNull(anchorPageIndex + 1)?.prevKey ?: state.pages.getOrNull(anchorPageIndex - 1)?.nextKey
         }
     }
 
-    override suspend fun load(params: LoadParams<String>): LoadResult<String, Bakery> {
-        val cursor = params.key ?: initialCursor
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Bakery> {
+        val page = params.key ?: InitialPage
 
         return try {
             val response = searchDataSource.searchBakery(
                 query = query,
-                cursorValue = cursor,
+                pageNo = page,
                 pageSize = params.loadSize
             )
-            val hasNextCursor = response.paging.hasNext
-            val prevCursor = response.paging.prevCursor
-            val nextCursor = response.paging.nextCursor
+            val hasNext = response.hasNext
 
-            if (cursor == initialCursor) {
+            if (page == InitialPage) {
                 cacheDataSource.putRecentSearchQuery(query = query)
             }
 
             LoadResult.Page(
                 data = response.items.map { it.toExternalModel() },
-                prevKey = null/*if (params.key == null || params.key == initialCursor || params.key == initialSortCursor) null else prevCursor*/,
-                nextKey = if (!hasNextCursor) null else nextCursor
+                prevKey = if (page == InitialPage) null else page - 1,
+                nextKey = if (!hasNext || response.items.size < pageSize) null else page + (params.loadSize / pageSize)
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

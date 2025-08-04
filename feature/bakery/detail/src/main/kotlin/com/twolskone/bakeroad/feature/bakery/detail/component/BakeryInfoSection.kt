@@ -40,12 +40,14 @@ import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.model.openingHourLabel
+import com.twolskone.bakeroad.feature.bakery.detail.mvi.ReviewState
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
 internal fun BakeryInfoSection(
     modifier: Modifier = Modifier,
     bakeryInfo: BakeryInfo?,
+    reviewState: ReviewState,
     expandOpeningHour: Boolean,
     rotateOpeningHourIconAngle: Float,
     onExpandOpeningHourClick: () -> Unit,
@@ -75,12 +77,12 @@ internal fun BakeryInfoSection(
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = bakeryInfo.rating.toString(),
+                    text = reviewState.avgRating.toString(),
                     style = BakeRoadTheme.typography.bodySmallSemibold.copy(color = BakeRoadTheme.colorScheme.Gray950)
                 )
                 Text(
                     modifier = Modifier.padding(start = 4.dp),
-                    text = stringResource(id = R.string.feature_bakery_detail_review_count, bakeryInfo.reviewCount.toCommaString()),
+                    text = stringResource(id = R.string.feature_bakery_detail_review_count, reviewState.count.toCommaString()),
                     style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
                 )
             }
@@ -242,8 +244,6 @@ private fun BakeryInfoSectionPreview() {
         BakeryInfoSection(
             bakeryInfo = BakeryInfo(
                 name = "서라당",
-                rating = 4.7f,
-                reviewCount = 100,
                 address = "서울시 관악구 신사로 120-1 1층 서라당",
                 phone = "010-1234-5678",
                 openStatus = BakeryOpenStatus.OPEN,
@@ -257,6 +257,7 @@ private fun BakeryInfoSectionPreview() {
                 dayOff = persistentListOf(),
                 isLike = true
             ),
+            reviewState = ReviewState(),
             expandOpeningHour = false,
             rotateOpeningHourIconAngle = 0f,
             onExpandOpeningHourClick = {},

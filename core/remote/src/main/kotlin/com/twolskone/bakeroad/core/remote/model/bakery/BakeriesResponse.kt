@@ -1,13 +1,12 @@
 package com.twolskone.bakeroad.core.remote.model.bakery
 
-import com.twolskone.bakeroad.core.remote.model.Paging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class BakeriesResponse(
-    @SerialName("paging")
-    val paging: Paging = Paging(),
+    @SerialName("has_next")
+    val hasNext: Boolean = false,
     @SerialName("items")
     val items: List<BakeryResponse> = emptyList()
 )

@@ -7,7 +7,6 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
-import com.twolskone.bakeroad.core.remote.model.initialSortCursor
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.DELETE
@@ -32,7 +31,7 @@ internal interface BakeryApi {
     @GET("bakeries/preference")
     suspend fun getPreferenceBakeries(
         @Query("area_code") areaCode: String,
-        @Query("cursor_value") cursorValue: String,
+        @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
@@ -40,7 +39,7 @@ internal interface BakeryApi {
     @GET("bakeries/hot")
     suspend fun getHotBakeries(
         @Query("area_code") areaCode: String,
-        @Query("cursor_value") cursorValue: String,
+        @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
@@ -52,7 +51,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getPreviewReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_value") cursorValue: String = initialSortCursor,
+        @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int = 5,
         @Query("sort_clause") sort: String = "LIKE_COUNT.DESC"
     ): BaseResponse<BakeryReviewsResponse>
@@ -61,7 +60,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_value") cursorValue: String,
+        @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeryReviewsResponse>
@@ -70,7 +69,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/my-review")
     suspend fun getMyReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("cursor_value") cursorValue: String,
+        @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeryReviewsResponse>
 

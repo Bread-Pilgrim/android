@@ -1,21 +1,22 @@
 package com.twolskone.bakeroad.core.remote.model.bakery
 
-import com.twolskone.bakeroad.core.remote.model.Paging
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class BakeryReviewsResponse(
-    @SerialName("paging")
-    val paging: Paging = Paging(),
+    @SerialName("has_next")
+    val hasNext: Boolean = false,
+    @SerialName("avg_rating")
+    val avgRating: Float = 0f,
+    @SerialName("review_count")
+    val reviewCount: Int = 0,
     @SerialName("items")
     val items: List<BakeryReviewResponse> = emptyList()
 )
 
 @Serializable
 data class BakeryReviewResponse(
-    @SerialName("avg_rating")
-    val avgRating: Float = 0f,
     @SerialName("user_name")
     val userName: String = "",
     @SerialName("profile_img")
@@ -30,6 +31,8 @@ data class BakeryReviewResponse(
     val reviewRating: Float = 0f,
     @SerialName("review_like_count")
     val reviewLikeCount: Int = 0,
+    @SerialName("review_created_at")
+    val reviewCreatedAt: String = "",
     @SerialName("review_menus")
     val reviewMenus: List<Menu> = emptyList(),
     @SerialName("review_photos")

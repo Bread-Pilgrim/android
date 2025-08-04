@@ -33,7 +33,7 @@ internal class BakeryListViewModel @Inject constructor(
     val pagingFlow = getBakeriesUseCase(
         areaCodes = savedStateHandle.get<String>(AREA_CODES) ?: EntireBusan.toString(),
         bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE
-    ).cachedIn(viewModelScope).catch { cause -> handleException(cause) }
+    ).cachedIn(viewModelScope)
 
     override fun initState(savedStateHandle: SavedStateHandle): BakeryListState {
         return BakeryListState(bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE)

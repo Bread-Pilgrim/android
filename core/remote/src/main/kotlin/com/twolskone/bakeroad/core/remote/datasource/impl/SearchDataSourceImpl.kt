@@ -11,23 +11,19 @@ import kotlinx.coroutines.CoroutineDispatcher
 
 internal class SearchDataSourceImpl @Inject constructor(
     private val api: SearchApi,
-//    private val cacheDataSource: CacheDataSource,
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : SearchDataSource {
 
     override suspend fun searchBakery(
         query: String,
-        cursorValue: String,
+        pageNo: Int,
         pageSize: Int
     ): BakeriesResponse {
         val response = api.searchBakery(
             keyword = query,
-            cursorValue = cursorValue,
+            pageNo = pageNo,
             pageSize = pageSize
         )
-//        if (cursorValue == initialCursor) {
-//            cacheDataSource.putRecentSearchQuery(query = query)
-//        }
         return response.toData()
     }
 }

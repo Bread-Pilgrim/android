@@ -95,7 +95,7 @@ internal fun LazyListScope.review(
             } else {
                 items(
                     count = reviewPaging.itemCount,
-                    key = { index -> reviewPaging[index]?.id ?: "placeholder_$index" }
+                    key = { index -> reviewPaging.peek(index)?.id ?: "placeholder_$index" }
                 ) { index ->
                     reviewPaging[index]?.let { review ->
                         ReviewCard(
@@ -132,7 +132,7 @@ internal fun LazyListScope.review(
             } else {
                 items(
                     count = myReviewPaging.itemCount,
-                    key = { index -> myReviewPaging[index]?.id ?: "placeholder_$index" }
+                    key = { index -> myReviewPaging.peek(index)?.id ?: "placeholder_$index" }
                 ) { index ->
                     myReviewPaging[index]?.let { review ->
                         ReviewCard(

@@ -13,10 +13,6 @@ data class BakeryDetailResponse(
     val address: String = "",
     @SerialName("phone")
     val phone: String = "",
-    @SerialName("avg_rating")
-    val avgRating: Float = -1f,
-    @SerialName("review_count")
-    val reviewCount: Int = 0,
     @SerialName("open_status")
     val openStatus: String,
     @SerialName("operating_hours")

@@ -51,8 +51,6 @@ internal fun BakeryDetailResponse.toExternalModel(): BakeryDetail =
         name = bakeryName,
         address = address,
         phone = phone,
-        rating = avgRating,
-        reviewCount = reviewCount,
         openStatus = runCatching {
             BakeryOpenStatus.ofStatus(openStatus) ?: BakeryOpenStatus.OPEN
         }.getOrDefault(BakeryOpenStatus.OPEN),
@@ -78,10 +76,11 @@ internal fun BakeryDetailResponse.toExternalModel(): BakeryDetail =
         }
     )
 
-internal fun BakeryReviewResponse.toExternalModel(): BakeryReview =
+internal fun BakeryReviewResponse.toExternalModel(avgRating: Float, reviewCount: Int): BakeryReview =
     BakeryReview(
         id = reviewId,
         avgRating = avgRating,
+        totalCount = reviewCount,
         userName = userName,
         profileUrl = profileImg,
         isLike = isLike,

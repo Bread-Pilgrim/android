@@ -3,7 +3,8 @@ package com.twolskone.bakeroad.core.model
 /**
  * 리뷰
  * @param id            리뷰 ID
- * @param avgRating     평균 별점
+ * @param avgRating     전체 리뷰 평균 별점
+ * @param totalCount    전체 리뷰 개수
  * @param profileUrl    유저 프로필 이미지
  * @param isLike        사용자 좋아요 여부
  * @param content       리뷰 내용
@@ -15,6 +16,7 @@ package com.twolskone.bakeroad.core.model
 data class BakeryReview(
     val id: Int,
     val avgRating: Float,
+    val totalCount: Int,
     val userName: String,
     val profileUrl: String,
     val isLike: Boolean,

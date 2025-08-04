@@ -1,11 +1,12 @@
 package com.twolskone.bakeroad.core.data.repository
 
 import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.twolskone.bakeroad.core.common.kotlin.network.BakeRoadDispatcher
 import com.twolskone.bakeroad.core.common.kotlin.network.Dispatcher
+import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
 import com.twolskone.bakeroad.core.data.paging.SearchBakeryPagingSource
+import com.twolskone.bakeroad.core.data.paging.defaultPagingConfig
 import com.twolskone.bakeroad.core.datastore.CacheDataSource
 import com.twolskone.bakeroad.core.domain.repository.SearchRepository
 import com.twolskone.bakeroad.core.model.Bakery
@@ -36,13 +37,10 @@ class SearchRepositoryImpl @Inject constructor(
 
     override fun searchBakery(query: String): Flow<PagingData<Bakery>> =
         Pager(
-            config = PagingConfig(
-                pageSize = 15,
-                enablePlaceholders = true,
-                initialLoadSize = 15
-            ),
+            config = defaultPagingConfig(),
             pagingSourceFactory = {
                 SearchBakeryPagingSource(
+                    pageSize = DefaultPageSize,
                     searchDataSource = searchDataSource,
                     cacheDataSource = cacheDataSource,
                     query = query

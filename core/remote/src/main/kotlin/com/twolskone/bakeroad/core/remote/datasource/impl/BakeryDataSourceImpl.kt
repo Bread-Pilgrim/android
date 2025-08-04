@@ -11,7 +11,6 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
-import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
@@ -31,8 +30,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 
-private const val PreviewReviewCount = 3
-
 internal class BakeryDataSourceImpl @Inject constructor(
     private val api: BakeryApi,
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher,
@@ -49,21 +46,25 @@ internal class BakeryDataSourceImpl @Inject constructor(
 
     override suspend fun getPreferenceBakeries(
         areaCodes: String,
-        cursorValue: String,
+        pageNo: Int,
         pageSize: Int
     ): BakeriesResponse {
         val response = api.getPreferenceBakeries(
             areaCode = areaCodes,
-            cursorValue = cursorValue,
+            pageNo = pageNo,
             pageSize = pageSize
         )
         return response.toData()
     }
 
-    override suspend fun getHotBakeries(areaCodes: String, cursorValue: String, pageSize: Int): BakeriesResponse {
+    override suspend fun getHotBakeries(
+        areaCodes: String,
+        pageNo: Int,
+        pageSize: Int
+    ): BakeriesResponse {
         val response = api.getHotBakeries(
             areaCode = areaCodes,
-            cursorValue = cursorValue,
+            pageNo = pageNo,
             pageSize = pageSize
         )
         return response.toData()
@@ -73,37 +74,39 @@ internal class BakeryDataSourceImpl @Inject constructor(
         emitData(api.getBakeryDetail(bakeryId = bakeryId))
     }.flowOn(networkDispatcher)
 
-    override fun getPreviewReviews(bakeryId: Int): Flow<List<BakeryReviewResponse>> = flow {
-        val items = api.getPreviewReviews(bakeryId = bakeryId)
-            .toData()
-            .items
-            .take(PreviewReviewCount)
-        emit(items)
+    override fun getPreviewReviews(bakeryId: Int): Flow<BakeryReviewsResponse> = flow {
+        val response = api.getPreviewReviews(
+            pageNo = 1,
+            pageSize = 5,
+            sort = "LIKE_COUNT.DESC",
+            bakeryId = bakeryId
+        ).toData()
+        emit(response)
     }.flowOn(networkDispatcher)
 
     override suspend fun getReviews(
         bakeryId: Int,
         sort: String,
-        cursorValue: String,
+        pageNo: Int,
         pageSize: Int
     ): BakeryReviewsResponse {
         val response = api.getReviews(
             bakeryId = bakeryId,
-            sort = sort,
-            cursorValue = cursorValue,
-            pageSize = pageSize
+            pageNo = pageNo,
+            pageSize = pageSize,
+            sort = sort
         )
         return response.toData()
     }
 
     override suspend fun getMyReviews(
         bakeryId: Int,
-        cursorValue: String,
+        pageNo: Int,
         pageSize: Int
     ): BakeryReviewsResponse {
         val response = api.getMyReviews(
             bakeryId = bakeryId,
-            cursorValue = cursorValue,
+            pageNo = pageNo,
             pageSize = pageSize
         )
         return response.toData()

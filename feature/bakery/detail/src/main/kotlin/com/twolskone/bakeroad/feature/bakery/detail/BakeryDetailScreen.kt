@@ -167,6 +167,7 @@ internal fun BakeryDetailScreen(
                         .fillMaxWidth()
                         .padding(bottom = 8.dp),
                     bakeryInfo = state.bakeryInfo,
+                    reviewState = state.reviewState,
                     expandOpeningHour = expandOpeningHour,
                     rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
                     onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour },
@@ -317,6 +318,7 @@ private fun BakeryDetailScreenPreview() {
                 BakeryReview(
                     id = 1,
                     avgRating = 4.7f,
+                    totalCount = 0,
                     userName = "서빵글",
                     profileUrl = "",
                     isLike = false,

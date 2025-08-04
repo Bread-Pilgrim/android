@@ -22,8 +22,8 @@ internal data class BakeryDetailState(
 
 @Immutable
 internal data class ReviewState(
-    val count: Int = 0,
     val avgRating: Float = 0.0f,
+    val count: Int = 0,
     val previewReviewList: ImmutableList<BakeryReview> = persistentListOf(),
     val localLikeMap: PersistentMap<Int, Boolean> = persistentMapOf()
 )

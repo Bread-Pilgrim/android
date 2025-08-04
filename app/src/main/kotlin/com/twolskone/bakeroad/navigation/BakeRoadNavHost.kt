@@ -36,7 +36,9 @@ internal fun BakeRoadNavHost(
             showSnackbar = showSnackbar
         )
         searchScreen(
-            padding = padding
+            padding = padding,
+            navigateToBakeryDetail = navigateToBakeryDetail,
+            showSnackbar = showSnackbar
         )
     }
 }

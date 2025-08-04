@@ -29,6 +29,7 @@ internal fun BakeryListRoute(
     ) { result ->
         if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
             Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
+            viewModel.intent(BakeryListIntent.ClearLocalLikeMap)
             lazyPagingItems.refresh()
         } else {
             Timber.i("xxx bakeryDetailLauncher :: Canceled")

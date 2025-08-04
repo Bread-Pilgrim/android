@@ -11,6 +11,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 
 internal data class SearchState(
+    val loading: Boolean = false,
     val section: SearchSection = RecentSearchResult,
     val recentSearchBakeryList: ImmutableList<Bakery> = persistentListOf(),
     val recentQueryList: ImmutableList<Pair<String, String>> = persistentListOf(),

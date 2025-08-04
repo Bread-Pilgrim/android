@@ -16,6 +16,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 /**
@@ -30,7 +31,8 @@ internal fun BakeRoadButtonContent(
     buttonSize: ButtonSize,
     text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
-    trailingIcon: @Composable (() -> Unit)? = null
+    trailingIcon: @Composable (() -> Unit)? = null,
+    onParentClick: () -> Unit,
 ) {
     if (leadingIcon != null) {
         Box(
@@ -42,6 +44,7 @@ internal fun BakeRoadButtonContent(
     }
     Box(
         modifier = Modifier
+            .noRippleSingleClickable { onParentClick() }
             .padding(
                 start = if (leadingIcon != null) buttonSize.iconSpacing else 0.dp,
                 end = if (trailingIcon != null) buttonSize.iconSpacing else 0.dp,

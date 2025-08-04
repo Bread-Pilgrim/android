@@ -65,6 +65,8 @@ internal class BakeryListViewModel @Inject constructor(
                     deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
                 }
             }
+
+            BakeryListIntent.ClearLocalLikeMap -> reduce { copy(localLikeMap = localLikeMap.clear()) }
         }
     }
 }

@@ -78,7 +78,8 @@ fun BakeRoadSolidButton(
             text = text,
             buttonSize = size,
             leadingIcon = leadingIcon,
-            trailingIcon = trailingIcon
+            trailingIcon = trailingIcon,
+            onParentClick = onClick
         )
     }
 }

@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.search
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -41,7 +42,12 @@ internal fun SearchScreen(
     resultPagingItems: LazyPagingItems<Bakery>,
     interactionSource: MutableInteractionSource,
     onCancelClick: () -> Unit,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    onDeleteQueryClick: (String) -> Unit,
+    onDeleteAllQueriesClick: () -> Unit,
+    onSearchResultClick: (Bakery) -> Unit,
+    onBakeryLikeClick: (Int, Boolean) -> Unit,
+    onClearQueriesClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -55,14 +61,24 @@ internal fun SearchScreen(
             showCancelButton = state.section != SearchSection.RecentSearchResult,
             hint = stringResource(id = R.string.feature_search_hint),
             onKeyboardAction = { onSearch(queryTextState.text.toString()) },
-            onCancelClick = onCancelClick
+            onCancelClick = onCancelClick,
+            onClearClick = onClearQueriesClick
         )
         when (state.section) {
             SearchSection.RecentSearchResult -> RecentSearchResult(list = state.recentSearchBakeryList)
-            SearchSection.RecentSearchQueries -> RecentSearchQueries(queryList = state.recentQueryList)
+            SearchSection.RecentSearchQueries -> RecentSearchQueries(
+                queryList = state.recentQueryList,
+                onChipClick = onSearch,
+                onDeleteClick = onDeleteQueryClick,
+                onDeleteAllClick = onDeleteAllQueriesClick
+            )
+
             SearchSection.SearchResult -> SearchResult(
+                loading = state.loading,
                 resultPagingItems = resultPagingItems,
-                localLikeMap = state.localLikeMap
+                localLikeMap = state.localLikeMap,
+                onCardClick = onSearchResultClick,
+                onLikeClick = onBakeryLikeClick
             )
         }
     }
@@ -100,11 +116,16 @@ private fun ColumnScope.RecentSearchResult(list: ImmutableList<Bakery>) {
  * 최근 검색어
  */
 @Composable
-private fun ColumnScope.RecentSearchQueries(queryList: ImmutableList<Pair<String, String>>) {
+private fun ColumnScope.RecentSearchQueries(
+    queryList: ImmutableList<Pair<String, String>>,
+    onChipClick: (String) -> Unit,
+    onDeleteClick: (String) -> Unit,
+    onDeleteAllClick: () -> Unit
+) {
     SectionTitle(
         title = stringResource(id = R.string.feature_search_title_recent_search_query),
         deleteAllEnabled = queryList.isNotEmpty(),
-        onDeleteAllClick = {}
+        onDeleteAllClick = onDeleteAllClick
     )
     if (queryList.isNotEmpty()) {
         LazyRow(
@@ -118,8 +139,8 @@ private fun ColumnScope.RecentSearchQueries(queryList: ImmutableList<Pair<String
             ) { (query, timeMillis) ->
                 RecentSearchQueryChip(
                     query = query,
-                    onClick = {},
-                    onDeleteClick = {}
+                    onClick = { onChipClick(query) },
+                    onDeleteClick = onDeleteClick
                 )
             }
         }
@@ -138,10 +159,17 @@ private fun ColumnScope.RecentSearchQueries(queryList: ImmutableList<Pair<String
  */
 @Composable
 private fun ColumnScope.SearchResult(
+    loading: Boolean,
     resultPagingItems: LazyPagingItems<Bakery>,
-    localLikeMap: PersistentMap<Int, Boolean>
+    localLikeMap: PersistentMap<Int, Boolean>,
+    onCardClick: (Bakery) -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
-    if (resultPagingItems.isEmpty) {
+    if (loading) {
+        Timber.e("xxx SearchResult: loading")
+        Box(modifier = Modifier.weight(1f))
+    } else if (resultPagingItems.isEmpty) {
+        Timber.e("xxx SearchResult: empty")
         EmptyCard(
             modifier = Modifier
                 .fillMaxWidth()
@@ -149,6 +177,7 @@ private fun ColumnScope.SearchResult(
             description = stringResource(id = R.string.feature_search_empty_recent_search_query)
         )
     } else {
+        Timber.e("xxx SearchResult: result")
         LazyColumn(
             modifier = Modifier.fillMaxWidth(),
             contentPadding = PaddingValues(vertical = 20.dp, horizontal = 16.dp),
@@ -156,15 +185,14 @@ private fun ColumnScope.SearchResult(
         ) {
             items(
                 count = resultPagingItems.itemCount,
-//            key = { index -> resultPagingItems[index]?.id ?: "placeholder_$index" }
+                key = { index -> resultPagingItems.peek(index)?.id ?: "placeholder_$index" }
             ) { index ->
-                Timber.e("xxx $index")
                 resultPagingItems[index]?.let { bakery ->
                     BakeryCard(
                         bakery = bakery,
                         likeMap = localLikeMap,
-                        onCardClick = {},
-                        onLikeClick = { _, _ -> }
+                        onCardClick = onCardClick,
+                        onLikeClick = onLikeClick
                     )
                 } ?: run {
                     // TODO. Skeleton.

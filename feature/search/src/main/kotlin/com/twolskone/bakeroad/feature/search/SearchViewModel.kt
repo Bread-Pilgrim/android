@@ -5,6 +5,8 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteBakeryLikeUseCase
+import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteAllRecentSearchQueriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteRecentSearchQueryUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.GetRecentSearchQueriesUseCase
@@ -31,7 +33,9 @@ internal class SearchViewModel @Inject constructor(
     private val getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val deleteRecentSearchQueryUseCase: DeleteRecentSearchQueryUseCase,
     private val deleteAllRecentSearchQueriesUseCase: DeleteAllRecentSearchQueriesUseCase,
-    private val getSearchBakeriesUseCase: GetSearchBakeriesUseCase
+    private val getSearchBakeriesUseCase: GetSearchBakeriesUseCase,
+    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
+    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
 ) : BaseViewModel<SearchState, SearchIntent, SearchSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): SearchState {
@@ -45,6 +49,7 @@ internal class SearchViewModel @Inject constructor(
         .filter { it.isNotBlank() }
         .distinctUntilChanged()
         .flatMapLatest { query ->
+            reduce { copy(loading = true, localLikeMap = localLikeMap.clear()) }
             getSearchBakeriesUseCase(query = query).cachedIn(viewModelScope)
         }
 
@@ -78,17 +83,46 @@ internal class SearchViewModel @Inject constructor(
                     }
 
                     SearchSection.RecentSearchQueries -> {
-                        val queries = getRecentSearchQueriesUseCase()
-                        reduce { copy(recentQueryList = queries.toImmutableList()) }
+                        getRecentSearchQueryList()
                     }
 
                     SearchSection.SearchResult -> {
+                        // Search result use changed query.
                     }
                 }
                 reduce { copy(section = intent.section) }
             }
 
             is SearchIntent.SearchBakery -> _query.value = intent.query
+
+            is SearchIntent.DeleteQuery -> {
+                deleteRecentSearchQueryUseCase(query = intent.query)
+                getRecentSearchQueryList()
+            }
+
+            SearchIntent.DeleteAllQueries -> {
+                deleteAllRecentSearchQueriesUseCase()
+                getRecentSearchQueryList()
+            }
+
+            is SearchIntent.ClickBakeryLike -> {
+                reduce { copy(localLikeMap = localLikeMap.put(intent.bakeryId, intent.isLike)) }
+                if (intent.isLike) {
+                    postBakeryLikeUseCase(bakeryId = intent.bakeryId)
+                } else {
+                    deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
+                }
+            }
+
+            is SearchIntent.SetLoading -> reduce { copy(loading = intent.loading) }
         }
+    }
+
+    /**
+     * 최근 검색어 목록
+     */
+    private suspend fun getRecentSearchQueryList() {
+        val queries = getRecentSearchQueriesUseCase()
+        reduce { copy(recentQueryList = queries.toImmutableList()) }
     }
 }

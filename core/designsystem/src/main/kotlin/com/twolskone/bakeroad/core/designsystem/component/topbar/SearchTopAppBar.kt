@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
@@ -42,6 +43,7 @@ import com.twolskone.bakeroad.core.designsystem.R
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 
 @Composable
@@ -54,7 +56,8 @@ fun BakeRoadSearchTopAppBar(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     onKeyboardAction: KeyboardActionHandler,
     showCancelButton: Boolean = false,
-    onCancelClick: (() -> Unit)? = null
+    onCancelClick: (() -> Unit)? = null,
+    onClearClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -72,7 +75,8 @@ fun BakeRoadSearchTopAppBar(
             searchTextInputColors = searchTextInputColors,
             interactionSource = interactionSource,
             hint = hint,
-            onKeyboardAction = onKeyboardAction
+            onKeyboardAction = onKeyboardAction,
+            onClearClick = onClearClick
         )
         AnimatedVisibility(visible = showCancelButton) {
             BakeRoadTextButton(
@@ -98,7 +102,8 @@ private fun SearchTextInput(
     onKeyboardAction: KeyboardActionHandler,
     outputTransformation: OutputTransformation? = null,
     interactionSource: MutableInteractionSource,
-    hint: String = ""
+    hint: String = "",
+    onClearClick: () -> Unit
 ) {
     val isFocus by interactionSource.collectIsFocusedAsState()
 
@@ -121,10 +126,20 @@ private fun SearchTextInput(
                     .background(color = searchTextInputColors.containerColor, shape = SearchTextInputShape),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                CompositionLocalProvider(
+                    LocalContentColor provides searchTextInputColors.iconContentColor
+                ) {
+                    Icon(
+                        modifier = Modifier.padding(start = 12.dp),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.core_designsystem_ic_search),
+                        contentDescription = "Search"
+                    )
+                }
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                        .wrapContentHeight()
+                        .padding(horizontal = 8.dp, vertical = 12.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
                     if (state.text.isNotEmpty() || isFocus) {
@@ -139,11 +154,15 @@ private fun SearchTextInput(
                 CompositionLocalProvider(
                     LocalContentColor provides searchTextInputColors.iconContentColor
                 ) {
-                    Icon(
-                        modifier = Modifier.padding(end = 12.dp),
-                        imageVector = ImageVector.vectorResource(id = R.drawable.core_designsystem_ic_search),
-                        contentDescription = "Search"
-                    )
+                    if (state.text.isNotEmpty()) {
+                        Icon(
+                            modifier = Modifier
+                                .noRippleSingleClickable { onClearClick() }
+                                .padding(end = 12.dp),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.core_designsystem_ic_delete),
+                            contentDescription = "Clear"
+                        )
+                    }
                 }
             }
         }
@@ -185,7 +204,8 @@ private fun BakeRoadSearchTopAppBarPreview() {
             hint = "가고 싶은 빵집이나 메뉴를 검색해보세요.",
             showCancelButton = true,
             onCancelClick = { focusManager.clearFocus(force = true) },
-            onKeyboardAction = {}
+            onKeyboardAction = {},
+            onClearClick = {}
         )
     }
 }

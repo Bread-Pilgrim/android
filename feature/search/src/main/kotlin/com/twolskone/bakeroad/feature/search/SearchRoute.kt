@@ -1,6 +1,10 @@
 package com.twolskone.bakeroad.feature.search
 
+import android.content.Intent
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,20 +14,29 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
+import com.twolskone.bakeroad.core.common.android.extension.ObserveError
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
+import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.search.mvi.SearchIntent
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filterIsInstance
 import timber.log.Timber
 
 @Composable
 internal fun SearchRoute(
     padding: PaddingValues,
     viewModel: SearchViewModel = hiltViewModel(),
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    showSnackbar: (SnackbarState) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -32,6 +45,24 @@ internal fun SearchRoute(
     val resultPagingItems = viewModel.resultPagingFlow.collectAsLazyPagingItems()
     val interactionSource = remember { MutableInteractionSource() }
     val isFocus by interactionSource.collectIsFocusedAsState()
+
+    val bakeryDetailLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
+            Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
+            when (state.section) {
+                SearchSection.RecentSearchResult -> {
+                    // TODO. Refresh recent search result.
+                }
+
+                SearchSection.SearchResult -> resultPagingItems.refresh()
+                SearchSection.RecentSearchQueries -> {}
+            }
+        } else {
+            Timber.i("xxx bakeryDetailLauncher :: Canceled")
+        }
+    }
 
     BackHandler {
         if (state.section != SearchSection.RecentSearchResult) {
@@ -43,12 +74,28 @@ internal fun SearchRoute(
         }
     }
 
-    LaunchedEffect(isFocus) {
-        Timber.i("xxx isFocus $isFocus")
-        if (isFocus && state.section == SearchSection.RecentSearchResult) {
+    LaunchedEffect(Unit) {
+        viewModel.snackbarEffect.collectLatest { state ->
+            showSnackbar(state)
+        }
+    }
+
+    LaunchedEffect(isFocus, queryTextState.text) {
+        if (isFocus && (queryTextState.text.isBlank() || state.section == SearchSection.RecentSearchResult)) {
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))
         }
     }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { resultPagingItems.loadState.refresh }
+            .filterIsInstance<LoadState.NotLoading>()
+            .collect {
+                Timber.e("xxx loadState: $it")
+                viewModel.intent(SearchIntent.SetLoading(loading = false))
+            }
+    }
+
+    resultPagingItems.ObserveError(viewModel = viewModel)
 
     BaseComposable(baseViewModel = viewModel) {
         SearchScreen(
@@ -63,9 +110,18 @@ internal fun SearchRoute(
                 viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
             },
             onSearch = { query ->
+                focusManager.clearFocus()
                 keyboardController?.hide()
                 viewModel.intent(SearchIntent.SearchBakery(query = query))
                 viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.SearchResult))
+            },
+            onDeleteQueryClick = { query -> viewModel.intent(SearchIntent.DeleteQuery(query = query)) },
+            onDeleteAllQueriesClick = { viewModel.intent(SearchIntent.DeleteAllQueries) },
+            onSearchResultClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
+            onBakeryLikeClick = { bakeryId, isLike -> viewModel.intent(SearchIntent.ClickBakeryLike(bakeryId = bakeryId, isLike = isLike)) },
+            onClearQueriesClick = {
+                queryTextState.clearText()
+                viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))
             }
         )
     }

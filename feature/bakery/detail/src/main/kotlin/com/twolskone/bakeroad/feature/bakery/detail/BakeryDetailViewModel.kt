@@ -10,6 +10,7 @@ import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeryDetailUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeryMyReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeryPreviewReviewsUseCase
+import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeryReviewEligibilityUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeryReviewsUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.review.DeleteReviewLikeUseCase
@@ -51,7 +52,8 @@ internal class BakeryDetailViewModel @Inject constructor(
     private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
     private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase,
     private val postReviewLikeUseCase: PostReviewLikeUseCase,
-    private val deleteReviewLikeUseCase: DeleteReviewLikeUseCase
+    private val deleteReviewLikeUseCase: DeleteReviewLikeUseCase,
+    private val getBakeryReviewEligibilityUseCase: GetBakeryReviewEligibilityUseCase
 ) : BaseViewModel<BakeryDetailState, BakeryDetailIntent, BakeryDetailSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): BakeryDetailState {
@@ -156,6 +158,15 @@ internal class BakeryDetailViewModel @Inject constructor(
                         count = intent.count
                     )
                 )
+            }
+
+            BakeryDetailIntent.CheckReviewEligibility -> {
+                val isEligible = getBakeryReviewEligibilityUseCase(bakeryId = bakeryId)
+                if (isEligible) {
+                    postSideEffect(BakeryDetailSideEffect.NavigateToWriteBakeryReview)
+                } else {
+                    showSnackbar(type = SnackbarType.ERROR, messageRes = R.string.feature_bakery_detail_snackbar_review_eligibility_false)
+                }
             }
         }
     }

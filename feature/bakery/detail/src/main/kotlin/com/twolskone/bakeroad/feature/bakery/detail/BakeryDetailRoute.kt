@@ -24,6 +24,7 @@ import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
+import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailSideEffect
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import timber.log.Timber
@@ -64,6 +65,14 @@ internal fun BakeryDetailRoute(
         setResult(RESULT_REFRESH_BAKERY_LIST, true)
     }
 
+    LaunchedEffect(viewModel) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                BakeryDetailSideEffect.NavigateToWriteBakeryReview -> navigateToWriteBakeryReview(viewModel.bakeryId, writeReviewLauncher)
+            }
+        }
+    }
+
     LaunchedEffect(Unit) {
         snapshotFlow { reviewPagingItems.loadState.refresh }
             .filterIsInstance<LoadState.NotLoading>()
@@ -92,7 +101,7 @@ internal fun BakeryDetailRoute(
             onTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectTab(tab)) },
             onReviewTabSelect = { tab -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab)) },
             onReviewSortSelect = { sort -> viewModel.intent(BakeryDetailIntent.SelectReviewSort(sort)) },
-            onWriteReviewClick = { navigateToWriteBakeryReview(viewModel.bakeryId, writeReviewLauncher) },
+            onWriteReviewClick = { viewModel.intent(BakeryDetailIntent.CheckReviewEligibility) },
             onBakeryLikeClick = { isLike -> viewModel.intent(BakeryDetailIntent.ClickBakeryLike(isLike = isLike)) },
             onReviewLikeClick = { id, isLike -> viewModel.intent(BakeryDetailIntent.ClickReviewLike(reviewId = id, isLike = isLike)) }
         )

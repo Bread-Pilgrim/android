@@ -23,7 +23,7 @@
     <string name="feature_bakery_detail_label_sort_created_at">최신 작성 순</string>
     <string name="feature_bakery_detail_label_sort_rating_desc">높은 평가 순</string>
     <string name="feature_bakery_detail_label_sort_rating_asc">낮은 평가 순</string>
-    <string name="feature_bakery_detail_description_empty_review">아직 등록된 리뷰가 없습니다!\n방문하셨다면 리뷰를 남겨주세요 🥨</string>
+    <string name="feature_bakery_detail_empty_review">아직 등록된 리뷰가 없습니다!\n방문하셨다면 리뷰를 남겨주세요 🥨</string>
     <string name="feature_bakery_detail_review_count">(%s개)</string>
     <string name="feature_bakery_detail_like">좋아요</string>
     <string name="feature_bakery_detail_price">%s원</string>

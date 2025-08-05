@@ -17,7 +17,7 @@ import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListSideEffect
 import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.catch
+import timber.log.Timber
 
 private const val AREA_CODES = "areaCodes"
 private const val BAKERY_TYPE = "bakeryType"
@@ -40,6 +40,7 @@ internal class BakeryListViewModel @Inject constructor(
     }
 
     override fun handleException(cause: Throwable) {
+        Timber.e(cause)
         when (cause) {
             is ClientException -> {
                 showSnackbar(

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_mybakery">내 빵집</string>
+    <string name="feature_mybakery_tab_visited_bakery">다녀온 빵집</string>
+    <string name="feature_mybakery_tab_like_bakery">찜한 빵집</string>
+    <string name="feature_mybakery_empty_visited_bakery">아직 다녀온 빵집이 없어요 🥲\n방문 후 리뷰를 남겨주시면 다녀온 빵집에 추가돼요!</string>
+    <string name="feature_mybakery_empty_like_bakery">아직 찜한 빵집이 없어요 🥲\n가고 싶은 빵집을 추가해봐요!</string>
+</resources>

@@ -195,7 +195,7 @@ private fun ReviewContent(
         } else {
             EmptyCard(
                 modifier = Modifier.fillMaxWidth(),
-                description = stringResource(id = R.string.feature_bakery_detail_description_empty_review)
+                description = stringResource(id = R.string.feature_bakery_detail_empty_review)
             )
         }
     }

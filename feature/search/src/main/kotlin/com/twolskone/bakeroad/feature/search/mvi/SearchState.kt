@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.feature.search.mvi
 
+import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection.RecentSearchQueries
@@ -10,6 +11,7 @@ import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 
+@Immutable
 internal data class SearchState(
     val loading: Boolean = false,
     val section: SearchSection = RecentSearchResult,
@@ -25,6 +27,7 @@ internal data class SearchState(
  * @property RecentSearchQueries    최근 검색어
  * @property SearchResult           검색결과
  */
+@Immutable
 internal enum class SearchSection {
     RecentSearchResult, RecentSearchQueries, SearchResult
 }

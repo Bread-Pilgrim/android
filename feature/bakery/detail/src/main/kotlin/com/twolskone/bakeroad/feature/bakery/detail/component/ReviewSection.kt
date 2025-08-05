@@ -89,7 +89,7 @@ internal fun LazyListScope.review(
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
                             .padding(vertical = 12.dp, horizontal = 16.dp),
-                        description = stringResource(id = R.string.feature_bakery_detail_description_empty_review)
+                        description = stringResource(id = R.string.feature_bakery_detail_empty_review)
                     )
                 }
             } else {
@@ -126,7 +126,7 @@ internal fun LazyListScope.review(
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
                             .padding(vertical = 12.dp, horizontal = 16.dp),
-                        description = stringResource(id = R.string.feature_bakery_detail_description_empty_review)
+                        description = stringResource(id = R.string.feature_bakery_detail_empty_review)
                     )
                 }
             } else {

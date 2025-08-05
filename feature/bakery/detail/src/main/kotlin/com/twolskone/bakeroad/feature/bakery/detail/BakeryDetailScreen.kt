@@ -192,7 +192,7 @@ internal fun BakeryDetailScreen(
                         BakeRoadTab(
                             selected = (tab == tabState),
                             onClick = { onTabSelect(tab) },
-                            text = { Text(text = stringResource(id = tab.labelId)) }
+                            text = { Text(text = stringResource(id = tab.labelRes)) }
                         )
                     }
                 }

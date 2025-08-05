@@ -4,6 +4,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewEligibilityResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
@@ -22,4 +23,5 @@ interface BakeryDataSource {
     fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit>
     fun postLike(bakeryId: Int): Flow<BakeryLikeResponse>
     fun deleteLike(bakeryId: Int): Flow<BakeryLikeResponse>
+    fun checkReviewEligibility(bakeryId: Int): Flow<BakeryReviewEligibilityResponse>
 }

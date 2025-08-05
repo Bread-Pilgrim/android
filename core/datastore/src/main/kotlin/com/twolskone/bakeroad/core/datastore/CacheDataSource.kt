@@ -24,7 +24,7 @@ class CacheDataSource @Inject constructor(@CacheDataStore private val dataStore:
         private const val MAX_COUNT_RECENT_SEARCH_QUERY = 20
     }
 
-    suspend fun isOnboardingCompleted(): Boolean =
+    suspend fun getOnboardingCompleted(): Boolean =
         dataStore.data.firstOrNull()?.get(KEY_IS_ONBOARDING_COMPLETED).orFalse()
 
     suspend fun setOnboardingCompleted(value: Boolean) {

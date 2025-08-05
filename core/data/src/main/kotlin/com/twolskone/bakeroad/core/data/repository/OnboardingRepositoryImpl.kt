@@ -13,8 +13,8 @@ internal class OnboardingRepositoryImpl @Inject constructor(
     private val userDataSource: UserDataSource
 ) : OnboardingRepository {
 
-    override suspend fun isOnboardingCompleted(): Boolean {
-        return cacheDataSource.isOnboardingCompleted()
+    override suspend fun getOnboardingCompleted(): Boolean {
+        return cacheDataSource.getOnboardingCompleted()
     }
 
     override suspend fun setOnboardingCompleted(value: Boolean) {

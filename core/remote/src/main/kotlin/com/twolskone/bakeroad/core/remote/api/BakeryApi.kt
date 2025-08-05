@@ -5,6 +5,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeriesResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryDetailResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryLikeResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
+import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewEligibilityResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import okhttp3.MultipartBody
@@ -96,4 +97,8 @@ internal interface BakeryApi {
     /* 빵집 좋아요 취소 */
     @DELETE("bakeries/{bakery_id}/like")
     suspend fun deleteLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse>
+
+    /* 빵집 리뷰 작성 가능 여부 체크 */
+    @GET("bakeries/{bakery_id}/review/eligibility")
+    suspend fun checkReviewEligibility(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryReviewEligibilityResponse>
 }

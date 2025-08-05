@@ -10,5 +10,5 @@ import javax.inject.Inject
 class GetOnboardingStatusUseCase @Inject constructor(private val onboardingRepository: OnboardingRepository) {
 
     suspend operator fun invoke(): Boolean =
-        onboardingRepository.isOnboardingCompleted()
+        onboardingRepository.getOnboardingCompleted()
 }

@@ -111,4 +111,9 @@ internal class BakeryRepositoryImpl @Inject constructor(
         return bakeryDataSource.deleteLike(bakeryId = bakeryId)
             .map { it.bakeryId to it.isLike }
     }
+
+    override fun checkReviewEligibility(bakeryId: Int): Flow<Boolean> {
+        return bakeryDataSource.checkReviewEligibility(bakeryId = bakeryId)
+            .map { it.isEligible }
+    }
 }

@@ -19,4 +19,5 @@ interface BakeryRepository {
     fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit>
     fun postLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
     fun deleteLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
+    fun checkReviewEligibility(bakeryId: Int): Flow<Boolean>
 }

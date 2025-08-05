@@ -106,7 +106,10 @@ internal class WriteReviewViewModel @Inject constructor(
 
             is WriteBakeryReviewIntent.UpdateContent -> reduce { copy(content = intent.content) }
 
-            WriteBakeryReviewIntent.CompleteWrite -> writeReview()
+            WriteBakeryReviewIntent.CompleteWrite -> {
+                reduce { copy(loading = true) }
+                writeReview()
+            }
         }
     }
 
@@ -122,7 +125,12 @@ internal class WriteReviewViewModel @Inject constructor(
                 photos = photoList
             )
         }
-        postBakeryReviewUseCase(bakeryId = bakeryId, review = review)
-        postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
+        val result = postBakeryReviewUseCase(bakeryId = bakeryId, review = review)
+
+        reduce { copy(loading = false) }
+
+        if (result) {
+            postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
+        }
     }
 }

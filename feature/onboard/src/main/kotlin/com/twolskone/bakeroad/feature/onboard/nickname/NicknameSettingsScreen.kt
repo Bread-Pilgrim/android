@@ -28,6 +28,7 @@ import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidBu
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoading
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextInput
 import com.twolskone.bakeroad.core.designsystem.component.textinput.TextInputType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -118,7 +119,7 @@ internal fun NicknameSettingsScreen(
                     role = SolidButtonRole.PRIMARY,
                     size = ButtonSize.XLARGE,
                     trailingIcon = if (isLoading) {
-                        { BakeRoadLoading() }
+                        { BakeRoadLoading(type = LoadingType.Button) }
                     } else null,
                     text = {
                         Text(text = stringResource(id = R.string.feature_onboarding_button_bakeroad_start))
@@ -148,7 +149,7 @@ private fun NicknameSettingsScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             nicknameTextState = textFieldState,
             description = "",
-            isLoading = false,
+            isLoading = true,
             onBackClick = {},
             onStartClick = {}
         )

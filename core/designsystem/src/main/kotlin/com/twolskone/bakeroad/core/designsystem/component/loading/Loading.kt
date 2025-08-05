@@ -13,24 +13,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-
-private val LoadingSize = 28.dp
-private val LoadingStrokeWidth = 4.dp
 
 @Composable
 fun BakeRoadLoading(
     modifier: Modifier = Modifier,
-    indicatorColor: Color = BakeRoadTheme.colorScheme.White,
-    trackColor: Color = BakeRoadTheme.colorScheme.Primary200,
-    backgroundColor: Color = Color.Transparent
+    type: LoadingType,
+    colors: LoadingColors = BakeRoadLoadingDefaults.colors(type),
+    size: Dp = BakeRoadLoadingDefaults.size(type),
+    trackWidth: Dp = BakeRoadLoadingDefaults.trackWidth(type)
 ) {
     val rotation = rememberInfiniteTransition()
         .animateFloat(
@@ -43,18 +45,18 @@ fun BakeRoadLoading(
 
     Box(
         modifier = modifier
-            .size(LoadingSize)
-            .background(color = backgroundColor, shape = CircleShape)
-            .padding(LoadingStrokeWidth / 2)
+            .size(size)
+            .background(color = colors.backgroundColor, shape = CircleShape)
+            .padding(trackWidth / 2)
             .rotate(rotation.value)
     ) {
         Canvas(modifier = Modifier.fillMaxSize()) {
             val sweepAngle = 68.82f
-            val stroke = Stroke(width = LoadingStrokeWidth.toPx(), cap = StrokeCap.Round)
+            val stroke = Stroke(width = trackWidth.toPx(), cap = StrokeCap.Round)
 
             // Track.
             drawArc(
-                color = trackColor,
+                color = colors.trackColor,
                 startAngle = 0f,
                 sweepAngle = 360f,
                 useCenter = false,
@@ -63,7 +65,7 @@ fun BakeRoadLoading(
 
             // Stroke.
             drawArc(
-                color = indicatorColor,
+                color = colors.indicatorColor,
                 startAngle = 0f,
                 sweepAngle = sweepAngle,
                 useCenter = false,
@@ -73,10 +75,86 @@ fun BakeRoadLoading(
     }
 }
 
+@Composable
+fun BakeRoadLoadingScreen(
+    modifier: Modifier = Modifier,
+    touchBlocking: Boolean = true,
+    type: LoadingType,
+    colors: LoadingColors = BakeRoadLoadingDefaults.colors(type),
+    size: Dp = BakeRoadLoadingDefaults.size(type),
+    trackWidth: Dp = BakeRoadLoadingDefaults.trackWidth(type)
+) {
+    Box(
+        modifier = modifier
+            .then(
+                if (touchBlocking) {
+                    Modifier.pointerInput(Unit) {
+                        awaitPointerEventScope {
+                            while (true) {
+                                awaitPointerEvent()
+                            }
+                        }
+                    }
+                } else {
+                    Modifier
+                }
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        BakeRoadLoading(
+            type = type,
+            colors = colors,
+            size = size,
+            trackWidth = trackWidth
+        )
+    }
+}
+
+object BakeRoadLoadingDefaults {
+
+    @Composable
+    fun colors(type: LoadingType) = when (type) {
+        LoadingType.Default -> LoadingColors(
+            indicatorColor = BakeRoadTheme.colorScheme.Primary500,
+            trackColor = BakeRoadTheme.colorScheme.Primary100,
+            backgroundColor = Color.Transparent
+        )
+
+        LoadingType.Button -> LoadingColors(
+            indicatorColor = BakeRoadTheme.colorScheme.White,
+            trackColor = BakeRoadTheme.colorScheme.Primary200,
+            backgroundColor = Color.Transparent
+        )
+    }
+
+    @Composable
+    fun size(type: LoadingType) = when (type) {
+        LoadingType.Default -> 40.dp
+        LoadingType.Button -> 28.dp
+    }
+
+    @Composable
+    fun trackWidth(type: LoadingType) = when (type) {
+        LoadingType.Default -> 6.dp
+        LoadingType.Button -> 4.dp
+    }
+}
+
+@Immutable
+data class LoadingColors(
+    val indicatorColor: Color,
+    val trackColor: Color,
+    val backgroundColor: Color
+)
+
+enum class LoadingType {
+    Default, Button
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun BakeRoadLoadingPreview() {
     BakeRoadTheme {
-        BakeRoadLoading(modifier = Modifier.size(20.dp))
+        BakeRoadLoading(type = LoadingType.Default)
     }
 }

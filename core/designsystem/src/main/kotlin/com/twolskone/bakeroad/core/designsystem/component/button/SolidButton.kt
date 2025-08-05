@@ -34,7 +34,13 @@ fun BakeRoadSolidButton(
         modifier = modifier
             .background(color = containerColor, shape = size.shape(style = style))
             .clip(size.shape(style = style))
-            .singleClickable { onClick() },
+            .then(
+                if (enabled) {
+                    Modifier.singleClickable { onClick() }
+                } else {
+                    Modifier
+                }
+            ),
         contentAlignment = Alignment.Center
     ) {
         ProvideContentColorTextStyle(

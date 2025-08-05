@@ -3,7 +3,6 @@ package com.twolskone.bakeroad.feature.search
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadSearchTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
@@ -167,7 +168,12 @@ private fun ColumnScope.SearchResult(
 ) {
     if (loading) {
         Timber.e("xxx SearchResult: loading")
-        Box(modifier = Modifier.weight(1f))
+        BakeRoadLoadingScreen(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            type = LoadingType.Default
+        )
     } else if (resultPagingItems.isEmpty) {
         Timber.e("xxx SearchResult: empty")
         EmptyCard(

@@ -47,6 +47,8 @@ import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.ratingbar.BakeRoadRatingBar
 import com.twolskone.bakeroad.core.designsystem.component.switch.BakeRoadSwitch
 import com.twolskone.bakeroad.core.designsystem.component.switch.SwitchSize
@@ -211,6 +213,12 @@ internal fun WriteBakeryReviewScreen(
             size = ButtonSize.XLARGE,
             onClick = onSubmit,
             content = { Text(text = stringResource(id = R.string.feature_review_write_button_write_complete)) }
+        )
+    }
+    if (state.loading) {
+        BakeRoadLoadingScreen(
+            modifier = Modifier.fillMaxSize(),
+            type = LoadingType.Default
         )
     }
 }

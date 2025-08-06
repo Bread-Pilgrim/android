@@ -30,14 +30,14 @@ internal class BakeryListViewModel @Inject constructor(
     private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
 ) : BaseViewModel<BakeryListState, BakeryListIntent, BakeryListSideEffect>(savedStateHandle) {
 
+    override fun initState(savedStateHandle: SavedStateHandle): BakeryListState {
+        return BakeryListState(bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE)
+    }
+
     val pagingFlow = getBakeriesUseCase(
         areaCodes = savedStateHandle.get<String>(AREA_CODES) ?: EntireBusan.toString(),
         bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE
     ).cachedIn(viewModelScope)
-
-    override fun initState(savedStateHandle: SavedStateHandle): BakeryListState {
-        return BakeryListState(bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE)
-    }
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause)

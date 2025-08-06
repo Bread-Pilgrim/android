@@ -28,7 +28,7 @@ internal interface BakeryApi {
     @GET("bakeries/recommend/hot")
     suspend fun getRecommendHotBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
 
-    /* 내 취향 기반 빵집 목록 (페이징) */
+    /* 내 취향 기반 빵집 목록 */
     @GET("bakeries/preference")
     suspend fun getPreferenceBakeries(
         @Query("area_code") areaCode: String,
@@ -36,7 +36,7 @@ internal interface BakeryApi {
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
-    /* Hot한 빵집 목록 (페이징) */
+    /* Hot한 빵집 목록 */
     @GET("bakeries/hot")
     suspend fun getHotBakeries(
         @Query("area_code") areaCode: String,
@@ -48,7 +48,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakeryId}")
     suspend fun getBakeryDetail(@Path("bakeryId") bakeryId: Int): BaseResponse<BakeryDetailResponse>
 
-    /* 빵집 리뷰 프리뷰 목록 (페이징 x) */
+    /* 빵집 리뷰 미리보기 */
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getPreviewReviews(
         @Path("bakery_id") bakeryId: Int,
@@ -101,4 +101,12 @@ internal interface BakeryApi {
     /* 빵집 리뷰 작성 가능 여부 체크 */
     @GET("bakeries/{bakery_id}/review/eligibility")
     suspend fun checkReviewEligibility(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryReviewEligibilityResponse>
+
+    /* 내가 찜한 빵집 목록 */
+    @GET("bakeries/like")
+    suspend fun getLikeBakeries(
+        @Query("page_no") pageNo: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("sort_clause") sort: String
+    ): BaseResponse<BakeriesResponse>
 }

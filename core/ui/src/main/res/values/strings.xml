@@ -4,10 +4,12 @@
     <string name="core_ui_title_preference_flavor">어떤 빵 맛을 선호하세요?</string>
     <string name="core_ui_title_preference_bakery_type">어떤 종류의 빵집을 선호하시나요?</string>
     <string name="core_ui_title_preference_commercial_area">원하시는 지역이 있으신가요?</string>
+    <string name="core_ui_title_sort_order">정렬 순서</string>
     <string name="core_ui_description_preference">(복수 선택 가능🥐)</string>
     <string name="core_ui_button_next">다음</string>
     <string name="core_ui_button_previous">이전</string>
     <string name="core_ui_button_save">저장</string>
+    <string name="core_ui_button_sort">정렬</string>
     <string name="core_ui_button_preference_change">내 취향 변경</string>
     <string name="core_ui_label_bakery_open_status_open">영업중</string>
     <string name="core_ui_label_bakery_open_status_closed">영업종료</string>
@@ -15,4 +17,12 @@
     <string name="core_ui_label_bakery_open_status_before_open">영업전</string>
     <string name="core_ui_label_signature_menu">대표메뉴</string>
     <string name="core_ui_label_review_count">(리뷰 %s)</string>
+    <string name="core_ui_label_sort_like_count">좋아요 순</string>
+    <string name="core_ui_label_sort_created_at">최신 작성 순</string>
+    <string name="core_ui_label_review_sort_rating_desc">높은 평가 순</string>
+    <string name="core_ui_label_review_sort_rating_asc">낮은 평가 순</string>
+    <string name="core_ui_label_sort_review_desc">리뷰 많은 순</string>
+    <string name="core_ui_label_bakery_sort_rating_desc">별점 높은 순</string>
+    <string name="core_ui_label_bakery_sort_rating_asc">별점 낮은 순</string>
+    <string name="core_ui_label_sort_name">가나다 순</string>
 </resources>

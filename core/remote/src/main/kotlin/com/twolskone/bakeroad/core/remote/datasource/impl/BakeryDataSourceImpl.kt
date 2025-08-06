@@ -147,4 +147,13 @@ internal class BakeryDataSourceImpl @Inject constructor(
     override fun checkReviewEligibility(bakeryId: Int): Flow<BakeryReviewEligibilityResponse> = flow {
         emitData(api.checkReviewEligibility(bakeryId = bakeryId))
     }.flowOn(networkDispatcher)
+
+    override suspend fun getLikeBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse {
+        val response = api.getLikeBakeries(
+            pageNo = pageNo,
+            pageSize = pageSize,
+            sort = sort
+        )
+        return response.toData()
+    }
 }

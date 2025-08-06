@@ -297,7 +297,7 @@ internal fun BakeryDetailScreen(
 
         if (showReviewSortBottomSheet) {
             ReviewSortBottomSheet(
-                sortType = reviewSortState,
+                sort = reviewSortState,
                 onDismissRequest = { showReviewSortBottomSheet = false },
                 onSortSelect = { sort ->
                     if (sort != reviewSortState) onReviewSortSelect(sort)

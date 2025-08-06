@@ -6,6 +6,5 @@ package com.twolskone.bakeroad.core.model.type
  * @property HOT            Hot한 빵집
  */
 enum class BakeryType {
-    PREFERENCE,
-    HOT,
+    PREFERENCE, HOT
 }

@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.bakery.detail.component
+package com.twolskone.bakeroad.feature.mybakery.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -19,16 +19,16 @@ import com.twolskone.bakeroad.core.designsystem.component.button.RadioButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadSheet
 import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.model.type.ReviewSortType
+import com.twolskone.bakeroad.core.model.type.BakerySortType
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ReviewSortBottomSheet(
-    sort: ReviewSortType,
+internal fun BakerySortBottomSheet(
+    sort: BakerySortType,
     onDismissRequest: () -> Unit,
-    onSortSelect: (ReviewSortType) -> Unit,
+    onSortSelect: (BakerySortType) -> Unit,
     onCancel: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -46,13 +46,13 @@ internal fun ReviewSortBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 radioButtonSize = RadioButtonSize.NORMAL,
                 selectedIndex = selectedSort.ordinal,
-                optionList = ReviewSortType.entries.map { it.label }.toImmutableList(),
-                onOptionSelect = { selectedSort = ReviewSortType.entries[it] },
+                optionList = BakerySortType.entries.map { it.label }.toImmutableList(),
+                onOptionSelect = { selectedSort = BakerySortType.entries[it] },
                 verticalPadding = 8.dp,
                 text = { index ->
                     Text(
                         modifier = Modifier.padding(start = 4.dp),
-                        text = ReviewSortType.entries[index].label,
+                        text = BakerySortType.entries[index].label,
                         style = BakeRoadTheme.typography.bodySmallMedium.copy(
                             color = if (selectedSort.ordinal == index) {
                                 BakeRoadTheme.colorScheme.Gray990
@@ -77,11 +77,12 @@ internal fun ReviewSortBottomSheet(
     )
 }
 
-internal val ReviewSortType.label: String
+internal val BakerySortType.label: String
     @Composable
     get() = when (this) {
-        ReviewSortType.LIKE_COUNT_DESC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_sort_like_count)
-        ReviewSortType.CREATED_AT_DESC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_sort_created_at)
-        ReviewSortType.RATING_DESC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_review_sort_rating_desc)
-        ReviewSortType.RATING_ASC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_review_sort_rating_asc)
+        BakerySortType.CREATED_AT_DESC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_sort_created_at)
+        BakerySortType.REVIEW_COUNT_DESC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_sort_review_desc)
+        BakerySortType.AVG_RATING_DESC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_bakery_sort_rating_desc)
+        BakerySortType.AVG_RATING_ASC -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_bakery_sort_rating_asc)
+        BakerySortType.NAME -> stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_label_sort_name)
     }

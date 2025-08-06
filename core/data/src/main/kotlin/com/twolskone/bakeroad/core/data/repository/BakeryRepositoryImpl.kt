@@ -9,6 +9,7 @@ import com.twolskone.bakeroad.core.data.mapper.toReviewMenu
 import com.twolskone.bakeroad.core.data.paging.BakeryPagingSource
 import com.twolskone.bakeroad.core.data.paging.BakeryReviewPagingSource
 import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
+import com.twolskone.bakeroad.core.data.paging.MyBakeryPagingSource
 import com.twolskone.bakeroad.core.data.paging.defaultPagingConfig
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.Bakery
@@ -16,7 +17,9 @@ import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
+import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.model.type.MyBakeryType
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
@@ -116,4 +119,17 @@ internal class BakeryRepositoryImpl @Inject constructor(
         return bakeryDataSource.checkReviewEligibility(bakeryId = bakeryId)
             .map { it.isEligible }
     }
+
+    override fun getMyBakeries(myBakeryType: MyBakeryType, sort: BakerySortType): Flow<PagingData<Bakery>> =
+        Pager(
+            config = defaultPagingConfig(),
+            pagingSourceFactory = {
+                MyBakeryPagingSource(
+                    pageSize = DefaultPageSize,
+                    bakeryDataSource = bakeryDataSource,
+                    myBakeryType = myBakeryType,
+                    sort = sort
+                )
+            }
+        ).flow.flowOn(networkDispatcher)
 }

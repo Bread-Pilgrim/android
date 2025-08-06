@@ -9,7 +9,6 @@ import com.twolskone.bakeroad.core.data.mapper.toReviewMenu
 import com.twolskone.bakeroad.core.data.paging.BakeryPagingSource
 import com.twolskone.bakeroad.core.data.paging.BakeryReviewPagingSource
 import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
-import com.twolskone.bakeroad.core.data.paging.MyBakeryPagingSource
 import com.twolskone.bakeroad.core.data.paging.defaultPagingConfig
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.Bakery
@@ -17,6 +16,7 @@ import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
+import com.twolskone.bakeroad.core.model.paging.Paging
 import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.MyBakeryType
@@ -26,6 +26,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 
@@ -120,16 +121,29 @@ internal class BakeryRepositoryImpl @Inject constructor(
             .map { it.isEligible }
     }
 
-    override fun getMyBakeries(myBakeryType: MyBakeryType, sort: BakerySortType): Flow<PagingData<Bakery>> =
-        Pager(
-            config = defaultPagingConfig(),
-            pagingSourceFactory = {
-                MyBakeryPagingSource(
-                    pageSize = DefaultPageSize,
-                    bakeryDataSource = bakeryDataSource,
-                    myBakeryType = myBakeryType,
-                    sort = sort
-                )
-            }
-        ).flow.flowOn(networkDispatcher)
+    override fun getMyBakeries(
+        page: Int,
+        myBakeryType: MyBakeryType,
+        sort: BakerySortType
+    ): Flow<Paging<Bakery>> = flow {
+        val response = when (myBakeryType) {
+            MyBakeryType.VISITED -> bakeryDataSource.getLikeBakeries(
+                pageNo = page,
+                pageSize = DefaultPageSize,
+                sort = sort.value
+            )
+
+            MyBakeryType.LIKE -> bakeryDataSource.getLikeBakeries(
+                pageNo = page,
+                pageSize = DefaultPageSize,
+                sort = sort.value
+            )
+        }
+        val paging = Paging(
+            list = response.items.map { it.toExternalModel() },
+            page = page,
+            hasNext = response.hasNext
+        )
+        emit(paging)
+    }.flowOn(networkDispatcher)
 }

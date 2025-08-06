@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
+import com.twolskone.bakeroad.core.model.paging.Paging
 import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.MyBakeryType
@@ -22,5 +23,5 @@ interface BakeryRepository {
     fun postLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
     fun deleteLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
     fun checkReviewEligibility(bakeryId: Int): Flow<Boolean>
-    fun getMyBakeries(myBakeryType: MyBakeryType, sort: BakerySortType): Flow<PagingData<Bakery>>
+    fun getMyBakeries(page: Int, myBakeryType: MyBakeryType, sort: BakerySortType): Flow<Paging<Bakery>>
 }

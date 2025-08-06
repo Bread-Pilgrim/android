@@ -16,8 +16,10 @@ internal class BakeryPagingSource(
 ) : PagingSource<Int, Bakery>() {
 
     override fun getRefreshKey(state: PagingState<Int, Bakery>): Int? {
+
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1) ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
         }.also {
             Timber.i("xxx getRefreshKey : $it")
         }

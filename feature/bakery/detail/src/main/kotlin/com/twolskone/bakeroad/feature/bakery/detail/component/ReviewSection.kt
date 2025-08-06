@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import com.twolskone.bakeroad.core.common.android.extension.emptyState
 import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
@@ -61,7 +62,7 @@ internal fun LazyListScope.review(
                     .padding(top = 12.dp, bottom = 4.dp)
                     .height(48.dp),
                 selectedOptionIndex = tabState.ordinal,
-                optionList = ReviewTab.entries.map { stringResource(id = it.labelId) }.toImmutableList(),
+                optionList = ReviewTab.entries.map { stringResource(id = it.labelRes) }.toImmutableList(),
                 onSelect = { index ->
                     val selectedReviewTab = runCatching { ReviewTab.entries[index] }.getOrDefault(ReviewTab.ALL_REVIEW)
                     if (index != tabState.ordinal) {
@@ -95,7 +96,7 @@ internal fun LazyListScope.review(
             } else {
                 items(
                     count = reviewPaging.itemCount,
-                    key = { index -> reviewPaging.peek(index)?.id ?: "placeholder_$index" }
+                    key = reviewPaging.itemKey { it.id }
                 ) { index ->
                     reviewPaging[index]?.let { review ->
                         ReviewCard(
@@ -132,7 +133,7 @@ internal fun LazyListScope.review(
             } else {
                 items(
                     count = myReviewPaging.itemCount,
-                    key = { index -> myReviewPaging.peek(index)?.id ?: "placeholder_$index" }
+                    key = reviewPaging.itemKey { it.id }
                 ) { index ->
                     myReviewPaging[index]?.let { review ->
                         ReviewCard(

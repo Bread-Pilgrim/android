@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemKey
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
@@ -79,14 +80,13 @@ internal fun BakeryListScreen(
             contentPadding = PaddingValues(
                 start = 16.dp,
                 end = 16.dp,
-                top = 20.dp,
-                bottom = 28.dp
+                top = 20.dp
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(
                 count = pagingItems.itemCount,
-                key = { index -> pagingItems.peek(index)?.id ?: "placeholder_$index" }
+                key = pagingItems.itemKey { it.id }
             ) { index ->
                 pagingItems[index]?.let { bakery ->
                     BakeryCard(
@@ -95,8 +95,6 @@ internal fun BakeryListScreen(
                         onCardClick = onBakeryClick,
                         onLikeClick = onBakeryLikeClick
                     )
-                } ?: run {
-                    // TODO. Skeleton.
                 }
             }
         }

@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
+import timber.log.Timber
 
 internal class BakeryReviewPagingSource(
     private val pageSize: Int,
@@ -17,7 +18,10 @@ internal class BakeryReviewPagingSource(
 
     override fun getRefreshKey(state: PagingState<Int, BakeryReview>): Int? {
         return state.anchorPosition?.let { anchorPosition ->
-            state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1) ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
+            val anchorPage = state.closestPageToPosition(anchorPosition)
+            anchorPage?.prevKey?.plus(1) ?: anchorPage?.nextKey?.minus(1)
+        }.also {
+            Timber.i("xxx getRefreshKey : $it")
         }
     }
 

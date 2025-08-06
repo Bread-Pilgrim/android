@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,9 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
-import androidx.paging.PagingData
-import androidx.paging.compose.LazyPagingItems
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
@@ -37,17 +37,16 @@ import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
-import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.ui.BakeryCard
+import com.twolskone.bakeroad.core.ui.model.PagingUiState
 import com.twolskone.bakeroad.feature.mybakery.component.BakerySortBottomSheet
 import com.twolskone.bakeroad.feature.mybakery.component.ViewModeToggleButton
 import com.twolskone.bakeroad.feature.mybakery.component.label
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.model.ViewMode
-import kotlinx.collections.immutable.PersistentMap
+import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryState
 import kotlinx.collections.immutable.persistentMapOf
-import kotlinx.coroutines.flow.flowOf
 
 private val TabEdgePadding = 16.dp
 private val TabMinWidth = 120.dp
@@ -56,33 +55,16 @@ private val TabMinWidth = 120.dp
 internal fun MyBakeryScreen(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
-    tabState: Tab,
-    sortState: BakerySortType,
-    bakeryPagingItems: LazyPagingItems<Bakery>,
-    localLikeMap: PersistentMap<Int, Boolean>,
+    state: MyBakeryState,
+    visitedListState: LazyListState,
+    likeListState: LazyListState,
     onTabSelect: (Tab) -> Unit,
-    onSortSelect: (BakerySortType) -> Unit,
+    onSortSelect: (Tab, BakerySortType) -> Unit,
     onBakeryClick: (Bakery) -> Unit,
     onBakeryLikeClick: (Int, Boolean) -> Unit
 ) {
     val density = LocalDensity.current
-    var visitedViewMode by remember { mutableStateOf(ViewMode.LIST) }
-    var likeViewMode by remember { mutableStateOf(ViewMode.LIST) }
-    var currentViewMode = when (tabState) {
-        Tab.VISITED -> visitedViewMode
-        Tab.LIKE -> likeViewMode
-    }
-    var visitedSortType by remember { mutableStateOf(BakerySortType.CREATED_AT_DESC) }
-    var likeSortType by remember { mutableStateOf(BakerySortType.CREATED_AT_DESC) }
-    var currentSortType = when (tabState) {
-        Tab.VISITED -> visitedSortType
-        Tab.LIKE -> likeSortType
-    }
     var showSortBottomSheet by remember { mutableStateOf(false) }
-
-    LaunchedEffect(sortState) {
-        currentSortType = sortState
-    }
 
     Column(
         modifier = modifier
@@ -102,72 +84,40 @@ internal fun MyBakeryScreen(
                 containerColor = BakeRoadTheme.colorScheme.White,
                 contentColor = BakeRoadTheme.colorScheme.Gray990,
                 edgePadding = TabEdgePadding,
-                selectedTabIndex = Tab.entries.indexOf(tabState)
+                selectedTabIndex = Tab.entries.indexOf(state.tab)
             ) {
                 Tab.entries.fastForEach { tab ->
                     BakeRoadTab(
                         modifier = Modifier.width(tabWidth),
-                        selected = tab == tabState,
+                        selected = tab == state.tab,
                         onClick = { onTabSelect(tab) },
                         text = { Text(text = stringResource(id = tab.labelRes)) }
                     )
                 }
             }
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 16.dp)
-                .padding(horizontal = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            ViewModeToggleButton(
-                modifier = Modifier.padding(start = 6.dp),
-                selectedViewMode = currentViewMode,
-                onClick = { viewMode ->
-                    when (tabState) {
-                        Tab.VISITED -> visitedViewMode = viewMode
-                        Tab.LIKE -> likeViewMode = viewMode
-                    }
-                }
+        when (state.tab) {
+            Tab.VISITED -> MyBakerySection(
+                sort = state.visitedSection.sort,
+                paging = state.visitedSection.paging,
+                listState = visitedListState,
+                onSortClick = { showSortBottomSheet = true }
             )
-            BakeRoadTextButton(
-                style = TextButtonStyle.ASSISTIVE,
-                size = TextButtonSize.SMALL,
-                onClick = {},
-                content = { Text(text = currentSortType.label) }
+
+            Tab.LIKE -> MyBakerySection(
+                sort = state.likeSection.sort,
+                paging = state.likeSection.paging,
+                listState = likeListState,
+                onSortClick = { showSortBottomSheet = true }
             )
-        }
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentPadding = PaddingValues(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(
-                count = bakeryPagingItems.itemCount,
-                key = { index -> bakeryPagingItems.peek(index)?.id ?: "placeholder_$index" }
-            ) { index ->
-                bakeryPagingItems[index]
-                    ?.let { bakery ->
-                        BakeryCard(
-                            bakery = bakery,
-                            likeMap = localLikeMap,
-                            onCardClick = onBakeryClick,
-                            onLikeClick = onBakeryLikeClick
-                        )
-                    }
-            }
         }
     }
     if (showSortBottomSheet) {
         BakerySortBottomSheet(
-            sort = currentSortType,
+            sort = state.currentSort,
             onDismissRequest = { showSortBottomSheet = false },
             onSortSelect = { sort ->
-                if (sort != currentSortType) onSortSelect(sort)
+                if (sort != state.currentSort) onSortSelect(state.tab, sort)
                 showSortBottomSheet = false
             },
             onCancel = { showSortBottomSheet = false }
@@ -175,38 +125,67 @@ internal fun MyBakeryScreen(
     }
 }
 
+@Composable
+private fun ColumnScope.MyBakerySection(
+    sort: BakerySortType,
+    paging: PagingUiState<Bakery>,
+    listState: LazyListState,
+    onSortClick: () -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 16.dp)
+            .padding(horizontal = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        ViewModeToggleButton(
+            modifier = Modifier.padding(start = 6.dp),
+            selectedViewMode = ViewMode.LIST,
+            onClick = { }
+        )
+        BakeRoadTextButton(
+            style = TextButtonStyle.ASSISTIVE,
+            size = TextButtonSize.SMALL,
+            onClick = {},
+            content = { Text(text = sort.label) }
+        )
+    }
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+        state = listState
+    ) {
+        items(
+            items = paging.list,
+//            key = { bakery -> bakery.id }
+        ) { bakery ->
+            BakeryCard(
+                bakery = bakery,
+                likeMap = persistentMapOf(),
+                onCardClick = { },
+                onLikeClick = { _, _ -> }
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun MyBakeryScreenPreview() {
     BakeRoadTheme {
-        val pagingData = PagingData.from(
-            listOf(
-                Bakery(
-                    id = 1,
-                    name = "서라당",
-                    areaCode = 14,
-                    rating = 4.7f,
-                    reviewCount = 20203,
-                    openStatus = BakeryOpenStatus.OPEN,
-                    imageUrl = "",
-                    addressGu = "",
-                    addressDong = "",
-                    isLike = true,
-                    signatureMenus = emptyList()
-                )
-            )
-        )
-        val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
-
         MyBakeryScreen(
             modifier = Modifier.fillMaxSize(),
             padding = PaddingValues(),
-            tabState = Tab.VISITED,
-            sortState = BakerySortType.CREATED_AT_DESC,
-            bakeryPagingItems = lazyPagingItems,
-            localLikeMap = persistentMapOf(1 to true),
+            state = MyBakeryState(),
+            visitedListState = rememberLazyListState(),
+            likeListState = rememberLazyListState(),
             onTabSelect = {},
-            onSortSelect = {},
+            onSortSelect = { _, _ -> },
             onBakeryClick = {},
             onBakeryLikeClick = { _, _ -> }
         )

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
 import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
@@ -191,7 +192,7 @@ private fun ColumnScope.SearchResult(
         ) {
             items(
                 count = resultPagingItems.itemCount,
-                key = { index -> resultPagingItems.peek(index)?.id ?: "placeholder_$index" }
+                key = resultPagingItems.itemKey { it.id }
             ) { index ->
                 resultPagingItems[index]?.let { bakery ->
                     BakeryCard(

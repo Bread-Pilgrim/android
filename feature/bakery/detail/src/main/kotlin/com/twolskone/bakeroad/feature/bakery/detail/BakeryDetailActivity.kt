@@ -29,8 +29,12 @@ internal class BakeryDetailActivity : ComponentActivity() {
                             launcher = launcher
                         )
                     },
-                    setResult = { code, finish ->
-                        setResult(code)
+                    setResult = { code, intent, finish ->
+                        if (intent != null) {
+                            setResult(code, intent)
+                        } else {
+                            setResult(code)
+                        }
                         if (finish) finish()
                     }
                 )

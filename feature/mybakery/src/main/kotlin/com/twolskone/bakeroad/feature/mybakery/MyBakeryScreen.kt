@@ -15,7 +15,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,11 +50,11 @@ import com.twolskone.bakeroad.feature.mybakery.component.label
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.model.ViewMode
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryState
-import kotlinx.collections.immutable.persistentMapOf
 
 private val TabEdgePadding = 16.dp
 private val TabMinWidth = 120.dp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MyBakeryScreen(
     modifier: Modifier = Modifier,
@@ -61,67 +65,85 @@ internal fun MyBakeryScreen(
     onTabSelect: (Tab) -> Unit,
     onSortSelect: (Tab, BakerySortType) -> Unit,
     onBakeryClick: (Bakery) -> Unit,
-    onBakeryLikeClick: (Int, Boolean) -> Unit
+    onRefresh: () -> Unit
 ) {
+    val refreshState = rememberPullToRefreshState()
     val density = LocalDensity.current
     var showSortBottomSheet by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = BakeRoadTheme.colorScheme.White)
-            .padding(bottom = padding.calculateBottomPadding())
-    ) {
-        BakeRoadTopAppBar(
-            modifier = Modifier.fillMaxWidth(),
-            title = { Text(text = stringResource(id = R.string.feature_mybakery)) }
-        )
-        BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-            val parentWidth = with(density) { constraints.maxWidth.toDp() }
-            val tabWidth = (parentWidth / 2 - TabEdgePadding).coerceAtLeast(TabMinWidth)
-            BakeRoadScrollableTabRow(
-                modifier = Modifier.fillMaxWidth(),
+    PullToRefreshBox(
+        state = refreshState,
+        isRefreshing = state.isRefreshing,
+        onRefresh = onRefresh,
+        indicator = {
+            Indicator(
+                modifier = Modifier.align(Alignment.TopCenter),
+                isRefreshing = state.isRefreshing,
+                state = refreshState,
                 containerColor = BakeRoadTheme.colorScheme.White,
-                contentColor = BakeRoadTheme.colorScheme.Gray990,
-                edgePadding = TabEdgePadding,
-                selectedTabIndex = Tab.entries.indexOf(state.tab)
-            ) {
-                Tab.entries.fastForEach { tab ->
-                    BakeRoadTab(
-                        modifier = Modifier.width(tabWidth),
-                        selected = tab == state.tab,
-                        onClick = { onTabSelect(tab) },
-                        text = { Text(text = stringResource(id = tab.labelRes)) }
-                    )
+                color = BakeRoadTheme.colorScheme.Primary500,
+            )
+        }
+    ) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = BakeRoadTheme.colorScheme.White)
+                .padding(bottom = padding.calculateBottomPadding())
+        ) {
+            BakeRoadTopAppBar(
+                modifier = Modifier.fillMaxWidth(),
+                title = { Text(text = stringResource(id = R.string.feature_mybakery)) }
+            )
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val parentWidth = with(density) { constraints.maxWidth.toDp() }
+                val tabWidth = (parentWidth / 2 - TabEdgePadding).coerceAtLeast(TabMinWidth)
+                BakeRoadScrollableTabRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    containerColor = BakeRoadTheme.colorScheme.White,
+                    contentColor = BakeRoadTheme.colorScheme.Gray990,
+                    edgePadding = TabEdgePadding,
+                    selectedTabIndex = Tab.entries.indexOf(state.tab)
+                ) {
+                    Tab.entries.fastForEach { tab ->
+                        BakeRoadTab(
+                            modifier = Modifier.width(tabWidth),
+                            selected = tab == state.tab,
+                            onClick = { onTabSelect(tab) },
+                            text = { Text(text = stringResource(id = tab.labelRes)) }
+                        )
+                    }
                 }
             }
-        }
-        when (state.tab) {
-            Tab.VISITED -> MyBakerySection(
-                sort = state.visitedSection.sort,
-                paging = state.visitedSection.paging,
-                listState = visitedListState,
-                onSortClick = { showSortBottomSheet = true }
-            )
+            when (state.tab) {
+                Tab.VISITED -> MyBakerySection(
+                    sort = state.visitedSection.sort,
+                    paging = state.visitedSection.paging,
+                    listState = visitedListState,
+                    onSortClick = { showSortBottomSheet = true },
+                    onBakeryClick = onBakeryClick
+                )
 
-            Tab.LIKE -> MyBakerySection(
-                sort = state.likeSection.sort,
-                paging = state.likeSection.paging,
-                listState = likeListState,
-                onSortClick = { showSortBottomSheet = true }
+                Tab.LIKE -> MyBakerySection(
+                    sort = state.likeSection.sort,
+                    paging = state.likeSection.paging,
+                    listState = likeListState,
+                    onSortClick = { showSortBottomSheet = true },
+                    onBakeryClick = onBakeryClick
+                )
+            }
+        }
+        if (showSortBottomSheet) {
+            BakerySortBottomSheet(
+                sort = state.currentSort,
+                onDismissRequest = { showSortBottomSheet = false },
+                onSortSelect = { sort ->
+                    if (sort != state.currentSort) onSortSelect(state.tab, sort)
+                    showSortBottomSheet = false
+                },
+                onCancel = { showSortBottomSheet = false }
             )
         }
-    }
-    if (showSortBottomSheet) {
-        BakerySortBottomSheet(
-            sort = state.currentSort,
-            onDismissRequest = { showSortBottomSheet = false },
-            onSortSelect = { sort ->
-                if (sort != state.currentSort) onSortSelect(state.tab, sort)
-                showSortBottomSheet = false
-            },
-            onCancel = { showSortBottomSheet = false }
-        )
     }
 }
 
@@ -130,13 +152,13 @@ private fun ColumnScope.MyBakerySection(
     sort: BakerySortType,
     paging: PagingUiState<Bakery>,
     listState: LazyListState,
-    onSortClick: () -> Unit
+    onSortClick: () -> Unit,
+    onBakeryClick: (Bakery) -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 16.dp)
-            .padding(horizontal = 10.dp),
+            .padding(vertical = 16.dp, horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -148,7 +170,7 @@ private fun ColumnScope.MyBakerySection(
         BakeRoadTextButton(
             style = TextButtonStyle.ASSISTIVE,
             size = TextButtonSize.SMALL,
-            onClick = {},
+            onClick = onSortClick,
             content = { Text(text = sort.label) }
         )
     }
@@ -156,7 +178,7 @@ private fun ColumnScope.MyBakerySection(
         modifier = Modifier
             .fillMaxWidth()
             .weight(1f),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp),
         state = listState
     ) {
@@ -166,9 +188,7 @@ private fun ColumnScope.MyBakerySection(
         ) { bakery ->
             BakeryCard(
                 bakery = bakery,
-                likeMap = persistentMapOf(),
-                onCardClick = { },
-                onLikeClick = { _, _ -> }
+                onCardClick = onBakeryClick
             )
         }
     }
@@ -187,7 +207,7 @@ private fun MyBakeryScreenPreview() {
             onTabSelect = {},
             onSortSelect = { _, _ -> },
             onBakeryClick = {},
-            onBakeryLikeClick = { _, _ -> }
+            onRefresh = {}
         )
     }
 }

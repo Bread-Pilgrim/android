@@ -13,7 +13,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
-import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListIntent
 import timber.log.Timber
 
 @Composable
@@ -27,13 +26,7 @@ internal fun BakeryListRoute(
     val bakeryDetailLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
-            Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
-            viewModel.intent(BakeryListIntent.ClearLocalLikeMap)
-            lazyPagingItems.refresh()
-        } else {
-            Timber.i("xxx bakeryDetailLauncher :: Canceled")
-        }
+        Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
     }
 
     BackHandler {
@@ -46,16 +39,7 @@ internal fun BakeryListRoute(
         BakeryListScreen(
             bakeryType = state.bakeryType,
             pagingItems = lazyPagingItems,
-            localLikeMap = state.localLikeMap,
-            onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
-            onBakeryLikeClick = { bakeryId, isLike ->
-                viewModel.intent(
-                    BakeryListIntent.ClickBakeryLike(
-                        bakeryId = bakeryId,
-                        isLike = isLike
-                    )
-                )
-            }
+            onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) }
         )
     }
 }

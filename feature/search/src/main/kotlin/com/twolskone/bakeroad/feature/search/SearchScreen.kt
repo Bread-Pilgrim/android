@@ -32,7 +32,6 @@ import com.twolskone.bakeroad.feature.search.component.SectionTitle
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
 import com.twolskone.bakeroad.feature.search.mvi.SearchState
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentMap
 import timber.log.Timber
 
 @Composable
@@ -48,7 +47,6 @@ internal fun SearchScreen(
     onDeleteQueryClick: (String) -> Unit,
     onDeleteAllQueriesClick: () -> Unit,
     onSearchResultClick: (Bakery) -> Unit,
-    onBakeryLikeClick: (Int, Boolean) -> Unit,
     onClearQueriesClick: () -> Unit
 ) {
     Column(
@@ -78,9 +76,7 @@ internal fun SearchScreen(
             SearchSection.SearchResult -> SearchResult(
                 loading = state.loading,
                 resultPagingItems = resultPagingItems,
-                localLikeMap = state.localLikeMap,
-                onCardClick = onSearchResultClick,
-                onLikeClick = onBakeryLikeClick
+                onCardClick = onSearchResultClick
             )
         }
     }
@@ -163,9 +159,7 @@ private fun ColumnScope.RecentSearchQueries(
 private fun ColumnScope.SearchResult(
     loading: Boolean,
     resultPagingItems: LazyPagingItems<Bakery>,
-    localLikeMap: PersistentMap<Int, Boolean>,
     onCardClick: (Bakery) -> Unit,
-    onLikeClick: (Int, Boolean) -> Unit
 ) {
     if (loading) {
         Timber.e("xxx SearchResult: loading")
@@ -197,12 +191,8 @@ private fun ColumnScope.SearchResult(
                 resultPagingItems[index]?.let { bakery ->
                     BakeryCard(
                         bakery = bakery,
-                        likeMap = localLikeMap,
-                        onCardClick = onCardClick,
-                        onLikeClick = onLikeClick
+                        onCardClick = onCardClick
                     )
-                } ?: run {
-                    // TODO. Skeleton.
                 }
             }
         }

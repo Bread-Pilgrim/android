@@ -14,7 +14,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.model.type.BakeryType
-import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
@@ -32,8 +31,8 @@ internal fun HomeRoute(
     val changePreferenceLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
         if (result.resultCode == Activity.RESULT_OK) {
-            Timber.i("xxx changePreferenceLauncher :: Refresh bakery list with snackbar")
             viewModel.intent(
                 HomeIntent.RefreshBakeries(
                     completeSnackbarState = SnackbarState(
@@ -42,40 +41,23 @@ internal fun HomeRoute(
                     )
                 )
             )
-        } else {
-            Timber.i("xxx changePreferenceLauncher :: Canceled change preference")
         }
     }
     val bakeryListLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
-            Timber.i("xxx bakeryListLauncher :: Refresh bakery list")
-            viewModel.intent(HomeIntent.RefreshBakeries())
-        } else {
-            Timber.i("xxx bakeryListLauncher :: Canceled")
-        }
+        Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
     }
     val bakeryDetailLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
-            Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
-            viewModel.intent(HomeIntent.RefreshBakeries())
-        } else {
-            Timber.i("xxx bakeryDetailLauncher :: Canceled")
-        }
+        Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
     }
 
     LaunchedEffect(Unit) {
         viewModel.snackbarEffect.collectLatest { state ->
             showSnackbar(state)
         }
-    }
-
-    // 탭 전환 마다 빵집 재조회
-    LaunchedEffect(Unit) {
-        viewModel.intent(HomeIntent.RefreshBakeries())
     }
 
     HomeScreen(
@@ -91,14 +73,6 @@ internal fun HomeRoute(
             )
         },
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
-        onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) },
-        onBakeryLikeClick = { bakeryId, isLike ->
-            viewModel.intent(
-                HomeIntent.ClickBakeryLike(
-                    bakeryId = bakeryId,
-                    isLike = isLike
-                )
-            )
-        }
+        onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) }
     )
 }

@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
-import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteBakeryLikeUseCase
-import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteAllRecentSearchQueriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteRecentSearchQueryUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.GetRecentSearchQueriesUseCase
@@ -33,9 +31,7 @@ internal class SearchViewModel @Inject constructor(
     private val getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val deleteRecentSearchQueryUseCase: DeleteRecentSearchQueryUseCase,
     private val deleteAllRecentSearchQueriesUseCase: DeleteAllRecentSearchQueriesUseCase,
-    private val getSearchBakeriesUseCase: GetSearchBakeriesUseCase,
-    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
-    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
+    private val getSearchBakeriesUseCase: GetSearchBakeriesUseCase
 ) : BaseViewModel<SearchState, SearchIntent, SearchSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): SearchState {
@@ -49,7 +45,6 @@ internal class SearchViewModel @Inject constructor(
         .filter { it.isNotBlank() }
         .distinctUntilChanged()
         .flatMapLatest { query ->
-            reduce { copy(loading = true, localLikeMap = localLikeMap.clear()) }
             getSearchBakeriesUseCase(query = query).cachedIn(viewModelScope)
         }
 
@@ -103,15 +98,6 @@ internal class SearchViewModel @Inject constructor(
             SearchIntent.DeleteAllQueries -> {
                 deleteAllRecentSearchQueriesUseCase()
                 getRecentSearchQueryList()
-            }
-
-            is SearchIntent.ClickBakeryLike -> {
-                reduce { copy(localLikeMap = localLikeMap.put(intent.bakeryId, intent.isLike)) }
-                if (intent.isLike) {
-                    postBakeryLikeUseCase(bakeryId = intent.bakeryId)
-                } else {
-                    deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
-                }
             }
 
             is SearchIntent.SetLoading -> reduce { copy(loading = intent.loading) }

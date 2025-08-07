@@ -99,38 +99,32 @@ fun RowScope.BakeRoadNavigationBarItem(
         verticalArrangement = Arrangement.Center
     ) {
         val color = if (selected) BakeRoadNavigationDefaults.navigationSelectedItemColor else LocalContentColor.current
-        val styledIcon = @Composable {
-            val iconColor by animateColorAsState(
-                targetValue = color,
-                animationSpec = tween(ItemAnimationDurationMillis)
-            )
-            CompositionLocalProvider(
-                LocalContentColor provides iconColor,
-                content = if (selected) selectedIcon else icon
-            )
-        }
-        val styledLabel = @Composable {
-            val fontWeight by animateIntAsState(
-                targetValue = if (selected) FontWeight.SemiBold.weight else FontWeight.Medium.weight,
-                animationSpec = tween(ItemAnimationDurationMillis)
-            )
-            val textColor by animateColorAsState(
-                targetValue = color,
-                animationSpec = tween(ItemAnimationDurationMillis)
-            )
-            val style = BakeRoadTheme.typography.body2XsmallMedium.copy(
-                fontWeight = FontWeight(fontWeight)
-            )
-            CompositionLocalProvider(
-                LocalContentColor provides textColor,
-                LocalTextStyle provides style,
-                content = label
-            )
-        }
+        val iconColor by animateColorAsState(
+            targetValue = color,
+            animationSpec = tween(ItemAnimationDurationMillis)
+        )
+        val fontWeight by animateIntAsState(
+            targetValue = if (selected) FontWeight.SemiBold.weight else FontWeight.Medium.weight,
+            animationSpec = tween(ItemAnimationDurationMillis)
+        )
+        val textColor by animateColorAsState(
+            targetValue = color,
+            animationSpec = tween(ItemAnimationDurationMillis)
+        )
+        val style = BakeRoadTheme.typography.body2XsmallMedium.copy(
+            fontWeight = FontWeight(fontWeight)
+        )
 
-        styledIcon()
+        CompositionLocalProvider(
+            LocalContentColor provides iconColor,
+            content = if (selected) selectedIcon else icon
+        )
         Spacer(modifier = Modifier.height(2.dp))
-        styledLabel()
+        CompositionLocalProvider(
+            LocalContentColor provides textColor,
+            LocalTextStyle provides style,
+            content = label
+        )
     }
 }
 

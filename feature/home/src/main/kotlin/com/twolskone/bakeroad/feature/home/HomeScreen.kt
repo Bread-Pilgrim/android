@@ -49,8 +49,7 @@ internal fun HomeScreen(
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
     onSeeAllBakeriesClick: (BakeryType) -> Unit,
     onBakeryClick: (RecommendBakery) -> Unit,
-    onEditPreferenceClick: () -> Unit,
-    onBakeryLikeClick: (bakeryId: Int, isLike: Boolean) -> Unit
+    onEditPreferenceClick: () -> Unit
 ) {
     LazyColumn(
         modifier = modifier
@@ -145,8 +144,7 @@ internal fun HomeScreen(
                 ) {
                     RecommendBakeryCard(
                         bakery = it,
-                        onCardClick = { bakery -> onBakeryClick(bakery) },
-                        onLikeClick = { id, isLike -> onBakeryLikeClick(id, isLike) }
+                        onCardClick = { bakery -> onBakeryClick(bakery) }
                     )
                 }
             }
@@ -176,8 +174,7 @@ internal fun HomeScreen(
                 ) {
                     RecommendBakeryCard(
                         bakery = it,
-                        onCardClick = { bakery -> onBakeryClick(bakery) },
-                        onLikeClick = { id, isLike -> onBakeryLikeClick(id, isLike) }
+                        onCardClick = { bakery -> onBakeryClick(bakery) }
                     )
                 }
             }
@@ -253,8 +250,7 @@ private fun HomeScreenPreview() {
             onTourCategorySelect = { _, _ -> },
             onSeeAllBakeriesClick = {},
             onBakeryClick = {},
-            onEditPreferenceClick = {},
-            onBakeryLikeClick = { _, _ -> }
+            onEditPreferenceClick = {}
         )
     }
 }

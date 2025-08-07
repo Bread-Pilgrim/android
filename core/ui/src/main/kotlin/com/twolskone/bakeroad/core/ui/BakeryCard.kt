@@ -39,8 +39,6 @@ import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickabl
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
-import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.persistentMapOf
 
 private val ImageWidth = 148.dp
 private val ImageShape = RoundedCornerShape(9.dp)
@@ -49,18 +47,13 @@ private const val ImageRatio = 4f / 3f
 
 /**
  * 빵집 카드
- * @param likeMap   좋아요 로컬 데이터
  */
 @Composable
 fun BakeryCard(
     modifier: Modifier = Modifier,
     bakery: Bakery,
-    likeMap: PersistentMap<Int, Boolean>,
-    onCardClick: (Bakery) -> Unit,
-    onLikeClick: (Int, Boolean) -> Unit
+    onCardClick: (Bakery) -> Unit
 ) {
-    val isLike = likeMap[bakery.id] ?: bakery.isLike
-
     Row(modifier = modifier.noRippleSingleClickable { onCardClick(bakery) }) {
         Box(
             modifier = Modifier
@@ -75,13 +68,6 @@ fun BakeryCard(
                 contentDescription = "Bakery",
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
-            )
-            LikeIcon(
-                modifier = Modifier.align(Alignment.TopEnd),
-                size = 20.dp,
-                padding = 8.dp,
-                isLike = isLike,
-                onClick = { result -> onLikeClick(bakery.id, result) }
             )
             BakeryOpenStatusChip(
                 modifier = Modifier
@@ -169,7 +155,6 @@ private fun BakeryCardPreview() {
     BakeRoadTheme {
         BakeryCard(
             modifier = Modifier.fillMaxWidth(),
-            likeMap = persistentMapOf(1 to true),
             bakery = Bakery(
                 id = 1,
                 name = "서라당",
@@ -183,8 +168,7 @@ private fun BakeryCardPreview() {
                 isLike = true,
                 signatureMenus = listOf("소금빵", "올리브치 치아바타", "겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴겁나긴메뉴")
             ),
-            onCardClick = {},
-            onLikeClick = { _, _ -> }
+            onCardClick = {}
         )
     }
 }

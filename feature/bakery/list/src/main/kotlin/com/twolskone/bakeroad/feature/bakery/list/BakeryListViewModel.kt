@@ -5,9 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
-import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetBakeriesUseCase
-import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
@@ -25,9 +23,7 @@ private const val BAKERY_TYPE = "bakeryType"
 @HiltViewModel
 internal class BakeryListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    getBakeriesUseCase: GetBakeriesUseCase,
-    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
-    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
+    getBakeriesUseCase: GetBakeriesUseCase
 ) : BaseViewModel<BakeryListState, BakeryListIntent, BakeryListSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): BakeryListState {
@@ -56,18 +52,5 @@ internal class BakeryListViewModel @Inject constructor(
         }
     }
 
-    override suspend fun handleIntent(intent: BakeryListIntent) {
-        when (intent) {
-            is BakeryListIntent.ClickBakeryLike -> {
-                reduce { copy(localLikeMap = localLikeMap.put(intent.bakeryId, intent.isLike)) }
-                if (intent.isLike) {
-                    postBakeryLikeUseCase(bakeryId = intent.bakeryId)
-                } else {
-                    deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
-                }
-            }
-
-            BakeryListIntent.ClearLocalLikeMap -> reduce { copy(localLikeMap = localLikeMap.clear()) }
-        }
-    }
+    override suspend fun handleIntent(intent: BakeryListIntent) {}
 }

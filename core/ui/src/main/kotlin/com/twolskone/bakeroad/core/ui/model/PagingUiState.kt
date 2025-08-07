@@ -33,6 +33,13 @@ data class PagingUiState<T>(
         page = next.page,
         hasNext = next.hasNext
     )
+
+    fun refresh(next: Paging<T>) = copy(
+        list= next.list.toPersistentList(),
+        isLoading = false,
+        page = next.page,
+        hasNext = next.hasNext
+    )
 }
 
 fun <T> Paging<T>.toUiState() = PagingUiState(

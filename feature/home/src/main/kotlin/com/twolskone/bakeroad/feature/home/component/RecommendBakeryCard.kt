@@ -34,7 +34,6 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
-import com.twolskone.bakeroad.core.ui.LikeIcon
 
 private val ImageSize = 116.dp
 private val ImageShape = RoundedCornerShape(6.dp)
@@ -47,8 +46,7 @@ private val CardHeight = 213.dp
 internal fun RecommendBakeryCard(
     modifier: Modifier = Modifier,
     bakery: RecommendBakery,
-    onCardClick: (RecommendBakery) -> Unit,
-    onLikeClick: (Int, Boolean) -> Unit
+    onCardClick: (RecommendBakery) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -68,13 +66,6 @@ internal fun RecommendBakeryCard(
                 contentDescription = "Bakery",
                 contentScale = ContentScale.Crop,
                 placeholder = painterResource(com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail)
-            )
-            LikeIcon(
-                modifier = Modifier.align(Alignment.TopEnd),
-                size = 20.dp,
-                padding = 6.dp,
-                isLike = bakery.isLike,
-                onClick = { result -> onLikeClick(bakery.id, result) }
             )
         }
         Text(
@@ -135,8 +126,7 @@ private fun BakeryCardPreview() {
                     imageUrl = "",
                     isLike = false
                 ),
-                onCardClick = {},
-                onLikeClick = { _, _ -> }
+                onCardClick = {}
             )
             RecommendBakeryCard(
                 bakery = RecommendBakery(
@@ -150,7 +140,6 @@ private fun BakeryCardPreview() {
                     isLike = true
                 ),
                 onCardClick = {},
-                onLikeClick = { _, _ -> }
             )
         }
     }

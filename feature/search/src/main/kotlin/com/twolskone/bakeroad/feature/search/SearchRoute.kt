@@ -24,7 +24,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
-import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.search.mvi.SearchIntent
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
 import kotlinx.coroutines.flow.collectLatest
@@ -49,19 +48,7 @@ internal fun SearchRoute(
     val bakeryDetailLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-        if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
-            Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
-            when (state.section) {
-                SearchSection.RecentSearchResult -> {
-                    // TODO. Refresh recent search result.
-                }
-
-                SearchSection.SearchResult -> resultPagingItems.refresh()
-                SearchSection.RecentSearchQueries -> {}
-            }
-        } else {
-            Timber.i("xxx bakeryDetailLauncher :: Canceled")
-        }
+        Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
     }
 
     BackHandler {
@@ -70,7 +57,7 @@ internal fun SearchRoute(
             queryTextState.clearText()
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
         } else {
-
+            // TODO. GO back.
         }
     }
 
@@ -118,7 +105,6 @@ internal fun SearchRoute(
             onDeleteQueryClick = { query -> viewModel.intent(SearchIntent.DeleteQuery(query = query)) },
             onDeleteAllQueriesClick = { viewModel.intent(SearchIntent.DeleteAllQueries) },
             onSearchResultClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
-            onBakeryLikeClick = { bakeryId, isLike -> viewModel.intent(SearchIntent.ClickBakeryLike(bakeryId = bakeryId, isLike = isLike)) },
             onClearQueriesClick = {
                 queryTextState.clearText()
                 viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))

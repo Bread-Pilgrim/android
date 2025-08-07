@@ -8,6 +8,7 @@ import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.paging.startPage
 import com.twolskone.bakeroad.core.model.type.MyBakeryType
+import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryIntent
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakerySideEffect
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryState
@@ -26,6 +27,7 @@ internal class MyBakeryViewModel @Inject constructor(
     }
 
     init {
+        Timber.e("xxx ???")
         getVisitedBakeries(refresh = true)
     }
 
@@ -48,54 +50,88 @@ internal class MyBakeryViewModel @Inject constructor(
 
     override suspend fun handleIntent(intent: MyBakeryIntent) {
         when (intent) {
-            is MyBakeryIntent.SelectTab -> {
-                reduce { copy(tab = intent.tab) }
-            }
+            is MyBakeryIntent.SelectTab -> reduce { copy(tab = intent.tab) }
 
             is MyBakeryIntent.SelectVisitedSort -> reduce { copy(visitedSection = visitedSection.copy(sort = intent.sort)) }
 
             is MyBakeryIntent.SelectLikeSort -> reduce { copy(likeSection = likeSection.copy(sort = intent.sort)) }
 
-            is MyBakeryIntent.ClickBakeryLike -> {}
-
             is MyBakeryIntent.GetVisitedBakeries -> getVisitedBakeries(refresh = intent.refresh)
 
-            is MyBakeryIntent.GetLikeBakeries -> TODO()
+            is MyBakeryIntent.GetLikeBakeries -> getLikeBakeries(refresh = intent.refresh)
+
+            is MyBakeryIntent.DeleteBakery -> reduce {
+                copy(
+                    likeSection = likeSection.copy(
+                        paging = likeSection.paging.copy(
+                            list = likeSection.paging.list.removeAll { it.id == intent.bakeryId }
+                        )
+                    )
+                )
+            }
+
+            MyBakeryIntent.Refresh -> {
+                reduce { copy(isRefreshing = true) }
+                when (state.value.tab) {
+                    Tab.VISITED -> getVisitedBakeries(refresh = true)
+                    Tab.LIKE -> getLikeBakeries(refresh = true)
+                }
+            }
         }
     }
 
     private fun getVisitedBakeries(refresh: Boolean) {
         launch {
-            with(state.value.visitedSection) {
-                if (!paging.canRequest) {
-                    Timber.i("xxx visitedPaging is loading or last page")
-                    return@launch
-                }
-                reduce { copy(likeSection = likeSection.copy(paging = paging.copy(isLoading = true))) }
-                val nextPaging = getMyBakeriesUseCase(
-                    page = if (refresh) startPage else paging.nextPage,
-                    myBakeryType = MyBakeryType.VISITED,
-                    sort = sort
+            val section = state.value.visitedSection
+            if (!refresh && !section.paging.canRequest) {
+                Timber.i("xxx visitedPaging is loading or last page")
+                return@launch
+            }
+            reduce { copy(visitedSection = visitedSection.copy(paging = visitedSection.paging.copy(isLoading = true))) }
+            val nextPaging = getMyBakeriesUseCase(
+                page = if (refresh) startPage else section.paging.nextPage,
+                myBakeryType = MyBakeryType.VISITED,
+                sort = section.sort
+            )
+            reduce {
+                copy(
+                    isRefreshing = false,
+                    visitedSection = visitedSection.copy(
+                        paging = if (refresh) {
+                            visitedSection.paging.refresh(nextPaging)
+                        } else {
+                            visitedSection.paging.merge(nextPaging)
+                        }
+                    )
                 )
-                reduce { copy(visitedSection = visitedSection.copy(paging = paging.merge(nextPaging))) }
             }
         }
     }
 
     private fun getLikeBakeries(refresh: Boolean) {
         launch {
-            with(state.value.likeSection) {
-                if (!paging.canRequest) {
-                    Timber.i("xxx likePaging is loading or last page")
-                    return@launch
-                }
-                reduce { copy(likeSection = likeSection.copy(paging = paging.copy(isLoading = true))) }
-                val nextPaging = getMyBakeriesUseCase(
-                    page = if (refresh) startPage else paging.nextPage,
-                    myBakeryType = MyBakeryType.LIKE,
-                    sort = sort
+            val section = state.value.likeSection
+            if (!refresh && !section.paging.canRequest) {
+                Timber.i("xxx likePaging is loading or last page")
+                return@launch
+            }
+            reduce { copy(likeSection = likeSection.copy(paging = likeSection.paging.copy(isLoading = true))) }
+            val nextPaging = getMyBakeriesUseCase(
+                page = if (refresh) startPage else section.paging.nextPage,
+                myBakeryType = MyBakeryType.LIKE,
+                sort = section.sort
+            )
+            reduce {
+                copy(
+                    isRefreshing = false,
+                    likeSection = likeSection.copy(
+                        paging = if (refresh) {
+                            likeSection.paging.refresh(nextPaging)
+                        } else {
+                            likeSection.paging.merge(nextPaging)
+                        }
+                    )
                 )
-                reduce { copy(likeSection = likeSection.copy(paging = paging.merge(nextPaging))) }
             }
         }
     }

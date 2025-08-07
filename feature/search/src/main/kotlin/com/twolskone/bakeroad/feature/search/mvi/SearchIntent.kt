@@ -7,6 +7,5 @@ internal sealed interface SearchIntent : BaseUiIntent {
     data class SearchBakery(val query: String) : SearchIntent
     data class DeleteQuery(val query: String) : SearchIntent
     data object DeleteAllQueries : SearchIntent
-    data class ClickBakeryLike(val bakeryId: Int, val isLike: Boolean) : SearchIntent
     data class SetLoading(val loading: Boolean) : SearchIntent
 }

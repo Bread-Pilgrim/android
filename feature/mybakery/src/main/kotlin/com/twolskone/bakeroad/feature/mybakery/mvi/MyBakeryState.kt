@@ -11,6 +11,7 @@ import kotlinx.collections.immutable.persistentMapOf
 
 @Immutable
 internal data class MyBakeryState(
+    val isRefreshing: Boolean = false,
     val tab: Tab = Tab.VISITED,
     val visitedSection: VisitedSectionState = VisitedSectionState(),
     val likeSection: LikeSectionState = LikeSectionState(),

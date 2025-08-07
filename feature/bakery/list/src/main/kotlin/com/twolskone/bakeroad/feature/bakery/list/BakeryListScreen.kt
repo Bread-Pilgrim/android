@@ -32,8 +32,6 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.ui.BakeryCard
-import kotlinx.collections.immutable.PersistentMap
-import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.flowOf
 
 @Composable
@@ -41,9 +39,7 @@ internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
     bakeryType: BakeryType,
     pagingItems: LazyPagingItems<Bakery>,
-    localLikeMap: PersistentMap<Int, Boolean>,
-    onBakeryClick: (Bakery) -> Unit,
-    onBakeryLikeClick: (Int, Boolean) -> Unit
+    onBakeryClick: (Bakery) -> Unit
 ) {
     val title = when (bakeryType) {
         BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
@@ -91,9 +87,7 @@ internal fun BakeryListScreen(
                 pagingItems[index]?.let { bakery ->
                     BakeryCard(
                         bakery = bakery,
-                        likeMap = localLikeMap,
-                        onCardClick = onBakeryClick,
-                        onLikeClick = onBakeryLikeClick
+                        onCardClick = onBakeryClick
                     )
                 }
             }
@@ -127,9 +121,7 @@ private fun BakeryListScreenPreview() {
         BakeryListScreen(
             bakeryType = BakeryType.PREFERENCE,
             pagingItems = lazyPagingItems,
-            localLikeMap = persistentMapOf(),
-            onBakeryClick = {},
-            onBakeryLikeClick = { _, _ -> }
+            onBakeryClick = {}
         )
     }
 }

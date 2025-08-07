@@ -7,9 +7,7 @@ import com.twolskone.bakeroad.feature.search.mvi.SearchSection.RecentSearchQueri
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection.RecentSearchResult
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection.SearchResult
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentMapOf
 
 @Immutable
 internal data class SearchState(
@@ -17,8 +15,7 @@ internal data class SearchState(
     val section: SearchSection = RecentSearchResult,
     val recentSearchBakeryList: ImmutableList<Bakery> = persistentListOf(),
     val recentQueryList: ImmutableList<Pair<String, String>> = persistentListOf(),
-    val searchBakeryList: ImmutableList<Bakery> = persistentListOf(),
-    val localLikeMap: PersistentMap<Int, Boolean> = persistentMapOf()
+    val searchBakeryList: ImmutableList<Bakery> = persistentListOf()
 ) : BaseUiState
 
 /**

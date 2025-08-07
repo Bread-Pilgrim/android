@@ -17,6 +17,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
+import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
+import com.twolskone.bakeroad.core.common.kotlin.extension.orTrue
+import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_ID
+import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_LIKE
 import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
@@ -30,7 +34,7 @@ import timber.log.Timber
 internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel(),
     navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit,
-    setResult: (code: Int, withFinish: Boolean) -> Unit
+    setResult: (code: Int, intent: Intent?, withFinish: Boolean) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
@@ -59,7 +63,14 @@ internal fun BakeryDetailRoute(
     }
 
     BackHandler {
-        setResult(RESULT_REFRESH_BAKERY_LIST, true)
+        setResult(
+            RESULT_REFRESH_BAKERY_LIST,
+            Intent().apply {
+                putExtra(KEY_BAKERY_ID, viewModel.bakeryId)
+                state.bakeryInfo?.let { putExtra(KEY_BAKERY_LIKE, it.isLike) }
+            },
+            true
+        )
     }
 
     LaunchedEffect(viewModel) {

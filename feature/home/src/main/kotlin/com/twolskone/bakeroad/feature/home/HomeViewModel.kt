@@ -5,10 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.area.GetAreasUseCase
-import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendHotBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendPreferenceBakeriesUseCase
-import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
@@ -36,9 +34,7 @@ internal class HomeViewModel @Inject constructor(
     private val getAreasUseCase: GetAreasUseCase,
     private val getPreferenceBakeriesUseCase: GetRecommendPreferenceBakeriesUseCase,
     private val getHotBakeriesUseCase: GetRecommendHotBakeriesUseCase,
-    private val getTourAreasUseCase: GetTourAreasUseCase,
-    private val postBakeryLikeUseCase: PostBakeryLikeUseCase,
-    private val deleteBakeryLikeUseCase: DeleteBakeryLikeUseCase
+    private val getTourAreasUseCase: GetTourAreasUseCase
 ) : BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): HomeState {
@@ -51,7 +47,7 @@ internal class HomeViewModel @Inject constructor(
     init {
         observeTrigger()
         getAreas()
-        refreshTourAreas()
+        refreshAll()
     }
 
     override suspend fun handleIntent(intent: HomeIntent) {
@@ -92,32 +88,6 @@ internal class HomeViewModel @Inject constructor(
                 }
                 tourAreaCategoryTrigger.tryEmit(Unit)
                 copy(selectedTourAreaCategories = selectedTourCategories)
-            }
-
-            is HomeIntent.ClickBakeryLike -> {
-                reduce {
-                    copy(
-                        preferenceBakeryList = preferenceBakeryList.map { bakery ->
-                            if (bakery.id == intent.bakeryId) {
-                                bakery.copy(isLike = intent.isLike)
-                            } else {
-                                bakery
-                            }
-                        }.toImmutableList(),
-                        hotBakeryList = hotBakeryList.map { bakery ->
-                            if (bakery.id == intent.bakeryId) {
-                                bakery.copy(isLike = intent.isLike)
-                            } else {
-                                bakery
-                            }
-                        }.toImmutableList()
-                    )
-                }
-                if (intent.isLike) {
-                    postBakeryLikeUseCase(bakeryId = intent.bakeryId)
-                } else {
-                    deleteBakeryLikeUseCase(bakeryId = intent.bakeryId)
-                }
             }
 
             is HomeIntent.RefreshBakeries -> {

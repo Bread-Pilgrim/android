@@ -4,23 +4,29 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
+import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_ID
+import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_LIKE
 import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryIntent
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @Composable
@@ -30,6 +36,7 @@ internal fun MyBakeryRoute(
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
+    val scope = rememberCoroutineScope()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val visitedListState = rememberLazyListState()
     val likeListState = rememberLazyListState()
@@ -37,10 +44,14 @@ internal fun MyBakeryRoute(
     val bakeryDetailLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
+        Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
         if (result.resultCode == RESULT_REFRESH_BAKERY_LIST) {
-            Timber.i("xxx bakeryDetailLauncher :: Refresh bakery list")
-        } else {
-            Timber.i("xxx bakeryDetailLauncher :: Canceled")
+            val bakeryId = result.data?.getIntExtra(KEY_BAKERY_ID, -1) ?: return@rememberLauncherForActivityResult
+            val isLike = result.data?.getBooleanExtra(KEY_BAKERY_LIKE, true) ?: return@rememberLauncherForActivityResult
+            Timber.i("xxx bakeryDetailLauncher :: bakeryId($bakeryId), isLike($isLike)")
+            if (!isLike) {
+                viewModel.intent(MyBakeryIntent.DeleteBakery(bakeryId = bakeryId))
+            }
         }
     }
 
@@ -96,6 +107,12 @@ internal fun MyBakeryRoute(
             }
         },
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
-        onBakeryLikeClick = { bakeryId, isLike -> viewModel.intent(MyBakeryIntent.ClickBakeryLike(bakeryId = bakeryId, isLike = isLike)) }
+        onRefresh = {
+            viewModel.intent(MyBakeryIntent.Refresh)
+            scope.launch {
+                visitedListState.scrollBy(0f)
+                likeListState.scrollBy(0f)
+            }
+        }
     )
 }

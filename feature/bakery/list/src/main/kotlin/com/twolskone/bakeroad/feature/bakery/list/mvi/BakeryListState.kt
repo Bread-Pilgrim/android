@@ -6,5 +6,6 @@ import com.twolskone.bakeroad.core.model.type.BakeryType
 
 @Immutable
 internal data class BakeryListState(
+    val loading: Boolean = true,
     val bakeryType: BakeryType = BakeryType.PREFERENCE
 ) : BaseUiState

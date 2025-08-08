@@ -52,8 +52,6 @@ internal class HomeViewModel @Inject constructor(
 
     override suspend fun handleIntent(intent: HomeIntent) {
         when (intent) {
-            HomeIntent.RefreshAll -> refreshAll()
-
             is HomeIntent.SelectArea -> reduce {
                 val originAreaCodes = selectedAreaCodes
                 val selectedAreaCodes = when {
@@ -127,7 +125,12 @@ internal class HomeViewModel @Inject constructor(
      */
     private fun getAreas() = launch {
         val areas = getAreasUseCase()
-        reduce { copy(areaList = areas.toImmutableList()) }
+        reduce {
+            copy(
+                loadingState = loadingState.copy(areaLoading = false),
+                areaList = areas.toImmutableList()
+            )
+        }
     }
 
     /**
@@ -146,29 +149,47 @@ internal class HomeViewModel @Inject constructor(
      * 내 취향 추천 빵집 (최대 20개)
      */
     private fun refreshPreferenceBakeries() = launch {
+        reduce { copy(loadingState = loadingState.copy(preferenceBakeryLoading = true)) }
         val preferenceBakeries = getPreferenceBakeriesUseCase(areaCodes = state.value.selectedAreaCodes)
             .take(BakeryMaxCount)
-        reduce { copy(preferenceBakeryList = preferenceBakeries.toImmutableList()) }
+        reduce {
+            copy(
+                loadingState = loadingState.copy(preferenceBakeryLoading = false),
+                preferenceBakeryList = preferenceBakeries.toImmutableList()
+            )
+        }
     }
 
     /**
      * Hot한 빵집 모음 (최대 20개)
      */
     private fun refreshHotBakeries() = launch {
+        reduce { copy(loadingState = loadingState.copy(hotBakeryLoading = true)) }
         val hotBakeries = getHotBakeriesUseCase(areaCodes = state.value.selectedAreaCodes)
             .take(BakeryMaxCount)
-        reduce { copy(hotBakeryList = hotBakeries.toImmutableList()) }
+        reduce {
+            copy(
+                loadingState = loadingState.copy(hotBakeryLoading = false),
+                hotBakeryList = hotBakeries.toImmutableList()
+            )
+        }
     }
 
     /**
      * 같이 가볼만한 관광지 (최대 5개)
      */
     private fun refreshTourAreas() = launch {
+        reduce { copy(loadingState = loadingState.copy(tourAreaLoading = true)) }
         val tourAreas = getTourAreasUseCase(
             areaCodes = state.value.selectedAreaCodes,
             tourCategories = state.value.selectedTourAreaCategories
         ).take(TourAreaMaxCount)
-        reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
+        reduce {
+            copy(
+                loadingState = loadingState.copy(tourAreaLoading = false),
+                tourAreaList = tourAreas.toImmutableList()
+            )
+        }
     }
 
     @OptIn(FlowPreview::class)

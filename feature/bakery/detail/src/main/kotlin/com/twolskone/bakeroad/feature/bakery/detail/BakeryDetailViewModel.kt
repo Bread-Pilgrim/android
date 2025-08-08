@@ -172,9 +172,11 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     private fun getBakeryDetail() = launch {
+        reduce { copy(loadingState = loadingState.copy(bakeryDetailLoading = true)) }
         val bakeryDetail = getBakeryDetailUseCase(bakeryId = bakeryId)
         reduce {
             copy(
+                loadingState = loadingState.copy(bakeryDetailLoading = false),
                 bakeryImageList = bakeryDetail.imageUrls.toImmutableList(),
                 bakeryInfo = bakeryDetail.toBakeryInfo(),
                 menuList = bakeryDetail.menus.toImmutableList()
@@ -183,9 +185,11 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     private fun getPreviewReviews() = launch {
+        reduce { copy(loadingState = loadingState.copy(previewReviewLoading = true)) }
         val reviews = getBakeryPreviewReviewsUseCase(bakeryId = bakeryId)
         reduce {
             copy(
+                loadingState = loadingState.copy(previewReviewLoading = false),
                 reviewState = reviewState.copy(
                     avgRating = reviews.firstOrNull()?.avgRating.orZero(),
                     count = reviews.firstOrNull()?.totalCount.orZero(),
@@ -197,11 +201,17 @@ internal class BakeryDetailViewModel @Inject constructor(
 
     private fun getTourAreas() = launch {
         savedStateHandle.get<Int>(AREA_CODE)?.let { areaCode ->
+            reduce { copy(loadingState = loadingState.copy(tourAreaLoading = true)) }
             val tourAreas = getTourAreasUseCase(
                 areaCodes = setOf(areaCode),
                 tourCategories = TourAreaCategory.entries.toSet()
             )
-            reduce { copy(tourAreaList = tourAreas.toImmutableList()) }
+            reduce {
+                copy(
+                    loadingState = loadingState.copy(tourAreaLoading = false),
+                    tourAreaList = tourAreas.toImmutableList()
+                )
+            }
         }
     }
 }

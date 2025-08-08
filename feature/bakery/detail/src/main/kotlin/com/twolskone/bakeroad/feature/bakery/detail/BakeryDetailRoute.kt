@@ -6,10 +6,13 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -17,8 +20,6 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
-import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
-import com.twolskone.bakeroad.core.common.kotlin.extension.orTrue
 import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_ID
 import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_LIKE
 import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
@@ -97,6 +98,9 @@ internal fun BakeryDetailRoute(
 
     BaseComposable(baseViewModel = viewModel) {
         BakeryDetailScreen(
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
             state = state,
             tabState = tabState,
             reviewTabState = reviewTabState,

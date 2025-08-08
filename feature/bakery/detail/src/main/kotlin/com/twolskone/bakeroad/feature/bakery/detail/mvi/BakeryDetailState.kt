@@ -13,6 +13,7 @@ import kotlinx.collections.immutable.persistentMapOf
 
 @Immutable
 internal data class BakeryDetailState(
+    val loadingState: LoadingState = LoadingState(),
     val bakeryImageList: ImmutableList<String> = persistentListOf(),
     val bakeryInfo: BakeryInfo? = null,
     val menuList: ImmutableList<BakeryDetail.Menu> = persistentListOf(),
@@ -26,4 +27,11 @@ internal data class ReviewState(
     val count: Int = 0,
     val previewReviewList: ImmutableList<BakeryReview> = persistentListOf(),
     val localLikeMap: PersistentMap<Int, Boolean> = persistentMapOf()
+)
+
+@Immutable
+internal data class LoadingState(
+    val bakeryDetailLoading: Boolean = true,
+    val previewReviewLoading: Boolean = true,
+    val tourAreaLoading: Boolean = true
 )

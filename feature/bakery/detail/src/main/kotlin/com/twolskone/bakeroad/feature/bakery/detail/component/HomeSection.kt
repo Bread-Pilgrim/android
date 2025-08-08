@@ -4,18 +4,25 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -27,12 +34,16 @@ import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonRole
+import com.twolskone.bakeroad.core.designsystem.component.skeleton.ReviewsSkeleton
+import com.twolskone.bakeroad.core.designsystem.component.skeleton.TitleSkeleton
+import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.core.ui.EmptyCard
 import com.twolskone.bakeroad.feature.bakery.detail.R
+import com.twolskone.bakeroad.feature.bakery.detail.mvi.LoadingState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
@@ -49,6 +60,7 @@ private const val TourAreaMaxCount = 5
  */
 internal fun LazyListScope.home(
     itemModifier: Modifier = Modifier,
+    loadingState: LoadingState,
     reviewCount: Int,
     menuList: ImmutableList<BakeryDetail.Menu>,
     reviewList: ImmutableList<BakeryReview>,
@@ -61,26 +73,38 @@ internal fun LazyListScope.home(
 ) {
     item {
         Column(modifier = itemModifier) {
-            MenuContent(
-                modifier = Modifier.fillMaxWidth(),
-                menuList = menuList,
-                onViewAllClick = onViewAllMenuClick
-            )
-            ReviewContent(
-                modifier = Modifier
-                    .padding(vertical = 8.dp)
-                    .fillMaxWidth(),
-                reviewCount = reviewCount,
-                reviewList = reviewList,
-                onViewAllClick = onViewAllReviewClick,
-                localReviewLikeMap = localReviewLikeMap,
-                onLikeClick = onReviewLikeClick
-            )
-            TourAreaContent(
-                modifier = Modifier.fillMaxWidth(),
-                tourAreaList = tourAreaList,
-                onViewAllClick = onViewAllTourAreaClick
-            )
+            if (loadingState.bakeryDetailLoading) {
+                MenuContentSkeleton()
+            } else {
+                MenuContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    menuList = menuList,
+                    onViewAllClick = onViewAllMenuClick
+                )
+            }
+            if (loadingState.previewReviewLoading) {
+                ReviewContentSkeleton()
+            } else {
+                ReviewContent(
+                    modifier = Modifier
+                        .padding(vertical = 8.dp)
+                        .fillMaxWidth(),
+                    reviewCount = reviewCount,
+                    reviewList = reviewList,
+                    onViewAllClick = onViewAllReviewClick,
+                    localReviewLikeMap = localReviewLikeMap,
+                    onLikeClick = onReviewLikeClick
+                )
+            }
+            if (loadingState.tourAreaLoading) {
+                TourAreaContentSkeleton()
+            } else {
+                TourAreaContent(
+                    modifier = Modifier.fillMaxWidth(),
+                    tourAreaList = tourAreaList,
+                    onViewAllClick = onViewAllTourAreaClick
+                )
+            }
         }
     }
 }
@@ -214,7 +238,8 @@ private fun TourAreaContent(
     Column(
         modifier = modifier
             .background(color = BakeRoadTheme.colorScheme.White)
-            .padding(vertical = 20.dp),
+            .padding(vertical = 20.dp)
+            .padding(bottom = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Row(
@@ -253,28 +278,180 @@ private fun TourAreaContent(
     }
 }
 
+@Composable
+private fun MenuContentSkeleton() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(BakeRoadTheme.colorScheme.White)
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        TitleSkeleton(
+            modifier = Modifier.fillMaxWidth(),
+            titleWidth = 154.dp
+        )
+        repeat(4) { index ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 58.dp, height = 23.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(width = 97.dp, height = 16.dp)
+                            .clip(CircleShape)
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .size(width = 76.dp, height = 16.dp)
+                            .clip(CircleShape)
+                            .shimmerEffect()
+                    )
+                }
+                Box(
+                    modifier = Modifier
+                        .width(100.dp)
+                        .aspectRatio(ratio = 5f / 4f)
+                        .clip(RoundedCornerShape(8.dp))
+                        .shimmerEffect()
+                )
+            }
+            if (index < 3) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(1.dp)
+                        .shimmerEffect()
+                )
+            }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .shimmerEffect()
+        )
+    }
+}
+
+@Composable
+private fun ReviewContentSkeleton() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(BakeRoadTheme.colorScheme.White)
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        TitleSkeleton(
+            modifier = Modifier.fillMaxWidth(),
+            titleWidth = 154.dp
+        )
+        ReviewsSkeleton(modifier = Modifier.fillMaxWidth())
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(40.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .shimmerEffect()
+        )
+    }
+}
+
+@Composable
+private fun TourAreaContentSkeleton() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(BakeRoadTheme.colorScheme.White)
+            .padding(vertical = 20.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        TitleSkeleton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            titleWidth = 154.dp,
+            skipButton = true
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
+        ) {
+            repeat(5) {
+                Column {
+                    Box(
+                        modifier = Modifier
+                            .size(100.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 6.dp)
+                            .size(width = 97.dp, height = 12.25.dp)
+                            .clip(CircleShape)
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .size(width = 76.dp, height = 12.25.dp)
+                            .clip(CircleShape)
+                            .shimmerEffect()
+                    )
+                }
+            }
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .height(40.dp)
+                .clip(RoundedCornerShape(8.dp))
+                .shimmerEffect()
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun MenuContentPreview() {
     BakeRoadTheme {
-        MenuContent(
-            modifier = Modifier.fillMaxWidth(),
-            menuList = persistentListOf(
-                BakeryDetail.Menu(
-                    name = "에그타르트",
-                    price = 3000,
-                    isSignature = true,
-                    imageUrl = ""
+        val isLoading = true
+        if (isLoading) {
+            MenuContentSkeleton()
+        } else {
+            MenuContent(
+                modifier = Modifier.fillMaxWidth(),
+                menuList = persistentListOf(
+                    BakeryDetail.Menu(
+                        name = "에그타르트",
+                        price = 3000,
+                        isSignature = true,
+                        imageUrl = ""
+                    ),
+                    BakeryDetail.Menu(
+                        name = "에그타르트",
+                        price = 3000,
+                        isSignature = false,
+                        imageUrl = ""
+                    )
                 ),
-                BakeryDetail.Menu(
-                    name = "에그타르트",
-                    price = 3000,
-                    isSignature = false,
-                    imageUrl = ""
-                )
-            ),
-            onViewAllClick = {}
-        )
+                onViewAllClick = {}
+            )
+        }
     }
 }
 
@@ -282,28 +459,33 @@ private fun MenuContentPreview() {
 @Composable
 private fun ReviewContentPreview() {
     BakeRoadTheme {
-        ReviewContent(
-            modifier = Modifier.fillMaxWidth(),
-            reviewCount = 0,
-            reviewList = persistentListOf(
-                BakeryReview(
-                    id = 1,
-                    avgRating = 4.7f,
-                    totalCount = 0,
-                    userName = "서빵글",
-                    profileUrl = "",
-                    isLike = false,
-                    content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
-                    rating = 5.0f,
-                    likeCount = 100,
-                    menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
-                    photos = emptyList()
-                )
-            ),
-            localReviewLikeMap = persistentMapOf(),
-            onViewAllClick = {},
-            onLikeClick = { _, _ -> }
-        )
+        val isLoading = true
+        if (isLoading) {
+            ReviewContentSkeleton()
+        } else {
+            ReviewContent(
+                modifier = Modifier.fillMaxWidth(),
+                reviewCount = 0,
+                reviewList = persistentListOf(
+                    BakeryReview(
+                        id = 1,
+                        avgRating = 4.7f,
+                        totalCount = 0,
+                        userName = "서빵글",
+                        profileUrl = "",
+                        isLike = false,
+                        content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
+                        rating = 5.0f,
+                        likeCount = 100,
+                        menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
+                        photos = emptyList()
+                    )
+                ),
+                localReviewLikeMap = persistentMapOf(),
+                onViewAllClick = {},
+                onLikeClick = { _, _ -> }
+            )
+        }
     }
 }
 
@@ -311,19 +493,24 @@ private fun ReviewContentPreview() {
 @Composable
 private fun TourAreaContentPreview() {
     BakeRoadTheme {
-        TourAreaContent(
-            modifier = Modifier.fillMaxWidth(),
-            tourAreaList = persistentListOf(
-                TourArea(
-                    title = "관광지명\n관광지명",
-                    type = "타입",
-                    address = "주소주소주소주소",
-                    imagePath = "",
-                    mapY = 0f,
-                    mapX = 0f
-                )
-            ),
-            onViewAllClick = {}
-        )
+        val isLoading = false
+        if (isLoading) {
+            TourAreaContentSkeleton()
+        } else {
+            TourAreaContent(
+                modifier = Modifier.fillMaxWidth(),
+                tourAreaList = persistentListOf(
+                    TourArea(
+                        title = "관광지명\n관광지명",
+                        type = "타입",
+                        address = "주소주소주소주소",
+                        imagePath = "",
+                        mapY = 0f,
+                        mapX = 0f
+                    )
+                ),
+                onViewAllClick = {}
+            )
+        }
     }
 }

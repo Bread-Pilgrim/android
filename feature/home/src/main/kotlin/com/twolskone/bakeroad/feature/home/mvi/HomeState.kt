@@ -14,6 +14,7 @@ import kotlinx.collections.immutable.persistentSetOf
 
 @Immutable
 internal data class HomeState(
+    val loadingState: LoadingState = LoadingState(),
     val selectedAreaCodes: PersistentSet<Int> = persistentSetOf(EntireBusan),
     val selectedTourAreaCategories: PersistentSet<TourAreaCategory> = persistentSetOf(TourAreaCategory.NATURE),
     val areaList: ImmutableList<Area> = persistentListOf(),
@@ -21,3 +22,11 @@ internal data class HomeState(
     val hotBakeryList: ImmutableList<RecommendBakery> = persistentListOf(),
     val tourAreaList: ImmutableList<TourArea> = persistentListOf()
 ) : BaseUiState
+
+@Immutable
+internal data class LoadingState(
+    val areaLoading: Boolean = true,
+    val preferenceBakeryLoading: Boolean = true,
+    val hotBakeryLoading: Boolean = true,
+    val tourAreaLoading: Boolean = true
+)

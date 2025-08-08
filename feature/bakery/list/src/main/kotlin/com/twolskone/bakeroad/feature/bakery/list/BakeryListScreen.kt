@@ -25,6 +25,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.twolskone.bakeroad.core.designsystem.component.skeleton.BakeriesSkeleton
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
@@ -37,6 +38,7 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
+    loading: Boolean,
     bakeryType: BakeryType,
     pagingItems: LazyPagingItems<Bakery>,
     onBakeryClick: (Bakery) -> Unit
@@ -69,26 +71,31 @@ internal fun BakeryListScreen(
             },
             title = { Text(text = title) }
         )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            contentPadding = PaddingValues(
-                start = 16.dp,
-                end = 16.dp,
-                top = 20.dp
-            ),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
-            items(
-                count = pagingItems.itemCount,
-                key = pagingItems.itemKey { it.id }
-            ) { index ->
-                pagingItems[index]?.let { bakery ->
-                    BakeryCard(
-                        bakery = bakery,
-                        onCardClick = onBakeryClick
-                    )
+        if (loading) {
+            BakeriesSkeleton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 16.dp, vertical = 20.dp)
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(
+                    count = pagingItems.itemCount,
+                    key = pagingItems.itemKey { it.id }
+                ) { index ->
+                    pagingItems[index]?.let { bakery ->
+                        BakeryCard(
+                            bakery = bakery,
+                            onCardClick = onBakeryClick
+                        )
+                    }
                 }
             }
         }
@@ -119,6 +126,7 @@ private fun BakeryListScreenPreview() {
         val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
         BakeryListScreen(
+            loading = true,
             bakeryType = BakeryType.PREFERENCE,
             pagingItems = lazyPagingItems,
             onBakeryClick = {}

@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.bakery.detail.component
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -33,6 +35,7 @@ import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
@@ -237,31 +240,140 @@ internal fun BakeryInfoSection(
     }
 }
 
+@Composable
+internal fun BakeryInfoSectionSkeleton(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 20.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .padding(end = 45.dp)
+                    .fillMaxWidth()
+                    .height(28.dp)
+                    .clip(CircleShape)
+                    .shimmerEffect()
+            )
+            Box(
+                modifier = Modifier
+                    .padding(top = 6.dp)
+                    .size(width = 88.dp, height = 21.dp)
+                    .clip(CircleShape)
+                    .shimmerEffect()
+            )
+            Box(
+                modifier = Modifier
+                    .padding(top = 16.dp)
+                    .fillMaxWidth()
+                    .height(40.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect()
+            )
+            Box(
+                modifier = Modifier
+                    .padding(vertical = 16.dp)
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .shimmerEffect()
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(20.dp)
+                        .padding(end = 43.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .size(width = 45.dp, height = 18.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 159.dp, height = 20.dp)
+                        .padding(end = 43.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .size(width = 45.dp, height = 18.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+            }
+            Row(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 106.dp, height = 20.dp)
+                        .padding(end = 43.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .size(width = 45.dp, height = 18.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+            }
+        }
+    }
+}
+
 @Preview
 @Composable
 private fun BakeryInfoSectionPreview() {
     BakeRoadTheme {
-        BakeryInfoSection(
-            bakeryInfo = BakeryInfo(
-                name = "서라당",
-                address = "서울시 관악구 신사로 120-1 1층 서라당",
-                phone = "010-1234-5678",
-                openStatus = BakeryOpenStatus.OPEN,
-                openingHour = persistentListOf(
-                    BakeryInfo.OpeningHour(
-                        dayOffWeek = DayOfWeek.MONDAY,
-                        openTime = "10:00",
-                        closeTime = "20:00"
-                    )
+        val loading = true
+        if (loading) {
+            BakeryInfoSectionSkeleton()
+        } else {
+            BakeryInfoSection(
+                bakeryInfo = BakeryInfo(
+                    name = "서라당",
+                    address = "서울시 관악구 신사로 120-1 1층 서라당",
+                    phone = "010-1234-5678",
+                    openStatus = BakeryOpenStatus.OPEN,
+                    openingHour = persistentListOf(
+                        BakeryInfo.OpeningHour(
+                            dayOffWeek = DayOfWeek.MONDAY,
+                            openTime = "10:00",
+                            closeTime = "20:00"
+                        )
+                    ),
+                    dayOff = persistentListOf(),
+                    isLike = true
                 ),
-                dayOff = persistentListOf(),
-                isLike = true
-            ),
-            reviewState = ReviewState(),
-            expandOpeningHour = false,
-            rotateOpeningHourIconAngle = 0f,
-            onExpandOpeningHourClick = {},
-            onWriteReviewClick = {}
-        )
+                reviewState = ReviewState(),
+                expandOpeningHour = false,
+                rotateOpeningHourIconAngle = 0f,
+                onExpandOpeningHourClick = {},
+                onWriteReviewClick = {}
+            )
+        }
     }
 }

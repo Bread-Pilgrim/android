@@ -22,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
@@ -93,6 +94,16 @@ private fun ImagePagerIndicator(
             style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray50)
         )
     }
+}
+
+@Composable
+internal fun BakeryImageHeaderSkeleton() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(ratio = 3f / 2f)
+            .shimmerEffect()
+    )
 }
 
 @Preview

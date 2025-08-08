@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -57,7 +57,9 @@ import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.ui.LikeIcon
 import com.twolskone.bakeroad.core.ui.LikeIconColors
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImageHeader
+import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryImageHeaderSkeleton
 import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfoSection
+import com.twolskone.bakeroad.feature.bakery.detail.component.BakeryInfoSectionSkeleton
 import com.twolskone.bakeroad.feature.bakery.detail.component.ReviewSortBottomSheet
 import com.twolskone.bakeroad.feature.bakery.detail.component.home
 import com.twolskone.bakeroad.feature.bakery.detail.component.menu
@@ -152,27 +154,39 @@ internal fun BakeryDetailScreen(
                 .background(color = BakeRoadTheme.colorScheme.Gray50)
                 .offset { IntOffset(x = 0, y = topPadding.toPx().toInt()) },    // Skip Composition. (start from Layout phrase)
             state = listState,
-            contentPadding = WindowInsets.systemBars.asPaddingValues()
+            contentPadding = WindowInsets.navigationBars.asPaddingValues()
         ) {
-            item {
-                BakeryImageHeader(
-                    modifier = Modifier.fillMaxWidth(),
-                    imageList = state.bakeryImageList,
-                    bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
-                )
-            }
-            item {
-                BakeryInfoSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 8.dp),
-                    bakeryInfo = state.bakeryInfo,
-                    reviewState = state.reviewState,
-                    expandOpeningHour = expandOpeningHour,
-                    rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
-                    onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour },
-                    onWriteReviewClick = onWriteReviewClick
-                )
+            if (state.loadingState.bakeryDetailLoading) {
+                item { BakeryImageHeaderSkeleton() }
+                item {
+                    BakeryInfoSectionSkeleton(
+                        modifier = Modifier
+                            .padding(bottom = 8.dp)
+                            .fillMaxWidth()
+                            .background(BakeRoadTheme.colorScheme.White)
+                    )
+                }
+            } else {
+                item {
+                    BakeryImageHeader(
+                        modifier = Modifier.fillMaxWidth(),
+                        imageList = state.bakeryImageList,
+                        bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
+                    )
+                }
+                item {
+                    BakeryInfoSection(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        bakeryInfo = state.bakeryInfo,
+                        reviewState = state.reviewState,
+                        expandOpeningHour = expandOpeningHour,
+                        rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
+                        onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour },
+                        onWriteReviewClick = onWriteReviewClick
+                    )
+                }
             }
             stickyHeader {
                 BakeRoadScrollableTabRow(
@@ -200,6 +214,7 @@ internal fun BakeryDetailScreen(
             when (tabState) {
                 BakeryDetailTab.HOME -> {
                     home(
+                        loadingState = state.loadingState,
                         reviewCount = state.reviewState.count,
                         menuList = state.menuList,
                         reviewList = state.reviewState.previewReviewList,
@@ -213,7 +228,10 @@ internal fun BakeryDetailScreen(
                 }
 
                 BakeryDetailTab.MENU -> {
-                    menu(menuList = state.menuList)
+                    menu(
+                        loading = state.loadingState.bakeryDetailLoading,
+                        menuList = state.menuList
+                    )
                 }
 
                 BakeryDetailTab.REVIEW -> {
@@ -231,7 +249,10 @@ internal fun BakeryDetailScreen(
                 }
 
                 BakeryDetailTab.TOUR_AREA -> {
-                    tourArea(tourList = state.tourAreaList)
+                    tourArea(
+                        loading = state.loadingState.tourAreaLoading,
+                        tourList = state.tourAreaList
+                    )
                 }
             }
         }

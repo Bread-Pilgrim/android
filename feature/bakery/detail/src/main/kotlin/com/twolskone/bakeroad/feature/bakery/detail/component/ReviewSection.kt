@@ -89,7 +89,8 @@ internal fun LazyListScope.review(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 12.dp, horizontal = 16.dp),
+                            .padding(vertical = 6.dp, horizontal = 16.dp)
+                            .padding(bottom = 14.dp),
                         description = stringResource(id = R.string.feature_bakery_detail_empty_review)
                     )
                 }
@@ -126,7 +127,8 @@ internal fun LazyListScope.review(
                         modifier = Modifier
                             .fillMaxWidth()
                             .background(BakeRoadTheme.colorScheme.White)
-                            .padding(vertical = 12.dp, horizontal = 16.dp),
+                            .padding(vertical = 6.dp, horizontal = 16.dp)
+                            .padding(bottom = 14.dp),
                         description = stringResource(id = R.string.feature_bakery_detail_empty_review)
                     )
                 }

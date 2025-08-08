@@ -7,7 +7,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -102,17 +101,24 @@ internal fun MyBakeryRoute(
         onTabSelect = { tab -> viewModel.intent(MyBakeryIntent.SelectTab(tab = tab)) },
         onSortSelect = { tab, sort ->
             when (tab) {
-                Tab.VISITED -> viewModel.intent(MyBakeryIntent.SelectVisitedSort(sort = sort))
-                Tab.LIKE -> viewModel.intent(MyBakeryIntent.SelectLikeSort(sort = sort))
+                Tab.VISITED -> {
+                    scope.launch { visitedListState.scrollBy(0f) }
+                    viewModel.intent(MyBakeryIntent.SelectVisitedSort(sort = sort))
+                }
+
+                Tab.LIKE -> {
+                    scope.launch { likeListState.scrollBy(0f) }
+                    viewModel.intent(MyBakeryIntent.SelectLikeSort(sort = sort))
+                }
             }
         },
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
         onRefresh = {
-            viewModel.intent(MyBakeryIntent.Refresh)
             scope.launch {
                 visitedListState.scrollBy(0f)
                 likeListState.scrollBy(0f)
             }
+            viewModel.intent(MyBakeryIntent.Refresh)
         }
     )
 }

@@ -52,9 +52,15 @@ internal class MyBakeryViewModel @Inject constructor(
         when (intent) {
             is MyBakeryIntent.SelectTab -> reduce { copy(tab = intent.tab) }
 
-            is MyBakeryIntent.SelectVisitedSort -> reduce { copy(visitedSection = visitedSection.copy(sort = intent.sort)) }
+            is MyBakeryIntent.SelectVisitedSort -> {
+                reduce { copy(visitedSection = visitedSection.copy(sort = intent.sort)) }
+                getVisitedBakeries(refresh = true)
+            }
 
-            is MyBakeryIntent.SelectLikeSort -> reduce { copy(likeSection = likeSection.copy(sort = intent.sort)) }
+            is MyBakeryIntent.SelectLikeSort -> {
+                reduce { copy(likeSection = likeSection.copy(sort = intent.sort)) }
+                getLikeBakeries(refresh = true)
+            }
 
             is MyBakeryIntent.GetVisitedBakeries -> getVisitedBakeries(refresh = intent.refresh)
 

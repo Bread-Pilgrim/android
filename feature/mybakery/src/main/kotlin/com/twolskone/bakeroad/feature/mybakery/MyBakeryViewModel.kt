@@ -96,7 +96,7 @@ internal class MyBakeryViewModel @Inject constructor(
             reduce {
                 copy(
                     visitedSection = visitedSection.copy(
-                        loading = true,
+                        loading = refresh,
                         paging = visitedSection.paging.copy(isLoading = true)
                     )
                 )
@@ -132,7 +132,7 @@ internal class MyBakeryViewModel @Inject constructor(
             reduce {
                 copy(
                     likeSection = likeSection.copy(
-                        loading = true,
+                        loading = refresh,
                         paging = likeSection.paging.copy(isLoading = true)
                     )
                 )

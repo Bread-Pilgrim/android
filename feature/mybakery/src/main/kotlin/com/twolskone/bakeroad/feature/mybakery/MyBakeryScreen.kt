@@ -36,6 +36,7 @@ import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
+import com.twolskone.bakeroad.core.designsystem.component.skeleton.BakeriesSkeleton
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -117,6 +118,7 @@ internal fun MyBakeryScreen(
             }
             when (state.tab) {
                 Tab.VISITED -> MyBakerySection(
+                    loading = state.visitedSection.loading,
                     sort = state.visitedSection.sort,
                     paging = state.visitedSection.paging,
                     listState = visitedListState,
@@ -125,6 +127,7 @@ internal fun MyBakeryScreen(
                 )
 
                 Tab.LIKE -> MyBakerySection(
+                    loading = state.likeSection.loading,
                     sort = state.likeSection.sort,
                     paging = state.likeSection.paging,
                     listState = likeListState,
@@ -149,6 +152,7 @@ internal fun MyBakeryScreen(
 
 @Composable
 private fun ColumnScope.MyBakerySection(
+    loading: Boolean,
     sort: BakerySortType,
     paging: PagingUiState<Bakery>,
     listState: LazyListState,
@@ -174,22 +178,31 @@ private fun ColumnScope.MyBakerySection(
             content = { Text(text = sort.label) }
         )
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .weight(1f),
-        contentPadding = PaddingValues(horizontal = 16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-        state = listState
-    ) {
-        items(
-            items = paging.list,
+    if (loading) {
+        BakeriesSkeleton(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            verticalSpace = 16.dp
+        )
+    } else {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            state = listState
+        ) {
+            items(
+                items = paging.list,
 //            key = { bakery -> bakery.id }
-        ) { bakery ->
-            BakeryCard(
-                bakery = bakery,
-                onCardClick = onBakeryClick
-            )
+            ) { bakery ->
+                BakeryCard(
+                    bakery = bakery,
+                    onCardClick = onBakeryClick
+                )
+            }
         }
     }
 }

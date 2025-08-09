@@ -27,12 +27,14 @@ internal data class MyBakeryState(
 
 @Immutable
 internal data class VisitedSectionState(
+    val loading: Boolean = true,
     val sort: BakerySortType = BakerySortType.CREATED_AT_DESC,
     val paging: PagingUiState<Bakery> = PagingUiState(),
 )
 
 @Immutable
 internal data class LikeSectionState(
+    val loading: Boolean = true,
     val sort: BakerySortType = BakerySortType.CREATED_AT_DESC,
     val paging: PagingUiState<Bakery> = PagingUiState(),
 )

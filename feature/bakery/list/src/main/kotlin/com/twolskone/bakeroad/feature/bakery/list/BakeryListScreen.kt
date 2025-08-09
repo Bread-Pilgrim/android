@@ -75,7 +75,6 @@ internal fun BakeryListScreen(
             BakeriesSkeleton(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
             )
         } else {

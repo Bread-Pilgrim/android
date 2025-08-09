@@ -88,7 +88,6 @@ internal fun HomeScreen(
             if (state.loadingState.areaLoading) {
                 LineChipsSkeleton(
                     modifier = Modifier
-                        .fillMaxWidth()
                         .padding(top = 10.dp, bottom = 30.dp)
                         .padding(horizontal = 16.dp)
                 )
@@ -266,7 +265,7 @@ internal fun HomeScreen(
                         .padding(top = 16.dp, bottom = 2.dp)
                         .fillMaxWidth(),
                     contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(9.dp)
+                    horizontalArrangement = Arrangement.spacedBy(7.dp)
                 ) {
                     items(
                         items = TourAreaCategory.entries,

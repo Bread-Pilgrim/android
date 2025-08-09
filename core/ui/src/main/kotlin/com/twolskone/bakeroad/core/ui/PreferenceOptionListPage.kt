@@ -12,16 +12,20 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
@@ -32,6 +36,7 @@ import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.PreferenceOption
 import com.twolskone.bakeroad.core.model.PreferenceOptionType
@@ -54,6 +59,7 @@ private const val TotalPage = 3
 @Composable
 fun PreferenceOptionListPage(
     modifier: Modifier = Modifier,
+    loading: Boolean,
     totalPage: Int = TotalPage,
     page: Int,
     title: String,
@@ -69,7 +75,7 @@ fun PreferenceOptionListPage(
         modifier = modifier.padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.Start
     ) {
-        // Title.
+        // Title
         Text(
             modifier = Modifier
                 .fillMaxWidth()
@@ -77,13 +83,13 @@ fun PreferenceOptionListPage(
             text = title,
             style = BakeRoadTheme.typography.headingLargeBold
         )
-        // Description.
+        // Description
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.core_ui_description_preference),
             style = BakeRoadTheme.typography.bodySmallRegular
         )
-        // Page indicator.
+        // Page indicator
         PageIndicator(
             modifier = Modifier
                 .padding(top = 25.dp)
@@ -91,25 +97,34 @@ fun PreferenceOptionListPage(
             totalPage = totalPage,
             currentPage = page
         )
-        // Chips.
-        FlowRow(
-            modifier = Modifier
-                .padding(top = 42.dp)
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalArrangement = Arrangement.spacedBy(space = 12.dp, alignment = Alignment.Start),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-            maxItemsInEachRow = 2
-        ) {
-            optionList.fastForEach { taste ->
-                OptionChip(
-                    selected = selectedOptions.contains(taste.id),
-                    option = taste,
-                    onSelected = onOptionSelected
-                )
+        // Chips
+        if (loading) {
+            OptionChipsSkeleton(
+                modifier = Modifier
+                    .padding(top = 42.dp)
+                    .fillMaxWidth()
+                    .weight(1f)
+            )
+        } else {
+            FlowRow(
+                modifier = Modifier
+                    .padding(top = 42.dp)
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.spacedBy(space = 12.dp, alignment = Alignment.Start),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                maxItemsInEachRow = 2
+            ) {
+                optionList.fastForEach { taste ->
+                    OptionChip(
+                        selected = selectedOptions.contains(taste.id),
+                        option = taste,
+                        onSelected = onOptionSelected
+                    )
+                }
             }
         }
-        // Buttons.
+        // Buttons
         Box(
             modifier = Modifier
                 .padding(bottom = 36.dp)
@@ -217,6 +232,28 @@ private fun OptionChip(
     }
 }
 
+@Composable
+private fun OptionChipsSkeleton(
+    modifier: Modifier = Modifier,
+    chipWidths: Array<Dp> = arrayOf(222.dp, 295.dp, 209.dp, 229.dp, 304.dp, 205.dp, 157.dp, 155.dp)
+) {
+    FlowRow(
+        modifier = modifier.wrapContentHeight(unbounded = true, align = Alignment.Top),
+        horizontalArrangement = Arrangement.spacedBy(space = 12.dp, alignment = Alignment.Start),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        maxItemsInEachRow = 2
+    ) {
+        chipWidths.forEach { width ->
+            Box(
+                modifier = Modifier
+                    .size(width = width, height = 30.dp)
+                    .clip(RoundedCornerShape(8.dp))
+                    .shimmerEffect()
+            )
+        }
+    }
+}
+
 private val DummyPreferenceOptions = listOf(
     PreferenceOption(id = 1, name = "페이스트리류 (크루아상, 뺑오쇼콜라)", type = PreferenceOptionType.BREAD_TYPE),
     PreferenceOption(id = 2, name = "담백한 식사용 빵 (식빵, 치아바타, 바케트, 하드롤)", type = PreferenceOptionType.BREAD_TYPE),
@@ -234,7 +271,9 @@ private val DummyPreferenceOptions = listOf(
 @Composable
 private fun PreferenceOptionListPagePreview() {
     BakeRoadTheme {
+        val loading = true
         PreferenceOptionListPage(
+            loading = loading,
             page = 2,
             title = "빵 취향을 알려주세요!",
             optionList = DummyPreferenceOptions.toImmutableList(),

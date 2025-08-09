@@ -27,8 +27,8 @@ internal class MyBakeryViewModel @Inject constructor(
     }
 
     init {
-        Timber.e("xxx ???")
         getVisitedBakeries(refresh = true)
+        getLikeBakeries(refresh = true)
     }
 
     override fun handleException(cause: Throwable) {
@@ -93,7 +93,14 @@ internal class MyBakeryViewModel @Inject constructor(
                 Timber.i("xxx visitedPaging is loading or last page")
                 return@launch
             }
-            reduce { copy(visitedSection = visitedSection.copy(paging = visitedSection.paging.copy(isLoading = true))) }
+            reduce {
+                copy(
+                    visitedSection = visitedSection.copy(
+                        loading = true,
+                        paging = visitedSection.paging.copy(isLoading = true)
+                    )
+                )
+            }
             val nextPaging = getMyBakeriesUseCase(
                 page = if (refresh) startPage else section.paging.nextPage,
                 myBakeryType = MyBakeryType.VISITED,
@@ -103,6 +110,7 @@ internal class MyBakeryViewModel @Inject constructor(
                 copy(
                     isRefreshing = false,
                     visitedSection = visitedSection.copy(
+                        loading = false,
                         paging = if (refresh) {
                             visitedSection.paging.refresh(nextPaging)
                         } else {
@@ -121,7 +129,14 @@ internal class MyBakeryViewModel @Inject constructor(
                 Timber.i("xxx likePaging is loading or last page")
                 return@launch
             }
-            reduce { copy(likeSection = likeSection.copy(paging = likeSection.paging.copy(isLoading = true))) }
+            reduce {
+                copy(
+                    likeSection = likeSection.copy(
+                        loading = true,
+                        paging = likeSection.paging.copy(isLoading = true)
+                    )
+                )
+            }
             val nextPaging = getMyBakeriesUseCase(
                 page = if (refresh) startPage else section.paging.nextPage,
                 myBakeryType = MyBakeryType.LIKE,
@@ -131,6 +146,7 @@ internal class MyBakeryViewModel @Inject constructor(
                 copy(
                     isRefreshing = false,
                     likeSection = likeSection.copy(
+                        loading = false,
                         paging = if (refresh) {
                             likeSection.paging.refresh(nextPaging)
                         } else {

@@ -87,6 +87,7 @@ internal fun PreferenceOptionListScreen(
         )
         PreferenceOptionListPage(
             modifier = Modifier.fillMaxSize(),
+            loading = state.loading,
             page = state.page,
             title = title,
             completionText = if (isEdit) stringResource(R.string.core_ui_button_save) else stringResource(R.string.core_ui_button_next),
@@ -99,4 +100,3 @@ internal fun PreferenceOptionListScreen(
         )
     }
 }
-

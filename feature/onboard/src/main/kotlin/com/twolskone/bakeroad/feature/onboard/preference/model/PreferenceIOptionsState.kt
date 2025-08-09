@@ -12,6 +12,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 @Immutable
 internal data class PreferenceOptionsState(
+    val loading: Boolean = true,
     @IntRange(from = 1, to = 3) val page: Int = 1,
     val breadTypeList: ImmutableList<PreferenceOption> = persistentListOf(),
     val flavorList: ImmutableList<PreferenceOption> = persistentListOf(),
@@ -25,6 +26,7 @@ internal data class PreferenceOptionsState(
 
 internal fun PreferenceOptionsState.copy(preferenceOptions: PreferenceOptions): PreferenceOptionsState =
     copy(
+        loading = false,
         breadTypeList = preferenceOptions.breadTypes.toImmutableList(),
         flavorList = preferenceOptions.flavors.toImmutableList(),
         bakeryTypeList = preferenceOptions.atmospheres.toImmutableList(),

@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
@@ -30,7 +32,7 @@ fun LineChipsSkeleton(
     widths: Array<Dp> = arrayOf(73.dp, 73.dp, 73.dp, 73.dp, 73.dp)
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.wrapContentWidth(unbounded = true, align = Alignment.Start),
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
         widths.forEach { width ->
@@ -53,7 +55,7 @@ fun ChipsSkeleton(
     widths: Array<Dp> = arrayOf(45.dp, 45.dp, 57.dp, 45.dp, 69.dp)
 ) {
     Row(
-        modifier = modifier,
+        modifier = modifier.wrapContentWidth(unbounded = true, align = Alignment.Start),
         horizontalArrangement = Arrangement.spacedBy(7.dp)
     ) {
         widths.forEach { width ->
@@ -68,7 +70,7 @@ fun ChipsSkeleton(
 }
 
 /**
- * Title skeleton.
+ * Title skeleton
  * @param titleWidth    제목 너비
  * @param skipButton    우측 버튼 숨김 여부
  */
@@ -106,7 +108,7 @@ fun TitleSkeleton(
 @Composable
 fun SimpleBakeriesSkeleton(modifier: Modifier = Modifier) {
     Row(
-        modifier = modifier,
+        modifier = modifier.wrapContentWidth(unbounded = true, align = Alignment.Start),
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         repeat(5) {
@@ -144,15 +146,18 @@ fun SimpleBakeriesSkeleton(modifier: Modifier = Modifier) {
 }
 
 /**
- * Bakeries skeleton.
+ * Bakeries skeleton
  */
 @Composable
-fun BakeriesSkeleton(modifier: Modifier = Modifier) {
+fun BakeriesSkeleton(
+    modifier: Modifier = Modifier,
+    verticalSpace: Dp = 20.dp
+) {
     Column(
-        modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(20.dp)
+        modifier = modifier.wrapContentHeight(unbounded = true, align = Alignment.Top),
+        verticalArrangement = Arrangement.spacedBy(verticalSpace),
     ) {
-        repeat(5) {
+        repeat(8) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top
@@ -164,7 +169,11 @@ fun BakeriesSkeleton(modifier: Modifier = Modifier) {
                         .clip(RoundedCornerShape(12.dp))
                         .shimmerEffect()
                 )
-                Column(modifier = Modifier.padding(start = 12.dp)) {
+                Column(
+                    modifier = Modifier
+                        .padding(start = 12.dp)
+                        .weight(1f)
+                ) {
                     Box(
                         modifier = Modifier
                             .size(width = 58.dp, height = 23.dp)
@@ -216,40 +225,41 @@ fun BakeriesSkeleton(modifier: Modifier = Modifier) {
 @Composable
 fun TourAreasSkeleton(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier,
+        modifier = modifier.wrapContentHeight(unbounded = true, align = Alignment.Top),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         repeat(5) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(16f / 9f)
-                    .clip(RoundedCornerShape(12.dp))
-                    .shimmerEffect()
-            )
-            Row(modifier = Modifier.padding(8.dp)) {
+            Column {
                 Box(
                     modifier = Modifier
-                        .size(width = 37.dp, height = 23.dp)
-                        .clip(RoundedCornerShape(6.dp))
-                        .padding(top = 6.dp)
+                        .fillMaxWidth()
+                        .aspectRatio(16f / 9f)
+                        .clip(RoundedCornerShape(12.dp))
                         .shimmerEffect()
                 )
+                Row(modifier = Modifier.padding(top = 8.dp)) {
+                    Box(
+                        modifier = Modifier
+                            .size(width = 37.dp, height = 23.dp)
+                            .clip(RoundedCornerShape(6.dp))
+                            .shimmerEffect()
+                    )
+                    Box(
+                        modifier = Modifier
+                            .padding(start = 4.dp)
+                            .size(width = 87.dp, height = 23.dp)
+                            .clip(CircleShape)
+                            .shimmerEffect()
+                    )
+                }
                 Box(
                     modifier = Modifier
-                        .size(width = 87.dp, height = 23.dp)
+                        .padding(top = 4.dp)
+                        .size(width = 104.dp, height = 18.dp)
                         .clip(CircleShape)
-                        .padding(start = 4.dp)
                         .shimmerEffect()
                 )
             }
-            Box(
-                modifier = Modifier
-                    .size(width = 104.dp, height = 18.dp)
-                    .clip(CircleShape)
-                    .padding(top = 4.dp)
-                    .shimmerEffect()
-            )
         }
     }
 }
@@ -263,7 +273,7 @@ fun ReviewsSkeleton(
     heights: Array<Dp> = arrayOf(171.dp, 307.dp, 307.dp, 40.dp)
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.wrapContentHeight(unbounded = true, align = Alignment.Top),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         heights.forEach { height ->

@@ -45,6 +45,7 @@ internal class SearchViewModel @Inject constructor(
         .filter { it.isNotBlank() }
         .distinctUntilChanged()
         .flatMapLatest { query ->
+            reduce { copy(loading = true) }
             getSearchBakeriesUseCase(query = query).cachedIn(viewModelScope)
         }
 

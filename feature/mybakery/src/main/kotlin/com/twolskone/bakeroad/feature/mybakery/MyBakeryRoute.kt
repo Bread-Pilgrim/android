@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -54,12 +53,6 @@ internal fun MyBakeryRoute(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.snackbarEffect.collectLatest { state ->
-            showSnackbar(state)
-        }
-    }
-
     val isLastVisitedItemVisible by remember {
         derivedStateOf {
             val lastVisibleItemIndex = visitedListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
@@ -72,6 +65,12 @@ internal fun MyBakeryRoute(
             val lastVisibleItemIndex = likeListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
             val lastIndex = likeListState.layoutInfo.totalItemsCount - 1
             state.likeSection.paging.canRequest && lastVisibleItemIndex == lastIndex
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.snackbarEffect.collectLatest { state ->
+            showSnackbar(state)
         }
     }
 
@@ -102,12 +101,12 @@ internal fun MyBakeryRoute(
         onSortSelect = { tab, sort ->
             when (tab) {
                 Tab.VISITED -> {
-                    scope.launch { visitedListState.scrollBy(0f) }
+                    scope.launch { visitedListState.scrollToItem(0) }
                     viewModel.intent(MyBakeryIntent.SelectVisitedSort(sort = sort))
                 }
 
                 Tab.LIKE -> {
-                    scope.launch { likeListState.scrollBy(0f) }
+                    scope.launch { likeListState.scrollToItem(0) }
                     viewModel.intent(MyBakeryIntent.SelectLikeSort(sort = sort))
                 }
             }
@@ -115,8 +114,8 @@ internal fun MyBakeryRoute(
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
         onRefresh = {
             scope.launch {
-                visitedListState.scrollBy(0f)
-                likeListState.scrollBy(0f)
+                visitedListState.scrollToItem(0)
+                likeListState.scrollToItem(0)
             }
             viewModel.intent(MyBakeryIntent.Refresh)
         }

@@ -12,12 +12,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,15 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -49,7 +43,7 @@ import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
-import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
+import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
@@ -89,7 +83,8 @@ internal fun BakeryDetailScreen(
     onReviewSortSelect: (ReviewSortType) -> Unit,
     onWriteReviewClick: () -> Unit,
     onBakeryLikeClick: (Boolean) -> Unit,
-    onReviewLikeClick: (Int, Boolean) -> Unit
+    onReviewLikeClick: (Int, Boolean) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -265,19 +260,12 @@ internal fun BakeryDetailScreen(
             containerColor = Color.Transparent,
             iconContentColor = BakeRoadTheme.colorScheme.Black,
             leftActions = {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                        .singleClickable {}
-                        .padding(4.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
-                        contentDescription = "Back"
-                    )
-                }
+                BakeRoadTopAppBarIcon(
+                    iconRes = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back,
+                    contentDescription = "Back",
+                    backgroundColor = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f),
+                    onClick = onBackClick
+                )
             },
             title = {
                 if (topBarColorTransition == 1f) {
@@ -286,20 +274,12 @@ internal fun BakeryDetailScreen(
             },
             rightActions = {
                 Row {
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                            .singleClickable {}
-                            .padding(4.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_share),
-                            contentDescription = "Share"
-                        )
-                    }
+                    BakeRoadTopAppBarIcon(
+                        iconRes = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_share,
+                        contentDescription = "Share",
+                        backgroundColor = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f),
+                        onClick = {}
+                    )
                     LikeIcon(
                         modifier = Modifier.padding(start = 12.dp),
                         size = 24.dp,
@@ -365,7 +345,8 @@ private fun BakeryDetailScreenPreview() {
             onReviewSortSelect = {},
             onWriteReviewClick = {},
             onBakeryLikeClick = {},
-            onReviewLikeClick = { _, _ -> }
+            onReviewLikeClick = { _, _ -> },
+            onBackClick = {}
         )
     }
 }

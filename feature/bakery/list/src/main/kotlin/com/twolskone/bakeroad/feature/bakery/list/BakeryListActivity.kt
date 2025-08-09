@@ -32,10 +32,7 @@ internal class BakeryListActivity : ComponentActivity() {
                             }
                         )
                     },
-                    setResult = { code, finish ->
-                        setResult(code)
-                        if (finish) finish()
-                    }
+                    finish = { finish() }
                 )
             }
         }

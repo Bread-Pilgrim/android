@@ -51,6 +51,7 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.search)
     implementation(projects.feature.mybakery)
+    implementation(projects.feature.mypage)
     implementation(projects.feature.bakery.list)
     implementation(projects.feature.bakery.detail)
     implementation(projects.feature.review.write)

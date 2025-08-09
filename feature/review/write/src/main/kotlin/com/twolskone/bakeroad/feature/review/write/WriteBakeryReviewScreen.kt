@@ -18,7 +18,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.foundation.text.input.rememberTextFieldState
@@ -54,8 +53,8 @@ import com.twolskone.bakeroad.core.designsystem.component.switch.BakeRoadSwitch
 import com.twolskone.bakeroad.core.designsystem.component.switch.SwitchSize
 import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextBox
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
+import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
-import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewState
 
@@ -84,19 +83,11 @@ internal fun WriteBakeryReviewScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
             leftActions = {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                        .singleClickable { onBackClick() }
-                        .padding(4.dp)
-                ) {
-                    Icon(
-                        modifier = Modifier.size(24.dp),
-                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
-                        contentDescription = "Back"
-                    )
-                }
+                BakeRoadTopAppBarIcon(
+                    iconRes = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back,
+                    contentDescription = "Back",
+                    onClick = onBackClick
+                )
             },
             title = {
                 Text(text = stringResource(id = R.string.feature_review_write_title_write_review))

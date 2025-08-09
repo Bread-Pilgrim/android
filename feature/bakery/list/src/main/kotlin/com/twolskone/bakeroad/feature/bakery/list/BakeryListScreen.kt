@@ -1,9 +1,7 @@
 package com.twolskone.bakeroad.feature.bakery.list
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,14 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
@@ -27,7 +21,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.twolskone.bakeroad.core.designsystem.component.skeleton.BakeriesSkeleton
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
-import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
+import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
@@ -41,7 +35,8 @@ internal fun BakeryListScreen(
     loading: Boolean,
     bakeryType: BakeryType,
     pagingItems: LazyPagingItems<Bakery>,
-    onBakeryClick: (Bakery) -> Unit
+    onBakeryClick: (Bakery) -> Unit,
+    onBackClick: () -> Unit
 ) {
     val title = when (bakeryType) {
         BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
@@ -57,17 +52,11 @@ internal fun BakeryListScreen(
         BakeRoadTopAppBar(
             modifier = Modifier.fillMaxWidth(),
             leftActions = {
-                Box(
-                    modifier = Modifier
-                        .clip(CircleShape)
-                        .singleClickable {}
-                        .padding(4.dp)
-                ) {
-                    Image(
-                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
-                        contentDescription = "Back"
-                    )
-                }
+                BakeRoadTopAppBarIcon(
+                    iconRes = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back,
+                    contentDescription = "Back",
+                    onClick = onBackClick
+                )
             },
             title = { Text(text = title) }
         )
@@ -128,7 +117,8 @@ private fun BakeryListScreenPreview() {
             loading = true,
             bakeryType = BakeryType.PREFERENCE,
             pagingItems = lazyPagingItems,
-            onBakeryClick = {}
+            onBakeryClick = {},
+            onBackClick = {}
         )
     }
 }

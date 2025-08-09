@@ -1,25 +1,16 @@
 package com.twolskone.bakeroad.feature.onboard.preference
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
-import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
+import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.PreferenceOption
 import com.twolskone.bakeroad.core.ui.PreferenceOptionListPage
@@ -69,19 +60,11 @@ internal fun PreferenceOptionListScreen(
             modifier = Modifier.fillMaxWidth(),
             leftActions = {
                 if (isEdit) {
-                    Box(
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .background(color = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f))
-                            .singleClickable { onPreviousPage(0) }
-                            .padding(4.dp)
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(24.dp),
-                            imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back),
-                            contentDescription = "Back"
-                        )
-                    }
+                    BakeRoadTopAppBarIcon(
+                        iconRes = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back,
+                        contentDescription = "Back",
+                        onClick = { onPreviousPage(0) }
+                    )
                 }
             }
         )

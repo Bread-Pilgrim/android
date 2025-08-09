@@ -19,7 +19,7 @@ import timber.log.Timber
 internal fun BakeryListRoute(
     viewModel: BakeryListViewModel = hiltViewModel(),
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, ActivityResultLauncher<Intent>) -> Unit,
-    setResult: (code: Int, withFinish: Boolean) -> Unit
+    finish: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val lazyPagingItems = viewModel.pagingFlow.collectAsLazyPagingItems()
@@ -29,10 +29,6 @@ internal fun BakeryListRoute(
         Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
     }
 
-    BackHandler {
-        setResult(RESULT_REFRESH_BAKERY_LIST, true)
-    }
-
     lazyPagingItems.ObserveError(viewModel = viewModel)
 
     BaseComposable(baseViewModel = viewModel) {
@@ -40,7 +36,8 @@ internal fun BakeryListRoute(
             loading = state.loading,
             bakeryType = state.bakeryType,
             pagingItems = lazyPagingItems,
-            onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) }
+            onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
+            onBackClick = finish
         )
     }
 }

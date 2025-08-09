@@ -36,6 +36,7 @@ import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.navigateToHome
 import com.twolskone.bakeroad.feature.mybakery.navigation.navigateToMyBakery
+import com.twolskone.bakeroad.feature.mypage.navigation.navigateToMyPage
 import com.twolskone.bakeroad.feature.search.navigation.navigateToSearch
 import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
@@ -128,5 +129,6 @@ private fun navigateToBakeRoadDestination(
         BakeRoadDestination.Home -> navController.navigateToHome(navOptions = navOptions)
         BakeRoadDestination.Search -> navController.navigateToSearch(navOptions = navOptions)
         BakeRoadDestination.MyBakery -> navController.navigateToMyBakery(navOptions = navOptions)
+        BakeRoadDestination.MyPage -> navController.navigateToMyPage(navOptions = navOptions)
     }
 }

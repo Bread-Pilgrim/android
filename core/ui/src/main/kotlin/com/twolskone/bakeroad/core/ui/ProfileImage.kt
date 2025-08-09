@@ -29,20 +29,20 @@ fun ProfileImage(
             modifier = Modifier
                 .size(size)
                 .clip(CircleShape)
-                .border(
+                /*.border(
                     width = 1.dp,
                     color = BakeRoadTheme.colorScheme.Gray100,
                     shape = CircleShape
-                ),
+                )*/,
             model = profileUrl,
             contentDescription = "Profile",
-            placeholder = painterResource(id = R.drawable.core_ui_ic_person_image),
+            placeholder = painterResource(id = R.drawable.core_ui_ic_person),
             contentScale = ContentScale.Crop
         )
     } else {
         Image(
             modifier = Modifier.size(size),
-            imageVector = ImageVector.vectorResource(id = R.drawable.core_ui_ic_person_image),
+            imageVector = ImageVector.vectorResource(id = R.drawable.core_ui_ic_person),
             contentDescription = "Profile"
         )
     }

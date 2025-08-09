@@ -12,6 +12,7 @@ import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.HomeRoute
 import com.twolskone.bakeroad.feature.home.navigation.homeScreen
 import com.twolskone.bakeroad.feature.mybakery.navigation.myBakeryScreen
+import com.twolskone.bakeroad.feature.mypage.navigation.myPageScreen
 import com.twolskone.bakeroad.feature.search.navigation.searchScreen
 
 @Composable
@@ -44,6 +45,10 @@ internal fun BakeRoadNavHost(
         myBakeryScreen(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
+            showSnackbar = showSnackbar
+        )
+        myPageScreen(
+            padding = padding,
             showSnackbar = showSnackbar
         )
     }

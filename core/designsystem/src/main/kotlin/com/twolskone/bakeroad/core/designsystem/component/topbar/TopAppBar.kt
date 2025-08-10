@@ -52,7 +52,7 @@ fun BakeRoadTopAppBar(
     modifier: Modifier = Modifier,
     containerColor: Color = BakeRoadTheme.colorScheme.White,
     contentColor: Color = BakeRoadTheme.colorScheme.Black,
-    iconContentColor: Color = BakeRoadTheme.colorScheme.Gray950,
+    iconContentColor: Color = BakeRoadTheme.colorScheme.Black,
     title: @Composable () -> Unit = {},
     leftActions: @Composable () -> Unit = {},
     rightActions: @Composable () -> Unit = {},

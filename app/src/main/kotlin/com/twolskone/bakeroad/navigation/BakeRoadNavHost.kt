@@ -23,6 +23,7 @@ internal fun BakeRoadNavHost(
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    navigateToSettings: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     NavHost(
@@ -49,6 +50,7 @@ internal fun BakeRoadNavHost(
         )
         myPageScreen(
             padding = padding,
+            navigateToSettings = navigateToSettings,
             showSnackbar = showSnackbar
         )
     }

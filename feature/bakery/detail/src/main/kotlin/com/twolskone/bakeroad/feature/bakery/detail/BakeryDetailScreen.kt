@@ -258,7 +258,6 @@ internal fun BakeryDetailScreen(
                 .align(Alignment.TopCenter)
                 .drawBehind { drawRect(color = topBarColor) },  // Skip Composition and Layout. (start from Drawing phrase)
             containerColor = Color.Transparent,
-            iconContentColor = BakeRoadTheme.colorScheme.Black,
             leftActions = {
                 BakeRoadTopAppBarIcon(
                     iconRes = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back,

@@ -9,6 +9,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
+import com.twolskone.bakeroad.core.navigator.SettingsNavigator
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -17,13 +18,16 @@ import javax.inject.Inject
 class MainActivity : ComponentActivity() {
 
     @Inject
-    lateinit var bakeryListNavigator: BakeryListNavigator
+    lateinit var bakeryListNavigator: BakeryListNavigator       // 빵집 목록
 
     @Inject
-    lateinit var bakeryDetailNavigator: BakeryDetailNavigator
+    lateinit var bakeryDetailNavigator: BakeryDetailNavigator   // 빵집 상세
 
     @Inject
-    lateinit var onboardingNavigator: OnboardingNavigator
+    lateinit var onboardingNavigator: OnboardingNavigator       // 취향 설정
+
+    @Inject
+    lateinit var settingsNavigator: SettingsNavigator           // 설정
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +62,12 @@ class MainActivity : ComponentActivity() {
                             activity = this,
                             intentBuilder = { putExtra("isEditPreference", true) },
                             launcher = launcher
+                        )
+                    },
+                    navigateToSettings = {
+                        settingsNavigator.navigateFromActivity(
+                            activity = this,
+                            withFinish = false
                         )
                     }
                 )

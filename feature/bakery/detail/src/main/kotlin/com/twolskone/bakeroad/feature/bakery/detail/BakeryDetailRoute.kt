@@ -20,9 +20,9 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
-import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_ID
-import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_LIKE
-import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
+import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
+import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_LIKE
+import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent

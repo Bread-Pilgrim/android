@@ -16,9 +16,9 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
-import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_ID
-import com.twolskone.bakeroad.core.navigator.model.KEY_BAKERY_LIKE
-import com.twolskone.bakeroad.core.navigator.model.RESULT_REFRESH_BAKERY_LIST
+import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
+import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_LIKE
+import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryIntent
 import kotlinx.coroutines.flow.collectLatest

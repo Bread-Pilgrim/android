@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.collectLatest
 internal fun MyPageRoute(
     padding: PaddingValues,
     viewModel: MyPageViewModel = hiltViewModel(),
+    navigateToSettings: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -22,7 +23,7 @@ internal fun MyPageRoute(
 
     MyPageScreen(
         padding = padding,
-        onSettingsClick = {},
+        onSettingsClick = navigateToSettings,
         onBadgeSettingsClick = {},
         onMenuClick = { menu ->
             when (menu) {

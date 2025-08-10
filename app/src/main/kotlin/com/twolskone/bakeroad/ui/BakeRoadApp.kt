@@ -46,7 +46,8 @@ internal fun BakeRoadApp(
     navController: NavHostController,
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
-    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit
+    navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    navigateToSettings: () -> Unit
 ) {
     val context = LocalContext.current
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
@@ -88,6 +89,7 @@ internal fun BakeRoadApp(
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
             navigateToEditPreference = navigateToEditPreference,
+            navigateToSettings = navigateToSettings,
             showSnackbar = { state -> snackbarTrigger = state to System.currentTimeMillis() }
         )
     }

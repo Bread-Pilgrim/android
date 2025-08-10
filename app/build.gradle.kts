@@ -55,6 +55,8 @@ dependencies {
     implementation(projects.feature.bakery.list)
     implementation(projects.feature.bakery.detail)
     implementation(projects.feature.review.write)
+    implementation(projects.feature.review.myreviews)
+    implementation(projects.feature.settings)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)

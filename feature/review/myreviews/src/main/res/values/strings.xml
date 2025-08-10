@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_review_myreviews">내가 쓴 리뷰</string>
+    <string name="feature_review_myreviews_empty_review">아직 작성한 리뷰가 없습니다!\n방문한 빵집이 있다면 리뷰를 남겨주세요 🥨</string>
+</resources>

@@ -40,12 +40,11 @@ import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickabl
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.ui.ProfileImage
-import com.twolskone.bakeroad.feature.bakery.detail.R
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 
+private val CardShape = RoundedCornerShape(12.dp)
 private val CardPadding = 12.dp
-private val RawContentSpacing = 6.dp
 private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end = CardPadding)
 
 /**
@@ -76,7 +75,7 @@ internal fun ReviewCard(
 
     Card(
         modifier = modifier,
-        shape = RoundedCornerShape(12.dp),
+        shape = CardShape,
         colors = CardColors(
             containerColor = BakeRoadTheme.colorScheme.Gray40,
             contentColor = BakeRoadTheme.colorScheme.Gray700,
@@ -116,10 +115,10 @@ internal fun ReviewCard(
         // 사진
         if (review.photos.isNotEmpty()) {
             BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                val cardWidth = (maxWidth / 2) - CardPadding - (RawContentSpacing / 2)
+                val cardWidth = (maxWidth / 2) - CardPadding - (7.dp / 2)
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalArrangement = Arrangement.spacedBy(7.dp),
                     contentPadding = contentPadding
                 ) {
                     items(
@@ -180,7 +179,7 @@ internal fun ReviewCard(
             Text(
                 modifier = Modifier.padding(start = 4.dp),
                 text = if (likeCount <= 0) {
-                    stringResource(R.string.feature_bakery_detail_like)
+                    stringResource(com.twolskone.bakeroad.core.ui.R.string.core_ui_label_like)
                 } else {
                     likeCount.toString()
                 },

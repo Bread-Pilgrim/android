@@ -25,4 +25,5 @@
     <string name="core_ui_label_bakery_sort_rating_desc">별점 높은 순</string>
     <string name="core_ui_label_bakery_sort_rating_asc">별점 낮은 순</string>
     <string name="core_ui_label_sort_name">가나다 순</string>
+    <string name="core_ui_label_like">좋아요</string>
 </resources>

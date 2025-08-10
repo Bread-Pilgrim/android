@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_settings">설정</string>
+    <string name="feature_settings_notice">공지사항</string>
+    <string name="feature_settings_app_info">앱 정보</string>
+    <string name="feature_settings_label_logout">로그아웃</string>
+    <string name="feature_settings_title_device_info">장치 정보</string>
+    <string name="feature_settings_title_app_version">앱 버전</string>
+    <string name="feature_settings_title_user_info">사용자 정보</string>
+    <string name="feature_settings_label_app_version">버전 %s</string>
+</resources>

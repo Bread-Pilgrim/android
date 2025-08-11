@@ -2,8 +2,8 @@
 <resources>
     <string name="feature_mypage">나의 빵글</string>
     <string name="feature_mypage_button_badge_settings">뱃지설정</string>
-    <string name="feature_mypage_bakeroad_settlement">빵말정산</string>
-    <string name="feature_mypage_bakeroad_received_badge">받은 뱃지</string>
-    <string name="feature_mypage_bakeroad_my_review">내가 쓴 리뷰</string>
-    <string name="feature_mypage_bakeroad_change_preference">취향 변경</string>
+    <string name="feature_mypage_report">빵말정산</string>
+    <string name="feature_mypage_received_badge">받은 뱃지</string>
+    <string name="feature_mypage_my_review">내가 쓴 리뷰</string>
+    <string name="feature_mypage_change_preference">취향 변경</string>
 </resources>

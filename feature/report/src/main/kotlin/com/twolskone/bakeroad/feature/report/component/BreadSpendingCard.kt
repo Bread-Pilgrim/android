@@ -1,0 +1,177 @@
+package com.twolskone.bakeroad.feature.report.component
+
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+
+private val ChartGradient = persistentListOf(
+    Color(0xFFFFEBDC),
+    Color(0xFFFFFFFF)
+)
+
+@Composable
+internal fun BreadSpendingCard(
+    modifier: Modifier = Modifier
+) {
+
+}
+
+@Composable
+private fun BreadSpendingChart(
+    modifier: Modifier = Modifier,
+    values: ImmutableList<Float>,
+    strokeColor: Color = BakeRoadTheme.colorScheme.Primary500,
+    strokeWidth: Dp = 2.dp,
+    areaGradient: ImmutableList<Color> = ChartGradient
+) {
+    val data = values.takeIf { it.size >= 2 } ?: listOf(0f, 0f)
+
+    Canvas(modifier = modifier) {
+        val w = size.width
+        val h = size.height
+        val stepX = w / (data.lastIndex.coerceAtLeast(1))
+
+        fun pxY(v: Float): Float {
+            val clamped = v.coerceIn(0f, 1f)
+            return h - clamped * (h * 0.95f) // 상단 5% 여백
+        }
+
+        val points = List(data.size) { i -> Offset(i * stepX, pxY(data[i])) }
+//        val linePath = Path().apply { catmullRom(points, tension) }
+        val linePath = Path().apply { monotoneCubic(points) }
+        val areaPath = Path().apply {
+            addPath(linePath)
+            lineTo(points.last().x, h)
+            lineTo(points.first().x, h)
+            close()
+        }
+
+        // 그래프 아래 영역
+        drawPath(
+            path = areaPath,
+            brush = Brush.verticalGradient(colors = areaGradient),
+            alpha = 1f
+        )
+        // 그래프 (stroke)
+        drawPath(
+            path = linePath,
+            color = strokeColor,
+            style = Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Round)
+        )
+    }
+}
+
+/* Catmull-Rom Splines → Cubic Bezier */
+private fun Path.catmullRom(points: List<Offset>, tension: Float) {
+    /* tension: 곡률 (0~1) */
+    if (points.size < 2) return
+    moveTo(points.first().x, points.first().y)
+
+    for (i in 0 until points.size - 1) {
+        val p0 = points.getOrNull(i - 1) ?: points[i]
+        val p1 = points[i]
+        val p2 = points[i + 1]
+        val p3 = points.getOrNull(i + 2) ?: p2
+        val c1 = Offset(
+            p1.x + (p2.x - p0.x) * tension / 6f,
+            p1.y + (p2.y - p0.y) * tension / 6f
+        )
+        val c2 = Offset(
+            p2.x - (p3.x - p1.x) * tension / 6f,
+            p2.y - (p3.y - p1.y) * tension / 6f
+        )
+
+        cubicTo(c1.x, c1.y, c2.x, c2.y, p2.x, p2.y)
+    }
+}
+
+/* Monotone Cubic → Cubic Bezier */
+private fun Path.monotoneCubic(points: List<Offset>) {
+    if (points.size < 2) return
+    moveTo(points.first().x, points.first().y)
+
+    val n = points.size
+    val x = FloatArray(n) { points[it].x }
+    val y = FloatArray(n) { points[it].y }
+
+    // 구간 기울기 (secant slopes)
+    val dx = FloatArray(n - 1)
+    val dy = FloatArray(n - 1)
+    val m = FloatArray(n - 1)
+    for (i in 0 until n - 1) {
+        dx[i] = x[i + 1] - x[i]
+        dy[i] = y[i + 1] - y[i]
+        m[i] = if (dx[i] != 0f) dy[i] / dx[i] else 0f
+    }
+
+    // 각 점에서의 접선 기울기 (tangent slopes)
+    val t = FloatArray(n)
+    t[0] = m[0]
+    t[n - 1] = m[n - 2]
+    for (i in 1 until n - 1) {
+        // 인접 구간이 부호가 다르면(모노토닉 아님) 0으로 눌러 overshoot 방지
+        if (m[i - 1] * m[i] <= 0f) t[i] = 0f
+        else t[i] = (m[i - 1] + m[i]) / 2f
+    }
+
+    // Fritsch–Carlson 보정 (아주 급한 구간에서 둔화)
+    for (i in 0 until n - 1) {
+        if (m[i] == 0f) {
+            t[i] = 0f
+            t[i + 1] = 0f
+            continue
+        }
+        val a = t[i] / m[i]
+        val b = t[i + 1] / m[i]
+        val s = a * a + b * b
+        if (s > 9f) {
+            val tau = 3f / kotlin.math.sqrt(s)
+            t[i] = tau * a * m[i]
+            t[i + 1] = tau * b * m[i]
+        }
+    }
+
+    // 각 구간 Cubic Bezier 변환
+    for (i in 0 until n - 1) {
+        val x0 = x[i]
+        val y0 = y[i]
+        val x1 = x[i + 1]
+        val y1 = y[i + 1]
+        val h = dx[i]
+        val c1 = Offset(x0 + h / 3f, y0 + t[i] * h / 3f)
+        val c2 = Offset(x1 - h / 3f, y1 - t[i + 1] * h / 3f)
+
+        cubicTo(c1.x, c1.y, c2.x, c2.y, x1, y1)
+    }
+}
+
+@Preview
+@Composable
+private fun BreadSpendingChartPreview() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = BakeRoadTheme.colorScheme.White)
+    ) {
+        BreadSpendingChart(
+            modifier = Modifier.size(width = 164.dp, height = 85.dp),
+            values = persistentListOf(0.55f, 0.4f, 1f)
+        )
+    }
+}

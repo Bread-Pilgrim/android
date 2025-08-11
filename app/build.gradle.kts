@@ -57,6 +57,7 @@ dependencies {
     implementation(projects.feature.review.write)
     implementation(projects.feature.review.myreviews)
     implementation(projects.feature.settings)
+    implementation(projects.feature.report)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)

@@ -27,7 +27,7 @@ internal fun MyPageRoute(
         onBadgeSettingsClick = {},
         onMenuClick = { menu ->
             when (menu) {
-                Menu.Settlement -> TODO()
+                Menu.Report -> TODO()
                 Menu.Badge -> TODO()
                 Menu.Review -> TODO()
                 Menu.Preference -> TODO()

@@ -89,7 +89,7 @@ internal class SearchViewModel @Inject constructor(
                 reduce { copy(section = intent.section) }
             }
 
-            is SearchIntent.SearchBakery -> _query.value = intent.query
+            is SearchIntent.SearchBakery -> _query.value = (intent.query).trim()
 
             is SearchIntent.DeleteQuery -> {
                 deleteRecentSearchQueryUseCase(query = intent.query)

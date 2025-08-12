@@ -2,10 +2,23 @@ package com.twolskone.bakeroad.feature.report.component
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
@@ -13,10 +26,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.feature.report.R
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -24,12 +41,104 @@ private val ChartGradient = persistentListOf(
     Color(0xFFFFEBDC),
     Color(0xFFFFFFFF)
 )
+private val ChartPadding = 66.dp
 
 @Composable
 internal fun BreadSpendingCard(
     modifier: Modifier = Modifier
 ) {
+    val density = LocalDensity.current
 
+    Card(
+        modifier = modifier,
+        shape = CardShape,
+        colors = CardColors(
+            containerColor = BakeRoadTheme.colorScheme.White,
+            contentColor = BakeRoadTheme.colorScheme.Gray950,
+            disabledContainerColor = BakeRoadTheme.colorScheme.Gray100,
+            disabledContentColor = BakeRoadTheme.colorScheme.Gray500
+        ),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            val amount = 5.5.toString()
+            val rawTitle = stringResource(R.string.feature_report_title_bread_spending_amount, amount)
+            val annotatedTitle = buildAnnotatedString {
+                append(rawTitle)
+                val start = rawTitle.indexOf(amount)
+                if (start >= 0) {
+                    addStyle(
+                        style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Primary500).toSpanStyle(),
+                        start = start,
+                        end = start + amount.length
+                    )
+                }
+            }
+            Text(
+                text = annotatedTitle,
+                style = BakeRoadTheme.typography.bodyMediumSemibold
+            )
+
+            val moreAmount = 1.2.toString()
+            val rawMoreAmount = stringResource(R.string.feature_report_format_ten_thousand_won, moreAmount)
+            val rawDescription = stringResource(id = R.string.feature_report_description_bread_spending, rawMoreAmount)
+            val annotatedDescription = buildAnnotatedString {
+                append(rawDescription)
+                val start = rawDescription.indexOf(rawMoreAmount)
+                if (start >= 0) {
+                    addStyle(
+                        style = BakeRoadTheme.typography.bodyXsmallSemibold.toSpanStyle(),
+                        start = start,
+                        end = start + rawMoreAmount.length
+                    )
+                }
+            }
+            UnderlineText(
+                modifier = Modifier.padding(top = 6.dp),
+                annotatedText = annotatedDescription,
+                textStyle = BakeRoadTheme.typography.bodyXsmallMedium
+            )
+
+            BoxWithConstraints(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                val parentWidth = constraints.maxWidth
+                val chartWidthDp = with(density) { parentWidth.toDp() } - ChartPadding * 2
+                val chartLabelWidthDp = chartWidthDp / 2
+
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    BreadSpendingChart(
+                        modifier = Modifier
+                            .padding(top = 20.dp)
+                            .width(chartWidthDp)
+                            .aspectRatio(2f / 1f),
+                        values = persistentListOf(0.55f, 0.4f, 1f)
+                    )
+                    Row(
+                        modifier = Modifier.padding(8.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        (6..8).forEach {
+                            BreadSpreadChartLabel(
+                                modifier = Modifier.width(chartLabelWidthDp),
+                                month = it,
+                                amount = "1000.5",
+                                isMaxAmount = it == 8
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -73,6 +182,35 @@ private fun BreadSpendingChart(
             path = linePath,
             color = strokeColor,
             style = Stroke(width = strokeWidth.toPx(), cap = StrokeCap.Round)
+        )
+    }
+}
+
+@Composable
+private fun BreadSpreadChartLabel(
+    modifier: Modifier = Modifier,
+    month: Int,
+    amount: String,
+    isMaxAmount: Boolean
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = stringResource(id = R.string.feature_report_format_month, month),
+            style = BakeRoadTheme.typography.body3XsmallMedium.copy(
+                color = if (isMaxAmount) {
+                    BakeRoadTheme.colorScheme.Primary500
+                } else {
+                    BakeRoadTheme.colorScheme.Gray800
+                }
+            )
+        )
+        Text(
+            modifier = Modifier.padding(top = 2.dp),
+            text = stringResource(id = R.string.feature_report_format_ten_thousand_won, amount),
+            style = BakeRoadTheme.typography.bodySmallSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
         )
     }
 }
@@ -163,15 +301,23 @@ private fun Path.monotoneCubic(points: List<Offset>) {
 
 @Preview
 @Composable
-private fun BreadSpendingChartPreview() {
+private fun BreadSpendingCardPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = BakeRoadTheme.colorScheme.White)
     ) {
-        BreadSpendingChart(
-            modifier = Modifier.size(width = 164.dp, height = 85.dp),
-            values = persistentListOf(0.55f, 0.4f, 1f)
+        BreadSpendingCard(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
         )
     }
+}
+
+@Preview
+@Composable
+private fun BreadSpendingChartPreview() {
+    BreadSpendingChart(
+        modifier = Modifier.size(width = 164.dp, height = 85.dp),
+        values = persistentListOf(0.55f, 0.4f, 1f)
+    )
 }

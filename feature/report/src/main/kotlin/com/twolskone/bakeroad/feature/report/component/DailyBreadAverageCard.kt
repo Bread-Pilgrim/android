@@ -71,7 +71,7 @@ fun DailyBreadAverageCard(
             val rawDescription = stringResource(id = R.string.feature_report_description_daily_bread_average_count, rawMoreCount)
             val annotatedDescription = buildAnnotatedString {
                 append(rawDescription)
-                val start = rawTitle.indexOf(rawMoreCount)
+                val start = rawDescription.indexOf(rawMoreCount)
                 if (start >= 0) {
                     addStyle(
                         style = BakeRoadTheme.typography.bodyXsmallSemibold.toSpanStyle(),
@@ -131,8 +131,7 @@ private fun DailyBreadAverageCarePreview() {
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
             DailyBreadAverageCard(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp, vertical = 20.dp),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
             )
         }
     }

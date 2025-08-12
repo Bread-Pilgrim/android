@@ -4,7 +4,11 @@
     <string name="feature_report_format_visited_count">%d회</string>
     <string name="feature_report_format_bread_count">%d개</string>
     <string name="feature_report_format_day">%d일</string>
+    <string name="feature_report_format_ten_thousand_won">%s만원</string>
+    <string name="feature_report_format_month">%d월</string>
     <string name="feature_report_title_daily_bread_average_count">하루 평균 %s개</string>
+    <string name="feature_report_title_bread_spending_amount">총 %s만원</string>
     <string name="feature_report_description_daily_bread_average_count">다른 빵글이들보다 %s 더 먹었어요!</string>
+    <string name="feature_report_description_bread_spending">전날 대비 %s 더 썼어요!</string>
     <string name="feature_report_label_total_this_month">이번달 총</string>
 </resources>

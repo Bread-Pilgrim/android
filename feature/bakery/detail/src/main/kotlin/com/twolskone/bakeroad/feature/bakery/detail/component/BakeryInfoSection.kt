@@ -40,6 +40,7 @@ import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
+import com.twolskone.bakeroad.core.ui.extension.toLabel
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.model.openingHourLabel
@@ -163,7 +164,7 @@ internal fun BakeryInfoSection(
                                 text = if (bakeryInfo.dayOff.isEmpty()) {
                                     stringResource(id = R.string.feature_bakery_detail_label_no_day_off)
                                 } else {
-                                    stringResource(id = R.string.feature_bakery_detail_label_day_off, bakeryInfo.dayOff.joinToString(separator = ","))
+                                    stringResource(id = R.string.feature_bakery_detail_label_day_off, bakeryInfo.dayOff.map { it.toLabel }.joinToString(separator = ","))
                                 }
                             )
                         }

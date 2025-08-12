@@ -26,4 +26,11 @@
     <string name="core_ui_label_bakery_sort_rating_asc">별점 낮은 순</string>
     <string name="core_ui_label_sort_name">가나다 순</string>
     <string name="core_ui_label_like">좋아요</string>
+    <string name="core_ui_monday">월</string>
+    <string name="core_ui_tuesday">화</string>
+    <string name="core_ui_wednesday">수</string>
+    <string name="core_ui_thursday">목</string>
+    <string name="core_ui_friday">금</string>
+    <string name="core_ui_saturday">토</string>
+    <string name="core_ui_sunday">일</string>
 </resources>

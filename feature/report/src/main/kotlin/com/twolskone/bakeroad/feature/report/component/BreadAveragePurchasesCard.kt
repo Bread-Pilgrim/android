@@ -49,7 +49,7 @@ fun DailyBreadAverageCard(
                 .padding(16.dp)
         ) {
             val avgCount = 3.32.toString()
-            val rawTitle = stringResource(R.string.feature_report_title_daily_bread_average_count, avgCount)
+            val rawTitle = stringResource(R.string.feature_report_title_bread_average_purchase_count, avgCount)
             val annotatedTitle = buildAnnotatedString {
                 append(rawTitle)
                 val start = rawTitle.indexOf(avgCount)

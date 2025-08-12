@@ -2,11 +2,10 @@ package com.twolskone.bakeroad.feature.bakery.detail.model
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
-import androidx.compose.ui.res.stringResource
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
-import com.twolskone.bakeroad.feature.bakery.detail.R
+import com.twolskone.bakeroad.core.ui.extension.toLabel
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
@@ -54,15 +53,3 @@ internal fun BakeryDetail.toBakeryInfo(): BakeryInfo =
 internal val BakeryInfo.OpeningHour.openingHourLabel: String
     @Composable
     get() = "${dayOffWeek.toLabel} $openTime ~ $closeTime"
-
-private val DayOfWeek.toLabel: String
-    @Composable
-    get() = when (this) {
-        DayOfWeek.MONDAY -> stringResource(R.string.feature_bakery_detail_monday)
-        DayOfWeek.TUESDAY -> stringResource(R.string.feature_bakery_detail_tuesday)
-        DayOfWeek.WEDNESDAY -> stringResource(R.string.feature_bakery_detail_wednesday)
-        DayOfWeek.THURSDAY -> stringResource(R.string.feature_bakery_detail_thursday)
-        DayOfWeek.FRIDAY -> stringResource(R.string.feature_bakery_detail_friday)
-        DayOfWeek.SATURDAY -> stringResource(R.string.feature_bakery_detail_saturday)
-        DayOfWeek.SUNDAY -> stringResource(R.string.feature_bakery_detail_sunday)
-    }

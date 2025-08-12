@@ -66,7 +66,7 @@ internal fun BreadSpendingCard(
                 .padding(16.dp)
         ) {
             val amount = 5.5.toString()
-            val rawTitle = stringResource(R.string.feature_report_title_bread_spending_amount, amount)
+            val rawTitle = stringResource(R.string.feature_report_title_bread_spending_total_amount, amount)
             val annotatedTitle = buildAnnotatedString {
                 append(rawTitle)
                 val start = rawTitle.indexOf(amount)

@@ -38,7 +38,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 /**
  * BakeRoad TopAppBar
  * * Height : 56dp
- * * HorizontalPadding : 10dp
+ * * HorizontalPadding : 12dp
  *
  * Actions 내 컴포넌트 자체 패딩을 주어 최종 디자인 가이드에 맞게 재배치 필요.
  * (디자인 가이드는 IconPadding 에 대한 고려가 되어있지 않기 때문)
@@ -71,7 +71,7 @@ fun BakeRoadTopAppBar(
 }
 
 internal val TopAppBarMaxHeight = 56.dp
-private val TopAppBarHorizontalPadding = 10.dp
+private val TopAppBarHorizontalPadding = 12.dp
 
 @Composable
 internal fun BakeRoadTopAppBarLayout(
@@ -188,22 +188,26 @@ internal fun BakeRoadTopAppBarLayout(
 
 @Composable
 fun BakeRoadTopAppBarIcon(
+    modifier: Modifier = Modifier,
+    iconSize: Dp = 24.dp,
     @DrawableRes iconRes: Int,
     contentDescription: String? = null,
     backgroundColor: Color = BakeRoadTheme.colorScheme.White,
+    tint: Color = BakeRoadTheme.colorScheme.Black,
     onClick: () -> Unit
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .clip(CircleShape)
             .background(backgroundColor)
             .singleClickable { onClick() }
             .padding(4.dp)
     ) {
         Icon(
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier.size(iconSize),
             imageVector = ImageVector.vectorResource(id = iconRes),
-            contentDescription = contentDescription
+            contentDescription = contentDescription,
+            tint = tint
         )
     }
 }

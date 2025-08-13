@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 
 /**
- * LineChips row skeleton
+ * Row LineChips skeleton
  */
 @Composable
 fun LineChipsSkeleton(
@@ -47,7 +47,7 @@ fun LineChipsSkeleton(
 }
 
 /**
- * Chips row skeleton
+ * Row Chips skeleton
  */
 @Composable
 fun ChipsSkeleton(

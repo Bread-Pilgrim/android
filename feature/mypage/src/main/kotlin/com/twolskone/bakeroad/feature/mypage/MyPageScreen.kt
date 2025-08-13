@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.mypage
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
@@ -19,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -31,10 +35,12 @@ import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
+import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.ui.ProfileImage
 import com.twolskone.bakeroad.feature.mypage.model.Menu
+import com.twolskone.bakeroad.feature.mypage.mvi.MyPageState
 
 private val MyPageSectionShape = RoundedCornerShape(20.dp)
 
@@ -42,6 +48,7 @@ private val MyPageSectionShape = RoundedCornerShape(20.dp)
 internal fun MyPageScreen(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
+    state: MyPageState,
     onSettingsClick: () -> Unit,
     onBadgeSettingsClick: () -> Unit,
     onMenuClick: (Menu) -> Unit
@@ -63,11 +70,19 @@ internal fun MyPageScreen(
                 )
             }
         )
-        ProfileSection(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 16.dp)
-        )
+        if (state.loading) {
+            ProfileSkeleton(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            )
+        } else {
+            ProfileSection(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 16.dp)
+            )
+        }
         Spacer(modifier = Modifier.height(12.dp))
         MenuListSection(
             modifier = Modifier
@@ -125,6 +140,53 @@ private fun ProfileSection(modifier: Modifier = Modifier) {
 }
 
 @Composable
+private fun ProfileSkeleton(modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .background(color = BakeRoadTheme.colorScheme.Gray40, shape = MyPageSectionShape)
+            .padding(horizontal = 16.dp, vertical = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
+        Box(
+            modifier = Modifier
+                .size(56.dp)
+                .clip(CircleShape)
+                .shimmerEffect()
+        )
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(width = 65.dp, height = 22.dp)
+                    .clip(CircleShape)
+                    .shimmerEffect()
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(width = 78.dp, height = 16.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+                Box(
+                    modifier = Modifier
+                        .size(width = 49.dp, height = 16.dp)
+                        .clip(CircleShape)
+                        .shimmerEffect()
+                )
+            }
+        }
+    }
+}
+
+@Composable
 private fun MenuListSection(
     modifier: Modifier = Modifier,
     onClick: (Menu) -> Unit
@@ -162,6 +224,7 @@ private fun MyPageScreenPreview() {
         MyPageScreen(
             modifier = Modifier.fillMaxSize(),
             padding = PaddingValues(),
+            state = MyPageState(loading = true),
             onSettingsClick = {},
             onBadgeSettingsClick = {},
             onMenuClick = {}

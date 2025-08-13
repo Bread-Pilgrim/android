@@ -3,19 +3,19 @@ package com.twolskone.bakeroad.core.data.di
 import com.twolskone.bakeroad.core.data.repository.AuthRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.BakeryRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.HomeRepositoryImpl
-import com.twolskone.bakeroad.core.data.repository.OnboardingRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.PreferRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.ReviewRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.SearchRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.TourRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.UserRepositoryImpl
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.domain.repository.HomeRepository
-import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
 import com.twolskone.bakeroad.core.domain.repository.PreferRepository
 import com.twolskone.bakeroad.core.domain.repository.ReviewRepository
 import com.twolskone.bakeroad.core.domain.repository.SearchRepository
 import com.twolskone.bakeroad.core.domain.repository.TourRepository
+import com.twolskone.bakeroad.core.domain.repository.UserRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -32,7 +32,7 @@ internal abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindsOnboardingRepository(onboardingRepository: OnboardingRepositoryImpl): OnboardingRepository
+    abstract fun bindsUserRepository(userRepository: UserRepositoryImpl): UserRepository
 
     @Binds
     @Singleton

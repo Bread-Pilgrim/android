@@ -1,17 +1,18 @@
 package com.twolskone.bakeroad.core.data.repository
 
 import com.twolskone.bakeroad.core.datastore.CacheDataSource
-import com.twolskone.bakeroad.core.domain.repository.OnboardingRepository
+import com.twolskone.bakeroad.core.domain.repository.UserRepository
 import com.twolskone.bakeroad.core.model.SelectedPreferenceOptions
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
 import com.twolskone.bakeroad.core.remote.model.user.UserOnboardingRequest
+import com.twolskone.bakeroad.core.remote.model.user.UserPreferencesRequest
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
 
-internal class OnboardingRepositoryImpl @Inject constructor(
+internal class UserRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheDataSource,
     private val userDataSource: UserDataSource
-) : OnboardingRepository {
+) : UserRepository {
 
     override suspend fun getOnboardingCompleted(): Boolean {
         return cacheDataSource.getOnboardingCompleted()
@@ -30,5 +31,10 @@ internal class OnboardingRepositoryImpl @Inject constructor(
             commercialAreas = selectedPreferenceOptions.commercialAreas
         )
         return userDataSource.postOnboarding(request = request)
+    }
+
+    override fun patchPreferences(addPreferences: List<Int>, deletePreferences: List<Int>): Flow<Unit> {
+        val request = UserPreferencesRequest(addPreferences = addPreferences, deletePreferences = deletePreferences)
+        return userDataSource.patchPreferences(request)
     }
 }

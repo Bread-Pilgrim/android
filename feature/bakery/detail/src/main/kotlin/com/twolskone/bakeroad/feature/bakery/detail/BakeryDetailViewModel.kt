@@ -18,6 +18,7 @@ import com.twolskone.bakeroad.core.domain.usecase.review.PostReviewLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
+import com.twolskone.bakeroad.core.model.isOtherMenu
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
@@ -179,7 +180,7 @@ internal class BakeryDetailViewModel @Inject constructor(
                 loadingState = loadingState.copy(bakeryDetailLoading = false),
                 bakeryImageList = bakeryDetail.imageUrls.toImmutableList(),
                 bakeryInfo = bakeryDetail.toBakeryInfo(),
-                menuList = bakeryDetail.menus.toImmutableList()
+                menuList = bakeryDetail.menus.filter { menu -> !menu.isOtherMenu() }.toImmutableList()
             )
         }
     }

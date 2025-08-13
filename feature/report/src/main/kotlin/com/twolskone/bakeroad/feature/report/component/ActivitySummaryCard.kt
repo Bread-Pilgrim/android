@@ -44,16 +44,18 @@ internal fun ActivitySummaryCard(
             disabledContainerColor = BakeRoadTheme.colorScheme.Gray100,
             disabledContentColor = BakeRoadTheme.colorScheme.Gray500
         ),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(CardElevation)
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(IntrinsicSize.Min)
         ) {
-            Row(modifier = Modifier
-                .weight(1f)
-                .wrapContentHeight()) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentHeight()
+            ) {
                 ActivitySummaryCell(
                     modifier = Modifier.weight(1f),
                     title = stringResource(id = R.string.feature_report_title_summary_review_count),
@@ -73,9 +75,11 @@ internal fun ActivitySummaryCard(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 color = BakeRoadTheme.colorScheme.Gray50
             )
-            Row(modifier = Modifier
-                .weight(1f)
-                .wrapContentHeight()) {
+            Row(
+                modifier = Modifier
+                    .weight(1f)
+                    .wrapContentHeight()
+            ) {
                 ActivitySummaryCell(
                     modifier = Modifier.weight(1f),
                     title = stringResource(id = R.string.feature_report_title_summary_like_given_count),

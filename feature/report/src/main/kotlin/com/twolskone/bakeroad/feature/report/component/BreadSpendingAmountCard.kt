@@ -58,7 +58,7 @@ internal fun BreadSpendingAmountCard(
             disabledContainerColor = BakeRoadTheme.colorScheme.Gray100,
             disabledContentColor = BakeRoadTheme.colorScheme.Gray500
         ),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(CardElevation)
     ) {
         Column(
             modifier = Modifier

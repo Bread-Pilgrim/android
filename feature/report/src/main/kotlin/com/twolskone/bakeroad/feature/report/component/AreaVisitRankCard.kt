@@ -33,6 +33,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 internal val CardShape = RoundedCornerShape(20.dp)
+internal val CardElevation = 2.5.dp
 
 private const val AreaMaxCount = 3
 
@@ -53,7 +54,7 @@ internal fun AreaVisitRankCard(
             disabledContainerColor = BakeRoadTheme.colorScheme.Gray100,
             disabledContentColor = BakeRoadTheme.colorScheme.Gray500
         ),
-        elevation = CardDefaults.cardElevation(4.dp)
+        elevation = CardDefaults.cardElevation(CardElevation)
     ) {
         if (regionList.isEmpty()) {
             Column(

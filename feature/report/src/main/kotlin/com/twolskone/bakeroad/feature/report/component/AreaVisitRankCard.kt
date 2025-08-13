@@ -38,10 +38,9 @@ private const val AreaMaxCount = 3
 
 /**
  * 자주 간 부산 지역 순위카드
- * - 최대 3개 지역
  */
 @Composable
-internal fun VisitedAreaRankCard(
+internal fun AreaVisitRankCard(
     modifier: Modifier = Modifier,
     regionList: ImmutableList<VisitedArea>
 ) {
@@ -56,42 +55,61 @@ internal fun VisitedAreaRankCard(
         ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            regionList
-                .take(AreaMaxCount)
-                .fastForEachIndexed { i, region ->
-                    Column(
-                        modifier = Modifier.weight(1f),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(6.dp)
-                    ) {
-                        UnderlineText(
-                            text = stringResource(id = R.string.feature_report_format_rank, i + 1),
-                            textStyle = BakeRoadTheme.typography.bodyXsmallMedium
-                        )
-                        Text(
-                            text = region.name,
-                            style = BakeRoadTheme.typography.bodyMediumSemibold
-                        )
-                        BakeRoadChip(
-                            selected = true,
-                            color = ChipColor.MAIN,
-                            size = ChipSize.LARGE,
-                            label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, region.visitedCount)) }
-                        )
+        if (regionList.isEmpty()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                UnderlineText(
+                    text = stringResource(id = R.string.feature_report_empty_area_visit_rank_1),
+                    textStyle = BakeRoadTheme.typography.bodyXsmallMedium
+                )
+                Text(
+                    text = stringResource(id = R.string.feature_report_empty_area_visit_rank_2),
+                    style = BakeRoadTheme.typography.bodyXsmallMedium
+                )
+            }
+        } else {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min)
+                    .padding(vertical = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                regionList
+                    .take(AreaMaxCount)
+                    .fastForEachIndexed { i, region ->
+                        Column(
+                            modifier = Modifier.weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            UnderlineText(
+                                text = stringResource(id = R.string.feature_report_format_rank, i + 1),
+                                textStyle = BakeRoadTheme.typography.bodyXsmallMedium
+                            )
+                            Text(
+                                text = region.name,
+                                style = BakeRoadTheme.typography.bodyMediumSemibold
+                            )
+                            BakeRoadChip(
+                                selected = true,
+                                color = ChipColor.MAIN,
+                                size = ChipSize.LARGE,
+                                label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, region.visitedCount)) }
+                            )
+                        }
+                        if (i < regionList.lastIndex) {
+                            VerticalDivider(
+                                color = BakeRoadTheme.colorScheme.Gray50
+                            )
+                        }
                     }
-                    if (i < regionList.lastIndex) {
-                        VerticalDivider(
-                            color = BakeRoadTheme.colorScheme.Gray50
-                        )
-                    }
-                }
+            }
         }
     }
 }
@@ -105,14 +123,14 @@ internal data class VisitedArea(
 
 @Preview
 @Composable
-private fun VisitedAreaRankCardPreview() {
+private fun AreaVisitRankCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
-            VisitedAreaRankCard(
+            AreaVisitRankCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
                 regionList = persistentListOf(
                     VisitedArea(

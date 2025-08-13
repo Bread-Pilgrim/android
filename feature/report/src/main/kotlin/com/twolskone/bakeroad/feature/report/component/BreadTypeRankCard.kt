@@ -78,47 +78,89 @@ internal fun BreadTypeRankCard(
         ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(IntrinsicSize.Min)
-                .padding(vertical = 16.dp, horizontal = 18.5.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(14.dp)
-        ) {
-            BreadTypeRankChart(
-                modifier = Modifier.size(ChartSize),
-                data = list.toPercentages(),
-                colors = BreadTypeColors
-            )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 6.dp, vertical = 2.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
-            ) {
-                list.fastForEachIndexed { i, type ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+        when (list.size) {
+            0 -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    UnderlineText(
+                        text = stringResource(id = R.string.feature_report_empty_bread_type_1),
+                        textStyle = BakeRoadTheme.typography.bodyXsmallMedium
+                    )
+                    Text(
+                        text = stringResource(id = R.string.feature_report_empty_bread_type_2),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium
+                    )
+                }
+            }
+
+            1 -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    UnderlineText(
+                        text = stringResource(id = R.string.feature_report_only_one_bread_type_1, list.first().breadName),
+                        textStyle = BakeRoadTheme.typography.bodyXsmallMedium
+                    )
+                    Text(
+                        text = stringResource(id = R.string.feature_report_empty_bread_type_2),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium
+                    )
+                }
+            }
+
+            else -> {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(IntrinsicSize.Min)
+                        .padding(vertical = 16.dp, horizontal = 18.5.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(14.dp)
+                ) {
+                    BreadTypeRankChart(
+                        modifier = Modifier.size(ChartSize),
+                        data = list.toPercentages(),
+                        colors = BreadTypeColors
+                    )
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(horizontal = 6.dp, vertical = 2.dp),
+                        verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        Box(
-                            modifier = Modifier
-                                .size(8.dp)
-                                .background(color = BreadTypeColors[i], shape = CircleShape)
-                        )
-                        Text(
-                            modifier = Modifier.weight(1f),
-                            text = type.breadName,
-                            style = BakeRoadTheme.typography.bodyXsmallMedium
-                        )
-                        BakeRoadChip(
-                            modifier = Modifier.widthIn(min = 34.dp),
-                            selected = true,
-                            color = ChipColor.GRAY,
-                            size = ChipSize.SMALL,
-                            label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, type.eatenCount)) }
-                        )
+                        list.fastForEachIndexed { i, type ->
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .size(8.dp)
+                                        .background(color = BreadTypeColors[i], shape = CircleShape)
+                                )
+                                Text(
+                                    modifier = Modifier.weight(1f),
+                                    text = type.breadName,
+                                    style = BakeRoadTheme.typography.bodyXsmallMedium
+                                )
+                                BakeRoadChip(
+                                    modifier = Modifier.widthIn(min = 34.dp),
+                                    selected = true,
+                                    color = ChipColor.GRAY,
+                                    size = ChipSize.SMALL,
+                                    label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, type.eatenCount)) }
+                                )
+                            }
+                        }
                     }
                 }
             }

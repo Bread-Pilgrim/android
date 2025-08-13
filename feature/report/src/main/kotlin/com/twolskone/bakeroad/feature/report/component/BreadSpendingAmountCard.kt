@@ -44,7 +44,7 @@ private val ChartGradient = persistentListOf(
 private val ChartPadding = 66.dp
 
 @Composable
-internal fun BreadSpendingCard(
+internal fun BreadSpendingAmountCard(
     modifier: Modifier = Modifier
 ) {
     val density = LocalDensity.current
@@ -115,7 +115,7 @@ internal fun BreadSpendingCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    BreadSpendingChart(
+                    BreadSpendingAmountChart(
                         modifier = Modifier
                             .padding(top = 20.dp)
                             .width(chartWidthDp)
@@ -142,7 +142,7 @@ internal fun BreadSpendingCard(
 }
 
 @Composable
-private fun BreadSpendingChart(
+private fun BreadSpendingAmountChart(
     modifier: Modifier = Modifier,
     values: ImmutableList<Float>,
     strokeColor: Color = BakeRoadTheme.colorScheme.Primary500,
@@ -301,13 +301,13 @@ private fun Path.monotoneCubic(points: List<Offset>) {
 
 @Preview
 @Composable
-private fun BreadSpendingCardPreview() {
+private fun BreadSpendingAmountCardPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = BakeRoadTheme.colorScheme.White)
     ) {
-        BreadSpendingCard(
+        BreadSpendingAmountCard(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
         )
     }
@@ -315,8 +315,8 @@ private fun BreadSpendingCardPreview() {
 
 @Preview
 @Composable
-private fun BreadSpendingChartPreview() {
-    BreadSpendingChart(
+private fun BreadSpendingAmountChartPreview() {
+    BreadSpendingAmountChart(
         modifier = Modifier.size(width = 164.dp, height = 85.dp),
         values = persistentListOf(0.55f, 0.4f, 1f)
     )

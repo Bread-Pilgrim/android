@@ -15,12 +15,14 @@ data object MyPageRoute
 fun NavGraphBuilder.myPageScreen(
     padding: PaddingValues,
     navigateToSettings: () -> Unit,
+    navigateToReport: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     composable<MyPageRoute> {
         MyPageRoute(
             padding = padding,
             navigateToSettings = navigateToSettings,
+            navigateToReport = navigateToReport,
             showSnackbar = showSnackbar
         )
     }

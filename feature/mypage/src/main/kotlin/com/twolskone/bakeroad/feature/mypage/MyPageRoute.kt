@@ -13,6 +13,7 @@ internal fun MyPageRoute(
     padding: PaddingValues,
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateToSettings: () -> Unit,
+    navigateToReport: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     LaunchedEffect(Unit) {
@@ -27,7 +28,7 @@ internal fun MyPageRoute(
         onBadgeSettingsClick = {},
         onMenuClick = { menu ->
             when (menu) {
-                Menu.Report -> TODO()
+                Menu.Report -> navigateToReport()
                 Menu.Badge -> TODO()
                 Menu.Review -> TODO()
                 Menu.Preference -> TODO()

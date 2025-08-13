@@ -29,7 +29,7 @@ import com.twolskone.bakeroad.feature.report.R
  * 하루 평균 빵 구매량 카드
  */
 @Composable
-fun DailyBreadAverageCard(
+fun BreadAveragePurchasesCard(
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -123,14 +123,14 @@ fun DailyBreadAverageCard(
 
 @Preview
 @Composable
-private fun DailyBreadAverageCarePreview() {
+private fun BreadAveragePurchasesCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
-            DailyBreadAverageCard(
+            BreadAveragePurchasesCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
             )
         }

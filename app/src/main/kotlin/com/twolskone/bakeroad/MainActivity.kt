@@ -9,6 +9,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
+import com.twolskone.bakeroad.core.navigator.ReportNavigator
 import com.twolskone.bakeroad.core.navigator.SettingsNavigator
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,6 +29,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var settingsNavigator: SettingsNavigator           // 설정
+
+    @Inject
+    lateinit var reportNavigator: ReportNavigator               // 빵말정산
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,6 +70,12 @@ class MainActivity : ComponentActivity() {
                     },
                     navigateToSettings = {
                         settingsNavigator.navigateFromActivity(
+                            activity = this,
+                            withFinish = false
+                        )
+                    },
+                    navigateToReport = {
+                        reportNavigator.navigateFromActivity(
                             activity = this,
                             withFinish = false
                         )

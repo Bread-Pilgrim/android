@@ -2,6 +2,14 @@
 <resources>
     <string name="feature_report">빵말정산</string>
     <string name="feature_report_empty_list">월간 빵말정산 리포트가 없습니다.\n다녀온 빵집의 리뷰를 남겨보세요 🥨</string>
+    <string name="feature_report_empty_area_visit_rank_1">아직 방문한 지역이 없어요!</string>
+    <string name="feature_report_empty_area_visit_rank_2">리뷰를 작성하고 빵말정산을 확인해보세요 😊</string>
+    <string name="feature_report_empty_bread_type_1">아직 먹은 빵 기록이 없어요!</string>
+    <string name="feature_report_empty_bread_type_2">리뷰를 작성하고 빵말정산을 확인해보세요 😊</string>
+    <string name="feature_report_empty_bread_consumption_1">이번 달엔 아직 빵을 먹지 않았어요!</string>
+    <string name="feature_report_empty_bread_consumption_2">리뷰를 작성하고 빵말정산을 확인해보세요 😊</string>
+    <string name="feature_report_only_one_bread_type_1">🥐 이번 달은 %s만 즐기셨어요!</string>
+    <string name="feature_report_only_one_bread_type_2">다음엔 어떤 빵을 맛볼까요?</string>
     <string name="feature_report_format_rank">%d등</string>
     <string name="feature_report_format_visited_count">%d회</string>
     <string name="feature_report_format_bread_count">%d개</string>

@@ -43,7 +43,7 @@ import kotlinx.collections.immutable.toImmutableList
  * 요일별 빵 섭취 패턴 카드
  */
 @Composable
-internal fun WeeklyBreadConsumptionCard(
+internal fun BreadConsumptionCard(
     modifier: Modifier = Modifier,
     data: ImmutableList<Pair<DayOfWeek, Int>>
 ) {
@@ -60,20 +60,42 @@ internal fun WeeklyBreadConsumptionCard(
         ),
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
-        Row(
+        Box(
             modifier = Modifier
                 .padding(16.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(17.83.dp)
         ) {
-            data.fastForEach { (dayOfWeek, value) ->
-                WeeklyBreadConsumptionBar(
-                    modifier = Modifier.weight(1f),
-                    isTopRank = maxValue == value,
-                    isEmpty = value == 0,
-                    dayOfWeek = dayOfWeek,
-                    heightRadio = (value.toFloat() / maxValue)
-                )
+            if (maxValue == 0) {
+                Column(
+                    modifier = Modifier
+                        .padding(24.dp)
+                        .align(Alignment.TopCenter),
+                    verticalArrangement = Arrangement.spacedBy(6.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    UnderlineText(
+                        text = stringResource(id = R.string.feature_report_empty_bread_type_1),
+                        textStyle = BakeRoadTheme.typography.bodyXsmallMedium
+                    )
+                    Text(
+                        text = stringResource(id = R.string.feature_report_empty_bread_type_2),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(17.83.dp)
+            ) {
+                data.fastForEach { (dayOfWeek, value) ->
+                    WeeklyBreadConsumptionBar(
+                        modifier = Modifier.weight(1f),
+                        isTopRank = value > 0 && maxValue == value,
+                        isEmpty = value == 0,
+                        dayOfWeek = dayOfWeek,
+                        heightRadio = (value.toFloat() / maxValue).coerceAtLeast(0f)
+                    )
+                }
             }
         }
     }
@@ -189,17 +211,17 @@ private fun RankBalloon(
 
 @Preview
 @Composable
-private fun WeeklyBreadConsumptionCardPreview() {
+private fun BreadConsumptionCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
-            WeeklyBreadConsumptionCard(
+            BreadConsumptionCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
                 data = DayOfWeek.entries.map {
-                    it to (0..7).random()
+                    it to (0..0).random()
                 }.toImmutableList()
             )
         }

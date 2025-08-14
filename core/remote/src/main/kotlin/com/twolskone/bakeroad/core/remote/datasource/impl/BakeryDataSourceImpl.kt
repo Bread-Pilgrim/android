@@ -156,4 +156,13 @@ internal class BakeryDataSourceImpl @Inject constructor(
         )
         return response.toData()
     }
+
+    override suspend fun getVisitedBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse {
+        val response = api.getVisitedBakeries(
+            pageNo = pageNo,
+            pageSize = pageSize,
+            sort = sort
+        )
+        return response.toData()
+    }
 }

@@ -127,7 +127,7 @@ internal class BakeryRepositoryImpl @Inject constructor(
         sort: BakerySortType
     ): Flow<Paging<Bakery>> = flow {
         val response = when (myBakeryType) {
-            MyBakeryType.VISITED -> bakeryDataSource.getLikeBakeries(
+            MyBakeryType.VISITED -> bakeryDataSource.getVisitedBakeries(
                 pageNo = page,
                 pageSize = DefaultPageSize,
                 sort = sort.value

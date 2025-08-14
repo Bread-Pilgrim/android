@@ -25,4 +25,5 @@ interface BakeryDataSource {
     fun deleteLike(bakeryId: Int): Flow<BakeryLikeResponse>
     fun checkReviewEligibility(bakeryId: Int): Flow<BakeryReviewEligibilityResponse>
     suspend fun getLikeBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse
+    suspend fun getVisitedBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse
 }

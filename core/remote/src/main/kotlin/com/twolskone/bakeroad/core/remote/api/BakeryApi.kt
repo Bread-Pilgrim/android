@@ -109,4 +109,12 @@ internal interface BakeryApi {
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeriesResponse>
+
+    /* 내가 방문한 빵집 목록 */
+    @GET("bakeries/visited")
+    suspend fun getVisitedBakeries(
+        @Query("page_no") pageNo: Int,
+        @Query("page_size") pageSize: Int,
+        @Query("sort_clause") sort: String
+    ): BaseResponse<BakeriesResponse>
 }

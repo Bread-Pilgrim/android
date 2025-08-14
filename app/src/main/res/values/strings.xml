@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">BakeRoad</string>
+    <string name="app_name">빵글</string>
+    <string name="app_name_debug">빵글(debug)</string>
 </resources>

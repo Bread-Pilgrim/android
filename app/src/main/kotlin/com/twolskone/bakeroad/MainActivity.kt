@@ -1,8 +1,10 @@
 package com.twolskone.bakeroad
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
@@ -14,6 +16,7 @@ import com.twolskone.bakeroad.core.navigator.SettingsNavigator
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -79,6 +82,13 @@ class MainActivity : ComponentActivity() {
                             activity = this,
                             withFinish = false
                         )
+                    },
+                    openBrowser = { url ->
+                        try {
+                            startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+                        } catch (e: Exception) {
+                            Timber.e(e)
+                        }
                     }
                 )
             }

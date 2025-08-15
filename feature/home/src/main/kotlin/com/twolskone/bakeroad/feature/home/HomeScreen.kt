@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,11 +41,14 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
+import com.twolskone.bakeroad.core.ui.AreaEventSheet
 import com.twolskone.bakeroad.core.ui.TourAreaCard
 import com.twolskone.bakeroad.feature.home.component.RecommendBakeryCard
 import com.twolskone.bakeroad.feature.home.component.Title
 import com.twolskone.bakeroad.feature.home.mvi.HomeState
+import com.twolskone.bakeroad.feature.home.mvi.SheetState
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
@@ -54,7 +58,9 @@ internal fun HomeScreen(
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
     onSeeAllBakeriesClick: (BakeryType) -> Unit,
     onBakeryClick: (RecommendBakery) -> Unit,
-    onEditPreferenceClick: () -> Unit
+    onEditPreferenceClick: () -> Unit,
+    onAreaEventSeeDetailsClick: (link: String) -> Unit,
+    onAreaEventSheetDismiss: (isTodayDismissed: Boolean) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -306,6 +312,23 @@ internal fun HomeScreen(
             }
         }
     }
+
+    when (state.sheetState) {
+        // 지역 행사 팝업
+        is SheetState.AreaEventSheet -> {
+            AreaEventSheet(
+                areaEvent = state.sheetState.data,
+                onDismissRequest = { onAreaEventSheetDismiss(false) },
+                onPrimaryAction = { link ->
+                    onAreaEventSheetDismiss(false)
+                    onAreaEventSeeDetailsClick(link)
+                },
+                onSecondaryAction = { onAreaEventSheetDismiss(true) }
+            )
+        }
+
+        SheetState.Nothing -> {}
+    }
 }
 
 @Composable
@@ -330,7 +353,9 @@ private fun HomeScreenPreview() {
             onTourCategorySelect = { _, _ -> },
             onSeeAllBakeriesClick = {},
             onBakeryClick = {},
-            onEditPreferenceClick = {}
+            onEditPreferenceClick = {},
+            onAreaEventSeeDetailsClick = {},
+            onAreaEventSheetDismiss = {}
         )
     }
 }

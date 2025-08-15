@@ -7,13 +7,16 @@ import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.area.GetAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendHotBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendPreferenceBakeriesUseCase
+import com.twolskone.bakeroad.core.domain.usecase.tour.GetAreaEventUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.domain.usecase.tour.SetAreaEventDismissedTimeMillisUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import com.twolskone.bakeroad.feature.home.mvi.HomeSideEffect
 import com.twolskone.bakeroad.feature.home.mvi.HomeState
+import com.twolskone.bakeroad.feature.home.mvi.SheetState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.collections.immutable.toImmutableList
@@ -34,7 +37,9 @@ internal class HomeViewModel @Inject constructor(
     private val getAreasUseCase: GetAreasUseCase,
     private val getPreferenceBakeriesUseCase: GetRecommendPreferenceBakeriesUseCase,
     private val getHotBakeriesUseCase: GetRecommendHotBakeriesUseCase,
-    private val getTourAreasUseCase: GetTourAreasUseCase
+    private val getTourAreasUseCase: GetTourAreasUseCase,
+    private val getAreaEventUseCase: GetAreaEventUseCase,
+    private val setAreaEventDismissedTimeMillisUseCase: SetAreaEventDismissedTimeMillisUseCase
 ) : BaseViewModel<HomeState, HomeIntent, HomeSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): HomeState {
@@ -48,6 +53,7 @@ internal class HomeViewModel @Inject constructor(
         observeTrigger()
         getAreas()
         refreshAll()
+        getAreaEvent()
     }
 
     override suspend fun handleIntent(intent: HomeIntent) {
@@ -99,6 +105,13 @@ internal class HomeViewModel @Inject constructor(
                         messageRes = snackbarState.messageRes
                     )
                 }
+            }
+
+            is HomeIntent.DismissAreaEventSheet -> {
+                if (intent.isTodayDismissed) {
+                    setAreaEventDismissedTimeMillisUseCase(timeMillis = System.currentTimeMillis())
+                }
+                reduce { copy(sheetState = SheetState.Nothing) }
             }
         }
     }
@@ -190,6 +203,14 @@ internal class HomeViewModel @Inject constructor(
                 tourAreaList = tourAreas.toImmutableList()
             )
         }
+    }
+
+    /**
+     * 지역 행사
+     */
+    private fun getAreaEvent() = launch {
+        val areaEvent = getAreaEventUseCase(areaCodes = state.value.selectedAreaCodes)
+        reduce { copy(sheetState = SheetState.AreaEventSheet(data = areaEvent)) }
     }
 
     @OptIn(FlowPreview::class)

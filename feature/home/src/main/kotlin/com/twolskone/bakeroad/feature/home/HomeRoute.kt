@@ -25,6 +25,7 @@ internal fun HomeRoute(
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    openBrowser: (url: String) -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -73,6 +74,8 @@ internal fun HomeRoute(
             )
         },
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
-        onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) }
+        onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) },
+        onAreaEventSeeDetailsClick = { link -> openBrowser(link) },
+        onAreaEventSheetDismiss = { isTodayDismissed -> viewModel.intent(HomeIntent.DismissAreaEventSheet(isTodayDismissed = isTodayDismissed)) }
     )
 }

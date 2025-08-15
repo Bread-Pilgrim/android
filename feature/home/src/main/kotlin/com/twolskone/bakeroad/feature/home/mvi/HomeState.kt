@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.home.mvi
 import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.model.Area
+import com.twolskone.bakeroad.core.model.AreaEvent
 import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.TourArea
@@ -15,6 +16,7 @@ import kotlinx.collections.immutable.persistentSetOf
 @Immutable
 internal data class HomeState(
     val loadingState: LoadingState = LoadingState(),
+    val sheetState: SheetState = SheetState.Nothing,
     val selectedAreaCodes: PersistentSet<Int> = persistentSetOf(EntireBusan),
     val selectedTourAreaCategories: PersistentSet<TourAreaCategory> = persistentSetOf(TourAreaCategory.NATURE),
     val areaList: ImmutableList<Area> = persistentListOf(),
@@ -30,3 +32,12 @@ internal data class LoadingState(
     val hotBakeryLoading: Boolean = true,
     val tourAreaLoading: Boolean = true
 )
+
+@Immutable
+internal sealed interface SheetState {
+    @Immutable
+    data object Nothing : SheetState
+
+    @Immutable
+    data class AreaEventSheet(val data: AreaEvent) : SheetState
+}

@@ -16,9 +16,11 @@ data class TourAreaEventResponse(
     @SerialName("event_img")
     val eventImg: String = "",
     @SerialName("mapx")
-    val mapX: Int = 0,
+    val mapX: Float = 0f,
     @SerialName("mapy")
-    val mapY: Int = 0,
+    val mapY: Float = 0f,
     @SerialName("tel")
-    val tel: String = ""
+    val tel: String = "",
+    @SerialName("read_more_link")
+    val readMoreLink: String = ""
 )

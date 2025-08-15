@@ -172,7 +172,7 @@ private fun BakeRoadSheetPreview() {
         ) {
             BakeRoadSolidButton(
                 modifier = Modifier.width(200.dp),
-                onClick = { scope.launch { showSheet = true } },
+                onClick = { showSheet = true },
                 role = SolidButtonRole.PRIMARY,
                 size = ButtonSize.LARGE
             ) {

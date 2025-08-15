@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option java_package = "com.twolskone.bakeroad.core.datastore";
+option java_multiple_files = true;
+
+/* 지역 행사 팝업 데이터 */
+message AreaEvent {
+  int64 last_api_call_time_millis = 1;  // 마지막 api 호출 시간
+  int64 last_dismissed_time_millis = 2; // 마지막 "오늘 하루 보지 않기" 선택 시간
+  string title = 3;                     // 행사 제목
+  string address = 4;                   // 행사 주소
+  string startDate = 5;                 // 행사 시작일
+  string endDate = 6;                   // 행사 마감일
+  string imageUrl = 7;                  // 행사 이미지
+  string link = 8;                      // 더보기 링크
+}

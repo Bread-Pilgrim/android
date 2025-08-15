@@ -25,6 +25,7 @@ internal fun BakeRoadNavHost(
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
+    openBrowser: (url: String) -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     NavHost(
@@ -37,6 +38,7 @@ internal fun BakeRoadNavHost(
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
             navigateToEditPreference = navigateToEditPreference,
+            openBrowser = openBrowser,
             showSnackbar = showSnackbar
         )
         searchScreen(

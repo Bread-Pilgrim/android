@@ -11,8 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -53,6 +55,7 @@ import com.twolskone.bakeroad.feature.home.mvi.SheetState
 internal fun HomeScreen(
     modifier: Modifier = Modifier,
     padding: PaddingValues,
+    verticalScrollState: LazyListState,
     state: HomeState,
     onAreaSelect: (Boolean, Int) -> Unit,
     onTourCategorySelect: (Boolean, TourAreaCategory) -> Unit,
@@ -66,7 +69,8 @@ internal fun HomeScreen(
         modifier = modifier
             .fillMaxSize()
             .background(color = BakeRoadTheme.colorScheme.White),
-        contentPadding = PaddingValues(bottom = padding.calculateBottomPadding())
+        contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+        state = verticalScrollState
     ) {
         item {
             BakeRoadTopAppBar(
@@ -348,6 +352,7 @@ private fun HomeScreenPreview() {
         HomeScreen(
             modifier = Modifier.fillMaxSize(),
             padding = PaddingValues(0.dp),
+            verticalScrollState = rememberLazyListState(),
             state = HomeState(),
             onAreaSelect = { _, _ -> },
             onTourCategorySelect = { _, _ -> },

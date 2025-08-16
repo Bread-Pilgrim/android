@@ -6,6 +6,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +30,7 @@ internal fun HomeRoute(
     showSnackbar: (SnackbarState) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val verticalScrollState = rememberLazyListState()
     val changePreferenceLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -61,8 +63,32 @@ internal fun HomeRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.mainTabEventBus.homeRefreshState.collectLatest { refresh ->
+            if (refresh) {
+                viewModel.mainTabEventBus.setHomeRefreshState(value = false)
+                viewModel.intent(
+                    HomeIntent.RefreshBakeries(
+                        completeSnackbarState = SnackbarState(
+                            type = SnackbarType.SUCCESS,
+                            messageRes = R.string.feature_home_snackbar_complete_edit_preference,
+                        )
+                    )
+                )
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.mainTabEventBus.homeReselectEvent.collect {
+            Timber.i("xxx collect homeReselectEvent")
+            verticalScrollState.animateScrollToItem(0)
+        }
+    }
+
     HomeScreen(
         padding = padding,
+        verticalScrollState = verticalScrollState,
         state = state,
         onAreaSelect = { selected, code -> viewModel.intent(HomeIntent.SelectArea(selected = selected, areaCode = code)) },
         onTourCategorySelect = { selected, category -> viewModel.intent(HomeIntent.SelectTourAreaCategory(selected = selected, category = category)) },

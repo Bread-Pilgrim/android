@@ -18,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +34,7 @@ import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNav
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBarItem
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.BakeRoadSnackbarHost
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
+import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.navigateToHome
 import com.twolskone.bakeroad.feature.mybakery.navigation.navigateToMyBakery
@@ -40,10 +42,12 @@ import com.twolskone.bakeroad.feature.mypage.navigation.navigateToMyPage
 import com.twolskone.bakeroad.feature.search.navigation.navigateToSearch
 import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun BakeRoadApp(
     navController: NavHostController,
+    mainTabEventBus: MainTabEventBus,
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
@@ -52,6 +56,7 @@ internal fun BakeRoadApp(
     openBrowser: (url: String) -> Unit
 ) {
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
     val snackbarHostState = remember { SnackbarHostState() }
@@ -76,7 +81,20 @@ internal fun BakeRoadApp(
                         icon = menu.icon,
                         selectedIcon = menu.selectedIcon,
                         label = { Text(text = stringResource(id = menu.labelId)) },
-                        onClick = { navigateToBakeRoadDestination(navController = navController, destination = menu) }
+                        onClick = {
+                            // Tab reselect.
+                            if (currentDestination.isRouteInHierarchy(route = menu.route)) {
+                                scope.launch {
+                                    when (menu) {
+                                        BakeRoadDestination.Home -> mainTabEventBus.reselectHome()
+                                        BakeRoadDestination.Search -> {}
+                                        BakeRoadDestination.MyBakery -> mainTabEventBus.reselectMyBakery()
+                                        BakeRoadDestination.MyPage -> {}
+                                    }
+                                }
+                            }
+                            navigateToBakeRoadDestination(navController = navController, destination = menu)
+                        }
                     )
                 }
             }

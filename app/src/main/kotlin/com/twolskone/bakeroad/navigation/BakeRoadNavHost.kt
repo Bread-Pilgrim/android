@@ -55,6 +55,7 @@ internal fun BakeRoadNavHost(
             padding = padding,
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
+            navigateToEditPreference = navigateToEditPreference,
             showSnackbar = showSnackbar
         )
     }

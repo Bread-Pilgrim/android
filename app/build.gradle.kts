@@ -70,6 +70,7 @@ dependencies {
     implementation(projects.core.navigator)
     implementation(projects.core.model)
     implementation(projects.core.exception)
+    implementation(projects.core.eventbus)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtimeCompose)

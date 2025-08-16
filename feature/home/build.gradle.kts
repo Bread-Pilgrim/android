@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.eventbus)
+
     implementation(libs.timber)
     implementation(libs.coil.kt.compose)
 }

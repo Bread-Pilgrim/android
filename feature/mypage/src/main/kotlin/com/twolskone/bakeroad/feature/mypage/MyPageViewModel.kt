@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.mypage
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.feature.mypage.mvi.MyPageIntent
@@ -14,7 +15,8 @@ import timber.log.Timber
 
 @HiltViewModel
 internal class MyPageViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    val mainTabEventBus: MainTabEventBus
 ) : BaseViewModel<MyPageState, MyPageIntent, MyPageSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): MyPageState {

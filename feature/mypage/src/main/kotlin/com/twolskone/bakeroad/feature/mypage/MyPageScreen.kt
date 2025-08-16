@@ -191,7 +191,11 @@ private fun MenuListSection(
     modifier: Modifier = Modifier,
     onClick: (Menu) -> Unit
 ) {
-    Column(modifier = modifier.background(color = BakeRoadTheme.colorScheme.Gray40, shape = MyPageSectionShape)) {
+    Column(
+        modifier = modifier
+            .clip(shape = MyPageSectionShape)
+            .background(color = BakeRoadTheme.colorScheme.Gray40, shape = MyPageSectionShape)
+    ) {
         Menu.entries.fastForEachIndexed { i, menu ->
             Row(
                 modifier = Modifier

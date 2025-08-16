@@ -10,6 +10,7 @@ import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendPreferenceB
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetAreaEventUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.SetAreaEventDismissedTimeMillisUseCase
+import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
@@ -34,6 +35,7 @@ private const val TourAreaMaxCount = 5
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    val mainTabEventBus: MainTabEventBus,
     private val getAreasUseCase: GetAreasUseCase,
     private val getPreferenceBakeriesUseCase: GetRecommendPreferenceBakeriesUseCase,
     private val getHotBakeriesUseCase: GetRecommendHotBakeriesUseCase,

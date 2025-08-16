@@ -7,5 +7,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.eventbus)
+
     implementation(libs.timber)
 }

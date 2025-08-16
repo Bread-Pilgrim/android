@@ -8,6 +8,7 @@ import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
+import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
@@ -20,6 +21,9 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var mainTabEventBus: MainTabEventBus               // 탭 간 이벤트 처리
 
     @Inject
     lateinit var bakeryListNavigator: BakeryListNavigator       // 빵집 목록
@@ -44,6 +48,7 @@ class MainActivity : ComponentActivity() {
             BakeRoadTheme {
                 BakeRoadApp(
                     navController = rememberNavController(),
+                    mainTabEventBus = mainTabEventBus,
                     navigateToBakeryList = { areaCodes, bakeryType, launcher ->
                         bakeryListNavigator.navigateFromLauncher(
                             activity = this,

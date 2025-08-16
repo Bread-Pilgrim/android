@@ -96,7 +96,7 @@ internal class MyBakeryViewModel @Inject constructor(
             reduce {
                 copy(
                     visitedSection = visitedSection.copy(
-                        loading = refresh,
+                        loading = !state.value.isRefreshing && refresh, // PullToRefresh 는 스켈레톤 제외.
                         paging = visitedSection.paging.copy(isLoading = true)
                     )
                 )
@@ -132,7 +132,7 @@ internal class MyBakeryViewModel @Inject constructor(
             reduce {
                 copy(
                     likeSection = likeSection.copy(
-                        loading = refresh,
+                        loading = !state.value.isRefreshing && refresh, // PullToRefresh 는 스켈레톤 제외.
                         paging = likeSection.paging.copy(isLoading = true)
                     )
                 )

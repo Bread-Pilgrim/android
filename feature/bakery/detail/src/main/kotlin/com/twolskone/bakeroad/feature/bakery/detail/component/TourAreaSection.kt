@@ -26,6 +26,7 @@ internal fun LazyListScope.tourArea(
         item {
             TourAreasSkeleton(
                 modifier = Modifier
+                    .background(color = BakeRoadTheme.colorScheme.White)
                     .padding(horizontal = 16.dp, vertical = 20.dp)
                     .fillMaxWidth()
             )

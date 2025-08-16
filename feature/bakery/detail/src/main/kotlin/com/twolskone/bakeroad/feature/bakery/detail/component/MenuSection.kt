@@ -67,6 +67,14 @@ internal fun LazyListScope.menu(
                 Spacer(modifier = Modifier.height(if (index == menuList.lastIndex) 20.dp else 16.dp))
             }
         }
+        item {
+            Spacer(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillParentMaxHeight(fraction = 0.8f)
+                    .background(color = BakeRoadTheme.colorScheme.White)
+            )
+        }
     }
 }
 

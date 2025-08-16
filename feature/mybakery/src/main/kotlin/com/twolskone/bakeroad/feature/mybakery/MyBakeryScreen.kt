@@ -44,12 +44,11 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.ui.BakeryCard
+import com.twolskone.bakeroad.core.ui.EmptyCard
 import com.twolskone.bakeroad.core.ui.model.PagingUiState
 import com.twolskone.bakeroad.feature.mybakery.component.BakerySortBottomSheet
-import com.twolskone.bakeroad.feature.mybakery.component.ViewModeToggleButton
 import com.twolskone.bakeroad.feature.mybakery.component.label
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
-import com.twolskone.bakeroad.feature.mybakery.model.ViewMode
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryState
 
 private val TabEdgePadding = 16.dp
@@ -119,6 +118,7 @@ internal fun MyBakeryScreen(
             when (state.tab) {
                 Tab.VISITED -> MyBakerySection(
                     loading = state.visitedSection.loading,
+                    tab = state.tab,
                     sort = state.visitedSection.sort,
                     paging = state.visitedSection.paging,
                     listState = visitedListState,
@@ -128,6 +128,7 @@ internal fun MyBakeryScreen(
 
                 Tab.LIKE -> MyBakerySection(
                     loading = state.likeSection.loading,
+                    tab = state.tab,
                     sort = state.likeSection.sort,
                     paging = state.likeSection.paging,
                     listState = likeListState,
@@ -153,6 +154,7 @@ internal fun MyBakeryScreen(
 @Composable
 private fun ColumnScope.MyBakerySection(
     loading: Boolean,
+    tab: Tab,
     sort: BakerySortType,
     paging: PagingUiState<Bakery>,
     listState: LazyListState,
@@ -164,13 +166,14 @@ private fun ColumnScope.MyBakerySection(
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.End
     ) {
-        ViewModeToggleButton(
-            modifier = Modifier.padding(start = 6.dp),
-            selectedViewMode = ViewMode.LIST,
-            onClick = { }
-        )
+        // TODO. 2차 개발건 (지도)
+//        ViewModeToggleButton(
+//            modifier = Modifier.padding(start = 6.dp),
+//            selectedViewMode = ViewMode.LIST,
+//            onClick = { }
+//        )
         BakeRoadTextButton(
             style = TextButtonStyle.ASSISTIVE,
             size = TextButtonSize.SMALL,
@@ -194,14 +197,28 @@ private fun ColumnScope.MyBakerySection(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             state = listState
         ) {
-            items(
-                items = paging.list,
-//            key = { bakery -> bakery.id }
-            ) { bakery ->
-                BakeryCard(
-                    bakery = bakery,
-                    onCardClick = onBakeryClick
-                )
+            if (paging.list.isNotEmpty()) {
+                items(
+                    items = paging.list,
+//                    key = { bakery -> bakery.id }
+                ) { bakery ->
+                    BakeryCard(
+                        bakery = bakery,
+                        onCardClick = onBakeryClick
+                    )
+                }
+            } else {
+                item {
+                    EmptyCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        description = stringResource(
+                            id = when (tab) {
+                                Tab.VISITED -> R.string.feature_mybakery_empty_visited_bakery
+                                Tab.LIKE -> R.string.feature_mybakery_empty_like_bakery
+                            }
+                        )
+                    )
+                }
             }
         }
     }

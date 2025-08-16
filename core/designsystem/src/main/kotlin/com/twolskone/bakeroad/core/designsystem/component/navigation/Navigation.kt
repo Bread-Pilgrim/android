@@ -1,8 +1,12 @@
 package com.twolskone.bakeroad.core.designsystem.component.navigation
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -115,10 +119,16 @@ fun RowScope.BakeRoadNavigationBarItem(
             fontWeight = FontWeight(fontWeight)
         )
 
-        CompositionLocalProvider(
-            LocalContentColor provides iconColor,
-            content = if (selected) selectedIcon else icon
-        )
+        AnimatedContent(
+            targetState = selected,
+            transitionSpec = {
+                fadeIn(tween(ItemAnimationDurationMillis)) togetherWith fadeOut(tween(ItemAnimationDurationMillis))
+            }
+        ) { selected ->
+            CompositionLocalProvider(LocalContentColor provides iconColor) {
+                if (selected) selectedIcon() else icon()
+            }
+        }
         Spacer(modifier = Modifier.height(2.dp))
         CompositionLocalProvider(
             LocalContentColor provides textColor,

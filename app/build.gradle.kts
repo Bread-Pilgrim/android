@@ -31,6 +31,7 @@ android {
             applicationIdSuffix = BakeRoadBuildType.RELEASE.applicationIdSuffix
             manifestPlaceholders["appName"] = "@string/app_name"
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("debug")
             // TODO. To publish on the Play store a private signing key is required.
         }
     }

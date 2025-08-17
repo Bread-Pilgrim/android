@@ -10,6 +10,8 @@ import com.twolskone.bakeroad.feature.settings.appinfo.navigation.appInfoScreen
 import com.twolskone.bakeroad.feature.settings.appinfo.navigation.navigateToAppInfo
 import com.twolskone.bakeroad.feature.settings.main.navigation.SettingsRoute
 import com.twolskone.bakeroad.feature.settings.main.navigation.settingsScreen
+import com.twolskone.bakeroad.feature.settings.notice.navigation.navigateToNotice
+import com.twolskone.bakeroad.feature.settings.notice.navigation.noticeScreen
 
 @Composable
 internal fun SettingsNavHost(
@@ -22,9 +24,18 @@ internal fun SettingsNavHost(
         startDestination = SettingsRoute
     ) {
         settingsScreen(
+            navigateToNotice = navController::navigateToNotice,
             navigateToAppInfo = navController::navigateToAppInfo
         )
         appInfoScreen(
+            goBack = {
+                val canBack = navController.currentDestination.isRouteInHierarchy(route = AppInfoRoute::class)
+                if (canBack) {
+                    navController.popBackStack()
+                }
+            }
+        )
+        noticeScreen(
             goBack = {
                 val canBack = navController.currentDestination.isRouteInHierarchy(route = AppInfoRoute::class)
                 if (canBack) {

@@ -180,8 +180,8 @@ internal fun BakeryInfoSection(
                     ) {
                         Icon(
                             modifier = Modifier.rotate(rotateOpeningHourIconAngle),
-                            imageVector = ImageVector.vectorResource(id = R.drawable.feature_bakery_detail_ic_down_arrow),
-                            contentDescription = "Location",
+                            imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_down_arrow),
+                            contentDescription = null,
                             tint = BakeRoadTheme.colorScheme.Gray800
                         )
                     }

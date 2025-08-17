@@ -28,7 +28,9 @@ import com.twolskone.bakeroad.feature.report.component.AreaVisitRankCard
 import com.twolskone.bakeroad.feature.report.component.BreadAveragePurchasesCard
 import com.twolskone.bakeroad.feature.report.component.BreadConsumptionCard
 import com.twolskone.bakeroad.feature.report.component.BreadSpendingAmountCard
+import com.twolskone.bakeroad.feature.report.component.BreadType
 import com.twolskone.bakeroad.feature.report.component.BreadTypeRankCard
+import com.twolskone.bakeroad.feature.report.component.VisitedArea
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
@@ -96,7 +98,20 @@ internal fun ReportDetailScreen(
                     )
                     AreaVisitRankCard(
                         modifier = Modifier.fillMaxWidth(),
-                        regionList = persistentListOf()
+                        regionList = persistentListOf(
+                            VisitedArea(
+                                name = "해운대구",
+                                visitedCount = 3
+                            ),
+                            VisitedArea(
+                                name = "남구",
+                                visitedCount = 2
+                            ),
+                            VisitedArea(
+                                name = "수영구",
+                                visitedCount = 1
+                            )
+                        )
                     )
                 }
             }
@@ -109,7 +124,20 @@ internal fun ReportDetailScreen(
                     )
                     BreadTypeRankCard(
                         modifier = Modifier.fillMaxWidth(),
-                        breadTypeList = persistentListOf()
+                        breadTypeList = persistentListOf(
+                            BreadType(
+                                breadName = "페이스트리류",
+                                eatenCount = 2
+                            ),
+                            BreadType(
+                                breadName = "클래식 & 레트로 빵",
+                                eatenCount = 2
+                            ),
+                            BreadType(
+                                breadName = "구운과자류",
+                                eatenCount = 1
+                            )
+                        )
                     )
                 }
             }
@@ -147,7 +175,7 @@ internal fun ReportDetailScreen(
                     BreadConsumptionCard(
                         modifier = Modifier.fillMaxWidth(),
                         data = DayOfWeek.entries.map {
-                            it to (0..0).random()
+                            it to (0..5).random()
                         }.toImmutableList()
                     )
                 }

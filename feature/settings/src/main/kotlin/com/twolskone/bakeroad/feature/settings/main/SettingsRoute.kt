@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 
 @Composable
 internal fun SettingsRoute(
+    navigateToNotice: () -> Unit,
     navigateToAppInfo: () -> Unit
 ) {
     SettingsScreen(
         onBackClick = {},
-        onNoticeClick = {},
+        onNoticeClick = navigateToNotice,
         onAppInfoClick = navigateToAppInfo,
         onLogoutClick = {}
     )

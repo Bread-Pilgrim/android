@@ -26,6 +26,7 @@ internal fun BakeRoadNavHost(
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
     openBrowser: (url: String) -> Unit,
+    goBack: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     NavHost(
@@ -44,11 +45,13 @@ internal fun BakeRoadNavHost(
         searchScreen(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
+            goBack = goBack,
             showSnackbar = showSnackbar
         )
         myBakeryScreen(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
+            goBack = goBack,
             showSnackbar = showSnackbar
         )
         myPageScreen(
@@ -56,6 +59,7 @@ internal fun BakeRoadNavHost(
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
             navigateToEditPreference = navigateToEditPreference,
+            goBack = goBack,
             showSnackbar = showSnackbar
         )
     }

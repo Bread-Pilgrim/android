@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.mybakery
 
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,13 +33,13 @@ internal fun MyBakeryRoute(
     viewModel: MyBakeryViewModel = hiltViewModel(),
     padding: PaddingValues,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    goBack: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val visitedListState = rememberLazyListState()
     val likeListState = rememberLazyListState()
-
     val bakeryDetailLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -52,7 +53,6 @@ internal fun MyBakeryRoute(
             }
         }
     }
-
     val isLastVisitedItemVisible by remember {
         derivedStateOf {
             val lastVisibleItemIndex = visitedListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
@@ -67,6 +67,8 @@ internal fun MyBakeryRoute(
             state.likeSection.paging.canRequest && lastVisibleItemIndex == lastIndex
         }
     }
+
+    BackHandler { goBack() }
 
     LaunchedEffect(Unit) {
         viewModel.snackbarEffect.collectLatest { state ->

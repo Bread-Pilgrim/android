@@ -17,12 +17,14 @@ data object SearchRoute
 fun NavGraphBuilder.searchScreen(
     padding: PaddingValues,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    goBack: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     composable<SearchRoute> {
         SearchRoute(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
+            goBack = goBack,
             showSnackbar = showSnackbar
         )
     }

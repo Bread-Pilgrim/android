@@ -94,7 +94,8 @@ class MainActivity : ComponentActivity() {
                         } catch (e: Exception) {
                             Timber.e(e)
                         }
-                    }
+                    },
+                    finish = { finish() }
                 )
             }
         }

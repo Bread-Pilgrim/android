@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.ui
 
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.result.ActivityResultLauncher
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -29,11 +31,13 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
+import com.twolskone.bakeroad.R
 import com.twolskone.bakeroad.core.common.android.extension.isRouteInHierarchy
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBar
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBarItem
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.BakeRoadSnackbarHost
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.navigateToHome
@@ -44,6 +48,8 @@ import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 import kotlinx.coroutines.launch
 
+private const val BackInterval = 1500L
+
 @Composable
 internal fun BakeRoadApp(
     navController: NavHostController,
@@ -53,7 +59,8 @@ internal fun BakeRoadApp(
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
-    openBrowser: (url: String) -> Unit
+    openBrowser: (url: String) -> Unit,
+    finish: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -61,6 +68,22 @@ internal fun BakeRoadApp(
     val currentDestination = currentBackStackEntry?.destination
     val snackbarHostState = remember { SnackbarHostState() }
     var snackbarTrigger: Pair<SnackbarState, Long>? by remember { mutableStateOf(null) }
+    var backTimeMillis by remember { mutableLongStateOf(0) }
+    val onBack: () -> Unit = {
+        val currentTimeMillis = System.currentTimeMillis()
+        if (currentTimeMillis - backTimeMillis >= BackInterval) {
+            backTimeMillis = currentTimeMillis
+            snackbarTrigger = SnackbarState(
+                type = SnackbarType.ERROR,
+                messageRes = R.string.snackbar_press_back_again_to_exit,
+                duration = BackInterval
+            ) to currentTimeMillis
+        } else {
+            finish()
+        }
+    }
+
+    BackHandler { onBack() }
 
     LaunchedEffect(snackbarTrigger) {
         snackbarTrigger?.let { (state, _) ->
@@ -112,6 +135,7 @@ internal fun BakeRoadApp(
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
             openBrowser = openBrowser,
+            goBack = onBack,
             showSnackbar = { state -> snackbarTrigger = state to System.currentTimeMillis() }
         )
     }

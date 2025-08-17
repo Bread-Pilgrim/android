@@ -17,12 +17,14 @@ data object MyBakeryRoute
 fun NavGraphBuilder.myBakeryScreen(
     padding: PaddingValues,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    goBack: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     composable<MyBakeryRoute> {
         MyBakeryRoute(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
+            goBack = goBack,
             showSnackbar = showSnackbar
         )
     }

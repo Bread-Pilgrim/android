@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.mypage
 
 import android.app.Activity
 import android.content.Intent
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
@@ -23,6 +24,7 @@ internal fun MyPageRoute(
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    goBack: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -34,6 +36,8 @@ internal fun MyPageRoute(
             viewModel.mainTabEventBus.setHomeRefreshState(value = true)
         }
     }
+
+    BackHandler { goBack() }
 
     LaunchedEffect(Unit) {
         viewModel.snackbarEffect.collectLatest { state ->

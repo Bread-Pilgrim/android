@@ -19,6 +19,7 @@ fun NavGraphBuilder.myPageScreen(
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    goBack: () -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     composable<MyPageRoute> {
@@ -27,6 +28,7 @@ fun NavGraphBuilder.myPageScreen(
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
             navigateToEditPreference = navigateToEditPreference,
+            goBack = goBack,
             showSnackbar = showSnackbar
         )
     }

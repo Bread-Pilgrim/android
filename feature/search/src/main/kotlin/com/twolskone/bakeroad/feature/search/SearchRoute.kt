@@ -35,6 +35,7 @@ internal fun SearchRoute(
     padding: PaddingValues,
     viewModel: SearchViewModel = hiltViewModel(),
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
+    goBack:() -> Unit,
     showSnackbar: (SnackbarState) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
@@ -44,7 +45,6 @@ internal fun SearchRoute(
     val resultPagingItems = viewModel.resultPagingFlow.collectAsLazyPagingItems()
     val interactionSource = remember { MutableInteractionSource() }
     val isFocus by interactionSource.collectIsFocusedAsState()
-
     val bakeryDetailLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -57,7 +57,7 @@ internal fun SearchRoute(
             queryTextState.clearText()
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
         } else {
-            // TODO. GO back.
+            goBack()
         }
     }
 

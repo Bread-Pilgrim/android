@@ -70,7 +70,8 @@ fun BakeRoadNavigationBar(
             modifier = Modifier
                 .fillMaxWidth()
 //                .heightIn(min = NavigationBarHeight)
-                .padding(top = 4.dp, start = 16.dp, end = 16.dp)
+                .padding(horizontal = 16.dp)
+                .padding(top = 4.dp, bottom = 6.dp)
                 .navigationBarsPadding()
                 .selectableGroup(),
             horizontalArrangement = Arrangement.SpaceAround,
@@ -95,10 +96,10 @@ fun RowScope.BakeRoadNavigationBarItem(
     Column(
         modifier = modifier
             .weight(1f)
-            .padding(horizontal = 10.dp)
+            .padding(bottom = 7.dp)
             .clip(RoundedCornerShape(20.dp))
             .selectable(selected = selected, onClick = onClick)
-            .padding(vertical = 6.dp),
+            .padding(horizontal = 10.dp, vertical = 6.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

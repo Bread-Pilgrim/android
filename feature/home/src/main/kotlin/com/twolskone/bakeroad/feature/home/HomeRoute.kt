@@ -26,8 +26,7 @@ internal fun HomeRoute(
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
-    openBrowser: (url: String) -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    openBrowser: (url: String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val verticalScrollState = rememberLazyListState()
@@ -58,29 +57,17 @@ internal fun HomeRoute(
     }
 
     LaunchedEffect(Unit) {
-        viewModel.snackbarEffect.collectLatest { state ->
-            showSnackbar(state)
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.mainTabEventBus.homeRefreshState.collectLatest { refresh ->
+        viewModel.mainEventBus.homeRefreshState.collectLatest { refresh ->
             if (refresh) {
-                viewModel.mainTabEventBus.setHomeRefreshState(value = false)
-                viewModel.intent(
-                    HomeIntent.RefreshBakeries(
-                        completeSnackbarState = SnackbarState(
-                            type = SnackbarType.SUCCESS,
-                            messageRes = R.string.feature_home_snackbar_complete_edit_preference,
-                        )
-                    )
-                )
+                Timber.i("xxx collect homeRefreshState")
+                viewModel.mainEventBus.setHomeRefreshState(value = false)
+                viewModel.intent(HomeIntent.RefreshBakeries())
             }
         }
     }
 
     LaunchedEffect(Unit) {
-        viewModel.mainTabEventBus.homeReselectEvent.collect {
+        viewModel.mainEventBus.homeReselectEvent.collect {
             Timber.i("xxx collect homeReselectEvent")
             verticalScrollState.animateScrollToItem(0)
         }

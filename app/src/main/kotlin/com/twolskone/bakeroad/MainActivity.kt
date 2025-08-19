@@ -4,16 +4,18 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
-import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import com.twolskone.bakeroad.core.navigator.ReportNavigator
 import com.twolskone.bakeroad.core.navigator.SettingsNavigator
+import com.twolskone.bakeroad.core.navigator.util.KEY_HOME_REFRESH
+import com.twolskone.bakeroad.mvi.MainIntent
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -22,8 +24,8 @@ import timber.log.Timber
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var mainTabEventBus: MainTabEventBus               // 탭 간 이벤트 처리
+//    @Inject
+//    lateinit var mainTabEventBus: MainTabEventBus               // 탭 간 이벤트 처리
 
     @Inject
     lateinit var bakeryListNavigator: BakeryListNavigator       // 빵집 목록
@@ -40,6 +42,8 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var reportNavigator: ReportNavigator               // 빵말정산
 
+    private val viewModel: MainViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,8 +51,9 @@ class MainActivity : ComponentActivity() {
             SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
                 BakeRoadApp(
+                    viewModel = viewModel,
+                    mainEventBus = viewModel.mainEventBus,
                     navController = rememberNavController(),
-                    mainTabEventBus = mainTabEventBus,
                     navigateToBakeryList = { areaCodes, bakeryType, launcher ->
                         bakeryListNavigator.navigateFromLauncher(
                             activity = this,
@@ -97,6 +102,17 @@ class MainActivity : ComponentActivity() {
                     },
                     finish = { finish() }
                 )
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        Timber.i("xxx onNewIntent")
+        when {
+            intent.getBooleanExtra(KEY_HOME_REFRESH, false) -> {
+                Timber.i("xxx onNewIntent // RefreshHome")
+                viewModel.intent(MainIntent.RefreshHome)
             }
         }
     }

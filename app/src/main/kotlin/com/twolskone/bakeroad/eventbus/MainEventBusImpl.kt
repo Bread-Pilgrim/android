@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.eventbus
 
-import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import timber.log.Timber
 
-class MainTabEventBusImpl @Inject constructor() : MainTabEventBus {
+class MainEventBusImpl @Inject constructor() : MainEventBus {
 
     private val _homeRefreshEvent = MutableStateFlow(false)
     override val homeRefreshState: StateFlow<Boolean>
@@ -37,5 +38,13 @@ class MainTabEventBusImpl @Inject constructor() : MainTabEventBus {
     override suspend fun reselectMyBakery() {
         Timber.i("xxx reselectMyBakery")
         _myBakeryReselectEvent.emit(Unit)
+    }
+
+    private val _snackbarEvent = MutableSharedFlow<SnackbarState>()
+    override val snackbarEvent: SharedFlow<SnackbarState>
+        get() = _snackbarEvent.asSharedFlow()
+
+    override suspend fun showSnackbar(snackbarState: SnackbarState) {
+        _snackbarEvent.emit(snackbarState)
     }
 }

@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.designsystem)
+
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.timber)
 }

@@ -7,3 +7,5 @@ const val RESULT_REFRESH_BAKERY_LIST = 10
 const val KEY_BAKERY_ID = "bakeryId"
 // 좋아요 상태
 const val KEY_BAKERY_LIKE = "bakeryLike"
+// 홈탭 갱신
+const val KEY_HOME_REFRESH = "homeRefresh"

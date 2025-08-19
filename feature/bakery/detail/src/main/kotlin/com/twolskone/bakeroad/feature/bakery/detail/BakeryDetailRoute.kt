@@ -49,15 +49,15 @@ internal fun BakeryDetailRoute(
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             Timber.i("xxx writeReviewLauncher :: Completed write review")
+            viewModel.mainEvetBus.setHomeRefreshState(value = true) // 홈 갱신
             if (tabState == BakeryDetailTab.REVIEW) {
-                // 방문자 리뷰 탭 전환 또는 갱신
                 when (reviewTabState) {
-                    ReviewTab.ALL_REVIEW -> reviewPagingItems.refresh()
-                    ReviewTab.MY_REVIEW -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab = ReviewTab.ALL_REVIEW))
+                    ReviewTab.ALL_REVIEW -> viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab = ReviewTab.MY_REVIEW))
+                    ReviewTab.MY_REVIEW -> myReviewPagingItems.refresh()
                 }
             } else {
-                // 리뷰 프리뷰 갱신 (리뷰 데이터 fetch)
-                viewModel.intent(BakeryDetailIntent.RefreshPreviewReviews)
+                viewModel.intent(BakeryDetailIntent.SelectTab(tab = BakeryDetailTab.REVIEW))
+                if (reviewTabState == ReviewTab.ALL_REVIEW) viewModel.intent(BakeryDetailIntent.SelectReviewTab(tab = ReviewTab.MY_REVIEW))
             }
         } else {
             Timber.i("xxx writeReviewLauncher :: Canceled write review")

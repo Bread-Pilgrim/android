@@ -130,7 +130,8 @@ internal class WriteReviewViewModel @Inject constructor(
         reduce { copy(loading = false) }
 
         if (result) {
-            postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
+//            postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
+            postSideEffect(WriteBakeryReviewSideEffect.NavigateToComplete)
         }
     }
 }

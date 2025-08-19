@@ -8,13 +8,10 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.feature.mypage.model.Menu
-import kotlinx.coroutines.flow.collectLatest
 import timber.log.Timber
 
 @Composable
@@ -24,8 +21,7 @@ internal fun MyPageRoute(
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
-    goBack: () -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    goBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val changePreferenceLauncher = rememberLauncherForActivityResult(
@@ -33,17 +29,11 @@ internal fun MyPageRoute(
     ) { result ->
         Timber.i("xxx bakeryDetailLauncher :: resultCode ${result.resultCode}")
         if (result.resultCode == Activity.RESULT_OK) {
-            viewModel.mainTabEventBus.setHomeRefreshState(value = true)
+            viewModel.mainEventBus.setHomeRefreshState(value = true)
         }
     }
 
     BackHandler { goBack() }
-
-    LaunchedEffect(Unit) {
-        viewModel.snackbarEffect.collectLatest { state ->
-            showSnackbar(state)
-        }
-    }
 
     MyPageScreen(
         padding = padding,

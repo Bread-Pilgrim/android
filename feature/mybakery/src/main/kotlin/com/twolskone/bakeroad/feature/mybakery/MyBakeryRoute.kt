@@ -16,13 +16,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_LIKE
 import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryIntent
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
@@ -33,8 +31,7 @@ internal fun MyBakeryRoute(
     viewModel: MyBakeryViewModel = hiltViewModel(),
     padding: PaddingValues,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
-    goBack: () -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    goBack: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -69,12 +66,6 @@ internal fun MyBakeryRoute(
     }
 
     BackHandler { goBack() }
-
-    LaunchedEffect(Unit) {
-        viewModel.snackbarEffect.collectLatest { state ->
-            showSnackbar(state)
-        }
-    }
 
     LaunchedEffect(Unit) {
         snapshotFlow { isLastVisitedItemVisible }

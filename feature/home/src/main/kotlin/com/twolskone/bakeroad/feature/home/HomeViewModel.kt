@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.home
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.area.GetAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendHotBakeriesUseCase
@@ -10,7 +11,7 @@ import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecommendPreferenceB
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetAreaEventUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.SetAreaEventDismissedTimeMillisUseCase
-import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.EntireBusan
@@ -35,7 +36,7 @@ private const val TourAreaMaxCount = 5
 @HiltViewModel
 internal class HomeViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    val mainTabEventBus: MainTabEventBus,
+    val mainEventBus: MainEventBus,
     private val getAreasUseCase: GetAreasUseCase,
     private val getPreferenceBakeriesUseCase: GetRecommendPreferenceBakeriesUseCase,
     private val getHotBakeriesUseCase: GetRecommendHotBakeriesUseCase,
@@ -101,6 +102,7 @@ internal class HomeViewModel @Inject constructor(
                 val hotBakeriesJob = refreshHotBakeries()
                 joinAll(preferenceBakeriesJob, hotBakeriesJob)
                 intent.completeSnackbarState?.let { snackbarState ->
+                    mainEventBus.showSnackbar(snackbarState = snackbarState)
                     showSnackbar(
                         type = snackbarState.type,
                         message = snackbarState.message,
@@ -120,17 +122,23 @@ internal class HomeViewModel @Inject constructor(
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause)
-        when (cause) {
-            is ClientException -> {
-                showSnackbar(
-                    type = SnackbarType.ERROR,
-                    message = cause.message,
-                    messageRes = cause.error?.messageRes
-                )
-            }
+        launch {
+            when (cause) {
+                is ClientException -> {
+                    mainEventBus.showSnackbar(
+                        snackbarState = SnackbarState(
+                            type = SnackbarType.ERROR,
+                            message = cause.message,
+                            messageRes = cause.error?.messageRes
+                        )
+                    )
+                }
 
-            is BakeRoadException -> {
-                showSnackbar(type = SnackbarType.ERROR, message = cause.message)
+                is BakeRoadException -> {
+                    mainEventBus.showSnackbar(
+                        snackbarState = SnackbarState(type = SnackbarType.ERROR, message = cause.message)
+                    )
+                }
             }
         }
     }

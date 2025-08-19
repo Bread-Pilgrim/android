@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.HomeRoute
 import kotlinx.serialization.Serializable
@@ -20,8 +19,7 @@ fun NavGraphBuilder.homeScreen(
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
-    openBrowser: (url: String) -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    openBrowser: (url: String) -> Unit
 ) {
     composable<HomeRoute> {
         HomeRoute(
@@ -29,8 +27,7 @@ fun NavGraphBuilder.homeScreen(
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
             navigateToEditPreference = navigateToEditPreference,
-            openBrowser = openBrowser,
-            showSnackbar = showSnackbar
+            openBrowser = openBrowser
         )
     }
 }

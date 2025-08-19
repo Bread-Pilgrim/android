@@ -7,7 +7,6 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.feature.mypage.MyPageRoute
 import kotlinx.serialization.Serializable
 
@@ -19,8 +18,7 @@ fun NavGraphBuilder.myPageScreen(
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
-    goBack: () -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    goBack: () -> Unit
 ) {
     composable<MyPageRoute> {
         MyPageRoute(
@@ -28,8 +26,7 @@ fun NavGraphBuilder.myPageScreen(
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
             navigateToEditPreference = navigateToEditPreference,
-            goBack = goBack,
-            showSnackbar = showSnackbar
+            goBack = goBack
         )
     }
 }

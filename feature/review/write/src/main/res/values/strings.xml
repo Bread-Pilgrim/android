@@ -2,9 +2,13 @@
 <resources>
     <string name="feature_review_write_title_menu_selection">메뉴 선택</string>
     <string name="feature_review_write_title_write_review">리뷰 작성</string>
+    <string name="feature_review_write_title_write_complete">리뷰를 작성했어요!</string>
     <string name="feature_review_write_description_select_purchase_quantity">구매 수량을 선택해주세요.</string>
+    <string name="feature_review_write_description_write_complete">소중한 경험을 남겨주셔서 감사합니다 🍞</string>
     <string name="feature_review_write_button_private_review">나만보기</string>
     <string name="feature_review_write_button_add_photo">사진 추가하기</string>
     <string name="feature_review_write_button_write_complete">작성 완료</string>
     <string name="feature_review_write_button_other_menu">여기에 없어요 🧐</string>
+    <string name="feature_review_write_button_go_home">홈으로</string>
+    <string name="feature_review_write_button_see_review">리뷰 보기</string>
 </resources>

@@ -3,57 +3,51 @@ package com.twolskone.bakeroad.ui
 import android.content.Intent
 import androidx.activity.compose.BackHandler
 import androidx.activity.result.ActivityResultLauncher
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastForEach
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.navOptions
+import com.twolskone.bakeroad.MainViewModel
 import com.twolskone.bakeroad.R
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.isRouteInHierarchy
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBar
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBarItem
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.BakeRoadSnackbarHost
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
-import com.twolskone.bakeroad.core.eventbus.MainTabEventBus
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.navigateToHome
 import com.twolskone.bakeroad.feature.mybakery.navigation.navigateToMyBakery
 import com.twolskone.bakeroad.feature.mypage.navigation.navigateToMyPage
 import com.twolskone.bakeroad.feature.search.navigation.navigateToSearch
+import com.twolskone.bakeroad.mvi.MainSideEffect
 import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 private const val BackInterval = 1500L
 
 @Composable
 internal fun BakeRoadApp(
+    viewModel: MainViewModel,
+    mainEventBus: MainEventBus,
     navController: NavHostController,
-    mainTabEventBus: MainTabEventBus,
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
@@ -62,22 +56,19 @@ internal fun BakeRoadApp(
     openBrowser: (url: String) -> Unit,
     finish: () -> Unit
 ) {
-    val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
-    val snackbarHostState = remember { SnackbarHostState() }
-    var snackbarTrigger: Pair<SnackbarState, Long>? by remember { mutableStateOf(null) }
     var backTimeMillis by remember { mutableLongStateOf(0) }
     val onBack: () -> Unit = {
         val currentTimeMillis = System.currentTimeMillis()
         if (currentTimeMillis - backTimeMillis >= BackInterval) {
             backTimeMillis = currentTimeMillis
-            snackbarTrigger = SnackbarState(
+            viewModel.showSnackbar(
                 type = SnackbarType.ERROR,
                 messageRes = R.string.snackbar_press_back_again_to_exit,
                 duration = BackInterval
-            ) to currentTimeMillis
+            )
         } else {
             finish()
         }
@@ -85,72 +76,69 @@ internal fun BakeRoadApp(
 
     BackHandler { onBack() }
 
-    LaunchedEffect(snackbarTrigger) {
-        snackbarTrigger?.let { (state, _) ->
-            snackbarHostState.showSnackbar(
-                message = state.messageRes?.let { context.getString(it) } ?: state.message,
-                withDismissAction = true,
-                duration = SnackbarDuration.Indefinite
+    LaunchedEffect(Unit) {
+        mainEventBus.snackbarEvent.collectLatest { snackbarState ->
+            viewModel.showSnackbar(
+                type = snackbarState.type,
+                messageRes = snackbarState.messageRes,
+                message = snackbarState.message
             )
         }
     }
 
-    Scaffold(
-        bottomBar = {
-            BakeRoadNavigationBar(modifier = Modifier.fillMaxWidth()) {
-                BakeRoadDestination.entries.fastForEach { menu ->
-                    BakeRoadNavigationBarItem(
-                        selected = currentDestination.isRouteInHierarchy(route = menu.route),
-                        icon = menu.icon,
-                        selectedIcon = menu.selectedIcon,
-                        label = { Text(text = stringResource(id = menu.labelId)) },
-                        onClick = {
-                            // Tab reselect.
-                            if (currentDestination.isRouteInHierarchy(route = menu.route)) {
-                                scope.launch {
-                                    when (menu) {
-                                        BakeRoadDestination.Home -> mainTabEventBus.reselectHome()
-                                        BakeRoadDestination.Search -> {}
-                                        BakeRoadDestination.MyBakery -> mainTabEventBus.reselectMyBakery()
-                                        BakeRoadDestination.MyPage -> {}
-                                    }
-                                }
-                            }
-                            navigateToBakeRoadDestination(navController = navController, destination = menu)
-                        }
-                    )
-                }
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                MainSideEffect.NavigateToHome -> navigateToBakeRoadDestination(
+                    navController = navController,
+                    destination = BakeRoadDestination.Home
+                )
             }
-        },
-    ) { contentPadding ->
-        BakeRoadNavHost(
-            modifier = Modifier
-                .fillMaxSize()
-                .statusBarsPadding(),
-            padding = contentPadding,
-            navController = navController,
-            navigateToBakeryList = navigateToBakeryList,
-            navigateToBakeryDetail = navigateToBakeryDetail,
-            navigateToEditPreference = navigateToEditPreference,
-            navigateToSettings = navigateToSettings,
-            navigateToReport = navigateToReport,
-            openBrowser = openBrowser,
-            goBack = onBack,
-            showSnackbar = { state -> snackbarTrigger = state to System.currentTimeMillis() }
-        )
+        }
     }
 
-    snackbarTrigger?.let { (state, _) ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.navigationBars),
-            contentAlignment = Alignment.BottomCenter
-        ) {
-            BakeRoadSnackbarHost(
-                snackbarHostState = snackbarHostState,
-                type = state.type,
-                durationMills = state.duration
+    BaseComposable(baseViewModel = viewModel) {
+        Scaffold(
+            bottomBar = {
+                BakeRoadNavigationBar(modifier = Modifier.fillMaxWidth()) {
+                    BakeRoadDestination.entries.fastForEach { menu ->
+                        BakeRoadNavigationBarItem(
+                            selected = currentDestination.isRouteInHierarchy(route = menu.route),
+                            icon = menu.icon,
+                            selectedIcon = menu.selectedIcon,
+                            label = { Text(text = stringResource(id = menu.labelId)) },
+                            onClick = {
+                                // Tab reselect.
+                                if (currentDestination.isRouteInHierarchy(route = menu.route)) {
+                                    scope.launch {
+                                        when (menu) {
+                                            BakeRoadDestination.Home -> mainEventBus.reselectHome()
+                                            BakeRoadDestination.Search -> {}
+                                            BakeRoadDestination.MyBakery -> mainEventBus.reselectMyBakery()
+                                            BakeRoadDestination.MyPage -> {}
+                                        }
+                                    }
+                                }
+                                navigateToBakeRoadDestination(navController = navController, destination = menu)
+                            }
+                        )
+                    }
+                }
+            },
+        ) { contentPadding ->
+            BakeRoadNavHost(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .statusBarsPadding(),
+                padding = contentPadding,
+                navController = navController,
+                navigateToBakeryList = navigateToBakeryList,
+                navigateToBakeryDetail = navigateToBakeryDetail,
+                navigateToEditPreference = navigateToEditPreference,
+                navigateToSettings = navigateToSettings,
+                navigateToReport = navigateToReport,
+                openBrowser = openBrowser,
+                goBack = onBack
             )
         }
     }

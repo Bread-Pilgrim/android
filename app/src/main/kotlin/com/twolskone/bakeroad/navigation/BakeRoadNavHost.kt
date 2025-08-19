@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.feature.home.navigation.HomeRoute
 import com.twolskone.bakeroad.feature.home.navigation.homeScreen
@@ -26,8 +25,7 @@ internal fun BakeRoadNavHost(
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
     openBrowser: (url: String) -> Unit,
-    goBack: () -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    goBack: () -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -39,28 +37,24 @@ internal fun BakeRoadNavHost(
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
             navigateToEditPreference = navigateToEditPreference,
-            openBrowser = openBrowser,
-            showSnackbar = showSnackbar
+            openBrowser = openBrowser
         )
         searchScreen(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
-            goBack = goBack,
-            showSnackbar = showSnackbar
+            goBack = goBack
         )
         myBakeryScreen(
             padding = padding,
             navigateToBakeryDetail = navigateToBakeryDetail,
-            goBack = goBack,
-            showSnackbar = showSnackbar
+            goBack = goBack
         )
         myPageScreen(
             padding = padding,
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
             navigateToEditPreference = navigateToEditPreference,
-            goBack = goBack,
-            showSnackbar = showSnackbar
+            goBack = goBack
         )
     }
 }

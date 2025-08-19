@@ -23,10 +23,8 @@ import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
-import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.feature.search.mvi.SearchIntent
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterIsInstance
 import timber.log.Timber
 
@@ -35,8 +33,7 @@ internal fun SearchRoute(
     padding: PaddingValues,
     viewModel: SearchViewModel = hiltViewModel(),
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
-    goBack:() -> Unit,
-    showSnackbar: (SnackbarState) -> Unit
+    goBack: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -58,12 +55,6 @@ internal fun SearchRoute(
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
         } else {
             goBack()
-        }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.snackbarEffect.collectLatest { state ->
-            showSnackbar(state)
         }
     }
 

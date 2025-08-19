@@ -16,6 +16,7 @@ import com.twolskone.bakeroad.core.domain.usecase.bakery.PostBakeryLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.review.DeleteReviewLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.review.PostReviewLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.isOtherMenu
@@ -44,6 +45,7 @@ private const val AREA_CODE = "areaCode"
 
 @HiltViewModel
 internal class BakeryDetailViewModel @Inject constructor(
+    val mainEvetBus: MainEventBus,
     private val savedStateHandle: SavedStateHandle,
     private val getBakeryDetailUseCase: GetBakeryDetailUseCase,
     private val getBakeryPreviewReviewsUseCase: GetBakeryPreviewReviewsUseCase,

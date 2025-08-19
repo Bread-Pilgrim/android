@@ -4,11 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteAllRecentSearchQueriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteRecentSearchQueryUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.GetRecentSearchQueriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.GetSearchBakeriesUseCase
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.feature.search.mvi.SearchIntent
@@ -28,6 +30,7 @@ import timber.log.Timber
 @HiltViewModel
 internal class SearchViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val mainEventBus: MainEventBus,
     private val getRecentSearchQueriesUseCase: GetRecentSearchQueriesUseCase,
     private val deleteRecentSearchQueryUseCase: DeleteRecentSearchQueryUseCase,
     private val deleteAllRecentSearchQueriesUseCase: DeleteAllRecentSearchQueriesUseCase,

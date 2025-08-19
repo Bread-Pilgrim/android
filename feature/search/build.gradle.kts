@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.eventbus)
+
     implementation(libs.androidx.paging.compose)
     implementation(libs.timber)
 }

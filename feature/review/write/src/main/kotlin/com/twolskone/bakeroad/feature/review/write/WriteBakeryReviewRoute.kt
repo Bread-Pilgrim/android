@@ -23,7 +23,8 @@ internal fun WriteBakeryReviewRoute(
     modifier: Modifier = Modifier,
     viewModel: WriteReviewViewModel,
     onBackClick: () -> Unit,
-    setResult: (code: Int, withFinish: Boolean) -> Unit
+    setResult: (code: Int, withFinish: Boolean) -> Unit,
+    navigateToComplete: () -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -55,14 +56,14 @@ internal fun WriteBakeryReviewRoute(
     }
 
     LaunchedEffect(contentTextState.text) {
-
         viewModel.intent(WriteBakeryReviewIntent.UpdateContent(content = contentTextState.text.toString()))
     }
 
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collect {
             when (it) {
-                is WriteBakeryReviewSideEffect.SetResult -> setResult(it.code, it.withFinish)
+                is WriteBakeryReviewSideEffect.SetResult -> {}/*setResult(it.code, it.withFinish)*/
+                WriteBakeryReviewSideEffect.NavigateToComplete -> navigateToComplete()
             }
         }
     }

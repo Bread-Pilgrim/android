@@ -11,6 +11,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
+import com.twolskone.bakeroad.core.navigator.MyReviewsNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import com.twolskone.bakeroad.core.navigator.ReportNavigator
 import com.twolskone.bakeroad.core.navigator.SettingsNavigator
@@ -23,9 +24,6 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-//    @Inject
-//    lateinit var mainTabEventBus: MainTabEventBus               // 탭 간 이벤트 처리
 
     @Inject
     lateinit var bakeryListNavigator: BakeryListNavigator       // 빵집 목록
@@ -41,6 +39,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var reportNavigator: ReportNavigator               // 빵말정산
+
+    @Inject
+    lateinit var myReviewsNavigator: MyReviewsNavigator         // 내가 쓴 리뷰
 
     private val viewModel: MainViewModel by viewModels()
 
@@ -89,6 +90,12 @@ class MainActivity : ComponentActivity() {
                     },
                     navigateToReport = {
                         reportNavigator.navigateFromActivity(
+                            activity = this,
+                            withFinish = false
+                        )
+                    },
+                    navigateToMyReviews = {
+                        myReviewsNavigator.navigateFromActivity(
                             activity = this,
                             withFinish = false
                         )

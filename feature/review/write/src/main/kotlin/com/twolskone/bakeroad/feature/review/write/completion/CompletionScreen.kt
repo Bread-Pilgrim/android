@@ -2,20 +2,24 @@ package com.twolskone.bakeroad.feature.review.write.completion
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
@@ -30,20 +34,27 @@ internal fun CompletionScreen(
     onGoHomeClick: () -> Unit,
     onConfirmReviewClick: () -> Unit,
 ) {
-    Box(
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.success))
+
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(color = BakeRoadTheme.colorScheme.White)
-            .systemBarsPadding(),
-        contentAlignment = Alignment.BottomCenter
+            .padding(horizontal = 16.dp)
+            .systemBarsPadding()
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(bottom = 58.dp)
+                .weight(1f),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
+            LottieAnimation(
+                modifier = Modifier.size(300.dp),
+                composition = composition
+            )
             Text(
                 text = stringResource(id = R.string.feature_review_write_title_write_complete),
                 style = BakeRoadTheme.typography.headingMediumBold,
@@ -55,27 +66,27 @@ internal fun CompletionScreen(
                 style = BakeRoadTheme.typography.bodyMediumSemibold,
                 color = BakeRoadTheme.colorScheme.Black
             )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 183.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                BakeRoadOutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    role = OutlinedButtonRole.SECONDARY,
-                    size = ButtonSize.XLARGE,
-                    onClick = onGoHomeClick,
-                    content = { Text(text = stringResource(R.string.feature_review_write_button_go_home)) }
-                )
-                BakeRoadSolidButton(
-                    modifier = Modifier.weight(1f),
-                    role = SolidButtonRole.PRIMARY,
-                    size = ButtonSize.XLARGE,
-                    onClick = onConfirmReviewClick,
-                    content = { Text(text = stringResource(R.string.feature_review_write_button_see_review)) }
-                )
-            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            BakeRoadOutlinedButton(
+                modifier = Modifier.weight(1f),
+                role = OutlinedButtonRole.SECONDARY,
+                size = ButtonSize.LARGE,
+                onClick = onGoHomeClick,
+                content = { Text(text = stringResource(R.string.feature_review_write_button_go_home)) }
+            )
+            BakeRoadSolidButton(
+                modifier = Modifier.weight(1f),
+                role = SolidButtonRole.PRIMARY,
+                size = ButtonSize.LARGE,
+                onClick = onConfirmReviewClick,
+                content = { Text(text = stringResource(R.string.feature_review_write_button_see_review)) }
+            )
         }
     }
 }

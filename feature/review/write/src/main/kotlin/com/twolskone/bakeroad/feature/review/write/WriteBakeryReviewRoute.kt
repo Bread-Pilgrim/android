@@ -11,6 +11,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.util.fastFilteredMap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.common.android.util.FileUtil
@@ -28,6 +29,7 @@ internal fun WriteBakeryReviewRoute(
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val keyboardController = LocalSoftwareKeyboardController.current
     val contentTextState = rememberTextFieldState(initialText = state.content)
     val availablePickImageCount = MaxPickImages - state.photoList.size
     val imagePickerLauncher = rememberLauncherForActivityResult(
@@ -81,6 +83,9 @@ internal fun WriteBakeryReviewRoute(
         onRatingChange = { rating -> viewModel.intent(WriteBakeryReviewIntent.ChangeRating(rating = rating)) },
         onDeletePhotoClick = { index -> viewModel.intent(WriteBakeryReviewIntent.DeletePhoto(index = index)) },
         onPrivateCheck = { checked -> viewModel.intent(WriteBakeryReviewIntent.CheckPrivate(checked = checked)) },
-        onSubmit = { viewModel.intent(WriteBakeryReviewIntent.CompleteWrite) }
+        onSubmit = {
+            keyboardController?.hide()
+            viewModel.intent(WriteBakeryReviewIntent.CompleteWrite)
+        }
     )
 }

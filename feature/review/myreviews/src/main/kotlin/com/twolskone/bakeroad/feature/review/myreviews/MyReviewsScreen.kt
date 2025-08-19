@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.review.myreviews
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -16,10 +18,14 @@ import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.ui.EmptyCard
+import com.twolskone.bakeroad.feature.review.myreviews.component.MyReviewCard
+import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsState
 
 @Composable
 internal fun MyReviewsScreen(
     modifier: Modifier = Modifier,
+    state: MyReviewsState,
     onBackClick: () -> Unit
 ) {
     Column(
@@ -39,21 +45,32 @@ internal fun MyReviewsScreen(
             },
             title = { Text(text = stringResource(id = R.string.feature_review_myreviews)) }
         )
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .padding(top = 20.dp, bottom = 16.dp),
-            text = stringResource(id = R.string.feature_review_myreviews),
-            style = BakeRoadTheme.typography.bodyLargeSemibold
-        )
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(bottom = 20.dp)
+            contentPadding = PaddingValues(vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-
+            if (state.paging.list.isNotEmpty()) {
+                items(
+                    items = state.paging.list,
+                    key = { review -> review.id }
+                ) {
+                    MyReviewCard(
+                        review = it,
+                        onLikeClick = { id, isLike -> }
+                    )
+                }
+            } else {
+                item {
+                    EmptyCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        description = stringResource(R.string.feature_review_myreviews_empty_review)
+                    )
+                }
+            }
         }
     }
 }

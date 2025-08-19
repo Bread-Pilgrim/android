@@ -6,6 +6,8 @@ import com.twolskone.bakeroad.core.remote.api.UserApi
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
 import com.twolskone.bakeroad.core.remote.model.emitData
 import com.twolskone.bakeroad.core.remote.model.emitUnit
+import com.twolskone.bakeroad.core.remote.model.toData
+import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.user.UserOnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.UserPreferencesRequest
 import javax.inject.Inject
@@ -26,4 +28,9 @@ internal class UserDataSourceImpl @Inject constructor(
     override fun patchPreferences(request: UserPreferencesRequest): Flow<Unit> = flow {
         emitUnit(api.patchPreferences(request))
     }.flowOn(networkDispatcher)
+
+    override suspend fun getMyReviews(pageNo: Int, pageSize: Int): MyBakeryReviewsResponse {
+        val response = api.getMyReviews(pageNo = pageNo, pageSize = pageSize)
+        return response.toData()
+    }
 }

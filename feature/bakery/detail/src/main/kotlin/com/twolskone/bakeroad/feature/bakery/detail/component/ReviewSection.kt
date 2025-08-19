@@ -136,7 +136,7 @@ internal fun LazyListScope.review(
             } else {
                 items(
                     count = myReviewPaging.itemCount,
-                    key = reviewPaging.itemKey { it.id }
+                    key = myReviewPaging.itemKey { it.id }
                 ) { index ->
                     myReviewPaging[index]?.let { review ->
                         ReviewCard(

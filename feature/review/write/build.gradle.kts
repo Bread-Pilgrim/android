@@ -9,4 +9,5 @@ android {
 dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.timber)
+    implementation(libs.lottie.compose)
 }

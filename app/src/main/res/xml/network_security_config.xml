@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">tong.visitkorea.or.kr</domain>
         <domain includeSubdomains="true">k.kakaocdn.net</domain>
+        <domain includeSubdomains="true">img1.kakaocdn.net</domain>
     </domain-config>
 </network-security-config>

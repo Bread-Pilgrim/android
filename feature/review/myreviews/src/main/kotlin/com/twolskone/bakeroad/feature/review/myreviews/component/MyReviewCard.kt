@@ -39,7 +39,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.MyBakeryReview
 
 private val CardShape = RoundedCornerShape(12.dp)
 private val CardPadding = 12.dp
@@ -48,7 +48,7 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
 @Composable
 internal fun MyReviewCard(
     modifier: Modifier = Modifier,
-    review: BakeryReview,
+    review: MyBakeryReview,
     onLikeClick: (Int, Boolean) -> Unit
 ) {
     val likeColor by animateColorAsState(
@@ -80,7 +80,7 @@ internal fun MyReviewCard(
                 // 빵집 이름
                 Text(
                     modifier = Modifier,
-                    text = "서라당",
+                    text = review.bakeryName,
                     style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
                 )
                 // 별점
@@ -186,12 +186,10 @@ private fun ReviewCardPreview() {
     BakeRoadTheme {
         MyReviewCard(
             modifier = Modifier.fillMaxWidth(),
-            review = BakeryReview(
+            review = MyBakeryReview(
                 id = 1,
-                avgRating = 4.7f,
-                totalCount = 0,
-                userName = "서빵글",
-                profileUrl = "",
+                bakeryId = 1,
+                bakeryName = "서라당",
                 isLike = false,
                 content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
                 rating = 5.0f,

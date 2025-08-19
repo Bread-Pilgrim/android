@@ -30,6 +30,7 @@ kakao = "2.21.6"
 gson = "2.13.1"
 protobuf = "4.31.1"
 protobufPlugin = "0.9.5"
+lottie = "6.6.6"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -92,6 +93,7 @@ coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
 coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 kakao-auth = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
+lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

@@ -20,6 +20,7 @@ internal fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
+    navigateToMyReviews: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     goBack: () -> Unit
 ) {
@@ -44,7 +45,7 @@ internal fun MyPageRoute(
             when (menu) {
                 Menu.Report -> navigateToReport()
                 Menu.Badge -> TODO()
-                Menu.Review -> TODO()
+                Menu.Review -> navigateToMyReviews()
                 Menu.Preference -> navigateToEditPreference(changePreferenceLauncher)
             }
         }

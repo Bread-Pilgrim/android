@@ -11,8 +11,10 @@ class MyReviewsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SystemBarColorTheme(lightTheme = true)
+            MyReviewRoute()
         }
     }
 }

@@ -24,6 +24,7 @@ internal fun BakeRoadNavHost(
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
+    navigateToMyReviews: () -> Unit,
     openBrowser: (url: String) -> Unit,
     goBack: () -> Unit
 ) {
@@ -54,6 +55,7 @@ internal fun BakeRoadNavHost(
             navigateToSettings = navigateToSettings,
             navigateToReport = navigateToReport,
             navigateToEditPreference = navigateToEditPreference,
+            navigateToMyReviews = navigateToMyReviews,
             goBack = goBack
         )
     }

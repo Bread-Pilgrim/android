@@ -74,15 +74,13 @@ internal class HomeViewModel @Inject constructor(
                         }.add(intent.areaCode)
                     }
 
-                    (originAreaCodes.size > 1) -> {
-                        originAreaCodes.remove(intent.areaCode)
-                    }
+                    (originAreaCodes.size > 1) -> originAreaCodes.remove(intent.areaCode)
 
-                    else -> {
-                        originAreaCodes
-                    }
+                    else -> originAreaCodes
                 }
-                areaTrigger.tryEmit(Unit)
+                if (originAreaCodes != selectedAreaCodes) {
+                    areaTrigger.tryEmit(Unit)
+                }
                 copy(selectedAreaCodes = selectedAreaCodes)
             }
 
@@ -93,7 +91,9 @@ internal class HomeViewModel @Inject constructor(
                     (originTourCategories.size > 1) -> originTourCategories.remove(intent.category)
                     else -> originTourCategories
                 }
-                tourAreaCategoryTrigger.tryEmit(Unit)
+                if (originTourCategories != selectedTourCategories) {
+                    tourAreaCategoryTrigger.tryEmit(Unit)
+                }
                 copy(selectedTourAreaCategories = selectedTourCategories)
             }
 
@@ -163,9 +163,14 @@ internal class HomeViewModel @Inject constructor(
      * - 같이 가볼만한 관광지
      */
     private fun refreshAll() {
-        refreshPreferenceBakeries()
-        refreshHotBakeries()
-        refreshTourAreas()
+        launch {
+            reduce { copy(loadingState = loadingState.copy(allLoading = true)) }
+            val preferenceBakeriesJob = refreshPreferenceBakeries()
+            val hotBakeriesJob = refreshHotBakeries()
+            val tourAreasJob = refreshTourAreas()
+            joinAll(preferenceBakeriesJob, hotBakeriesJob, tourAreasJob)
+            reduce { copy(loadingState = loadingState.copy(allLoading = false)) }
+        }
     }
 
     /**

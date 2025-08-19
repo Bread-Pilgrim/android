@@ -27,6 +27,7 @@ internal data class HomeState(
 
 @Immutable
 internal data class LoadingState(
+    val allLoading: Boolean = true,
     val areaLoading: Boolean = true,
     val preferenceBakeryLoading: Boolean = true,
     val hotBakeryLoading: Boolean = true,

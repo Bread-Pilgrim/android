@@ -145,7 +145,7 @@ internal fun HomeScreen(
         }
         // 내 취향 추천 빵집 제목
         item(contentType = "titleWithSeeAll") {
-            if (state.loadingState.preferenceBakeryLoading) {
+            if (state.loadingState.preferenceBakeryLoading && state.loadingState.allLoading) {
                 TitleSkeleton(
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
@@ -192,7 +192,7 @@ internal fun HomeScreen(
         }
         // Hot한 빵집 제목
         item(contentType = "titleWithSeeAll") {
-            if (state.loadingState.hotBakeryLoading) {
+            if (state.loadingState.hotBakeryLoading && state.loadingState.allLoading) {
                 TitleSkeleton(
                     modifier = Modifier
                         .padding(top = 28.dp)
@@ -241,7 +241,7 @@ internal fun HomeScreen(
         }
         // 주변 추천 관광지 제목
         item {
-            if (state.loadingState.tourAreaLoading) {
+            if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
                 TitleSkeleton(
                     modifier = Modifier
                         .padding(top = 28.dp)
@@ -262,7 +262,7 @@ internal fun HomeScreen(
         }
         // 관광지 카테고리 필터
         item {
-            if (state.loadingState.tourAreaLoading) {
+            if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
                 ChipsSkeleton(
                     modifier = Modifier
                         .padding(top = 16.dp, bottom = 2.dp)

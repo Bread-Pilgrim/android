@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadAlert
 import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.core.model.PreferenceOptionType
@@ -38,50 +39,52 @@ internal fun PreferenceOptionsRoute(
         }
     }
 
-    PreferenceOptionListScreen(
-        modifier = modifier,
-        state = state,
-        isEdit = viewModel.isEditPreference,
-        onOptionSelected = { selected, option ->
-            when (option.type) {
-                PreferenceOptionType.BREAD_TYPE -> viewModel.intent(OnboardingIntent.SelectBreadTypeOption(selected = selected, option = option))
-                PreferenceOptionType.FLAVOR -> viewModel.intent(OnboardingIntent.SelectFlavorOption(selected = selected, option = option))
-                PreferenceOptionType.ATMOSPHERE -> viewModel.intent(OnboardingIntent.SelectBakeryTypeOption(selected = selected, option = option))
-            }
-        },
-        onPreviousPage = { page ->
-            Timber.e("onPreviousPage :: page is $page")
-            if (page > 0) {
-                viewModel.intent(OnboardingIntent.MoveToPage(page = page))
-            } else if (viewModel.isEditPreference) {
-                showCancelAlert = true
-            } else {
-                finish()
-            }
-        },
-        onNextPage = { page -> viewModel.intent(OnboardingIntent.MoveToPage(page = page)) },
-        onComplete = {
-            if (viewModel.isEditPreference) {
-                viewModel.intent(OnboardingIntent.EditPreferences)
-            } else {
-                navigateToNicknameSettings()
-            }
-        }
-    )
-
-    if (showCancelAlert) {
-        BakeRoadAlert(
-            buttonType = PopupButton.SHORT,
-            title = stringResource(id = R.string.feature_onboarding_title_cancel_edit_preference),
-            content = stringResource(id = R.string.feature_onboarding_description_cancel_edit_preference),
-            primaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_exit),
-            secondaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_cancel),
-            onDismissRequest = { showCancelAlert = false },
-            onPrimaryAction = {
-                showCancelAlert = false
-                finish()
+    BaseComposable(baseViewModel = viewModel) {
+        PreferenceOptionListScreen(
+            modifier = modifier,
+            state = state,
+            isEdit = viewModel.isEditPreference,
+            onOptionSelected = { selected, option ->
+                when (option.type) {
+                    PreferenceOptionType.BREAD_TYPE -> viewModel.intent(OnboardingIntent.SelectBreadTypeOption(selected = selected, option = option))
+                    PreferenceOptionType.FLAVOR -> viewModel.intent(OnboardingIntent.SelectFlavorOption(selected = selected, option = option))
+                    PreferenceOptionType.ATMOSPHERE -> viewModel.intent(OnboardingIntent.SelectBakeryTypeOption(selected = selected, option = option))
+                }
             },
-            onSecondaryAction = { showCancelAlert = false }
+            onPreviousPage = { page ->
+                Timber.e("onPreviousPage :: page is $page")
+                if (page > 0) {
+                    viewModel.intent(OnboardingIntent.MoveToPage(page = page))
+                } else if (viewModel.isEditPreference) {
+                    showCancelAlert = true
+                } else {
+                    finish()
+                }
+            },
+            onNextPage = { page -> viewModel.intent(OnboardingIntent.MoveToPage(page = page)) },
+            onComplete = {
+                if (viewModel.isEditPreference) {
+                    viewModel.intent(OnboardingIntent.EditPreferences)
+                } else {
+                    navigateToNicknameSettings()
+                }
+            }
         )
+
+        if (showCancelAlert) {
+            BakeRoadAlert(
+                buttonType = PopupButton.SHORT,
+                title = stringResource(id = R.string.feature_onboarding_title_cancel_edit_preference),
+                content = stringResource(id = R.string.feature_onboarding_description_cancel_edit_preference),
+                primaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_exit),
+                secondaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_cancel),
+                onDismissRequest = { showCancelAlert = false },
+                onPrimaryAction = {
+                    showCancelAlert = false
+                    finish()
+                },
+                onSecondaryAction = { showCancelAlert = false }
+            )
+        }
     }
 }

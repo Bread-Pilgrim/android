@@ -21,7 +21,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
-import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.feature.search.mvi.SearchIntent
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
@@ -75,31 +74,29 @@ internal fun SearchRoute(
 
     resultPagingItems.ObserveError(viewModel = viewModel)
 
-    BaseComposable(baseViewModel = viewModel) {
-        SearchScreen(
-            padding = padding,
-            state = state,
-            queryTextState = queryTextState,
-            interactionSource = interactionSource,
-            resultPagingItems = resultPagingItems,
-            onCancelClick = {
-                focusManager.clearFocus()
-                queryTextState.clearText()
-                viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
-            },
-            onSearch = { query ->
-                focusManager.clearFocus()
-                keyboardController?.hide()
-                viewModel.intent(SearchIntent.SearchBakery(query = query))
-                viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.SearchResult))
-            },
-            onDeleteQueryClick = { query -> viewModel.intent(SearchIntent.DeleteQuery(query = query)) },
-            onDeleteAllQueriesClick = { viewModel.intent(SearchIntent.DeleteAllQueries) },
-            onSearchResultClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
-            onClearQueriesClick = {
-                queryTextState.clearText()
-                viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))
-            }
-        )
-    }
+    SearchScreen(
+        padding = padding,
+        state = state,
+        queryTextState = queryTextState,
+        interactionSource = interactionSource,
+        resultPagingItems = resultPagingItems,
+        onCancelClick = {
+            focusManager.clearFocus()
+            queryTextState.clearText()
+            viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
+        },
+        onSearch = { query ->
+            focusManager.clearFocus()
+            keyboardController?.hide()
+            viewModel.intent(SearchIntent.SearchBakery(query = query))
+            viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.SearchResult))
+        },
+        onDeleteQueryClick = { query -> viewModel.intent(SearchIntent.DeleteQuery(query = query)) },
+        onDeleteAllQueriesClick = { viewModel.intent(SearchIntent.DeleteAllQueries) },
+        onSearchResultClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
+        onClearQueriesClick = {
+            queryTextState.clearText()
+            viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))
+        }
+    )
 }

@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.isRouteInHierarchy
 import com.twolskone.bakeroad.feature.onboard.OnboardingViewModel
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingSideEffect
@@ -34,29 +33,27 @@ internal fun OnBoardingNavHost(
         }
     }
 
-    BaseComposable(baseViewModel = viewModel) {
-        NavHost(
-            modifier = modifier,
-            navController = navController,
-            startDestination = PreferenceRoute,
-        ) {
-            // 취향 설정
-            preferenceOptionsScreen(
-                viewModel = viewModel,
-                navigateToNicknameSettings = navController::navigateToNicknameSettings,
-                finish = finish
-            )
-            // 닉네임 설정
-            nicknameSettingsScreen(
-                viewModel = viewModel,
-                onBackClick = {
-                    val canBack = navController.currentDestination.isRouteInHierarchy(route = NicknameSettingsRoute::class)
-                    if (canBack) {
+    NavHost(
+        modifier = modifier,
+        navController = navController,
+        startDestination = PreferenceRoute,
+    ) {
+        // 취향 설정
+        preferenceOptionsScreen(
+            viewModel = viewModel,
+            navigateToNicknameSettings = navController::navigateToNicknameSettings,
+            finish = finish
+        )
+        // 닉네임 설정
+        nicknameSettingsScreen(
+            viewModel = viewModel,
+            onBackClick = {
+                val canBack = navController.currentDestination.isRouteInHierarchy(route = NicknameSettingsRoute::class)
+                if (canBack) {
 //                    navController.navigateToPreferenceOptions()
-                        navController.popBackStack()
-                    }
+                    navController.popBackStack()
                 }
-            )
-        }
+            }
+        )
     }
 }

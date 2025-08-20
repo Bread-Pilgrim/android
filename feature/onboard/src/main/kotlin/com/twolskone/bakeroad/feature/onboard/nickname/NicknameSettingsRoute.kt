@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.feature.onboard.OnboardingViewModel
 import com.twolskone.bakeroad.feature.onboard.R
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingIntent
@@ -35,12 +36,14 @@ internal fun NicknameSettingsRoute(
         viewModel.intent(OnboardingIntent.UpdateNicknameText(text = nicknameTextState.text.toString()))
     }
 
-    NicknameSettingsScreen(
-        modifier = modifier,
-        nicknameTextState = nicknameTextState,
-        description = description,
-        isLoading = state.isLoading,
-        onBackClick = onBackClick,
-        onStartClick = { viewModel.intent(OnboardingIntent.StartBakeRoad) }
-    )
+    BaseComposable(baseViewModel = viewModel) {
+        NicknameSettingsScreen(
+            modifier = modifier,
+            nicknameTextState = nicknameTextState,
+            description = description,
+            isLoading = state.isLoading,
+            onBackClick = onBackClick,
+            onStartClick = { viewModel.intent(OnboardingIntent.StartBakeRoad) }
+        )
+    }
 }

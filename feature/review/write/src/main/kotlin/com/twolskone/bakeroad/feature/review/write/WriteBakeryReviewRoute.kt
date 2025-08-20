@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.util.fastFilteredMap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.util.FileUtil
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewIntent
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewSideEffect
@@ -70,22 +71,24 @@ internal fun WriteBakeryReviewRoute(
         }
     }
 
-    WriteBakeryReviewScreen(
-        modifier = modifier,
-        state = state,
-        contentTextState = contentTextState,
-        onAddPhotoClick = {
-            // Image picker does not require special permissions and can be activated right away.
-            val mediaRequest = PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-            imagePickerLauncher.launch(mediaRequest)
-        },
-        onBackClick = onBackClick,
-        onRatingChange = { rating -> viewModel.intent(WriteBakeryReviewIntent.ChangeRating(rating = rating)) },
-        onDeletePhotoClick = { index -> viewModel.intent(WriteBakeryReviewIntent.DeletePhoto(index = index)) },
-        onPrivateCheck = { checked -> viewModel.intent(WriteBakeryReviewIntent.CheckPrivate(checked = checked)) },
-        onSubmit = {
-            keyboardController?.hide()
-            viewModel.intent(WriteBakeryReviewIntent.CompleteWrite)
-        }
-    )
+    BaseComposable(baseViewModel = viewModel) {
+        WriteBakeryReviewScreen(
+            modifier = modifier,
+            state = state,
+            contentTextState = contentTextState,
+            onAddPhotoClick = {
+                // Image picker does not require special permissions and can be activated right away.
+                val mediaRequest = PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                imagePickerLauncher.launch(mediaRequest)
+            },
+            onBackClick = onBackClick,
+            onRatingChange = { rating -> viewModel.intent(WriteBakeryReviewIntent.ChangeRating(rating = rating)) },
+            onDeletePhotoClick = { index -> viewModel.intent(WriteBakeryReviewIntent.DeletePhoto(index = index)) },
+            onPrivateCheck = { checked -> viewModel.intent(WriteBakeryReviewIntent.CheckPrivate(checked = checked)) },
+            onSubmit = {
+                keyboardController?.hide()
+                viewModel.intent(WriteBakeryReviewIntent.CompleteWrite)
+            }
+        )
+    }
 }

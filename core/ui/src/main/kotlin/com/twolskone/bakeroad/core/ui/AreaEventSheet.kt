@@ -154,7 +154,7 @@ fun AreaEventSheet(
                     BakeRoadOutlinedButton(
                         modifier = Modifier.weight(1f),
                         role = OutlinedButtonRole.ASSISTIVE,
-                        size = ButtonSize.MEDIUM,
+                        size = ButtonSize.LARGE,
                         onClick = {
                             coroutineScope.launch { sheetState.hide() }
                             onSecondaryAction()
@@ -164,7 +164,7 @@ fun AreaEventSheet(
                     BakeRoadSolidButton(
                         modifier = Modifier.weight(1f),
                         role = SolidButtonRole.PRIMARY,
-                        size = ButtonSize.MEDIUM,
+                        size = ButtonSize.LARGE,
                         onClick = {
                             coroutineScope.launch { sheetState.hide() }
                             onPrimaryAction(areaEvent.link)

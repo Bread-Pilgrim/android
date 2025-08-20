@@ -12,7 +12,7 @@
     <string name="core_ui_button_sort">정렬</string>
     <string name="core_ui_button_preference_change">내 취향 변경</string>
     <string name="core_ui_button_close">닫기</string>
-    <string name="core_ui_button_dismiss_today">오늘 하루 보지 않기</string>
+    <string name="core_ui_button_dismiss_today">오늘 안보기</string>
     <string name="core_ui_button_see_details">자세히 보기</string>
     <string name="core_ui_label_bakery_open_status_open">영업중</string>
     <string name="core_ui_label_bakery_open_status_closed">영업종료</string>

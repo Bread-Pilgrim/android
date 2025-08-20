@@ -87,8 +87,8 @@ internal class MyReviewsViewModel @Inject constructor(
                 Timber.i("xxx MyReviewsPaging is loading or last page.")
                 return@launch
             }
-            reduce { copy(paging = paging.copy(isLoading = true)) }
-            val nextPaging = getMyBakeryReviewsUseCase(page = startPage)
+            reduce { copy(paging = paging.copy(isLoading = refresh)) }
+            val nextPaging = getMyBakeryReviewsUseCase(page = if (refresh) startPage else state.value.paging.nextPage)
             reduce {
                 copy(
                     paging = if (refresh) {

@@ -41,6 +41,7 @@ internal fun MyReviewRoute(
     BaseComposable(baseViewModel = viewModel) {
         MyReviewsScreen(
             state = state,
+            listState = listState,
             onBackClick = finish,
             onLikeClick = { id, isLike -> viewModel.intent(MyReviewsIntent.ClickLike(id = id, isLike = isLike)) }
         )

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +27,7 @@ import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsState
 internal fun MyReviewsScreen(
     modifier: Modifier = Modifier,
     state: MyReviewsState,
+    listState: LazyListState,
     onBackClick: () -> Unit,
     onLikeClick: (Int, Boolean) -> Unit
 ) {
@@ -55,12 +57,13 @@ internal fun MyReviewsScreen(
                     .weight(1f)
                     .padding(horizontal = 16.dp),
                 contentPadding = PaddingValues(vertical = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                state = listState
             ) {
                 if (state.paging.list.isNotEmpty()) {
                     items(
                         items = state.paging.list,
-                        key = { review -> review.id }
+//                        key = { review -> review.id }
                     ) {
                         MyReviewCard(
                             review = it,

@@ -1,6 +1,5 @@
 package com.twolskone.bakeroad.feature.onboard.preference
 
-import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -24,8 +23,7 @@ internal fun PreferenceOptionsRoute(
     modifier: Modifier = Modifier,
     viewModel: OnboardingViewModel = hiltViewModel(),
     navigateToNicknameSettings: () -> Unit,
-    finish: () -> Unit,
-    setResult: (code: Int, withFinish: Boolean) -> Unit
+    finish: () -> Unit
 ) {
     val state = viewModel.state.collectAsStateWithLifecycle().value.preferenceOptionsState
     var showCancelAlert by remember { mutableStateOf(false) }
@@ -49,7 +47,6 @@ internal fun PreferenceOptionsRoute(
                 PreferenceOptionType.BREAD_TYPE -> viewModel.intent(OnboardingIntent.SelectBreadTypeOption(selected = selected, option = option))
                 PreferenceOptionType.FLAVOR -> viewModel.intent(OnboardingIntent.SelectFlavorOption(selected = selected, option = option))
                 PreferenceOptionType.ATMOSPHERE -> viewModel.intent(OnboardingIntent.SelectBakeryTypeOption(selected = selected, option = option))
-                PreferenceOptionType.COMMERCIAL_AREA -> viewModel.intent(OnboardingIntent.SelectCommercialAreaOption(selected = selected, option = option))
             }
         },
         onPreviousPage = { page ->
@@ -65,7 +62,7 @@ internal fun PreferenceOptionsRoute(
         onNextPage = { page -> viewModel.intent(OnboardingIntent.MoveToPage(page = page)) },
         onComplete = {
             if (viewModel.isEditPreference) {
-                setResult(Activity.RESULT_OK, true)
+                viewModel.intent(OnboardingIntent.EditPreferences)
             } else {
                 navigateToNicknameSettings()
             }

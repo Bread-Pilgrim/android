@@ -9,8 +9,7 @@ internal fun PreferenceOptionsResponse.toExternalModel(): PreferenceOptions =
     PreferenceOptions(
         flavors = flavors.map { flavor -> flavor.toExternalModel(type = PreferenceOptionType.FLAVOR) },
         breadTypes = breadTypes.map { breadType -> breadType.toExternalModel(type = PreferenceOptionType.BREAD_TYPE) },
-        atmospheres = atmospheres.map { atmosphere -> atmosphere.toExternalModel(type = PreferenceOptionType.ATMOSPHERE) },
-        commercialAreas = commercialAreas.map { commercialArea -> commercialArea.toExternalModel(type = PreferenceOptionType.COMMERCIAL_AREA) }
+        atmospheres = atmospheres.map { atmosphere -> atmosphere.toExternalModel(type = PreferenceOptionType.ATMOSPHERE) }
     )
 
 private fun PreferenceOptionsResponse.Option.toExternalModel(type: PreferenceOptionType): PreferenceOption =

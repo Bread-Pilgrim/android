@@ -8,8 +8,9 @@ import com.twolskone.bakeroad.core.remote.model.emitData
 import com.twolskone.bakeroad.core.remote.model.emitUnit
 import com.twolskone.bakeroad.core.remote.model.toData
 import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewsResponse
-import com.twolskone.bakeroad.core.remote.model.user.UserOnboardingRequest
-import com.twolskone.bakeroad.core.remote.model.user.UserPreferencesRequest
+import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
+import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
+import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -21,11 +22,11 @@ internal class UserDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : UserDataSource {
 
-    override fun postOnboarding(request: UserOnboardingRequest): Flow<String> = flow {
+    override fun postOnboarding(request: OnboardingRequest): Flow<String> = flow {
         emitData(api.postOnboarding(request = request))
     }.flowOn(networkDispatcher)
 
-    override fun patchPreferences(request: UserPreferencesRequest): Flow<Unit> = flow {
+    override fun patchPreferences(request: PreferencesPatchRequest): Flow<Unit> = flow {
         emitUnit(api.patchPreferences(request))
     }.flowOn(networkDispatcher)
 
@@ -33,4 +34,8 @@ internal class UserDataSourceImpl @Inject constructor(
         val response = api.getMyReviews(pageNo = pageNo, pageSize = pageSize)
         return response.toData()
     }
+
+    override fun getPreferences(): Flow<PreferencesGetResponse> = flow {
+        emitData(api.getPreferences())
+    }.flowOn(networkDispatcher)
 }

@@ -29,6 +29,7 @@ internal fun OnBoardingNavHost(
         viewModel.sideEffect.collect {
             when (it) {
                 OnboardingSideEffect.NavigateToMain -> navigateToMain()
+                is OnboardingSideEffect.SetResult -> setResult(it.code, it.withFinish)
             }
         }
     }
@@ -43,8 +44,7 @@ internal fun OnBoardingNavHost(
             preferenceOptionsScreen(
                 viewModel = viewModel,
                 navigateToNicknameSettings = navController::navigateToNicknameSettings,
-                finish = finish,
-                setResult = setResult
+                finish = finish
             )
             // 닉네임 설정
             nicknameSettingsScreen(

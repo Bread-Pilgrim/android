@@ -4,4 +4,5 @@ import com.twolskone.bakeroad.core.common.android.base.BaseUiSideEffect
 
 internal sealed interface OnboardingSideEffect : BaseUiSideEffect {
     data object NavigateToMain : OnboardingSideEffect
+    data class SetResult(val code: Int, val withFinish: Boolean) : OnboardingSideEffect
 }

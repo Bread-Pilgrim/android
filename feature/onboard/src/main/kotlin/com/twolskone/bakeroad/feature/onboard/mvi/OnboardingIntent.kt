@@ -7,8 +7,8 @@ internal sealed interface OnboardingIntent : BaseUiIntent {
     data class SelectBreadTypeOption(val selected: Boolean, val option: PreferenceOption) : OnboardingIntent
     data class SelectFlavorOption(val selected: Boolean, val option: PreferenceOption) : OnboardingIntent
     data class SelectBakeryTypeOption(val selected: Boolean, val option: PreferenceOption) : OnboardingIntent
-    data class SelectCommercialAreaOption(val selected: Boolean, val option: PreferenceOption) : OnboardingIntent
     data class MoveToPage(val page: Int) : OnboardingIntent
     data class UpdateNicknameText(val text: String) : OnboardingIntent
     data object StartBakeRoad : OnboardingIntent
+    data object EditPreferences : OnboardingIntent
 }

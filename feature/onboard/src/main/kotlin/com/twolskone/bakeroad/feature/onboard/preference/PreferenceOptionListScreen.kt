@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
@@ -80,6 +82,13 @@ internal fun PreferenceOptionListScreen(
             onPreviousPage = onPreviousPage,
             onNextPage = onNextPage,
             onComplete = onComplete
+        )
+    }
+
+    if (state.loading) {
+        BakeRoadLoadingScreen(
+            modifier = Modifier.fillMaxSize(),
+            type = LoadingType.Default
         )
     }
 }

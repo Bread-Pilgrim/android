@@ -5,13 +5,11 @@ package com.twolskone.bakeroad.core.model
  * @param breadTypes        빵 종류
  * @param flavors           빵 맛
  * @param atmospheres       빵집 분위기
- * @param commercialAreas   상권지역
  */
 data class PreferenceOptions(
     val flavors: List<PreferenceOption>,
     val breadTypes: List<PreferenceOption>,
-    val atmospheres: List<PreferenceOption>,
-    val commercialAreas: List<PreferenceOption>
+    val atmospheres: List<PreferenceOption>
 )
 
 /**
@@ -29,16 +27,13 @@ enum class PreferenceOptionType {
     BREAD_TYPE,         // 빵 종류
     FLAVOR,             // 빵 맛
     ATMOSPHERE,         // 빵집 분위기
-    COMMERCIAL_AREA     // 상권지역
 }
 
 /**
- * 선택된 빵 취향 옵션 목록
- * (ID 값)
+ * 빵 취향 옵션 ID 목록
  */
-data class SelectedPreferenceOptions(
+data class PreferenceOptionIds(
     val flavors: List<Int>,
     val breadTypes: List<Int>,
-    val atmospheres: List<Int>,
-    val commercialAreas: List<Int>
+    val atmospheres: List<Int>
 )

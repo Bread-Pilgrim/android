@@ -10,9 +10,7 @@ data class PreferenceOptionsResponse(
     @SerialName("flavor")
     val flavors: List<Option> = emptyList(),
     @SerialName("atmosphere")
-    val atmospheres: List<Option> = emptyList(),
-    @SerialName("c_area")
-    val commercialAreas: List<Option> = emptyList()
+    val atmospheres: List<Option> = emptyList()
 ) {
 
     @Serializable

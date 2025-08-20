@@ -7,16 +7,17 @@ import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
 import com.twolskone.bakeroad.core.datastore.CacheDataSource
 import com.twolskone.bakeroad.core.domain.repository.UserRepository
 import com.twolskone.bakeroad.core.model.MyBakeryReview
-import com.twolskone.bakeroad.core.model.SelectedPreferenceOptions
+import com.twolskone.bakeroad.core.model.PreferenceOptionIds
 import com.twolskone.bakeroad.core.model.paging.Paging
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
-import com.twolskone.bakeroad.core.remote.model.user.UserOnboardingRequest
-import com.twolskone.bakeroad.core.remote.model.user.UserPreferencesRequest
+import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
+import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 
 internal class UserRepositoryImpl @Inject constructor(
     private val cacheDataSource: CacheDataSource,
@@ -32,19 +33,18 @@ internal class UserRepositoryImpl @Inject constructor(
         cacheDataSource.setOnboardingCompleted(value)
     }
 
-    override fun postOnboarding(nickname: String, selectedPreferenceOptions: SelectedPreferenceOptions): Flow<String> {
-        val request = UserOnboardingRequest(
+    override fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<String> {
+        val request = OnboardingRequest(
             nickname = nickname,
             breadTypes = selectedPreferenceOptions.breadTypes,
             flavors = selectedPreferenceOptions.flavors,
-            atmospheres = selectedPreferenceOptions.atmospheres,
-            commercialAreas = selectedPreferenceOptions.commercialAreas
+            atmospheres = selectedPreferenceOptions.atmospheres
         )
         return userDataSource.postOnboarding(request = request)
     }
 
     override fun patchPreferences(addPreferences: List<Int>, deletePreferences: List<Int>): Flow<Unit> {
-        val request = UserPreferencesRequest(addPreferences = addPreferences, deletePreferences = deletePreferences)
+        val request = PreferencesPatchRequest(addPreferences = addPreferences, deletePreferences = deletePreferences)
         return userDataSource.patchPreferences(request)
     }
 
@@ -57,4 +57,15 @@ internal class UserRepositoryImpl @Inject constructor(
         )
         emit(paging)
     }.flowOn(networkDispatcher)
+
+    override fun getPreferences(): Flow<PreferenceOptionIds> {
+        return userDataSource.getPreferences()
+            .map { response ->
+                PreferenceOptionIds(
+                    flavors = response.flavors.map { it.preferenceId },
+                    breadTypes = response.breadTypes.map { it.preferenceId },
+                    atmospheres = response.atmospheres.map { it.preferenceId }
+                )
+            }
+    }
 }

@@ -17,15 +17,13 @@ internal fun NavController.navigateToPreferenceOptions(navOptions: NavOptions? =
 internal fun NavGraphBuilder.preferenceOptionsScreen(
     viewModel: OnboardingViewModel,
     navigateToNicknameSettings: () -> Unit,
-    finish: () -> Unit,
-    setResult: (Int, withFinish: Boolean) -> Unit
+    finish: () -> Unit
 ) {
     composable<PreferenceRoute> {
         PreferenceOptionsRoute(
             viewModel = viewModel,
             navigateToNicknameSettings = navigateToNicknameSettings,
-            finish = finish,
-            setResult = setResult
+            finish = finish
         )
     }
 }

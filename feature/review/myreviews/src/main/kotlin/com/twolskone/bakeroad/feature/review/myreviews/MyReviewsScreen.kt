@@ -26,7 +26,8 @@ import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsState
 internal fun MyReviewsScreen(
     modifier: Modifier = Modifier,
     state: MyReviewsState,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onLikeClick: (Int, Boolean) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -45,30 +46,34 @@ internal fun MyReviewsScreen(
             },
             title = { Text(text = stringResource(id = R.string.feature_review_myreviews)) }
         )
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-                .padding(horizontal = 16.dp),
-            contentPadding = PaddingValues(vertical = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
-            if (state.paging.list.isNotEmpty()) {
-                items(
-                    items = state.paging.list,
-                    key = { review -> review.id }
-                ) {
-                    MyReviewCard(
-                        review = it,
-                        onLikeClick = { id, isLike -> }
-                    )
-                }
-            } else {
-                item {
-                    EmptyCard(
-                        modifier = Modifier.fillMaxWidth(),
-                        description = stringResource(R.string.feature_review_myreviews_empty_review)
-                    )
+        if (state.paging.isLoading) {
+            // TODO. progress or skeleton
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+                    .padding(horizontal = 16.dp),
+                contentPadding = PaddingValues(vertical = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                if (state.paging.list.isNotEmpty()) {
+                    items(
+                        items = state.paging.list,
+                        key = { review -> review.id }
+                    ) {
+                        MyReviewCard(
+                            review = it,
+                            onLikeClick = onLikeClick
+                        )
+                    }
+                } else {
+                    item {
+                        EmptyCard(
+                            modifier = Modifier.fillMaxWidth(),
+                            description = stringResource(R.string.feature_review_myreviews_empty_review)
+                        )
+                    }
                 }
             }
         }

@@ -70,38 +70,30 @@ internal fun MyReviewCard(
         ),
         elevation = CardDefaults.cardElevation(0.dp),
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .padding(top = CardPadding, start = CardPadding, end = CardPadding)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth()
         ) {
-            Column(modifier = Modifier.weight(1f)) {
-                // 빵집 이름
-                Text(
-                    modifier = Modifier,
-                    text = review.bakeryName,
-                    style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
-                )
-                // 별점
-                Row(modifier = Modifier.padding(top = 4.dp)) {
-                    Image(
-                        modifier = Modifier.size(16.dp),
-                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
-                        contentDescription = "RatingStar"
-                    )
-                    Text(
-                        modifier = Modifier.padding(start = 4.dp),
-                        text = review.rating.toString(),
-                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
-                    )
-                }
-            }
-            Icon(
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_right_arrow),
-                contentDescription = "RightArrow",
-                tint = BakeRoadTheme.colorScheme.Gray500
+            // 빵집 이름
+            Text(
+                modifier = Modifier,
+                text = review.bakeryName,
+                style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
             )
+            // 별점
+            Row(modifier = Modifier.padding(top = 4.dp)) {
+                Image(
+                    modifier = Modifier.size(16.dp),
+                    imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
+                    contentDescription = "RatingStar"
+                )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    text = review.rating.toString(),
+                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
+                )
+            }
         }
         // 사진
         if (review.photos.isNotEmpty()) {

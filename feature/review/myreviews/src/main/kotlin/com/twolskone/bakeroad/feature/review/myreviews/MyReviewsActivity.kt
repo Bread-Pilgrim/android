@@ -14,7 +14,9 @@ class MyReviewsActivity : ComponentActivity() {
 
         setContent {
             SystemBarColorTheme(lightTheme = true)
-            MyReviewRoute()
+            MyReviewRoute(
+                finish = { finish() }
+            )
         }
     }
 }

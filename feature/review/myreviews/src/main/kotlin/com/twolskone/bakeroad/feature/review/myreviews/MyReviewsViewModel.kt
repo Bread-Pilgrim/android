@@ -3,6 +3,8 @@ package com.twolskone.bakeroad.feature.review.myreviews
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.review.DeleteReviewLikeUseCase
+import com.twolskone.bakeroad.core.domain.usecase.review.PostReviewLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.user.GetMyBakeryReviewsUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
@@ -17,7 +19,9 @@ import timber.log.Timber
 @HiltViewModel
 internal class MyReviewsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val getMyBakeryReviewsUseCase: GetMyBakeryReviewsUseCase
+    private val getMyBakeryReviewsUseCase: GetMyBakeryReviewsUseCase,
+    private val postReviewLikeUseCase: PostReviewLikeUseCase,
+    private val deleteReviewLikeUseCase: DeleteReviewLikeUseCase
 ) : BaseViewModel<MyReviewsState, MyReviewsIntent, MyReviewsSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): MyReviewsState {
@@ -48,6 +52,32 @@ internal class MyReviewsViewModel @Inject constructor(
     override suspend fun handleIntent(intent: MyReviewsIntent) {
         when (intent) {
             is MyReviewsIntent.GetMyReviews -> getMyReviews(refresh = intent.refresh)
+
+            is MyReviewsIntent.ClickLike -> {
+                val index = state.value.paging.list
+                    .indexOfFirst { it.id == intent.id }
+                    .takeIf { it >= 0 } ?: return
+                val review = state.value.paging.list[index]
+                val likeCount = review.likeCount.run { if (intent.isLike) plus(1) else minus(1) }
+                reduce {
+                    copy(
+                        paging = paging.copy(
+                            list = paging.list.set(
+                                index = index,
+                                element = review.copy(
+                                    isLike = intent.isLike,
+                                    likeCount = likeCount
+                                )
+                            )
+                        )
+                    )
+                }
+                if (intent.isLike) {
+                    postReviewLikeUseCase(reviewId = intent.id)
+                } else {
+                    deleteReviewLikeUseCase(reviewId = intent.id)
+                }
+            }
         }
     }
 

@@ -9,13 +9,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsIntent
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
 
 @Composable
 internal fun MyReviewRoute(
-    viewModel: MyReviewsViewModel = hiltViewModel()
+    viewModel: MyReviewsViewModel = hiltViewModel(),
+    finish: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
@@ -36,8 +38,11 @@ internal fun MyReviewRoute(
             }
     }
 
-    MyReviewsScreen(
-        state = state,
-        onBackClick = {}
-    )
+    BaseComposable(baseViewModel = viewModel) {
+        MyReviewsScreen(
+            state = state,
+            onBackClick = finish,
+            onLikeClick = { id, isLike -> viewModel.intent(MyReviewsIntent.ClickLike(id = id, isLike = isLike)) }
+        )
+    }
 }

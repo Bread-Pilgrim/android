@@ -157,7 +157,7 @@ internal fun LazyListScope.review(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillParentMaxHeight(fraction = 0.6f)
+                .fillParentMaxHeight(fraction = 0.65f)
                 .background(color = BakeRoadTheme.colorScheme.White)
         )
     }

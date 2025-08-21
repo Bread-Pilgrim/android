@@ -164,7 +164,8 @@ private fun ColumnScope.MyBakerySection(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp, horizontal = 10.dp),
+            .padding(top = 16.dp)
+            .padding(horizontal = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
@@ -185,7 +186,7 @@ private fun ColumnScope.MyBakerySection(
         BakeriesSkeleton(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp),
+                .padding(16.dp),
             verticalSpace = 16.dp
         )
     } else {
@@ -193,7 +194,7 @@ private fun ColumnScope.MyBakerySection(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
-            contentPadding = PaddingValues(horizontal = 16.dp),
+            contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             state = listState
         ) {

@@ -68,6 +68,16 @@ internal fun MyBakeryRoute(
     BackHandler { goBack() }
 
     LaunchedEffect(Unit) {
+        viewModel.mainEventBus.myBakeryReselectEvent.collect {
+            Timber.i("xxx collect myBakeryReselectEvent")
+            when (state.tab) {
+                Tab.VISITED -> visitedListState.animateScrollToItem(0)
+                Tab.LIKE -> likeListState.animateScrollToItem(0)
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
         snapshotFlow { isLastVisitedItemVisible }
             .distinctUntilChanged()
             .filter { it }

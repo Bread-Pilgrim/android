@@ -21,7 +21,7 @@ import timber.log.Timber
 @HiltViewModel
 internal class MyBakeryViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val mainEventBus: MainEventBus,
+    val mainEventBus: MainEventBus,
     private val getMyBakeriesUseCase: GetMyBakeriesUseCase
 ) : BaseViewModel<MyBakeryState, MyBakeryIntent, MyBakerySideEffect>(savedStateHandle) {
 

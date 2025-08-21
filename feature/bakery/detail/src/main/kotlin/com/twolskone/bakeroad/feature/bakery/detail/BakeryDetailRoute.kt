@@ -35,8 +35,7 @@ import timber.log.Timber
 internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel(),
     navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit,
-    setResult: (code: Int, intent: Intent?, withFinish: Boolean) -> Unit,
-    finish: () -> Unit
+    setResult: (code: Int, intent: Intent?, withFinish: Boolean) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val tabState by viewModel.tabState.collectAsStateWithLifecycle()
@@ -114,7 +113,16 @@ internal fun BakeryDetailRoute(
             onWriteReviewClick = { viewModel.intent(BakeryDetailIntent.CheckReviewEligibility) },
             onBakeryLikeClick = { isLike -> viewModel.intent(BakeryDetailIntent.ClickBakeryLike(isLike = isLike)) },
             onReviewLikeClick = { id, isLike -> viewModel.intent(BakeryDetailIntent.ClickReviewLike(reviewId = id, isLike = isLike)) },
-            onBackClick = finish
+            onBackClick = {
+                setResult(
+                    RESULT_REFRESH_BAKERY_LIST,
+                    Intent().apply {
+                        putExtra(KEY_BAKERY_ID, viewModel.bakeryId)
+                        state.bakeryInfo?.let { putExtra(KEY_BAKERY_LIKE, it.isLike) }
+                    },
+                    true
+                )
+            }
         )
     }
 }

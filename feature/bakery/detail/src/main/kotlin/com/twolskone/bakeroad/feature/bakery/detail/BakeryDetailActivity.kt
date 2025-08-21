@@ -36,8 +36,7 @@ internal class BakeryDetailActivity : ComponentActivity() {
                             setResult(code)
                         }
                         if (finish) finish()
-                    },
-                    finish = { finish() }
+                    }
                 )
             }
         }

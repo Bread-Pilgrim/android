@@ -74,7 +74,7 @@ internal enum class BakeRoadDestination(
         },
         selectedIcon = {
             Icon(
-                imageVector = ImageVector.vectorResource(id = myBakeryR.drawable.feature_mybakery_ic_menu_stroke),
+                imageVector = ImageVector.vectorResource(id = myBakeryR.drawable.feature_mybakery_ic_menu_fill),
                 contentDescription = "MyBakerySelected"
             )
         },

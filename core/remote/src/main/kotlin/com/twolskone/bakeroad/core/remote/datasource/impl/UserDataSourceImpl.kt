@@ -11,6 +11,7 @@ import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
+import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -37,5 +38,9 @@ internal class UserDataSourceImpl @Inject constructor(
 
     override fun getPreferences(): Flow<PreferencesGetResponse> = flow {
         emitData(api.getPreferences())
+    }.flowOn(networkDispatcher)
+
+    override fun getProfile(): Flow<ProfileResponse> = flow {
+        emitData(api.getProfile())
     }.flowOn(networkDispatcher)
 }

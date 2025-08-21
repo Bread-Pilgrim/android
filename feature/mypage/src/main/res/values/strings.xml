@@ -6,4 +6,5 @@
     <string name="feature_mypage_received_badge">받은 뱃지</string>
     <string name="feature_mypage_my_review">내가 쓴 리뷰</string>
     <string name="feature_mypage_change_preference">취향 변경</string>
+    <string name="feature_mypage_label_empty_badge">대표뱃지 없음</string>
 </resources>

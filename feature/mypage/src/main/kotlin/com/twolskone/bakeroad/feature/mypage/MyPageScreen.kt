@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.feature.mypage
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +39,7 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.Profile
 import com.twolskone.bakeroad.core.ui.ProfileImage
 import com.twolskone.bakeroad.feature.mypage.model.Menu
 import com.twolskone.bakeroad.feature.mypage.mvi.MyPageState
@@ -80,7 +82,8 @@ internal fun MyPageScreen(
             ProfileSection(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = 16.dp),
+                profile = state.profile
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -94,7 +97,10 @@ internal fun MyPageScreen(
 }
 
 @Composable
-private fun ProfileSection(modifier: Modifier = Modifier) {
+private fun ProfileSection(
+    modifier: Modifier = Modifier,
+    profile: Profile
+) {
     Row(
         modifier = modifier
             .background(color = BakeRoadTheme.colorScheme.Gray40, shape = MyPageSectionShape)
@@ -104,36 +110,53 @@ private fun ProfileSection(modifier: Modifier = Modifier) {
     ) {
         ProfileImage(
             size = 56.dp,
-            profileUrl = ""
+            profileUrl = profile.imageUrl
         )
         Column(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             Text(
-                text = "김빵글",
+                text = profile.nickname,
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(
-                    text = "대표뱃지 미설정",
-                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray600)
-                )
-                BakeRoadTextButton(
-                    style = TextButtonStyle.ASSISTIVE,
-                    size = TextButtonSize.SMALL,
-                    onClick = {},
-                    content = {
-                        Text(
-                            text = stringResource(id = R.string.feature_mypage_button_badge_settings),
-                            style = BakeRoadTheme.typography.bodySmallSemibold.copy(textDecoration = TextDecoration.Underline)
-                        )
-                    }
-                )
+            if (profile.badgeName.isEmpty()) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.feature_mypage_label_empty_badge),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray600)
+                    )
+                    BakeRoadTextButton(
+                        style = TextButtonStyle.ASSISTIVE,
+                        size = TextButtonSize.SMALL,
+                        onClick = {},
+                        content = {
+                            Text(
+                                text = stringResource(id = R.string.feature_mypage_button_badge_settings),
+                                style = BakeRoadTheme.typography.bodySmallSemibold.copy(textDecoration = TextDecoration.Underline)
+                            )
+                        }
+                    )
+                }
+            } else {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_badge),
+                        contentDescription = "Badge"
+                    )
+                    Text(
+                        text = profile.badgeName,
+                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray600)
+                    )
+                }
             }
         }
     }

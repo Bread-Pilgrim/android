@@ -8,6 +8,7 @@ import com.twolskone.bakeroad.core.datastore.CacheDataSource
 import com.twolskone.bakeroad.core.domain.repository.UserRepository
 import com.twolskone.bakeroad.core.model.MyBakeryReview
 import com.twolskone.bakeroad.core.model.PreferenceOptionIds
+import com.twolskone.bakeroad.core.model.Profile
 import com.twolskone.bakeroad.core.model.paging.Paging
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
@@ -67,5 +68,10 @@ internal class UserRepositoryImpl @Inject constructor(
                     atmospheres = response.atmospheres.map { it.preferenceId }
                 )
             }
+    }
+
+    override fun getProfile(): Flow<Profile> {
+        return userDataSource.getProfile()
+            .map { profile -> profile.toExternalModel() }
     }
 }

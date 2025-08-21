@@ -5,6 +5,7 @@ import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
+import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -31,4 +32,8 @@ internal interface UserApi {
         @Query("page_no") pageNo: Int,
         @Query("page_size") pageSize: Int
     ): BaseResponse<MyBakeryReviewsResponse>
+
+    /* 프로필 조회 */
+    @GET("users/me")
+    suspend fun getProfile(): BaseResponse<ProfileResponse>
 }

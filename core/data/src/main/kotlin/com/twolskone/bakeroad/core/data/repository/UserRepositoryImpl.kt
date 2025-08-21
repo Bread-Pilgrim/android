@@ -33,7 +33,7 @@ internal class UserRepositoryImpl @Inject constructor(
         cacheDataSource.setOnboardingCompleted(value)
     }
 
-    override fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<String> {
+    override fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<Unit> {
         val request = OnboardingRequest(
             nickname = nickname,
             breadTypes = selectedPreferenceOptions.breadTypes,

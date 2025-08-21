@@ -15,7 +15,7 @@ internal interface UserApi {
 
     /* 온보딩 저장 (취향, 닉네임) */
     @POST("users/me/onboarding")
-    suspend fun postOnboarding(@Body request: OnboardingRequest): BaseResponse<String>
+    suspend fun postOnboarding(@Body request: OnboardingRequest): BaseResponse<Unit>
 
     /* 취향 조회 */
     @GET("users/preferences")

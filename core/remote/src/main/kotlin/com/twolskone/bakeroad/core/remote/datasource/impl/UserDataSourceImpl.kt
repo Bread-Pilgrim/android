@@ -22,8 +22,8 @@ internal class UserDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : UserDataSource {
 
-    override fun postOnboarding(request: OnboardingRequest): Flow<String> = flow {
-        emitData(api.postOnboarding(request = request))
+    override fun postOnboarding(request: OnboardingRequest): Flow<Unit> = flow {
+        emitUnit(api.postOnboarding(request = request))
     }.flowOn(networkDispatcher)
 
     override fun patchPreferences(request: PreferencesPatchRequest): Flow<Unit> = flow {

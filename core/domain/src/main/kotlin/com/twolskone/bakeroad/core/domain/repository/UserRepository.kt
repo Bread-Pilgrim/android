@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserRepository {
     suspend fun getOnboardingCompleted(): Boolean
     suspend fun setOnboardingCompleted(value: Boolean)
-    fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<String>
+    fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<Unit>
     fun patchPreferences(addPreferences: List<Int>, deletePreferences: List<Int>): Flow<Unit>
     fun getMyReviews(page: Int): Flow<Paging<MyBakeryReview>>
     fun getPreferences(): Flow<PreferenceOptionIds>

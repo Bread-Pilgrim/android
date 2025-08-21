@@ -18,6 +18,7 @@
     <string name="feature_report_format_ten_thousand_won">%s만원</string>
     <string name="feature_report_format_month">%d월</string>
     <string name="feature_report_format_weekly_rank">%d위</string>
+    <string name="feature_report_format_monthly_list">%1$d년 %2$d월</string>
     <string name="feature_report_title_area_visit_rank">자주 간 부산 지역 Top3</string>
     <string name="feature_report_title_bread_type_rank">가장 많이 먹은 빵 종류 Top3</string>
     <string name="feature_report_title_bread_average_purchases">하루 평균 빵 구매량</string>

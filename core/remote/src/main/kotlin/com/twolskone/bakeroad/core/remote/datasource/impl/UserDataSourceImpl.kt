@@ -12,6 +12,7 @@ import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
 import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
+import com.twolskone.bakeroad.core.remote.model.user.ReportMonthlyListResponse
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -31,8 +32,8 @@ internal class UserDataSourceImpl @Inject constructor(
         emitUnit(api.patchPreferences(request))
     }.flowOn(networkDispatcher)
 
-    override suspend fun getMyReviews(pageNo: Int, pageSize: Int): MyBakeryReviewsResponse {
-        val response = api.getMyReviews(pageNo = pageNo, pageSize = pageSize)
+    override suspend fun getMyReviews(cursor: String, pageSize: Int): MyBakeryReviewsResponse {
+        val response = api.getMyReviews(cursorValue = cursor, pageSize = pageSize)
         return response.toData()
     }
 
@@ -43,4 +44,9 @@ internal class UserDataSourceImpl @Inject constructor(
     override fun getProfile(): Flow<ProfileResponse> = flow {
         emitData(api.getProfile())
     }.flowOn(networkDispatcher)
+
+    override suspend fun getReportMonthlyList(cursor: String, pageSize: Int): ReportMonthlyListResponse {
+        val response = api.getReportMonthlyList(cursorValue = cursor, pageSize = pageSize)
+        return response.toData()
+    }
 }

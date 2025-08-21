@@ -9,7 +9,8 @@ import com.twolskone.bakeroad.core.domain.repository.UserRepository
 import com.twolskone.bakeroad.core.model.MyBakeryReview
 import com.twolskone.bakeroad.core.model.PreferenceOptionIds
 import com.twolskone.bakeroad.core.model.Profile
-import com.twolskone.bakeroad.core.model.paging.Paging
+import com.twolskone.bakeroad.core.model.ReportDate
+import com.twolskone.bakeroad.core.model.paging.CursorPaging
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
@@ -49,12 +50,12 @@ internal class UserRepositoryImpl @Inject constructor(
         return userDataSource.patchPreferences(request)
     }
 
-    override fun getMyReviews(page: Int): Flow<Paging<MyBakeryReview>> = flow {
-        val response = userDataSource.getMyReviews(pageNo = page, pageSize = DefaultPageSize)
-        val paging = Paging(
+    override fun getMyReviews(cursor: String): Flow<CursorPaging<MyBakeryReview>> = flow {
+        val response = userDataSource.getMyReviews(cursor = cursor, pageSize = DefaultPageSize)
+        val paging = CursorPaging(
             list = response.items.map { it.toExternalModel() },
-            page = page,
-            hasNext = response.hasNext
+            currentCursor = cursor,
+            nextCursor = response.nextCursor
         )
         emit(paging)
     }.flowOn(networkDispatcher)
@@ -74,4 +75,14 @@ internal class UserRepositoryImpl @Inject constructor(
         return userDataSource.getProfile()
             .map { profile -> profile.toExternalModel() }
     }
+
+    override fun getReportMonthlyList(cursor: String): Flow<CursorPaging<ReportDate>> = flow {
+        val response = userDataSource.getReportMonthlyList(cursor = cursor, pageSize = DefaultPageSize)
+        val paging = CursorPaging(
+            list = response.items.map { it.toExternalModel() },
+            currentCursor = cursor,
+            nextCursor = response.nextCursor
+        )
+        emit(paging)
+    }.flowOn(networkDispatcher)
 }

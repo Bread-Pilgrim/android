@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -25,12 +28,15 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.report.R
+import com.twolskone.bakeroad.feature.report.list.mvi.ReportListState
 
 @Composable
 internal fun ReportListScreen(
     modifier: Modifier = Modifier,
+    state: ReportListState,
+    listState: LazyListState,
     onBackClick: () -> Unit,
-    onItemClick: () -> Unit
+    onItemClick: (Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -49,13 +55,19 @@ internal fun ReportListScreen(
             },
             title = { Text(text = stringResource(id = R.string.feature_report)) }
         )
-        LazyColumn(modifier = Modifier.weight(1f)) {
-            items(5) {
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            state = listState
+        ) {
+            itemsIndexed(
+                items = state.paging.list,
+                key = { _, date -> "${date.year}/${date.month}" }
+            ) { index, date ->
                 ReportListItem(
-                    date = "2025년 7월",
-                    onClick = onItemClick
+                    date = stringResource(id = R.string.feature_report_format_monthly_list, date.year, date.month),
+                    onClick = { onItemClick(index) }
                 )
-                if (it < 5) {
+                if (state.paging.list.lastIndex != index) {
                     HorizontalDivider(color = BakeRoadTheme.colorScheme.Gray50)
                 }
             }
@@ -95,6 +107,8 @@ private fun ReportListItem(
 private fun ReportListScreenPreview() {
     BakeRoadTheme {
         ReportListScreen(
+            state = ReportListState(),
+            listState = rememberLazyListState(),
             onBackClick = {},
             onItemClick = {}
         )

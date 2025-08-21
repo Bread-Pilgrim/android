@@ -32,7 +32,7 @@ internal interface BakeryApi {
     @GET("bakeries/preference")
     suspend fun getPreferenceBakeries(
         @Query("area_code") areaCode: String,
-        @Query("page_no") pageNo: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
@@ -40,7 +40,7 @@ internal interface BakeryApi {
     @GET("bakeries/hot")
     suspend fun getHotBakeries(
         @Query("area_code") areaCode: String,
-        @Query("page_no") pageNo: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse>
 
@@ -70,7 +70,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/my-review")
     suspend fun getMyReviews(
         @Path("bakery_id") bakeryId: Int,
-        @Query("page_no") pageNo: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeryReviewsResponse>
 

@@ -5,8 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MyBakeryReviewsResponse(
-    @SerialName("has_next")
-    val hasNext: Boolean = false,
+    @SerialName("next_cursor")
+    val nextCursor: String = "",
     @SerialName("items")
     val items: List<MyBakeryReviewResponse> = emptyList()
 )

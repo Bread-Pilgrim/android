@@ -22,7 +22,7 @@ internal fun ReportNavHost(
         startDestination = ReportListRoute
     ) {
         reportListScreen(
-            navigateToReportDetail = navController::navigateToReportDetail
+            navigateToReportDetail = { list, index -> navController.navigateToReportDetail(dateList = list, index = index) }
         )
         reportDetailScreen(
             goBack = {

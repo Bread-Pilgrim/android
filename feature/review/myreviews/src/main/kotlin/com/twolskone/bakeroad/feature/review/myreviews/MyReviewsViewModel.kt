@@ -8,7 +8,7 @@ import com.twolskone.bakeroad.core.domain.usecase.review.PostReviewLikeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.user.GetMyBakeryReviewsUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
-import com.twolskone.bakeroad.core.model.paging.startPage
+import com.twolskone.bakeroad.core.model.paging.StartCursor
 import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsIntent
 import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsSideEffect
 import com.twolskone.bakeroad.feature.review.myreviews.mvi.MyReviewsState
@@ -88,7 +88,7 @@ internal class MyReviewsViewModel @Inject constructor(
                 return@launch
             }
             reduce { copy(paging = paging.copy(isLoading = refresh)) }
-            val nextPaging = getMyBakeryReviewsUseCase(page = if (refresh) startPage else state.value.paging.nextPage)
+            val nextPaging = getMyBakeryReviewsUseCase(cursor = if (refresh) StartCursor else state.value.paging.nextCursor)
             reduce {
                 copy(
                     paging = if (refresh) {

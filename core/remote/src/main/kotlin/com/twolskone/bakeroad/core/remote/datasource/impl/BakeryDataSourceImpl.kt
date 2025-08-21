@@ -47,12 +47,12 @@ internal class BakeryDataSourceImpl @Inject constructor(
 
     override suspend fun getPreferenceBakeries(
         areaCodes: String,
-        pageNo: Int,
+        cursorValue: String,
         pageSize: Int
     ): BakeriesResponse {
         val response = api.getPreferenceBakeries(
             areaCode = areaCodes,
-            pageNo = pageNo,
+            cursorValue = cursorValue,
             pageSize = pageSize
         )
         return response.toData()
@@ -60,12 +60,12 @@ internal class BakeryDataSourceImpl @Inject constructor(
 
     override suspend fun getHotBakeries(
         areaCodes: String,
-        pageNo: Int,
+        cursorValue: String,
         pageSize: Int
     ): BakeriesResponse {
         val response = api.getHotBakeries(
             areaCode = areaCodes,
-            pageNo = pageNo,
+            cursorValue = cursorValue,
             pageSize = pageSize
         )
         return response.toData()
@@ -102,12 +102,12 @@ internal class BakeryDataSourceImpl @Inject constructor(
 
     override suspend fun getMyReviews(
         bakeryId: Int,
-        pageNo: Int,
+        cursorValue: String,
         pageSize: Int
     ): BakeryReviewsResponse {
         val response = api.getMyReviews(
             bakeryId = bakeryId,
-            pageNo = pageNo,
+            cursorValue = cursorValue,
             pageSize = pageSize
         )
         return response.toData()

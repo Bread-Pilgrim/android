@@ -19,6 +19,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.twolskone.bakeroad.core.common.android.extension.isLoading
 import com.twolskone.bakeroad.core.designsystem.component.skeleton.BakeriesSkeleton
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
@@ -32,7 +33,6 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun BakeryListScreen(
     modifier: Modifier = Modifier,
-    loading: Boolean,
     bakeryType: BakeryType,
     pagingItems: LazyPagingItems<Bakery>,
     onBakeryClick: (Bakery) -> Unit,
@@ -60,7 +60,7 @@ internal fun BakeryListScreen(
             },
             title = { Text(text = title) }
         )
-        if (loading) {
+        if (pagingItems.isLoading) {
             BakeriesSkeleton(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -114,7 +114,6 @@ private fun BakeryListScreenPreview() {
         val lazyPagingItems = flowOf(pagingData).collectAsLazyPagingItems()
 
         BakeryListScreen(
-            loading = true,
             bakeryType = BakeryType.PREFERENCE,
             pagingItems = lazyPagingItems,
             onBakeryClick = {},

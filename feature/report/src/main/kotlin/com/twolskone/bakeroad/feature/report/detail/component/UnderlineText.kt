@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.report.component
+package com.twolskone.bakeroad.feature.report.detail.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

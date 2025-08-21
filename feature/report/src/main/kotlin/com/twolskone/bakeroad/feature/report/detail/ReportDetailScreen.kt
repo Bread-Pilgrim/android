@@ -23,14 +23,14 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.DayOfWeek
 import com.twolskone.bakeroad.feature.report.R
-import com.twolskone.bakeroad.feature.report.component.ActivitySummaryCard
-import com.twolskone.bakeroad.feature.report.component.AreaVisitRankCard
-import com.twolskone.bakeroad.feature.report.component.BreadAveragePurchasesCard
-import com.twolskone.bakeroad.feature.report.component.BreadConsumptionCard
-import com.twolskone.bakeroad.feature.report.component.BreadSpendingAmountCard
-import com.twolskone.bakeroad.feature.report.component.BreadType
-import com.twolskone.bakeroad.feature.report.component.BreadTypeRankCard
-import com.twolskone.bakeroad.feature.report.component.VisitedArea
+import com.twolskone.bakeroad.feature.report.detail.component.ActivitySummaryCard
+import com.twolskone.bakeroad.feature.report.detail.component.AreaVisitRankCard
+import com.twolskone.bakeroad.feature.report.detail.component.BreadAveragePurchasesCard
+import com.twolskone.bakeroad.feature.report.detail.component.BreadConsumptionCard
+import com.twolskone.bakeroad.feature.report.detail.component.BreadSpendingAmountCard
+import com.twolskone.bakeroad.feature.report.detail.component.BreadType
+import com.twolskone.bakeroad.feature.report.detail.component.BreadTypeRankCard
+import com.twolskone.bakeroad.feature.report.detail.component.VisitedArea
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 

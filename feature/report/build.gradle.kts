@@ -7,5 +7,6 @@ android {
 }
 
 dependencies {
+    implementation(libs.gson)
     implementation(libs.timber)
 }

@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.report.component
+package com.twolskone.bakeroad.feature.report.detail.component
 
 import androidx.annotation.FloatRange
 import androidx.compose.foundation.Canvas

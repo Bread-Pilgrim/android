@@ -31,7 +31,6 @@ internal fun BakeryListRoute(
 
     BaseComposable(baseViewModel = viewModel) {
         BakeryListScreen(
-            loading = state.loading,
             bakeryType = state.bakeryType,
             pagingItems = lazyPagingItems,
             onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },

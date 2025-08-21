@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class BakeriesResponse(
     @SerialName("has_next")
-    val hasNext: Boolean = false,
+    val hasNext: Boolean = false,   // TODO. cursor paging 적용 후 삭제
+    @SerialName("next_cursor")
+    val nextCursor: String = "",
     @SerialName("items")
     val items: List<BakeryResponse> = emptyList()
 )

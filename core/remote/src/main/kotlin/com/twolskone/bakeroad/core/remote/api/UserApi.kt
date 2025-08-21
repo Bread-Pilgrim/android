@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
 import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
+import com.twolskone.bakeroad.core.remote.model.user.ReportMonthlyListResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -29,11 +30,18 @@ internal interface UserApi {
     /* 내가 쓴 리뷰 목록 */
     @GET("users/me/reviews")
     suspend fun getMyReviews(
-        @Query("page_no") pageNo: Int,
+        @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<MyBakeryReviewsResponse>
 
     /* 프로필 조회 */
     @GET("users/me")
     suspend fun getProfile(): BaseResponse<ProfileResponse>
+
+    /* 빵말정산 월 리스트 조회 */
+    @GET("users/me/bread-report/monthly")
+    suspend fun getReportMonthlyList(
+        @Query("cursor_value") cursorValue: String,
+        @Query("page_size") pageSize: Int
+    ): BaseResponse<ReportMonthlyListResponse>
 }

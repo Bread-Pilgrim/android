@@ -15,7 +15,6 @@ import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListSideEffect
 import com.twolskone.bakeroad.feature.bakery.list.mvi.BakeryListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 private const val AREA_CODES = "areaCodes"
@@ -34,9 +33,7 @@ internal class BakeryListViewModel @Inject constructor(
     val pagingFlow = getBakeriesUseCase(
         areaCodes = savedStateHandle.get<String>(AREA_CODES) ?: EntireBusan.toString(),
         bakeryType = savedStateHandle.get<BakeryType>(BAKERY_TYPE) ?: BakeryType.PREFERENCE
-    ).cachedIn(viewModelScope).onEach {
-        reduce { copy(loading = false) }
-    }
+    ).cachedIn(viewModelScope)
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause)

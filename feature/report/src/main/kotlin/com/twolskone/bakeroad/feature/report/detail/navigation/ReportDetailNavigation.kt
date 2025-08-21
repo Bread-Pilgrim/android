@@ -4,11 +4,16 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
+import com.twolskone.bakeroad.core.model.ReportDate
 import com.twolskone.bakeroad.feature.report.detail.ReportDetailRoute
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 @Serializable
-internal data object ReportDetailRoute
+internal data class ReportDetailRoute(
+    val dateListJsonString: String,
+    val index: Int
+)
 
 internal fun NavGraphBuilder.reportDetailScreen(
     goBack: () -> Unit
@@ -18,5 +23,11 @@ internal fun NavGraphBuilder.reportDetailScreen(
     }
 }
 
-internal fun NavController.navigateToReportDetail(navOptions: NavOptions? = null) =
-    navigate(route = ReportDetailRoute, navOptions = navOptions)
+internal fun NavController.navigateToReportDetail(
+    dateList: List<ReportDate>,
+    index: Int,
+    navOptions: NavOptions? = null
+) {
+    val jsonString = Json.encodeToString(dateList)
+    navigate(route = ReportDetailRoute(dateListJsonString = jsonString, index = index), navOptions = navOptions)
+}

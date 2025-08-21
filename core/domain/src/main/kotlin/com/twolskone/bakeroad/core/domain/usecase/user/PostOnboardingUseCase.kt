@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.first
  */
 class PostOnboardingUseCase @Inject constructor(private val userRepository: UserRepository) {
 
-    suspend operator fun invoke(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): String =
+    suspend operator fun invoke(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): String? =
         userRepository.postOnboarding(
             nickname = nickname,
             selectedPreferenceOptions = selectedPreferenceOptions

@@ -136,7 +136,7 @@ internal class OnboardingViewModel @Inject constructor(
         launch {
             val preferenceOptionsJob = launch {
                 val options = getPreferenceOptionsUseCase()
-                reduce { copy(preferenceOptionsState = preferenceOptionsState.copy(loading = !isEditPreference, preferenceOptions = options)) }
+                reduce { copy(preferenceOptionsState = preferenceOptionsState.copy(loading = isEditPreference, preferenceOptions = options)) }
             }
             if (isEditPreference) {
                 val selectedPreferencesJob = launch {

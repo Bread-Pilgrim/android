@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.onboard.preference
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -11,6 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadAlert
 import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.core.model.PreferenceOptionType
@@ -26,12 +29,13 @@ internal fun PreferenceOptionsRoute(
     navigateToNicknameSettings: () -> Unit,
     finish: () -> Unit
 ) {
-    val state = viewModel.state.collectAsStateWithLifecycle().value.preferenceOptionsState
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    val preferenceOptionsState = state.preferenceOptionsState
     var showCancelAlert by remember { mutableStateOf(false) }
 
     BackHandler {
-        if (state.page > 1) {
-            viewModel.intent(OnboardingIntent.MoveToPage(page = state.page - 1))
+        if (preferenceOptionsState.page > 1) {
+            viewModel.intent(OnboardingIntent.MoveToPage(page = preferenceOptionsState.page - 1))
         } else if (viewModel.isEditPreference) {
             showCancelAlert = true
         } else {
@@ -42,7 +46,7 @@ internal fun PreferenceOptionsRoute(
     BaseComposable(baseViewModel = viewModel) {
         PreferenceOptionListScreen(
             modifier = modifier,
-            state = state,
+            state = preferenceOptionsState,
             isEdit = viewModel.isEditPreference,
             onOptionSelected = { selected, option ->
                 when (option.type) {
@@ -70,6 +74,13 @@ internal fun PreferenceOptionsRoute(
                 }
             }
         )
+
+        if (state.isLoading) {
+            BakeRoadLoadingScreen(
+                modifier = Modifier.fillMaxSize(),
+                type = LoadingType.Default
+            )
+        }
 
         if (showCancelAlert) {
             BakeRoadAlert(

@@ -84,11 +84,4 @@ internal fun PreferenceOptionListScreen(
             onComplete = onComplete
         )
     }
-
-    if (state.loading) {
-        BakeRoadLoadingScreen(
-            modifier = Modifier.fillMaxSize(),
-            type = LoadingType.Default
-        )
-    }
 }

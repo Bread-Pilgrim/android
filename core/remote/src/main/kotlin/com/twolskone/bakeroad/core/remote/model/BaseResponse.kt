@@ -15,7 +15,9 @@ data class BaseResponse<T>(
     @SerialName("data")
     val data: T? = null,
     @SerialName("token")
-    val token: Token? = null
+    val token: Token? = null,
+    @SerialName("error_usecase")
+    val errorUseCase: String? = null
 ) {
 
     @Serializable
@@ -35,7 +37,7 @@ internal fun <T> BaseResponse<T>.toDataOrNull(): T? =
         throw BakeRoadException(
             statusCode = code,
             error = runCatching {
-                (data as? String)?.let { BakeRoadError.valueOf(it) }
+                errorUseCase?.let { BakeRoadError.valueOf(it) }
             }.getOrDefault(null),
             message = message
         )
@@ -51,7 +53,7 @@ internal fun <T> BaseResponse<T>.toData(): T =
         throw BakeRoadException(
             statusCode = code,
             error = runCatching {
-                (data as? String)?.let { BakeRoadError.valueOf(it) }
+                errorUseCase?.let { BakeRoadError.valueOf(it) }
             }.getOrDefault(null),
             message = message
         )

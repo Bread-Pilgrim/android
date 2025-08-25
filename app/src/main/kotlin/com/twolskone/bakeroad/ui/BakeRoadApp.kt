@@ -53,6 +53,7 @@ internal fun BakeRoadApp(
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
+    navigateToBadgeList: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToMyReviews: () -> Unit,
     openBrowser: (url: String) -> Unit,
     finish: () -> Unit
@@ -138,6 +139,7 @@ internal fun BakeRoadApp(
                 navigateToEditPreference = navigateToEditPreference,
                 navigateToSettings = navigateToSettings,
                 navigateToReport = navigateToReport,
+                navigateToBadgeList = navigateToBadgeList,
                 navigateToMyReviews = navigateToMyReviews,
                 openBrowser = openBrowser,
                 goBack = onBack

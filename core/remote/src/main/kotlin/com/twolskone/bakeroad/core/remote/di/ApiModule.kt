@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.core.remote.di
 
 import com.twolskone.bakeroad.core.remote.api.AreaApi
 import com.twolskone.bakeroad.core.remote.api.AuthApi
+import com.twolskone.bakeroad.core.remote.api.BadgeApi
 import com.twolskone.bakeroad.core.remote.api.BakeryApi
 import com.twolskone.bakeroad.core.remote.api.PreferenceApi
 import com.twolskone.bakeroad.core.remote.api.ReviewApi
@@ -51,4 +52,8 @@ internal object ApiModule {
     @Provides
     @Singleton
     fun providesSearchApi(@CommonRetrofit retrofit: Retrofit): SearchApi = retrofit.create()
+
+    @Provides
+    @Singleton
+    fun providesBadgeApi(@CommonRetrofit retrofit: Retrofit): BadgeApi = retrofit.create()
 }

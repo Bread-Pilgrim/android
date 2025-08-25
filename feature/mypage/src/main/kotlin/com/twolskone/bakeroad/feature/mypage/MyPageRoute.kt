@@ -20,6 +20,7 @@ internal fun MyPageRoute(
     viewModel: MyPageViewModel = hiltViewModel(),
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
+    navigateToBadgeList: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToMyReviews: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     goBack: () -> Unit
@@ -33,6 +34,11 @@ internal fun MyPageRoute(
             viewModel.mainEventBus.setHomeRefreshState(value = true)
         }
     }
+    val badgeListLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+
+    }
 
     BackHandler { goBack() }
 
@@ -40,11 +46,10 @@ internal fun MyPageRoute(
         padding = padding,
         state = state,
         onSettingsClick = navigateToSettings,
-        onBadgeSettingsClick = {},
         onMenuClick = { menu ->
             when (menu) {
                 Menu.Report -> navigateToReport()
-                Menu.Badge -> TODO()
+                Menu.Badge -> navigateToBadgeList(badgeListLauncher)
                 Menu.Review -> navigateToMyReviews()
                 Menu.Preference -> navigateToEditPreference(changePreferenceLauncher)
             }

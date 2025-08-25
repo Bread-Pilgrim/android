@@ -4,19 +4,19 @@ import com.twolskone.bakeroad.core.model.type.DayOfWeek
 
 /**
  * 빵말정산
- * @property year                       연도
- * @property month                      월
- * @property visitedAreas               방문한 지역 (지역명:횟수)
- * @property breadTypes                 빵 타입 (빵이름:구매횟수)
- * @property breadDailyAverageCount     빵 하루평균 소비량
- * @property breadMonthlyConsumptionGap 전체 사용자의 빵 소비량 차이
- * @property totalBreadCount            총 빵 소비량
- * @property totalVisitedCount          총 방문횟수
- * @property totalPrices                총 빵 구매금액
- * @property breadWeeklyDistribution    요일별 빵 소비량 (요일:소비횟수)
- * @property reviewCount                리뷰 개수
- * @property sentLikeCount              보낸 좋아요 개수
- * @property receivedLikeCount          받은 좋아요 개수
+ * @param year                          연도
+ * @param month                         월
+ * @param visitedAreas                  방문한 지역 (지역명:횟수)
+ * @param breadTypes                    빵 타입 (빵이름:구매횟수)
+ * @param breadDailyAverageCount        빵 하루평균 소비량
+ * @param breadMonthlyConsumptionGap    전체 사용자의 빵 소비량 차이
+ * @param totalBreadCount               총 빵 소비량
+ * @param totalVisitedCount             총 방문횟수
+ * @param totalPrices                   총 빵 구매금액
+ * @param breadWeeklyDistribution       요일별 빵 소비량 (요일:소비횟수)
+ * @param reviewCount                   리뷰 개수
+ * @param sentLikeCount                 보낸 좋아요 개수
+ * @param receivedLikeCount             받은 좋아요 개수
  */
 data class ReportDetail(
     val year: Int,

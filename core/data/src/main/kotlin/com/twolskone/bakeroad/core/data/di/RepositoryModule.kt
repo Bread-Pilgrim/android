@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.core.data.di
 
 import com.twolskone.bakeroad.core.data.repository.AuthRepositoryImpl
+import com.twolskone.bakeroad.core.data.repository.BadgeRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.BakeryRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.HomeRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.PreferRepositoryImpl
@@ -9,6 +10,7 @@ import com.twolskone.bakeroad.core.data.repository.SearchRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.TourRepositoryImpl
 import com.twolskone.bakeroad.core.data.repository.UserRepositoryImpl
 import com.twolskone.bakeroad.core.domain.repository.AuthRepository
+import com.twolskone.bakeroad.core.domain.repository.BadgeRepository
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.domain.repository.HomeRepository
 import com.twolskone.bakeroad.core.domain.repository.PreferRepository
@@ -57,4 +59,8 @@ internal abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsSearchRepository(searchRepository: SearchRepositoryImpl): SearchRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsBadgeRepository(badgeRepository: BadgeRepositoryImpl): BadgeRepository
 }

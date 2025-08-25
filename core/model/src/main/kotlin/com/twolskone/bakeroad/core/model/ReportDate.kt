@@ -4,8 +4,8 @@ import kotlinx.serialization.Serializable
 
 /**
  * 빵말정산 날짜
- * @property year   년
- * @property month  월
+ * @param year  년
+ * @param month 월
  */
 @Serializable
 data class ReportDate(

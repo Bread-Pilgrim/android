@@ -195,7 +195,7 @@ internal fun HomeScreen(
             if (state.loadingState.hotBakeryLoading && state.loadingState.allLoading) {
                 TitleSkeleton(
                     modifier = Modifier
-                        .padding(top = 28.dp)
+                        .padding(top = 16.dp)
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     titleWidth = 154.dp
@@ -203,7 +203,7 @@ internal fun HomeScreen(
             } else {
                 Title(
                     modifier = Modifier
-                        .padding(top = 28.dp)
+                        .padding(top = 16.dp)
                         .padding(horizontal = 10.dp)
                         .fillMaxWidth(),
                     title = stringResource(id = R.string.feature_home_title_hot_bakery),
@@ -244,7 +244,7 @@ internal fun HomeScreen(
             if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
                 TitleSkeleton(
                     modifier = Modifier
-                        .padding(top = 28.dp)
+                        .padding(top = 16.dp)
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth(),
                     titleWidth = 190.dp,
@@ -253,7 +253,7 @@ internal fun HomeScreen(
             } else {
                 Title(
                     modifier = Modifier
-                        .padding(top = 28.dp)
+                        .padding(top = 16.dp)
                         .padding(horizontal = 10.dp)
                         .fillMaxWidth(),
                     title = stringResource(id = R.string.feature_home_title_tour_area)

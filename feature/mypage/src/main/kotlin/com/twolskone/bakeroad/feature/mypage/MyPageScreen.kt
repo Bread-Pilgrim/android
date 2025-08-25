@@ -52,7 +52,6 @@ internal fun MyPageScreen(
     padding: PaddingValues,
     state: MyPageState,
     onSettingsClick: () -> Unit,
-    onBadgeSettingsClick: () -> Unit,
     onMenuClick: (Menu) -> Unit
 ) {
     Column(
@@ -83,7 +82,8 @@ internal fun MyPageScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(horizontal = 16.dp),
-                profile = state.profile
+                profile = state.profile,
+                onBadgeSettingsClick = { onMenuClick(Menu.Badge) }
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
@@ -99,7 +99,8 @@ internal fun MyPageScreen(
 @Composable
 private fun ProfileSection(
     modifier: Modifier = Modifier,
-    profile: Profile
+    profile: Profile,
+    onBadgeSettingsClick: () -> Unit
 ) {
     Row(
         modifier = modifier
@@ -133,7 +134,7 @@ private fun ProfileSection(
                     BakeRoadTextButton(
                         style = TextButtonStyle.ASSISTIVE,
                         size = TextButtonSize.SMALL,
-                        onClick = {},
+                        onClick = onBadgeSettingsClick,
                         content = {
                             Text(
                                 text = stringResource(id = R.string.feature_mypage_button_badge_settings),
@@ -253,7 +254,6 @@ private fun MyPageScreenPreview() {
             padding = PaddingValues(),
             state = MyPageState(loading = true),
             onSettingsClick = {},
-            onBadgeSettingsClick = {},
             onMenuClick = {}
         )
     }

@@ -91,4 +91,12 @@ internal class UserRepositoryImpl @Inject constructor(
         return userDataSource.getReport(year = year, month = month)
             .map { response -> response.toExternalModel() }
     }
+
+    override fun enableBadge(badgeId: Int): Flow<Unit> {
+        return userDataSource.enableBadge(badgeId = badgeId)
+    }
+
+    override fun disableBadge(badgeId: Int): Flow<Unit> {
+        return userDataSource.disableBadge(badgeId = badgeId)
+    }
 }

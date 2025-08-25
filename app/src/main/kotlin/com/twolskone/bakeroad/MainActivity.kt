@@ -9,6 +9,7 @@ import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
+import com.twolskone.bakeroad.core.navigator.BadgeListNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
 import com.twolskone.bakeroad.core.navigator.MyReviewsNavigator
@@ -39,6 +40,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var reportNavigator: ReportNavigator               // 빵말정산
+
+    @Inject
+    lateinit var badgeListNavigator: BadgeListNavigator         // 받은 뱃지
 
     @Inject
     lateinit var myReviewsNavigator: MyReviewsNavigator         // 내가 쓴 리뷰
@@ -92,6 +96,12 @@ class MainActivity : ComponentActivity() {
                         reportNavigator.navigateFromActivity(
                             activity = this,
                             withFinish = false
+                        )
+                    },
+                    navigateToBadgeList = { launcher ->
+                        badgeListNavigator.navigateFromLauncher(
+                            activity = this,
+                            launcher = launcher
                         )
                     },
                     navigateToMyReviews = {

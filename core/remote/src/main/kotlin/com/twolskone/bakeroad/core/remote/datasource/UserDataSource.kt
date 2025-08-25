@@ -17,4 +17,6 @@ interface UserDataSource {
     fun getProfile(): Flow<ProfileResponse>
     suspend fun getReportMonthlyList(cursor: String, pageSize: Int): ReportMonthlyListResponse
     fun getReport(year: Int, month: Int): Flow<ReportResponse>
+    fun enableBadge(badgeId: Int): Flow<Unit>
+    fun disableBadge(badgeId: Int): Flow<Unit>
 }

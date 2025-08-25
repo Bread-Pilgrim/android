@@ -60,6 +60,7 @@ dependencies {
     implementation(projects.feature.review.myreviews)
     implementation(projects.feature.settings)
     implementation(projects.feature.report)
+    implementation(projects.feature.badge)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)

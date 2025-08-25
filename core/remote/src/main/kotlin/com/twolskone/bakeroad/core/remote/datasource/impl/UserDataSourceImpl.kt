@@ -54,4 +54,12 @@ internal class UserDataSourceImpl @Inject constructor(
     override fun getReport(year: Int, month: Int): Flow<ReportResponse> = flow {
         emitData(api.getReport(year = year, month = month))
     }.flowOn(networkDispatcher)
+
+    override fun enableBadge(badgeId: Int): Flow<Unit> = flow {
+        emitUnit(api.enableBadge(badgeId = badgeId))
+    }.flowOn(networkDispatcher)
+
+    override fun disableBadge(badgeId: Int): Flow<Unit> = flow {
+        emitUnit(api.disableBadge(badgeId = badgeId))
+    }.flowOn(networkDispatcher)
 }

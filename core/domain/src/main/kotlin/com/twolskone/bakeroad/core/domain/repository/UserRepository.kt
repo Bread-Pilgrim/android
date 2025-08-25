@@ -18,4 +18,6 @@ interface UserRepository {
     fun getProfile(): Flow<Profile>
     fun getReportMonthlyList(cursor: String): Flow<CursorPaging<ReportDate>>
     fun getReportDetail(year: Int, month: Int): Flow<ReportDetail>
+    fun enableBadge(badgeId: Int): Flow<Unit>
+    fun disableBadge(badgeId: Int): Flow<Unit>
 }

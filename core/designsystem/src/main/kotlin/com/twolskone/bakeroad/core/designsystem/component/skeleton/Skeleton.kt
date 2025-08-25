@@ -112,7 +112,10 @@ fun SimpleBakeriesSkeleton(modifier: Modifier = Modifier) {
         horizontalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         repeat(5) {
-            Column {
+            Column(
+                modifier = Modifier.height(213.dp),
+                verticalArrangement = Arrangement.Top
+            ) {
                 Box(
                     modifier = Modifier
                         .size(116.dp)

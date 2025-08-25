@@ -12,6 +12,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface UserApi {
@@ -52,4 +53,12 @@ internal interface UserApi {
         @Query("year") year: Int,
         @Query("month") month: Int
     ): BaseResponse<ReportResponse>
+
+    /* 대표뱃지 설정 */
+    @POST("users/me/badges/{badge_id}/represent")
+    suspend fun enableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit>
+
+    /* 대표뱃지 해제 */
+    @POST("users/me/badges/{badge_id}/derepresent")
+    suspend fun disableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit>
 }

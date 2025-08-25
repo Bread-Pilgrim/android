@@ -19,8 +19,8 @@ internal class BakeryListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
-                SystemBarColorTheme(lightTheme = true)
                 BakeryListRoute(
                     navigateToBakeryDetail = { bakeryId, areaCode, launcher ->
                         bakeryDetailNavigator.navigateFromLauncher(

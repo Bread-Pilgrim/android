@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.review.myreviews
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,9 +15,11 @@ class MyReviewsActivity : ComponentActivity() {
 
         setContent {
             SystemBarColorTheme(lightTheme = true)
-            MyReviewRoute(
-                finish = { finish() }
-            )
+            BakeRoadTheme {
+                MyReviewRoute(
+                    finish = { finish() }
+                )
+            }
         }
     }
 }

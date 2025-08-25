@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
+import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.MainNavigator
 import com.twolskone.bakeroad.feature.onboard.navigation.OnBoardingNavHost
@@ -24,23 +25,25 @@ internal class OnboardingActivity : ComponentActivity() {
 
         setContent {
             SystemBarColorTheme(lightTheme = true)
-            OnBoardingNavHost(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .imePadding(),
-                navController = rememberNavController(),
-                finish = { finish() },
-                setResult = { code, finish ->
-                    setResult(code)
-                    if (finish) finish()
-                },
-                navigateToMain = {
-                    mainNavigator.navigateFromActivity(
-                        activity = this,
-                        withFinish = true
-                    )
-                }
-            )
+            BakeRoadTheme {
+                OnBoardingNavHost(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .imePadding(),
+                    navController = rememberNavController(),
+                    finish = { finish() },
+                    setResult = { code, finish ->
+                        setResult(code)
+                        if (finish) finish()
+                    },
+                    navigateToMain = {
+                        mainNavigator.navigateFromActivity(
+                            activity = this,
+                            withFinish = true
+                        )
+                    }
+                )
+            }
         }
     }
 }

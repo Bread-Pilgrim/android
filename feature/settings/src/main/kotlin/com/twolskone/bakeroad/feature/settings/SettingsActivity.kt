@@ -14,6 +14,7 @@ class SettingsActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {

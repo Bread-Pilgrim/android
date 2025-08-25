@@ -27,8 +27,8 @@ internal class WriteBakeryReviewActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
+            SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
-                SystemBarColorTheme(lightTheme = true)
                 WriteBakeryReviewNavHost(
                     modifier = Modifier
                         .fillMaxSize()

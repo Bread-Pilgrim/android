@@ -41,9 +41,10 @@ import kotlinx.collections.immutable.toImmutableList
 
 /**
  * 요일별 빵 섭취 패턴 카드
+ * @param data  요일별 빵 섭취 개수
  */
 @Composable
-internal fun BreadConsumptionCard(
+internal fun BreadWeeklyDistributionCard(
     modifier: Modifier = Modifier,
     data: ImmutableList<Pair<DayOfWeek, Int>>
 ) {
@@ -211,14 +212,14 @@ private fun RankBalloon(
 
 @Preview
 @Composable
-private fun BreadConsumptionCardPreview() {
+private fun BreadWeeklyDistributionCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
-            BreadConsumptionCard(
+            BreadWeeklyDistributionCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
                 data = DayOfWeek.entries.map {
                     it to (0..0).random()

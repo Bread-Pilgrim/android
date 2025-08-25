@@ -32,22 +32,34 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.common.kotlin.extension.orZero
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.report.R
+import kotlin.math.abs
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 private val ChartGradient = persistentListOf(
     Color(0xFFFFEBDC),
     Color(0xFFFFFFFF)
 )
 private val ChartPadding = 66.dp
+private const val PriceUnit = 10000f    // 금액 단위
 
+/**
+ * 빵 소비 금액 카드
+ * @param currentMonth  이번달
+ * @param priceList     최근 3달 소비 금액 목록
+ */
 @Composable
-internal fun BreadSpendingAmountCard(
-    modifier: Modifier = Modifier
+internal fun BreadSpendingPriceCard(
+    modifier: Modifier = Modifier,
+    currentMonth: Int,
+    priceList: ImmutableList<Int>
 ) {
     val density = LocalDensity.current
+    val maxPrice = priceList.maxOrNull().orZero()
 
     Card(
         modifier = modifier,
@@ -65,16 +77,16 @@ internal fun BreadSpendingAmountCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            val amount = 5.5.toString()
-            val rawTitle = stringResource(R.string.feature_report_title_bread_spending_total_amount, amount)
+            val totalPrice = (priceList.sum() / PriceUnit).toString()
+            val rawTitle = stringResource(R.string.feature_report_title_bread_spending_total_amount, totalPrice)
             val annotatedTitle = buildAnnotatedString {
                 append(rawTitle)
-                val start = rawTitle.indexOf(amount)
+                val start = rawTitle.indexOf(totalPrice)
                 if (start >= 0) {
                     addStyle(
                         style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Primary500).toSpanStyle(),
                         start = start,
-                        end = start + amount.length
+                        end = start + totalPrice.length
                     )
                 }
             }
@@ -82,18 +94,21 @@ internal fun BreadSpendingAmountCard(
                 text = annotatedTitle,
                 style = BakeRoadTheme.typography.bodyMediumSemibold
             )
-
-            val moreAmount = 1.2.toString()
-            val rawMoreAmount = stringResource(R.string.feature_report_format_ten_thousand_won, moreAmount)
-            val rawDescription = stringResource(id = R.string.feature_report_description_bread_spending, rawMoreAmount)
+            val priceGap = (priceList.getOrNull(0).orZero() - priceList.getOrNull(1).orZero()) / PriceUnit
+            val rawPriceGap = stringResource(R.string.feature_report_format_ten_thousand_won, abs(priceGap).toString())
+            val rawDescription = if (priceGap >= 0) {
+                stringResource(id = R.string.feature_report_description_bread_more_spending, rawPriceGap)
+            } else {
+                stringResource(id = R.string.feature_report_description_bread_less_spending, rawPriceGap)
+            }
             val annotatedDescription = buildAnnotatedString {
                 append(rawDescription)
-                val start = rawDescription.indexOf(rawMoreAmount)
+                val start = rawDescription.indexOf(rawPriceGap)
                 if (start >= 0) {
                     addStyle(
                         style = BakeRoadTheme.typography.bodyXsmallSemibold.toSpanStyle(),
                         start = start,
-                        end = start + rawMoreAmount.length
+                        end = start + rawPriceGap.length
                     )
                 }
             }
@@ -115,23 +130,26 @@ internal fun BreadSpendingAmountCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    BreadSpendingAmountChart(
+                    BreadSpendingPriceChart(
                         modifier = Modifier
                             .padding(top = 20.dp)
                             .width(chartWidthDp)
                             .aspectRatio(2f / 1f),
-                        values = persistentListOf(0.55f, 0.4f, 1f)
+                        values = priceList
+                            .reversed()
+                            .map { price -> price / maxPrice.toFloat() }
+                            .toImmutableList()
                     )
                     Row(
                         modifier = Modifier.padding(8.dp),
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        (6..8).forEach {
-                            BreadSpreadChartLabel(
+                        (2 downTo 0).forEach { diff ->
+                            ChartLabel(
                                 modifier = Modifier.width(chartLabelWidthDp),
-                                month = it,
-                                amount = "1000.5",
-                                isMaxAmount = it == 8
+                                month = currentMonth - diff,
+                                price = (priceList.getOrNull(diff).orZero() / PriceUnit).toString(),
+                                isCurrentMonth = diff == 0
                             )
                         }
                     }
@@ -142,14 +160,17 @@ internal fun BreadSpendingAmountCard(
 }
 
 @Composable
-private fun BreadSpendingAmountChart(
+private fun BreadSpendingPriceChart(
     modifier: Modifier = Modifier,
     values: ImmutableList<Float>,
     strokeColor: Color = BakeRoadTheme.colorScheme.Primary500,
     strokeWidth: Dp = 2.dp,
     areaGradient: ImmutableList<Color> = ChartGradient
 ) {
-    val data = values.takeIf { it.size >= 2 } ?: listOf(0f, 0f)
+    val data = buildList(3) {
+        addAll(values)
+        repeat(3 - size) { add(0, 0f) }
+    }
 
     Canvas(modifier = modifier) {
         val w = size.width
@@ -187,11 +208,11 @@ private fun BreadSpendingAmountChart(
 }
 
 @Composable
-private fun BreadSpreadChartLabel(
+private fun ChartLabel(
     modifier: Modifier = Modifier,
     month: Int,
-    amount: String,
-    isMaxAmount: Boolean
+    price: String,
+    isCurrentMonth: Boolean
 ) {
     Column(
         modifier = modifier,
@@ -200,7 +221,7 @@ private fun BreadSpreadChartLabel(
         Text(
             text = stringResource(id = R.string.feature_report_format_month, month),
             style = BakeRoadTheme.typography.body3XsmallMedium.copy(
-                color = if (isMaxAmount) {
+                color = if (isCurrentMonth) {
                     BakeRoadTheme.colorScheme.Primary500
                 } else {
                     BakeRoadTheme.colorScheme.Gray800
@@ -209,7 +230,7 @@ private fun BreadSpreadChartLabel(
         )
         Text(
             modifier = Modifier.padding(top = 2.dp),
-            text = stringResource(id = R.string.feature_report_format_ten_thousand_won, amount),
+            text = stringResource(id = R.string.feature_report_format_ten_thousand_won, price),
             style = BakeRoadTheme.typography.bodySmallSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
         )
     }
@@ -301,22 +322,28 @@ private fun Path.monotoneCubic(points: List<Offset>) {
 
 @Preview
 @Composable
-private fun BreadSpendingAmountCardPreview() {
+private fun BreadSpendingPriceCardPreview() {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(color = BakeRoadTheme.colorScheme.White)
     ) {
-        BreadSpendingAmountCard(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp)
+        BreadSpendingPriceCard(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
+            currentMonth = 8,
+            priceList = persistentListOf(
+                72000,
+                215000,
+                84000
+            )
         )
     }
 }
 
 @Preview
 @Composable
-private fun BreadSpendingAmountChartPreview() {
-    BreadSpendingAmountChart(
+private fun BreadSpendingPriceChartPreview() {
+    BreadSpendingPriceChart(
         modifier = Modifier.size(width = 164.dp, height = 85.dp),
         values = persistentListOf(0.55f, 0.4f, 1f)
     )

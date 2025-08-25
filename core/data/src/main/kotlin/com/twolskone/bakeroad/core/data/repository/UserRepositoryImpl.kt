@@ -10,6 +10,7 @@ import com.twolskone.bakeroad.core.model.MyBakeryReview
 import com.twolskone.bakeroad.core.model.PreferenceOptionIds
 import com.twolskone.bakeroad.core.model.Profile
 import com.twolskone.bakeroad.core.model.ReportDate
+import com.twolskone.bakeroad.core.model.ReportDetail
 import com.twolskone.bakeroad.core.model.paging.CursorPaging
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
@@ -85,4 +86,9 @@ internal class UserRepositoryImpl @Inject constructor(
         )
         emit(paging)
     }.flowOn(networkDispatcher)
+
+    override fun getReportDetail(year: Int, month: Int): Flow<ReportDetail> {
+        return userDataSource.getReport(year = year, month = month)
+            .map { response -> response.toExternalModel() }
+    }
 }

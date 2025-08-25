@@ -12,7 +12,7 @@
     <string name="feature_report_only_one_bread_type_2">다음엔 어떤 빵을 맛볼까요?</string>
     <string name="feature_report_format_rank">%d등</string>
     <string name="feature_report_format_visited_count">%d회</string>
-    <string name="feature_report_format_bread_count">%d개</string>
+    <string name="feature_report_format_bread_count">%s개</string>
     <string name="feature_report_format_activity_count">%d개</string>
     <string name="feature_report_format_day">%d일</string>
     <string name="feature_report_format_ten_thousand_won">%s만원</string>
@@ -28,10 +28,12 @@
     <string name="feature_report_title_bread_consumption">요일별 빵 섭취 패턴</string>
     <string name="feature_report_title_activity_summary">이번 달 내 빵글 활동 총정리</string>
     <string name="feature_report_title_summary_review_count">내가 남긴 리뷰</string>
-    <string name="feature_report_title_summary_bread_count">내가 먹은 빵 갯수</string>
-    <string name="feature_report_title_summary_like_given_count">내가 남긴 좋아요 갯수</string>
-    <string name="feature_report_title_summary_like_received_count">내가 받은 좋아요 갯수</string>
-    <string name="feature_report_description_daily_bread_average_count">다른 빵글이들보다 %s 더 먹었어요!</string>
-    <string name="feature_report_description_bread_spending">전날 대비 %s 더 썼어요!</string>
+    <string name="feature_report_title_summary_bread_count">내가 먹은 빵</string>
+    <string name="feature_report_title_summary_like_given_count">내가 남긴 좋아요</string>
+    <string name="feature_report_title_summary_like_received_count">내가 받은 좋아요</string>
+    <string name="feature_report_description_daily_bread_more_count">다른 빵글이들보다 %s 더 먹었어요!</string>
+    <string name="feature_report_description_daily_bread_less_count">다른 빵글이들보다 %s 덜 먹었어요!</string>
+    <string name="feature_report_description_bread_more_spending">전날 대비 %s 더 썼어요!</string>
+    <string name="feature_report_description_bread_less_spending">전날 대비 %s 덜 썼어요!</string>
     <string name="feature_report_label_total_this_month">이번달 총</string>
 </resources>

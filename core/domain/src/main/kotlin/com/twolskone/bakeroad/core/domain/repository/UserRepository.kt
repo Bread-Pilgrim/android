@@ -4,6 +4,7 @@ import com.twolskone.bakeroad.core.model.MyBakeryReview
 import com.twolskone.bakeroad.core.model.PreferenceOptionIds
 import com.twolskone.bakeroad.core.model.Profile
 import com.twolskone.bakeroad.core.model.ReportDate
+import com.twolskone.bakeroad.core.model.ReportDetail
 import com.twolskone.bakeroad.core.model.paging.CursorPaging
 import kotlinx.coroutines.flow.Flow
 
@@ -16,4 +17,5 @@ interface UserRepository {
     fun getPreferences(): Flow<PreferenceOptionIds>
     fun getProfile(): Flow<Profile>
     fun getReportMonthlyList(cursor: String): Flow<CursorPaging<ReportDate>>
+    fun getReportDetail(year: Int, month: Int): Flow<ReportDetail>
 }

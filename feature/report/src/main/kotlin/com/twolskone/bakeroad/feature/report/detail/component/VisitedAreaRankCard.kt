@@ -17,7 +17,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -39,11 +38,12 @@ private const val AreaMaxCount = 3
 
 /**
  * 자주 간 부산 지역 순위카드
+ * @param areaList  지역 목록 (지역명:횟수)
  */
 @Composable
-internal fun AreaVisitRankCard(
+internal fun VisitedAreaRankCard(
     modifier: Modifier = Modifier,
-    regionList: ImmutableList<VisitedArea>
+    areaList: ImmutableList<Pair<String, Int>>
 ) {
     Card(
         modifier = modifier,
@@ -56,7 +56,7 @@ internal fun AreaVisitRankCard(
         ),
         elevation = CardDefaults.cardElevation(CardElevation)
     ) {
-        if (regionList.isEmpty()) {
+        if (areaList.isEmpty()) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -81,9 +81,9 @@ internal fun AreaVisitRankCard(
                     .padding(vertical = 16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                regionList
+                areaList
                     .take(AreaMaxCount)
-                    .fastForEachIndexed { i, region ->
+                    .fastForEachIndexed { i, (areaName, count) ->
                         Column(
                             modifier = Modifier.weight(1f),
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -94,17 +94,17 @@ internal fun AreaVisitRankCard(
                                 textStyle = BakeRoadTheme.typography.bodyXsmallMedium
                             )
                             Text(
-                                text = region.name,
+                                text = areaName,
                                 style = BakeRoadTheme.typography.bodyMediumSemibold
                             )
                             BakeRoadChip(
                                 selected = true,
                                 color = ChipColor.MAIN,
                                 size = ChipSize.LARGE,
-                                label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, region.visitedCount)) }
+                                label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, count)) }
                             )
                         }
-                        if (i < regionList.lastIndex) {
+                        if (i < areaList.lastIndex) {
                             VerticalDivider(
                                 color = BakeRoadTheme.colorScheme.Gray50
                             )
@@ -115,37 +115,21 @@ internal fun AreaVisitRankCard(
     }
 }
 
-// Temporary model.
-@Immutable
-internal data class VisitedArea(
-    val name: String,
-    val visitedCount: Int
-)
-
 @Preview
 @Composable
-private fun AreaVisitRankCardPreview() {
+private fun VisitedAreaRankCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
-            AreaVisitRankCard(
+            VisitedAreaRankCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
-                regionList = persistentListOf(
-                    VisitedArea(
-                        name = "해운대구",
-                        visitedCount = 3
-                    ),
-                    VisitedArea(
-                        name = "남구",
-                        visitedCount = 2
-                    ),
-                    VisitedArea(
-                        name = "수영구",
-                        visitedCount = 1
-                    ),
+                areaList = persistentListOf(
+                    "남포•광복" to 1,
+                    "연산•거제 " to 1,
+                    "광안리•민락" to 3
                 )
             )
         }

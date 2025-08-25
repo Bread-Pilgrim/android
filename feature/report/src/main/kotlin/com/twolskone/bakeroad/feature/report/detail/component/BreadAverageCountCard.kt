@@ -24,13 +24,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.report.R
+import kotlin.math.abs
 
 /**
  * 하루 평균 빵 구매량 카드
+ * @param averageCount      하루 평균 빵 구매 개수
+ * @param gapCount          다른 전체 사용자와의 구매 개수 차이
+ * @param totalCount        이번달 구매한 총 빵 개수
+ * @param totalVisitedCount 이번달 방문한 총 횟수
  */
 @Composable
-fun BreadAveragePurchasesCard(
-    modifier: Modifier = Modifier
+internal fun BreadAverageCountCard(
+    modifier: Modifier = Modifier,
+    averageCount: Float,
+    gapCount: Float,
+    totalCount: Int,
+    totalVisitedCount: Int
 ) {
     Card(
         modifier = modifier,
@@ -48,16 +57,16 @@ fun BreadAveragePurchasesCard(
                 .fillMaxWidth()
                 .padding(16.dp)
         ) {
-            val avgCount = 3.32.toString()
-            val rawTitle = stringResource(R.string.feature_report_title_bread_average_purchase_count, avgCount)
+            val average = averageCount.toString()
+            val rawTitle = stringResource(R.string.feature_report_title_bread_average_purchase_count, average)
             val annotatedTitle = buildAnnotatedString {
                 append(rawTitle)
-                val start = rawTitle.indexOf(avgCount)
+                val start = rawTitle.indexOf(average)
                 if (start >= 0) {
                     addStyle(
                         style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Primary500).toSpanStyle(),
                         start = start,
-                        end = start + avgCount.length
+                        end = start + average.length
                     )
                 }
             }
@@ -66,17 +75,20 @@ fun BreadAveragePurchasesCard(
                 style = BakeRoadTheme.typography.bodyMediumSemibold
             )
 
-            val moreCount = 2
-            val rawMoreCount = stringResource(R.string.feature_report_format_bread_count, moreCount)
-            val rawDescription = stringResource(id = R.string.feature_report_description_daily_bread_average_count, rawMoreCount)
+            val gap = stringResource(R.string.feature_report_format_bread_count, abs(gapCount).toString())
+            val rawDescription = if (gapCount >= 0) {
+                stringResource(id = R.string.feature_report_description_daily_bread_more_count, gap)
+            } else {
+                stringResource(id = R.string.feature_report_description_daily_bread_less_count, gap)
+            }
             val annotatedDescription = buildAnnotatedString {
                 append(rawDescription)
-                val start = rawDescription.indexOf(rawMoreCount)
+                val start = rawDescription.indexOf(gap)
                 if (start >= 0) {
                     addStyle(
                         style = BakeRoadTheme.typography.bodyXsmallSemibold.toSpanStyle(),
                         start = start,
-                        end = start + rawMoreCount.length
+                        end = start + gap.length
                     )
                 }
             }
@@ -102,10 +114,8 @@ fun BreadAveragePurchasesCard(
                     text = stringResource(id = R.string.feature_report_label_total_this_month),
                     style = BakeRoadTheme.typography.bodyXsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray600)
                 )
-                val count = 10
-                val day = 3
-                val rawCount = stringResource(id = R.string.feature_report_format_visited_count, count)
-                val rawDay = stringResource(id = R.string.feature_report_format_day, day)
+                val rawCount = stringResource(id = R.string.feature_report_format_visited_count, totalCount)
+                val rawDay = stringResource(id = R.string.feature_report_format_day, totalVisitedCount)
                 val annotatedCountAndDay = buildAnnotatedString {
                     withStyle(style = BakeRoadTheme.typography.bodyXsmallSemibold.toSpanStyle().copy(color = BakeRoadTheme.colorScheme.Gray600)) {
                         append(rawCount)
@@ -123,15 +133,19 @@ fun BreadAveragePurchasesCard(
 
 @Preview
 @Composable
-private fun BreadAveragePurchasesCardPreview() {
+private fun BreadAverageCountCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = BakeRoadTheme.colorScheme.White)
         ) {
-            BreadAveragePurchasesCard(
+            BreadAverageCountCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
+                averageCount = 3.32f,
+                gapCount = 2f,
+                totalCount = 10,
+                totalVisitedCount = 3
             )
         }
     }

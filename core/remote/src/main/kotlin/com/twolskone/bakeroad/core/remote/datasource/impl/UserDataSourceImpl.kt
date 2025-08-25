@@ -13,6 +13,7 @@ import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
 import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
 import com.twolskone.bakeroad.core.remote.model.user.ReportMonthlyListResponse
+import com.twolskone.bakeroad.core.remote.model.user.ReportResponse
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -49,4 +50,8 @@ internal class UserDataSourceImpl @Inject constructor(
         val response = api.getReportMonthlyList(cursorValue = cursor, pageSize = pageSize)
         return response.toData()
     }
+
+    override fun getReport(year: Int, month: Int): Flow<ReportResponse> = flow {
+        emitData(api.getReport(year = year, month = month))
+    }.flowOn(networkDispatcher)
 }

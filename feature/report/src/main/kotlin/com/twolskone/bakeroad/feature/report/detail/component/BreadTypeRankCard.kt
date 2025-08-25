@@ -19,7 +19,6 @@ import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -58,14 +57,14 @@ private const val BreadTypeMaxCount = 3
 
 /**
  * 가장 많이 먹은 빵 종류 순위카드
- * - 최대 3가지 빵
+ * @param breadTypeList 빵 종류 목록 (빵이름:횟수) // 최대 3가지
  */
 @Composable
 internal fun BreadTypeRankCard(
     modifier: Modifier = Modifier,
-    breadTypeList: ImmutableList<BreadType>
+    breadTypeList: ImmutableList<Pair<String, Int>>
 ) {
-    val list = breadTypeList.take(BreadTypeMaxCount).toImmutableList()
+    val list = breadTypeList.take(BreadTypeMaxCount)
 
     Card(
         modifier = modifier,
@@ -107,7 +106,7 @@ internal fun BreadTypeRankCard(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     UnderlineText(
-                        text = stringResource(id = R.string.feature_report_only_one_bread_type_1, list.first().breadName),
+                        text = stringResource(id = R.string.feature_report_only_one_bread_type_1, list.first().first),
                         textStyle = BakeRoadTheme.typography.bodyXsmallMedium
                     )
                     Text(
@@ -137,7 +136,7 @@ internal fun BreadTypeRankCard(
                             .padding(horizontal = 6.dp, vertical = 2.dp),
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
-                        list.fastForEachIndexed { i, type ->
+                        list.fastForEachIndexed { i, (breadName, count) ->
                             Row(
                                 verticalAlignment = Alignment.CenterVertically,
                                 horizontalArrangement = Arrangement.spacedBy(6.dp)
@@ -149,7 +148,7 @@ internal fun BreadTypeRankCard(
                                 )
                                 Text(
                                     modifier = Modifier.weight(1f),
-                                    text = type.breadName,
+                                    text = breadName,
                                     style = BakeRoadTheme.typography.bodyXsmallMedium
                                 )
                                 BakeRoadChip(
@@ -157,7 +156,7 @@ internal fun BreadTypeRankCard(
                                     selected = true,
                                     color = ChipColor.GRAY,
                                     size = ChipSize.SMALL,
-                                    label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, type.eatenCount)) }
+                                    label = { Text(text = stringResource(id = R.string.feature_report_format_visited_count, count)) }
                                 )
                             }
                         }
@@ -176,7 +175,9 @@ private fun BreadTypeRankChart(
     gap: Dp = 5.dp,
     startAngle: Float = -90f
 ) {
-    val total = data.sum().coerceAtLeast(1f)
+    val total = data
+        .sum()
+        .coerceAtLeast(1f)
 
     Canvas(
         modifier.graphicsLayer(compositingStrategy = CompositingStrategy.Offscreen)
@@ -230,21 +231,15 @@ private fun BreadTypeRankChart(
     }
 }
 
-// Temporary model.
-@Immutable
-internal data class BreadType(
-    val breadName: String,
-    val eatenCount: Int
-)
-
-private fun ImmutableList<BreadType>.toPercentages(): ImmutableList<Float> {
-    val maxCount = maxOf { it.eatenCount }
-    return map { it.eatenCount.toFloat() / maxCount }.toImmutableList()
+// 가장 많이 먹은 빵 종류의 횟수 기준 비율을 계산
+private fun List<Pair<String, Int>>.toPercentages(): ImmutableList<Float> {
+    val maxCount = maxOf { it.second }
+    return map { it.second.toFloat() / maxCount }.toImmutableList()
 }
 
 @Preview
 @Composable
-private fun BreadTypeRankChartPreview() {
+private fun BreadTypeRankCardPreview() {
     BakeRoadTheme {
         Box(
             modifier = Modifier
@@ -254,18 +249,9 @@ private fun BreadTypeRankChartPreview() {
             BreadTypeRankCard(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 20.dp),
                 breadTypeList = persistentListOf(
-                    BreadType(
-                        breadName = "페이스트리류",
-                        eatenCount = 2
-                    ),
-                    BreadType(
-                        breadName = "클래식 & 레트로 빵",
-                        eatenCount = 2
-                    ),
-                    BreadType(
-                        breadName = "구운과자류",
-                        eatenCount = 1
-                    )
+                    "건강한 빵" to 3,
+                    "달콤한 디저트 빵" to 8,
+                    "케이크, 브라우니, 파이류" to 1
                 )
             )
         }

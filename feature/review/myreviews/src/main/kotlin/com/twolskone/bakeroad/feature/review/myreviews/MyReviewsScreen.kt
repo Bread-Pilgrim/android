@@ -49,7 +49,7 @@ internal fun MyReviewsScreen(
             title = { Text(text = stringResource(id = R.string.feature_review_myreviews)) }
         )
         if (state.paging.isLoading) {
-            // TODO. progress or skeleton
+            // TODO. 2
         } else {
             LazyColumn(
                 modifier = Modifier

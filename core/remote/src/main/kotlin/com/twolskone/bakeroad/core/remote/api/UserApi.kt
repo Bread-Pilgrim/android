@@ -7,6 +7,7 @@ import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesPatchRequest
 import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
 import com.twolskone.bakeroad.core.remote.model.user.ReportMonthlyListResponse
+import com.twolskone.bakeroad.core.remote.model.user.ReportResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -44,4 +45,11 @@ internal interface UserApi {
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
     ): BaseResponse<ReportMonthlyListResponse>
+
+    /* 빵말정산 조회 */
+    @GET("users/me/bread-report")
+    suspend fun getReport(
+        @Query("year") year: Int,
+        @Query("month") month: Int
+    ): BaseResponse<ReportResponse>
 }

@@ -30,10 +30,18 @@ import com.twolskone.bakeroad.feature.report.R
 
 /**
  * 이번달 내 빵글 활동 총 정리
+ * @param reviewCount       내가 남긴 리뷰 개수
+ * @param breadCount        내가 먹은 빵 개수
+ * @param sentLikeCount     내가 남긴 좋아요 개수
+ * @param receivedLikeCount 내가 받은 좋아요 개수
  */
 @Composable
 internal fun ActivitySummaryCard(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    reviewCount: Int,
+    breadCount: Int,
+    sentLikeCount: Int,
+    receivedLikeCount: Int
 ) {
     Card(
         modifier = modifier,
@@ -59,7 +67,7 @@ internal fun ActivitySummaryCard(
                 ActivitySummaryCell(
                     modifier = Modifier.weight(1f),
                     title = stringResource(id = R.string.feature_report_title_summary_review_count),
-                    count = 1
+                    count = reviewCount
                 )
                 VerticalDivider(
                     modifier = Modifier.padding(top = 16.dp),
@@ -68,7 +76,7 @@ internal fun ActivitySummaryCard(
                 ActivitySummaryCell(
                     modifier = Modifier.weight(1f),
                     title = stringResource(id = R.string.feature_report_title_summary_bread_count),
-                    count = 1
+                    count = breadCount
                 )
             }
             HorizontalDivider(
@@ -83,7 +91,7 @@ internal fun ActivitySummaryCard(
                 ActivitySummaryCell(
                     modifier = Modifier.weight(1f),
                     title = stringResource(id = R.string.feature_report_title_summary_like_given_count),
-                    count = 1
+                    count = sentLikeCount
                 )
                 VerticalDivider(
                     modifier = Modifier.padding(bottom = 16.dp),
@@ -92,7 +100,7 @@ internal fun ActivitySummaryCard(
                 ActivitySummaryCell(
                     modifier = Modifier.weight(1f),
                     title = stringResource(id = R.string.feature_report_title_summary_like_received_count),
-                    count = 1
+                    count = receivedLikeCount
                 )
             }
         }
@@ -135,6 +143,10 @@ private fun ActivitySummaryCardPreview() {
             ActivitySummaryCard(
                 modifier = Modifier
                     .padding(horizontal = 16.dp, vertical = 20.dp),
+                reviewCount = 0,
+                breadCount = 0,
+                sentLikeCount = 0,
+                receivedLikeCount = 0
             )
         }
     }

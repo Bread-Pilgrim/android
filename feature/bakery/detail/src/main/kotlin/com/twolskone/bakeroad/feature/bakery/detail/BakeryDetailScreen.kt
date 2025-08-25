@@ -4,6 +4,7 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
@@ -149,7 +150,7 @@ internal fun BakeryDetailScreen(
                 .background(color = BakeRoadTheme.colorScheme.Gray50)
                 .offset { IntOffset(x = 0, y = topPadding.toPx().toInt()) },    // Skip Composition. (start from Layout phrase)
             state = listState,
-            contentPadding = WindowInsets.navigationBars.asPaddingValues()
+            contentPadding = PaddingValues(bottom = TopAppBarHeight)
         ) {
             if (state.loadingState.bakeryDetailLoading) {
                 item { BakeryImageHeaderSkeleton() }

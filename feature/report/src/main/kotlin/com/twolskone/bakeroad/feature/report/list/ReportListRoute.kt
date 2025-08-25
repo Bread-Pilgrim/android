@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 internal fun ReportListRoute(
     viewModel: ReportListViewModel = hiltViewModel(),
+    goBack: () -> Unit,
     navigateToReportDetail: (ImmutableList<ReportDate>, Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -44,7 +45,7 @@ internal fun ReportListRoute(
         ReportListScreen(
             state = state,
             listState = listState,
-            onBackClick = {},
+            onBackClick = goBack,
             onItemClick = { index -> navigateToReportDetail(state.paging.list, index) }
         )
     }

@@ -14,7 +14,8 @@ import com.twolskone.bakeroad.feature.report.list.navigation.reportListScreen
 @Composable
 internal fun ReportNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    finish: () -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -22,6 +23,7 @@ internal fun ReportNavHost(
         startDestination = ReportListRoute
     ) {
         reportListScreen(
+            goBack = finish,
             navigateToReportDetail = { list, index -> navController.navigateToReportDetail(dateList = list, index = index) }
         )
         reportDetailScreen(

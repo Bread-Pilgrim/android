@@ -27,6 +27,7 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.ui.EmptyCard
 import com.twolskone.bakeroad.feature.report.R
 import com.twolskone.bakeroad.feature.report.list.mvi.ReportListState
 
@@ -55,22 +56,29 @@ internal fun ReportListScreen(
             },
             title = { Text(text = stringResource(id = R.string.feature_report)) }
         )
-        LazyColumn(
-            modifier = Modifier.weight(1f),
-            state = listState
-        ) {
-            itemsIndexed(
-                items = state.paging.list,
-                key = { _, date -> "${date.year}/${date.month}" }
-            ) { index, date ->
-                ReportListItem(
-                    date = stringResource(id = R.string.feature_report_format_monthly_list, date.year, date.month),
-                    onClick = { onItemClick(index) }
-                )
-                if (state.paging.list.lastIndex != index) {
-                    HorizontalDivider(color = BakeRoadTheme.colorScheme.Gray50)
+        if (state.paging.list.isNotEmpty()) {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                state = listState
+            ) {
+                itemsIndexed(
+                    items = state.paging.list,
+                    key = { _, date -> "${date.year}/${date.month}" }
+                ) { index, date ->
+                    ReportListItem(
+                        date = stringResource(id = R.string.feature_report_format_monthly_list, date.year, date.month),
+                        onClick = { onItemClick(index) }
+                    )
+                    if (state.paging.list.lastIndex != index) {
+                        HorizontalDivider(color = BakeRoadTheme.colorScheme.Gray50)
+                    }
                 }
             }
+        } else {
+            EmptyCard(
+                modifier = Modifier.padding(16.dp),
+                description = stringResource(id = R.string.feature_report_empty_list)
+            )
         }
     }
 }

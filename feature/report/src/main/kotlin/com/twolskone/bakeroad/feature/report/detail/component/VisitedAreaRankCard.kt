@@ -32,7 +32,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 internal val CardShape = RoundedCornerShape(20.dp)
-internal val CardElevation = 2.5.dp
+internal val CardElevation = 4.5.dp
 
 private const val AreaMaxCount = 3
 

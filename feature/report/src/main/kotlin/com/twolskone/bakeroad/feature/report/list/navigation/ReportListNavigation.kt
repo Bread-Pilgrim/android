@@ -11,9 +11,13 @@ import kotlinx.serialization.Serializable
 internal data object ReportListRoute
 
 internal fun NavGraphBuilder.reportListScreen(
+    goBack: () -> Unit,
     navigateToReportDetail: (ImmutableList<ReportDate>, Int) -> Unit
 ) {
     composable<ReportListRoute> {
-        ReportListRoute(navigateToReportDetail = navigateToReportDetail)
+        ReportListRoute(
+            goBack = goBack,
+            navigateToReportDetail = navigateToReportDetail
+        )
     }
 }

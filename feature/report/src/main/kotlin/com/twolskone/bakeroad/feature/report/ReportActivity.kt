@@ -14,11 +14,13 @@ internal class ReportActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
                 ReportNavHost(
-                    navController = rememberNavController()
+                    navController = rememberNavController(),
+                    finish = { finish() }
                 )
             }
         }

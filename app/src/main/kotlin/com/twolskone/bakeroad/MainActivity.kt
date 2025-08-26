@@ -7,8 +7,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
+import com.twolskone.bakeroad.core.common.kotlin.extension.toIntOrZero
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
+import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.navigator.BadgeListNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
@@ -121,15 +123,51 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
+        handleDeepLink()
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         Timber.i("xxx onNewIntent")
         when {
+            // 홈 갱신
             intent.getBooleanExtra(KEY_HOME_REFRESH, false) -> {
                 Timber.i("xxx onNewIntent // RefreshHome")
                 viewModel.intent(MainIntent.RefreshHome)
+            }
+            // 빵집 공유
+            intent.data?.getQueryParameter("bakery_id").toIntOrZero() > 0 -> {
+                val bakeryId = intent.data?.getQueryParameter("bakery_id")?.toInt()
+                val areaCode = intent.data?.getQueryParameter("areaCode")?.toIntOrNull() ?: EntireBusan
+                Timber.i("xxx onNewIntent // NavigateToBakeryDetail(id: $bakeryId, areaCode: $areaCode)")
+                bakeryDetailNavigator.navigateFromActivity(
+                    activity = this,
+                    withFinish = false,
+                    intentBuilder = {
+                        putExtra("bakeryId", bakeryId)
+                        putExtra("areaCode", areaCode)
+                    }
+                )
+            }
+        }
+    }
+
+    private fun handleDeepLink() {
+        if (intent.action == Intent.ACTION_VIEW) {
+            intent.data?.let { uri ->
+                // 빵집 공유
+                uri.getQueryParameter("bakery_id")?.toIntOrNull()?.let { bakeryId ->
+                    val areaCode = uri.getQueryParameter("area_code")?.toIntOrNull() ?: EntireBusan
+                    bakeryDetailNavigator.navigateFromActivity(
+                        activity = this,
+                        withFinish = false,
+                        intentBuilder = {
+                            putExtra("bakeryId", bakeryId)
+                            putExtra("areaCode", areaCode)
+                        }
+                    )
+                }
             }
         }
     }

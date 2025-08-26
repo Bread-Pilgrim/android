@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -85,7 +84,8 @@ internal fun BakeryDetailScreen(
     onWriteReviewClick: () -> Unit,
     onBakeryLikeClick: (Boolean) -> Unit,
     onReviewLikeClick: (Int, Boolean) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onShareClick: () -> Unit
 ) {
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
@@ -278,7 +278,7 @@ internal fun BakeryDetailScreen(
                         iconRes = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_share,
                         contentDescription = "Share",
                         backgroundColor = BakeRoadTheme.colorScheme.White.copy(alpha = 0.6f),
-                        onClick = {}
+                        onClick = onShareClick
                     )
                     LikeIcon(
                         modifier = Modifier.padding(start = 12.dp),
@@ -346,7 +346,8 @@ private fun BakeryDetailScreenPreview() {
             onWriteReviewClick = {},
             onBakeryLikeClick = {},
             onReviewLikeClick = { _, _ -> },
-            onBackClick = {}
+            onBackClick = {},
+            onShareClick = {}
         )
     }
 }

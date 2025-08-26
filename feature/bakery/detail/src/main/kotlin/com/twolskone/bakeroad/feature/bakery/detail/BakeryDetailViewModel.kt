@@ -19,6 +19,7 @@ import com.twolskone.bakeroad.core.domain.usecase.tour.GetTourAreasUseCase
 import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
+import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.model.isOtherMenu
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
@@ -46,7 +47,7 @@ private const val AREA_CODE = "areaCode"
 @HiltViewModel
 internal class BakeryDetailViewModel @Inject constructor(
     val mainEvetBus: MainEventBus,
-    private val savedStateHandle: SavedStateHandle,
+    savedStateHandle: SavedStateHandle,
     private val getBakeryDetailUseCase: GetBakeryDetailUseCase,
     private val getBakeryPreviewReviewsUseCase: GetBakeryPreviewReviewsUseCase,
     private val getTourAreasUseCase: GetTourAreasUseCase,
@@ -64,6 +65,7 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     val bakeryId: Int = savedStateHandle.get<Int>(BAKERY_ID).orZero()
+    val areaCode: Int = savedStateHandle.get<Int>(AREA_CODE) ?: EntireBusan
 
     private val _tabState = MutableStateFlow(BakeryDetailTab.HOME)
     val tabState: StateFlow<BakeryDetailTab>
@@ -128,6 +130,8 @@ internal class BakeryDetailViewModel @Inject constructor(
             is BakeryDetailIntent.SelectReviewSort -> _reviewSortState.value = intent.sort
 
             is BakeryDetailIntent.ClickBakeryLike -> {
+                if (state.value.loadingState.bakeryDetailLoading) return
+
                 reduce { copy(bakeryInfo = bakeryInfo?.copy(isLike = intent.isLike)) }
                 if (intent.isLike) {
                     val (_, resultLike) = postBakeryLikeUseCase(bakeryId = bakeryId)
@@ -203,18 +207,16 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     private fun getTourAreas() = launch {
-        savedStateHandle.get<Int>(AREA_CODE)?.let { areaCode ->
-            reduce { copy(loadingState = loadingState.copy(tourAreaLoading = true)) }
-            val tourAreas = getTourAreasUseCase(
-                areaCodes = setOf(areaCode),
-                tourCategories = TourAreaCategory.entries.toSet()
+        reduce { copy(loadingState = loadingState.copy(tourAreaLoading = true)) }
+        val tourAreas = getTourAreasUseCase(
+            areaCodes = setOf(areaCode),
+            tourCategories = TourAreaCategory.entries.toSet()
+        )
+        reduce {
+            copy(
+                loadingState = loadingState.copy(tourAreaLoading = false),
+                tourAreaList = tourAreas.toImmutableList()
             )
-            reduce {
-                copy(
-                    loadingState = loadingState.copy(tourAreaLoading = false),
-                    tourAreaList = tourAreas.toImmutableList()
-                )
-            }
         }
     }
 }

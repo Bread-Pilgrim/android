@@ -2,6 +2,8 @@ package com.twolskone.bakeroad.core.navigator.util
 
 // 빵집 목록 갱신
 const val RESULT_REFRESH_BAKERY_LIST = 10
+// 프로필 갱신 (나의 빵글)
+const val RESULT_REFRESH_PROFILE = 11
 
 // 빵집 ID
 const val KEY_BAKERY_ID = "bakeryId"

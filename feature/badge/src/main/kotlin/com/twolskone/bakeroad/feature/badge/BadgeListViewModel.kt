@@ -67,7 +67,8 @@ internal class BadgeListViewModel @Inject constructor(
                         representativeBadge = intent.badge.copy(isRepresentative = true),
                         badgeList = badgeList.map { badge ->
                             badge.copy(isRepresentative = (badge.id == intent.badge.id))
-                        }.toImmutableList()
+                        }.toImmutableList(),
+                        isBadgeUpdated = true
                     )
                 }
                 showSnackbar(type = SnackbarType.SUCCESS, messageRes = R.string.feature_badge_snackbar_enable_badge)
@@ -80,7 +81,8 @@ internal class BadgeListViewModel @Inject constructor(
                         representativeBadge = Badge.ofEmpty(),
                         badgeList = badgeList.map { badge ->
                             badge.copy(isRepresentative = false)
-                        }.toImmutableList()
+                        }.toImmutableList(),
+                        isBadgeUpdated = true
                     )
                 }
                 showSnackbar(type = SnackbarType.SUCCESS, messageRes = R.string.feature_badge_snackbar_disable_badge)

@@ -28,7 +28,7 @@ fun BakeRoadSolidButton(
     content: @Composable RowScope.() -> Unit
 ) {
     val containerColor = if (enabled) role.colors.containerColor else role.colors.disabledContainerColor
-    val contentColor = if (enabled) role.colors.contentColor else role.colors.contentColor
+    val contentColor = if (enabled) role.colors.contentColor else role.colors.disabledContentColor
 
     Box(
         modifier = modifier

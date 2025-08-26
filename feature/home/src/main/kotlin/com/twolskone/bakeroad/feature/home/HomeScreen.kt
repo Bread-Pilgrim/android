@@ -43,7 +43,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
-import com.twolskone.bakeroad.core.ui.AreaEventSheet
+import com.twolskone.bakeroad.core.ui.AreaEventBottomSheet
 import com.twolskone.bakeroad.core.ui.TourAreaCard
 import com.twolskone.bakeroad.feature.home.component.RecommendBakeryCard
 import com.twolskone.bakeroad.feature.home.component.Title
@@ -320,7 +320,7 @@ internal fun HomeScreen(
     when (state.sheetState) {
         // 지역 행사 팝업
         is SheetState.AreaEventSheet -> {
-            AreaEventSheet(
+            AreaEventBottomSheet(
                 areaEvent = state.sheetState.data,
                 onDismissRequest = { onAreaEventSheetDismiss(false) },
                 onPrimaryAction = { link ->

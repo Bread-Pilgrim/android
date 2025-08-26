@@ -2,6 +2,7 @@ package com.twolskone.bakeroad.feature.badge
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,12 +29,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
-import com.twolskone.bakeroad.core.designsystem.component.button.ButtonStyle
-import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonRole
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
+import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
+import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
+import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
@@ -101,16 +102,6 @@ internal fun BadgeListScreen(
                         style = BakeRoadTheme.typography.bodyXsmallMedium,
                         color = BakeRoadTheme.colorScheme.Gray600
                     )
-                    BakeRoadOutlinedButton(
-                        modifier = Modifier
-                            .padding(top = 16.dp)
-                            .fillMaxWidth(),
-                        role = OutlinedButtonRole.ASSISTIVE,
-                        style = ButtonStyle.DEFAULT,
-                        size = ButtonSize.MEDIUM,
-                        onClick = { selectedBadge = state.representativeBadge },
-                        content = { Text(text = stringResource(id = R.string.feature_badge_button_update_badge)) }
-                    )
                 }
             }
             item(span = { GridItemSpan(3) }) {
@@ -148,23 +139,33 @@ internal fun BadgeListScreen(
                         .fillMaxWidth()
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = BakeRoadTheme.colorScheme.White)
-                        .then(
-                            if (badge.isEarned) {
-                                Modifier.singleClickable { selectedBadge = badge }
-                            } else {
-                                Modifier
-                            }
-                        )
-                        .padding(horizontal = 10.dp, vertical = 8.dp),
+                        .singleClickable { selectedBadge = badge },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
-                    BakeRoadBadge(
-                        size = 84.dp,
-                        imageSize = 72.dp,
-                        badge = badge
-                    )
+                    Box {
+                        BakeRoadBadge(
+                            modifier = Modifier
+                                .padding(horizontal = 10.dp, vertical = 8.dp)
+                                .align(Alignment.Center),
+                            size = 84.dp,
+                            imageSize = 72.dp,
+                            badge = badge
+                        )
+                        if (badge.isRepresentative) {
+                            BakeRoadChip(
+                                modifier = Modifier
+                                    .padding(start = 6.dp)
+                                    .align(Alignment.TopStart),
+                                selected = true,
+                                color = ChipColor.SUB,
+                                size = ChipSize.SMALL,
+                                label = { Text(text = stringResource(R.string.feature_badge_label_representative)) }
+                            )
+                        }
+                    }
                     Text(
+                        modifier = Modifier.padding(bottom = 10.dp),
                         text = badge.name,
                         style = BakeRoadTheme.typography.bodyXsmallMedium,
                         color = BakeRoadTheme.colorScheme.Gray600,
@@ -176,7 +177,7 @@ internal fun BadgeListScreen(
     }
 
     selectedBadge?.let { badge ->
-        BadgeSheet(
+        BadgeBottomSheet(
             modifier = Modifier.fillMaxWidth(),
             badge = badge,
             onDismissRequest = { selectedBadge = null },
@@ -194,7 +195,7 @@ internal fun BadgeListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun BadgeSheet(
+private fun BadgeBottomSheet(
     modifier: Modifier = Modifier,
     badge: Badge,
     onDismissRequest: () -> Unit = {},
@@ -219,7 +220,7 @@ private fun BadgeSheet(
             BakeRoadBadge(
                 size = 90.dp,
                 imageSize = 72.dp,
-                badge = Badge.ofEmpty()
+                badge = badge
             )
             Text(
                 modifier = Modifier.padding(top = 16.dp),
@@ -237,7 +238,8 @@ private fun BadgeSheet(
                 modifier = Modifier
                     .padding(top = 24.dp)
                     .fillMaxWidth(),
-                role = if (badge.isRepresentative) SolidButtonRole.PRIMARY else SolidButtonRole.SECONDARY,
+                enabled = badge.isEarned,
+                role = if (badge.isRepresentative) SolidButtonRole.SECONDARY else SolidButtonRole.PRIMARY,
                 size = ButtonSize.LARGE,
                 onClick = onPrimaryClick,
                 content = {

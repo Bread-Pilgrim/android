@@ -11,7 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_PROFILE
 import com.twolskone.bakeroad.feature.mypage.model.Menu
+import com.twolskone.bakeroad.feature.mypage.mvi.MyPageIntent
 import timber.log.Timber
 
 @Composable
@@ -37,7 +39,10 @@ internal fun MyPageRoute(
     val badgeListLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
-
+        Timber.i("xxx badgeListLauncher :: resultCode ${result.resultCode}")
+        if (result.resultCode == RESULT_REFRESH_PROFILE) {
+            viewModel.intent(MyPageIntent.RefreshProfile)
+        }
     }
 
     BackHandler { goBack() }

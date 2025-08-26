@@ -54,7 +54,7 @@ private val SheetHorizontalPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AreaEventSheet(
+fun AreaEventBottomSheet(
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     areaEvent: AreaEvent,
@@ -180,7 +180,7 @@ fun AreaEventSheet(
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-private fun AreaEventSheetPreview() {
+private fun AreaEventBottomSheetPreview() {
     BakeRoadTheme {
         val scope = rememberCoroutineScope()
         val sheetState = rememberModalBottomSheetState()
@@ -200,7 +200,7 @@ private fun AreaEventSheetPreview() {
             }
         }
         if (showSheet) {
-            AreaEventSheet(
+            AreaEventBottomSheet(
                 modifier = Modifier,
                 areaEvent = AreaEvent(
                     title = "센텀 맥주 축제",

@@ -9,5 +9,6 @@ import kotlinx.collections.immutable.persistentListOf
 @Immutable
 internal data class BadgeListState(
     val representativeBadge: Badge = Badge.ofEmpty(),
-    val badgeList: ImmutableList<Badge> = persistentListOf()
+    val badgeList: ImmutableList<Badge> = persistentListOf(),
+    val isBadgeUpdated: Boolean = false
 ) : BaseUiState

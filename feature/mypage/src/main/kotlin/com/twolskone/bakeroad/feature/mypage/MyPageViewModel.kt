@@ -53,7 +53,11 @@ internal class MyPageViewModel @Inject constructor(
         }
     }
 
-    override suspend fun handleIntent(intent: MyPageIntent) {}
+    override suspend fun handleIntent(intent: MyPageIntent) {
+        when (intent) {
+            MyPageIntent.RefreshProfile -> getProfile()
+        }
+    }
 
     private fun getProfile() = launch {
         reduce { copy(loading = true) }

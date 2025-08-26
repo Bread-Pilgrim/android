@@ -41,7 +41,7 @@ internal class ReportDetailViewModel @Inject constructor(
             state.value.currentDate?.let { date ->
                 val result = getReportDetailUseCase(year = date.year, month = date.month)
                 reduce { copy(loading = false, data = result) }
-            } ?: Timber.e("SJH", "current date is null")
+            } ?: Timber.e("xxx current date is null")
         }
     }
 

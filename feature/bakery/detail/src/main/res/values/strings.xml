@@ -2,7 +2,7 @@
 <resources>
     <string name="feature_bakery_detail_button_write_review">리뷰 작성하기</string>
     <string name="feature_bakery_detail_button_view_map">지도 보기</string>
-    <string name="feature_bakery_detail_button_call">연결</string>
+    <string name="feature_bakery_detail_button_copy">복사</string>
     <string name="feature_bakery_detail_button_view_all_menu">메뉴 전체보기</string>
     <string name="feature_bakery_detail_button_view_all_review">리뷰 전체보기</string>
     <string name="feature_bakery_detail_button_view_all_tour_area">관광지 전체보기</string>

@@ -1,5 +1,6 @@
 package com.twolskone.bakeroad.feature.bakery.detail.component
 
+import android.content.ClipData
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,11 +19,14 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalClipboard
+import androidx.compose.ui.platform.toClipEntry
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextDecoration
@@ -46,6 +50,7 @@ import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryInfo
 import com.twolskone.bakeroad.feature.bakery.detail.model.openingHourLabel
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.ReviewState
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 @Composable
 internal fun BakeryInfoSection(
@@ -57,6 +62,9 @@ internal fun BakeryInfoSection(
     onExpandOpeningHourClick: () -> Unit,
     onWriteReviewClick: () -> Unit
 ) {
+    val clipboard = LocalClipboard.current
+    val scope = rememberCoroutineScope()
+
     if (bakeryInfo != null) {
         Column(
             modifier = modifier
@@ -225,9 +233,11 @@ internal fun BakeryInfoSection(
                         style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
                     )
                     Text(
-                        modifier = Modifier
-                            .singleClickable { },
-                        text = stringResource(R.string.feature_bakery_detail_button_call),
+                        modifier = Modifier.singleClickable {
+                            val clipData = ClipData.newPlainText("phone", bakeryInfo.phone)
+                            scope.launch { clipboard.setClipEntry(clipData.toClipEntry()) }
+                        },
+                        text = stringResource(R.string.feature_bakery_detail_button_copy),
                         style = BakeRoadTheme.typography.bodyXsmallMedium.copy(
                             color = BakeRoadTheme.colorScheme.Gray950,
                             textDecoration = TextDecoration.Underline
@@ -349,7 +359,7 @@ internal fun BakeryInfoSectionSkeleton(modifier: Modifier = Modifier) {
 @Composable
 private fun BakeryInfoSectionPreview() {
     BakeRoadTheme {
-        val loading = true
+        val loading = false
         if (loading) {
             BakeryInfoSectionSkeleton()
         } else {

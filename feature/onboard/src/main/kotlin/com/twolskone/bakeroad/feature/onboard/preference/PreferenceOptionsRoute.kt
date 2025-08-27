@@ -36,7 +36,7 @@ internal fun PreferenceOptionsRoute(
     BackHandler {
         if (preferenceOptionsState.page > 1) {
             viewModel.intent(OnboardingIntent.MoveToPage(page = preferenceOptionsState.page - 1))
-        } else if (viewModel.isEditPreference) {
+        } else if (viewModel.isEditPreference && state.preferenceOptionsState.isPreferenceChanged) {
             showCancelAlert = true
         } else {
             finish()
@@ -59,7 +59,7 @@ internal fun PreferenceOptionsRoute(
                 Timber.e("onPreviousPage :: page is $page")
                 if (page > 0) {
                     viewModel.intent(OnboardingIntent.MoveToPage(page = page))
-                } else if (viewModel.isEditPreference) {
+                } else if (viewModel.isEditPreference && state.preferenceOptionsState.isPreferenceChanged) {
                     showCancelAlert = true
                 } else {
                     finish()

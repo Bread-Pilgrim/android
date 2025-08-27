@@ -28,6 +28,10 @@ internal data class PreferenceOptionsState(
     )
 ) {
 
+    // 취향 변경 시, 변경 항목 존재 여부
+    val isPreferenceChanged: Boolean
+        get() = addedList.isNotEmpty() || deletedList.isNotEmpty()
+
     // 취향 변경 시, 추가된 취향 목록
     val addedList: List<Int>
         get() = buildList {

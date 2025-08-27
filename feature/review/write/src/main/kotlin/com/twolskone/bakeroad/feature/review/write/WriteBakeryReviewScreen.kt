@@ -34,6 +34,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -119,7 +120,7 @@ internal fun WriteBakeryReviewScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp, alignment = Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 BakeRoadRatingBar(
@@ -127,9 +128,10 @@ internal fun WriteBakeryReviewScreen(
                     onRatingChange = onRatingChange
                 )
                 Text(
-                    modifier = Modifier.width(30.dp),
+                    modifier = Modifier.width(38.dp),
                     text = state.rating.toString(),
-                    style = BakeRoadTheme.typography.bodyXlargeMedium.copy(color = BakeRoadTheme.colorScheme.Gray950)
+                    style = BakeRoadTheme.typography.bodyXlargeMedium.copy(color = BakeRoadTheme.colorScheme.Gray950),
+                    textAlign = TextAlign.End
                 )
             }
             LazyRow(

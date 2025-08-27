@@ -68,7 +68,10 @@ internal fun SearchScreen(
             SearchSection.RecentSearchResult -> RecentSearchResult(list = state.recentSearchBakeryList)
             SearchSection.RecentSearchQueries -> RecentSearchQueries(
                 queryList = state.recentQueryList,
-                onChipClick = onSearch,
+                onChipClick = { query ->
+                    queryTextState.edit { append(query) }
+                    onSearch(query)
+                },
                 onDeleteClick = onDeleteQueryClick,
                 onDeleteAllClick = onDeleteAllQueriesClick
             )

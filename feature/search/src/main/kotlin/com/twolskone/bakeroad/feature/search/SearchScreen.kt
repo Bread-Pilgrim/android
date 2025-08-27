@@ -175,7 +175,7 @@ private fun ColumnScope.SearchResult(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 20.dp),
-            description = stringResource(id = R.string.feature_search_empty_recent_search_query)
+            description = stringResource(id = R.string.feature_search_empty_search_result)
         )
     } else {
         Timber.e("xxx SearchResult: result")

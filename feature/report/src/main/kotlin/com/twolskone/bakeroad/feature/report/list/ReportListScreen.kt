@@ -76,7 +76,9 @@ internal fun ReportListScreen(
             }
         } else {
             EmptyCard(
-                modifier = Modifier.padding(16.dp),
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
                 description = stringResource(id = R.string.feature_report_empty_list)
             )
         }

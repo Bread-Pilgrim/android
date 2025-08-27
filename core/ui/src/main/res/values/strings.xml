@@ -5,6 +5,7 @@
     <string name="core_ui_title_preference_bakery_type">어떤 종류의 빵집을 선호하시나요?</string>
     <string name="core_ui_title_preference_commercial_area">원하시는 지역이 있으신가요?</string>
     <string name="core_ui_title_sort_order">정렬 순서</string>
+    <string name="core_ui_title_badge_achieved">축하해요 🎉\n뱃지를 획득했어요!</string>
     <string name="core_ui_description_preference">(복수 선택 가능🥐)</string>
     <string name="core_ui_button_next">다음</string>
     <string name="core_ui_button_previous">이전</string>
@@ -14,6 +15,7 @@
     <string name="core_ui_button_close">닫기</string>
     <string name="core_ui_button_dismiss_today">오늘 안보기</string>
     <string name="core_ui_button_see_details">자세히 보기</string>
+    <string name="core_ui_button_badge_settings">뱃지 설정하기</string>
     <string name="core_ui_label_bakery_open_status_open">영업중</string>
     <string name="core_ui_label_bakery_open_status_closed">영업종료</string>
     <string name="core_ui_label_bakery_open_status_day_off">휴무일</string>

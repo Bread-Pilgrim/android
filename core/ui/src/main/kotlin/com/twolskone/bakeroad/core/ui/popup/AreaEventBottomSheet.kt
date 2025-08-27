@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.core.ui
+package com.twolskone.bakeroad.core.ui.popup
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -47,11 +47,15 @@ import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.AreaEvent
+import com.twolskone.bakeroad.core.ui.R
 import kotlinx.coroutines.launch
 
 private val SheetShape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
 private val SheetHorizontalPadding = 16.dp
 
+/**
+ * 지역행사 추천 바텀시트
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AreaEventBottomSheet(

@@ -19,7 +19,7 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Badge
 
-private val BadgeSize = 100.dp
+private val BadgeSize = 84.dp
 private val BadgeImageSize = 72.dp
 private val BadgeShape = RoundedCornerShape(20.dp)
 
@@ -40,13 +40,13 @@ fun BakeRoadBadge(
     ) {
         if (badge.imageUrl.isNotEmpty()) {
             AsyncImage(
-                modifier = Modifier.size(size * 0.7f),
+                modifier = Modifier.size(imageSize),
                 model = badge.imageUrl,
                 contentDescription = "Badge",
             )
         } else {
             Image(
-                modifier = Modifier.size(imageSize),
+                modifier = Modifier.size(size * 0.7f),
                 imageVector = ImageVector.vectorResource(id = R.drawable.core_ui_ic_badge_placeholder),
                 contentDescription = "BadgePlaceholder"
             )

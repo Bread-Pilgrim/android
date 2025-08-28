@@ -16,7 +16,7 @@ import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
-import com.twolskone.bakeroad.core.model.paging.Paging
+import com.twolskone.bakeroad.core.model.paging.CursorPaging
 import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.MyBakeryType
@@ -122,27 +122,27 @@ internal class BakeryRepositoryImpl @Inject constructor(
     }
 
     override fun getMyBakeries(
-        page: Int,
+        cursor: String,
         myBakeryType: MyBakeryType,
         sort: BakerySortType
-    ): Flow<Paging<Bakery>> = flow {
+    ): Flow<CursorPaging<Bakery>> = flow {
         val response = when (myBakeryType) {
             MyBakeryType.VISITED -> bakeryDataSource.getVisitedBakeries(
-                pageNo = page,
+                cursorValue = cursor,
                 pageSize = DefaultPageSize,
                 sort = sort.value
             )
 
             MyBakeryType.LIKE -> bakeryDataSource.getLikeBakeries(
-                pageNo = page,
+                cursorValue = cursor,
                 pageSize = DefaultPageSize,
                 sort = sort.value
             )
         }
-        val paging = Paging(
+        val paging = CursorPaging(
             list = response.items.map { it.toExternalModel() },
-            page = page,
-            hasNext = response.hasNext
+            currentCursor = cursor,
+            nextCursor = response.nextCursor
         )
         emit(paging)
     }.flowOn(networkDispatcher)

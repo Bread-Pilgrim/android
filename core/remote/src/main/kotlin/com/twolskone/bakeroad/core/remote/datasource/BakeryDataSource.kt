@@ -17,13 +17,13 @@ interface BakeryDataSource {
     suspend fun getHotBakeries(areaCodes: String, cursorValue: String, pageSize: Int): BakeriesResponse
     fun getBakeryDetail(bakeryId: Int): Flow<BakeryDetailResponse>
     fun getPreviewReviews(bakeryId: Int): Flow<BakeryReviewsResponse>
-    suspend fun getReviews(bakeryId: Int, sort: String, pageNo: Int, pageSize: Int): BakeryReviewsResponse
+    suspend fun getReviews(bakeryId: Int, sort: String, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     suspend fun getMyReviews(bakeryId: Int, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     fun getMenus(bakeryId: Int): Flow<List<BakeryMenuResponse>>
     fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit>
     fun postLike(bakeryId: Int): Flow<BakeryLikeResponse>
     fun deleteLike(bakeryId: Int): Flow<BakeryLikeResponse>
     fun checkReviewEligibility(bakeryId: Int): Flow<BakeryReviewEligibilityResponse>
-    suspend fun getLikeBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse
-    suspend fun getVisitedBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse
+    suspend fun getLikeBakeries(cursorValue: String, pageSize: Int, sort: String): BakeriesResponse
+    suspend fun getVisitedBakeries(cursorValue: String, pageSize: Int, sort: String): BakeriesResponse
 }

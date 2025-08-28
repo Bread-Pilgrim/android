@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.paging.StartCursor
+import com.twolskone.bakeroad.core.model.paging.StartCursorWithSort
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 
@@ -20,20 +22,18 @@ internal class BakeryReviewPagingSource(
     }
 
     override suspend fun load(params: LoadParams<String>): LoadResult<String, BakeryReview> {
-        val cursor = params.key ?: StartCursor
-
         return try {
             val response = if (myReview) {
                 bakeryDataSource.getMyReviews(
                     bakeryId = bakeryId,
-                    cursorValue = cursor,
+                    cursorValue = params.key ?: StartCursor,
                     pageSize = params.loadSize
                 )
             } else {
                 bakeryDataSource.getReviews(
                     bakeryId = bakeryId,
                     sort = sort?.value ?: ReviewSortType.LIKE_COUNT_DESC.value,
-                    pageNo = 1, // TODO. cursor paging
+                    cursorValue = params.key ?: StartCursorWithSort,
                     pageSize = params.loadSize
                 )
             }

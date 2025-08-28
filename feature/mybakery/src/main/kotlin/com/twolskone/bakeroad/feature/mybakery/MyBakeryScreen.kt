@@ -45,7 +45,7 @@ import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakerySortType
 import com.twolskone.bakeroad.core.ui.BakeryCard
 import com.twolskone.bakeroad.core.ui.EmptyCard
-import com.twolskone.bakeroad.core.ui.model.PagingUiState
+import com.twolskone.bakeroad.core.ui.model.CursorPagingUiState
 import com.twolskone.bakeroad.feature.mybakery.component.BakerySortBottomSheet
 import com.twolskone.bakeroad.feature.mybakery.component.label
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
@@ -156,7 +156,7 @@ private fun ColumnScope.MyBakerySection(
     loading: Boolean,
     tab: Tab,
     sort: BakerySortType,
-    paging: PagingUiState<Bakery>,
+    paging: CursorPagingUiState<Bakery>,
     listState: LazyListState,
     onSortClick: () -> Unit,
     onBakeryClick: (Bakery) -> Unit

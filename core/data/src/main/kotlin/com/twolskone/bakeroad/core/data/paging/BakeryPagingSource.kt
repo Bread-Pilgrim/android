@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.model.Bakery
+import com.twolskone.bakeroad.core.model.paging.StartCursor
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
 

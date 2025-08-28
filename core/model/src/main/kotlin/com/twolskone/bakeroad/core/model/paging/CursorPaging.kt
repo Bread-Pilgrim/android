@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.core.model.paging
 
-const val StartCursor = "0" // 시작 커서
+const val StartCursor = "0"             // 시작 커서
+const val StartCursorWithSort = "0||0"  // 시작 커서 (정렬 데이터)
 
 /**
  * 커서 페이징

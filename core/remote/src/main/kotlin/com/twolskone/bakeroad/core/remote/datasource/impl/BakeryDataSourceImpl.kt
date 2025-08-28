@@ -77,7 +77,7 @@ internal class BakeryDataSourceImpl @Inject constructor(
 
     override fun getPreviewReviews(bakeryId: Int): Flow<BakeryReviewsResponse> = flow {
         val response = api.getPreviewReviews(
-            pageNo = 1,
+            cursorValue = "0||0",
             pageSize = 5,
             sort = "LIKE_COUNT.DESC",
             bakeryId = bakeryId
@@ -88,12 +88,12 @@ internal class BakeryDataSourceImpl @Inject constructor(
     override suspend fun getReviews(
         bakeryId: Int,
         sort: String,
-        pageNo: Int,
+        cursorValue: String,
         pageSize: Int
     ): BakeryReviewsResponse {
         val response = api.getReviews(
             bakeryId = bakeryId,
-            pageNo = pageNo,
+            cursorValue = cursorValue,
             pageSize = pageSize,
             sort = sort
         )
@@ -148,18 +148,18 @@ internal class BakeryDataSourceImpl @Inject constructor(
         emitData(api.checkReviewEligibility(bakeryId = bakeryId))
     }.flowOn(networkDispatcher)
 
-    override suspend fun getLikeBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse {
+    override suspend fun getLikeBakeries(cursorValue: String, pageSize: Int, sort: String): BakeriesResponse {
         val response = api.getLikeBakeries(
-            pageNo = pageNo,
+            cursorValue = cursorValue,
             pageSize = pageSize,
             sort = sort
         )
         return response.toData()
     }
 
-    override suspend fun getVisitedBakeries(pageNo: Int, pageSize: Int, sort: String): BakeriesResponse {
+    override suspend fun getVisitedBakeries(cursorValue: String, pageSize: Int, sort: String): BakeriesResponse {
         val response = api.getVisitedBakeries(
-            pageNo = pageNo,
+            cursorValue = cursorValue,
             pageSize = pageSize,
             sort = sort
         )

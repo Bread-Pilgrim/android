@@ -8,7 +8,7 @@ import com.twolskone.bakeroad.core.domain.usecase.bakery.GetMyBakeriesUseCase
 import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
-import com.twolskone.bakeroad.core.model.paging.startPage
+import com.twolskone.bakeroad.core.model.paging.StartCursorWithSort
 import com.twolskone.bakeroad.core.model.type.MyBakeryType
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import com.twolskone.bakeroad.feature.mybakery.mvi.MyBakeryIntent
@@ -111,7 +111,7 @@ internal class MyBakeryViewModel @Inject constructor(
                 )
             }
             val nextPaging = getMyBakeriesUseCase(
-                page = if (refresh) startPage else section.paging.nextPage,
+                cursor = if (refresh) StartCursorWithSort else section.paging.nextCursor,
                 myBakeryType = MyBakeryType.VISITED,
                 sort = section.sort
             )
@@ -147,7 +147,7 @@ internal class MyBakeryViewModel @Inject constructor(
                 )
             }
             val nextPaging = getMyBakeriesUseCase(
-                page = if (refresh) startPage else section.paging.nextPage,
+                cursor = if (refresh) StartCursorWithSort else section.paging.nextCursor,
                 myBakeryType = MyBakeryType.LIKE,
                 sort = section.sort
             )

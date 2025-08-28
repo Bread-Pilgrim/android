@@ -2,9 +2,7 @@ package com.twolskone.bakeroad.core.data.paging
 
 import androidx.paging.PagingConfig
 
-internal const val InitialPage = 1
 internal const val DefaultPageSize = 15
-internal const val StartCursor = "0"
 
 internal fun defaultPagingConfig(
     pageSize: Int = DefaultPageSize,

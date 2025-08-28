@@ -4,7 +4,7 @@ import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.type.BakerySortType
-import com.twolskone.bakeroad.core.ui.model.PagingUiState
+import com.twolskone.bakeroad.core.ui.model.CursorPagingUiState
 import com.twolskone.bakeroad.feature.mybakery.model.Tab
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -29,12 +29,12 @@ internal data class MyBakeryState(
 internal data class VisitedSectionState(
     val loading: Boolean = true,
     val sort: BakerySortType = BakerySortType.CREATED_AT_DESC,
-    val paging: PagingUiState<Bakery> = PagingUiState(),
+    val paging: CursorPagingUiState<Bakery> = CursorPagingUiState(),
 )
 
 @Immutable
 internal data class LikeSectionState(
     val loading: Boolean = true,
     val sort: BakerySortType = BakerySortType.CREATED_AT_DESC,
-    val paging: PagingUiState<Bakery> = PagingUiState(),
+    val paging: CursorPagingUiState<Bakery> = CursorPagingUiState(),
 )

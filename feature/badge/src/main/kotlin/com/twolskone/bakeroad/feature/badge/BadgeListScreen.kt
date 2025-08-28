@@ -86,8 +86,8 @@ internal fun BadgeListScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     BakeRoadBadge(
-                        size = 90.dp,
-                        imageSize = 72.dp,
+                        size = 100.dp,
+                        imageSize = 90.dp,
                         badge = state.representativeBadge
                     )
                     Text(

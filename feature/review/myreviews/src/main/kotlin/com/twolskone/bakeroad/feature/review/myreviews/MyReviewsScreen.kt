@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
@@ -48,37 +50,39 @@ internal fun MyReviewsScreen(
             },
             title = { Text(text = stringResource(id = R.string.feature_review_myreviews)) }
         )
-        if (state.paging.isLoading) {
-            // TODO. 2
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f)
-                    .padding(horizontal = 16.dp),
-                contentPadding = PaddingValues(vertical = 20.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp),
-                state = listState
-            ) {
-                if (state.paging.list.isNotEmpty()) {
-                    items(
-                        items = state.paging.list,
-//                        key = { review -> review.id }
-                    ) {
-                        MyReviewCard(
-                            review = it,
-                            onLikeClick = onLikeClick
-                        )
-                    }
-                } else {
-                    item {
-                        EmptyCard(
-                            modifier = Modifier.fillMaxWidth(),
-                            description = stringResource(R.string.feature_review_myreviews_empty_review)
-                        )
-                    }
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            state = listState
+        ) {
+            if (state.paging.list.isNotEmpty()) {
+                items(
+                    items = state.paging.list,
+                    key = { review -> review.id }
+                ) {
+                    MyReviewCard(
+                        review = it,
+                        onLikeClick = onLikeClick
+                    )
+                }
+            } else {
+                item {
+                    EmptyCard(
+                        modifier = Modifier.fillMaxWidth(),
+                        description = stringResource(R.string.feature_review_myreviews_empty_review)
+                    )
                 }
             }
         }
+    }
+    if (state.paging.isLoading) {
+        BakeRoadLoadingScreen(
+            modifier = Modifier.fillMaxSize(),
+            type = LoadingType.Default
+        )
     }
 }

@@ -201,7 +201,7 @@ private fun ColumnScope.MyBakerySection(
             if (paging.list.isNotEmpty()) {
                 items(
                     items = paging.list,
-//                    key = { bakery -> bakery.id }
+                    key = { bakery -> bakery.id }
                 ) { bakery ->
                     BakeryCard(
                         bakery = bakery,

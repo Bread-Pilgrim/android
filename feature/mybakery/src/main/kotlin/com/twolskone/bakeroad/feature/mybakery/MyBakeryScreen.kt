@@ -204,6 +204,7 @@ private fun ColumnScope.MyBakerySection(
                     key = { bakery -> bakery.id }
                 ) { bakery ->
                     BakeryCard(
+                        modifier = Modifier.animateItem(),
                         bakery = bakery,
                         onCardClick = onBakeryClick
                     )

@@ -30,6 +30,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -40,6 +41,7 @@ import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickabl
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
 import com.twolskone.bakeroad.core.ui.ProfileImage
+import java.time.LocalDate
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 
@@ -166,7 +168,7 @@ internal fun ReviewCard(
         }
         Row(
             modifier = Modifier
-                .padding(top = 16.dp, bottom = CardPadding, start = CardPadding)
+                .padding(top = 16.dp, bottom = CardPadding, start = CardPadding, end = CardPadding)
                 .noRippleSingleClickable { onLikeClick(review.id, !isLike) },
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -177,13 +179,20 @@ internal fun ReviewCard(
                 tint = likeColor
             )
             Text(
-                modifier = Modifier.padding(start = 4.dp),
+                modifier = Modifier.padding(horizontal = 4.dp),
                 text = if (likeCount <= 0) {
                     stringResource(com.twolskone.bakeroad.core.ui.R.string.core_ui_label_like)
                 } else {
                     likeCount.toString()
                 },
                 style = BakeRoadTheme.typography.bodyXsmallRegular.copy(color = likeColor)
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = review.date?.let { "${it.year}.${it.monthValue}.${it.dayOfMonth}" }.orEmpty(),
+                style = BakeRoadTheme.typography.body2XsmallRegular,
+                color = BakeRoadTheme.colorScheme.Gray300,
+                textAlign = TextAlign.End
             )
         }
     }
@@ -205,6 +214,7 @@ private fun ReviewCardPreview() {
                 content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
                 rating = 5.0f,
                 likeCount = 100,
+                date = LocalDate.now(),
                 menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                 photos = emptyList()
             ),

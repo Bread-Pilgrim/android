@@ -31,6 +31,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -40,6 +41,7 @@ import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.MyBakeryReview
+import java.time.LocalDate
 
 private val CardShape = RoundedCornerShape(12.dp)
 private val CardPadding = 12.dp
@@ -149,7 +151,7 @@ internal fun MyReviewCard(
         }
         Row(
             modifier = Modifier
-                .padding(top = 16.dp, bottom = CardPadding, start = CardPadding)
+                .padding(top = 16.dp, bottom = CardPadding, start = CardPadding, end = CardPadding)
                 .noRippleSingleClickable { onLikeClick(review.id, !review.isLike) },
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -167,6 +169,13 @@ internal fun MyReviewCard(
                     review.likeCount.toString()
                 },
                 style = BakeRoadTheme.typography.bodyXsmallRegular.copy(color = likeColor)
+            )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = review.date?.let { "${it.year}.${it.monthValue}.${it.dayOfMonth}" }.orEmpty(),
+                style = BakeRoadTheme.typography.body2XsmallRegular,
+                color = BakeRoadTheme.colorScheme.Gray300,
+                textAlign = TextAlign.End
             )
         }
     }
@@ -186,6 +195,7 @@ private fun ReviewCardPreview() {
                 content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
                 rating = 5.0f,
                 likeCount = 100,
+                date = LocalDate.now(),
                 menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                 photos = emptyList()
             ),

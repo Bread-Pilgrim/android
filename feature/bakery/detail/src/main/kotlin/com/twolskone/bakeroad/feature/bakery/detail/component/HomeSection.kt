@@ -44,6 +44,7 @@ import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.core.ui.EmptyCard
 import com.twolskone.bakeroad.feature.bakery.detail.R
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.LoadingState
+import java.time.LocalDate
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
@@ -477,6 +478,7 @@ private fun ReviewContentPreview() {
                         content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
                         rating = 5.0f,
                         likeCount = 100,
+                        date = LocalDate.now(),
                         menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                         photos = emptyList()
                     )

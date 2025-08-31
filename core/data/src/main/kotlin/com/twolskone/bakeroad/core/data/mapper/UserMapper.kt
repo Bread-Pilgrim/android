@@ -11,6 +11,8 @@ import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
 import com.twolskone.bakeroad.core.remote.model.user.ReportMonthlyResponse
 import com.twolskone.bakeroad.core.remote.model.user.ReportResponse
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 internal fun MyBakeryReviewResponse.toExternalModel(): MyBakeryReview =
     MyBakeryReview(
@@ -21,6 +23,7 @@ internal fun MyBakeryReviewResponse.toExternalModel(): MyBakeryReview =
         content = reviewContent,
         rating = reviewRating,
         likeCount = reviewLikeCount,
+        date = runCatching { LocalDate.parse(reviewCreatedAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME) }.getOrDefault(null),
         menus = reviewMenus.map { it.menuName },
         photos = reviewPhotos.map { "${BuildConfig.UPLOADED_IMAGE_URL}${it.imgUrl}" }
     )

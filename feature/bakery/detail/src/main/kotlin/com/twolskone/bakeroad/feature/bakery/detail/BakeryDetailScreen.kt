@@ -62,6 +62,7 @@ import com.twolskone.bakeroad.feature.bakery.detail.component.tourArea
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailState
+import java.time.LocalDate
 import kotlinx.coroutines.flow.flowOf
 import timber.log.Timber
 
@@ -326,6 +327,7 @@ private fun BakeryDetailScreenPreview() {
                     content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
                     rating = 5.0f,
                     likeCount = 100,
+                    date = LocalDate.now(),
                     menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                     photos = emptyList()
                 )

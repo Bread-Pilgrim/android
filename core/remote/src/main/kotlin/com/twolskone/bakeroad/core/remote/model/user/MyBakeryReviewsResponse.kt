@@ -27,6 +27,8 @@ data class MyBakeryReviewResponse(
     val reviewLikeCount: Int = 0,
     @SerialName("is_like")
     val isLike: Boolean = false,
+    @SerialName("review_created_at")
+    val reviewCreatedAt: String = "",
     @SerialName("review_menus")
     val reviewMenus: List<Menu> = emptyList(),
     @SerialName("review_photos")

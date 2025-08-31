@@ -13,6 +13,8 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 internal fun RecommendBakeryResponse.toExternalModel(): RecommendBakery =
     RecommendBakery(
@@ -87,6 +89,7 @@ internal fun BakeryReviewResponse.toExternalModel(avgRating: Float, reviewCount:
         content = reviewContent,
         rating = reviewRating,
         likeCount = reviewLikeCount,
+        date = runCatching { LocalDate.parse(reviewCreatedAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME) }.getOrDefault(null),
         menus = reviewMenus.map { it.menuName },
         photos = reviewPhotos.map { "${BuildConfig.UPLOADED_IMAGE_URL}${it.imgUrl}" }
     )

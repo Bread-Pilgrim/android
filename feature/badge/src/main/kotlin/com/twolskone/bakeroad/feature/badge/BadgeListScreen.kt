@@ -92,7 +92,7 @@ internal fun BadgeListScreen(
                     )
                     Text(
                         modifier = Modifier.padding(top = 12.dp),
-                        text = stringResource(id = R.string.feature_badge_representative_badge_of, "김빵글"),
+                        text = stringResource(id = R.string.feature_badge_my_representative_badge),
                         style = BakeRoadTheme.typography.bodyMediumSemibold,
                         color = BakeRoadTheme.colorScheme.Primary500
                     )

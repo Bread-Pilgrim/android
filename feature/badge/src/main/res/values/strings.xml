@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="feature_badge_list">받은 뱃지</string>
-    <string name="feature_badge_representative_badge_of">%1$s님의 대표뱃지</string>
+    <string name="feature_badge_my_representative_badge">나의 대표뱃지</string>
     <string name="feature_badge_none">없음</string>
     <string name="feature_badge_button_set_badge">대표 뱃지로 설정</string>
     <string name="feature_badge_button_remove_badge">대표 뱃지 해지하기</string>

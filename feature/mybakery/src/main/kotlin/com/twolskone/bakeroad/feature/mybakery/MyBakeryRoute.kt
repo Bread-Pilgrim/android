@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.model.paging.StartCursorWithSort
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_LIKE
 import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_BAKERY_LIST
@@ -95,6 +96,18 @@ internal fun MyBakeryRoute(
             }
     }
 
+    LaunchedEffect(state.visitedSection.paging.list) {
+        if (state.visitedSection.paging.currentCursor == StartCursorWithSort) {
+            visitedListState.scrollToItem(0)
+        }
+    }
+
+    LaunchedEffect(state.likeSection.paging.list) {
+        if (state.likeSection.paging.currentCursor == StartCursorWithSort) {
+            likeListState.scrollToItem(0)
+        }
+    }
+
     MyBakeryScreen(
         padding = padding,
         state = state,
@@ -103,15 +116,8 @@ internal fun MyBakeryRoute(
         onTabSelect = { tab -> viewModel.intent(MyBakeryIntent.SelectTab(tab = tab)) },
         onSortSelect = { tab, sort ->
             when (tab) {
-                Tab.VISITED -> {
-                    scope.launch { visitedListState.scrollToItem(0) }
-                    viewModel.intent(MyBakeryIntent.SelectVisitedSort(sort = sort))
-                }
-
-                Tab.LIKE -> {
-                    scope.launch { likeListState.scrollToItem(0) }
-                    viewModel.intent(MyBakeryIntent.SelectLikeSort(sort = sort))
-                }
+                Tab.VISITED -> viewModel.intent(MyBakeryIntent.SelectVisitedSort(sort = sort))
+                Tab.LIKE -> viewModel.intent(MyBakeryIntent.SelectLikeSort(sort = sort))
             }
         },
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },

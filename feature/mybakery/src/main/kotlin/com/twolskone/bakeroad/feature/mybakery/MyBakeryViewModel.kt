@@ -98,6 +98,7 @@ internal class MyBakeryViewModel @Inject constructor(
     private fun getVisitedBakeries(refresh: Boolean) {
         launch {
             val section = state.value.visitedSection
+            val visitedBakeryIds = section.visitedBakeryIds.run { if (refresh) clear() else this }
             if (!refresh && !section.paging.canRequest) {
                 Timber.i("xxx visitedPaging is loading or last page")
                 return@launch
@@ -114,7 +115,10 @@ internal class MyBakeryViewModel @Inject constructor(
                 cursor = if (refresh) StartCursorWithSort else section.paging.nextCursor,
                 myBakeryType = MyBakeryType.VISITED,
                 sort = section.sort
-            )
+            ).run {
+                // 중복 제거
+                copy(list = list.filter { !visitedBakeryIds.contains(it.id) })
+            }
             reduce {
                 copy(
                     isRefreshing = false,
@@ -124,7 +128,8 @@ internal class MyBakeryViewModel @Inject constructor(
                             visitedSection.paging.refresh(nextPaging)
                         } else {
                             visitedSection.paging.merge(nextPaging)
-                        }
+                        },
+                        visitedBakeryIds = visitedBakeryIds.addAll(nextPaging.list.map { it.id })
                     )
                 )
             }

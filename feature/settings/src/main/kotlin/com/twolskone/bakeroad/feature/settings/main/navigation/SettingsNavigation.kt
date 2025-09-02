@@ -9,12 +9,14 @@ import kotlinx.serialization.Serializable
 internal data object SettingsRoute
 
 internal fun NavGraphBuilder.settingsScreen(
+    goBack: () -> Unit,
     navigateToNotice: () -> Unit,
     navigateToAppInfo: () -> Unit,
     navigateToLogin: () -> Unit
 ) {
     composable<SettingsRoute> {
         SettingsRoute(
+            goBack = goBack,
             navigateToNotice = navigateToNotice,
             navigateToAppInfo = navigateToAppInfo,
             navigateToLogin = navigateToLogin

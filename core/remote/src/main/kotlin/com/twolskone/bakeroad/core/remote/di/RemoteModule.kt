@@ -4,6 +4,7 @@ import com.twolskone.bakeroad.core.remote.datasource.AreaDataSource
 import com.twolskone.bakeroad.core.remote.datasource.AuthDataSource
 import com.twolskone.bakeroad.core.remote.datasource.BadgeDataSource
 import com.twolskone.bakeroad.core.remote.datasource.BakeryDataSource
+import com.twolskone.bakeroad.core.remote.datasource.NoticeDataSource
 import com.twolskone.bakeroad.core.remote.datasource.PreferDataSource
 import com.twolskone.bakeroad.core.remote.datasource.ReviewDataSource
 import com.twolskone.bakeroad.core.remote.datasource.SearchDataSource
@@ -13,6 +14,7 @@ import com.twolskone.bakeroad.core.remote.datasource.impl.AreaDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.AuthDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.BadgeDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.BakeryDataSourceImpl
+import com.twolskone.bakeroad.core.remote.datasource.impl.NoticeDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.PreferDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.ReviewDataSourceImpl
 import com.twolskone.bakeroad.core.remote.datasource.impl.SearchDataSourceImpl
@@ -63,4 +65,8 @@ internal abstract class RemoteModule {
     @Binds
     @Singleton
     abstract fun bindsBadgeDataSource(badgeDataSource: BadgeDataSourceImpl): BadgeDataSource
+
+    @Binds
+    @Singleton
+    abstract fun bindsNoticeDataSource(noticeDataSource: NoticeDataSourceImpl): NoticeDataSource
 }

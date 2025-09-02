@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -31,11 +32,14 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.Notice
 import com.twolskone.bakeroad.feature.settings.R
+import com.twolskone.bakeroad.feature.settings.notice.mvi.NoticeState
 
 @Composable
 internal fun NoticeScreen(
     modifier: Modifier = Modifier,
+    state: NoticeState,
     onBackClick: () -> Unit
 ) {
     Column(
@@ -58,8 +62,14 @@ internal fun NoticeScreen(
         LazyColumn(
             modifier = Modifier.fillMaxWidth()
         ) {
-            items(5) {
-                NoticeItem(modifier = Modifier.fillMaxWidth())
+            items(
+                items = state.noticeList,
+                key = { notice -> notice.id }
+            ) {
+                NoticeItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    notice = it
+                )
             }
         }
     }
@@ -67,7 +77,8 @@ internal fun NoticeScreen(
 
 @Composable
 private fun NoticeItem(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    notice: Notice
 ) {
     var isExpand by remember { mutableStateOf(false) }
     val arrowIconAngle by animateFloatAsState(
@@ -89,7 +100,7 @@ private fun NoticeItem(
             ) {
                 Text(
                     modifier = Modifier.weight(1f),
-                    text = "성수동 인기 빵집 정보 업데이트 안내",
+                    text = notice.title,
                     style = BakeRoadTheme.typography.bodyMediumSemibold,
                     color = BakeRoadTheme.colorScheme.Gray900
                 )
@@ -105,8 +116,7 @@ private fun NoticeItem(
                     modifier = Modifier
                         .padding(top = 12.dp, end = 44.dp)
                         .fillMaxWidth(),
-                    text = "최근 성수동 지역의 인기 베이커리 정보를 새롭게 반영하였습니다.\n" +
-                            "주말 방문 전, 최신 운영시간과 메뉴 정보를 확인해 주세요.",
+                    text = notice.content,
                     style = BakeRoadTheme.typography.bodyXsmallRegular,
                     color = BakeRoadTheme.colorScheme.Gray800
                 )
@@ -122,6 +132,7 @@ private fun NoticeScreenPreview() {
     BakeRoadTheme {
         NoticeScreen(
             modifier = Modifier.fillMaxSize(),
+            state = NoticeState(),
             onBackClick = {}
         )
     }

@@ -9,9 +9,11 @@ import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsDialogState
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsIntent
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsSideEffect
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import timber.log.Timber
 
+@HiltViewModel
 internal class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<SettingsState, SettingsIntent, SettingsSideEffect>(savedStateHandle) {

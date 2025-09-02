@@ -91,30 +91,30 @@ internal fun AppInfoScreen(
         }
         HorizontalDivider(color = BakeRoadTheme.colorScheme.Gray50)
         // 사용자 정보
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(InfoPadding)
-        ) {
-            Text(
-                text = stringResource(id = R.string.feature_settings_title_user_info),
-                style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray900)
-            )
-            ProvideTextStyle(InfoTextStyle) {
-                Text(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = ""
-                )
-                Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    text = ""
-                )
-                Text(
-                    modifier = Modifier.padding(top = 8.dp),
-                    text = ""
-                )
-            }
-        }
+//        Column(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .padding(InfoPadding)
+//        ) {
+//            Text(
+//                text = stringResource(id = R.string.feature_settings_title_user_info),
+//                style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Gray900)
+//            )
+//            ProvideTextStyle(InfoTextStyle) {
+//                Text(
+//                    modifier = Modifier.padding(top = 12.dp),
+//                    text = ""
+//                )
+//                Text(
+//                    modifier = Modifier.padding(top = 8.dp),
+//                    text = ""
+//                )
+//                Text(
+//                    modifier = Modifier.padding(top = 8.dp),
+//                    text = ""
+//                )
+//            }
+//        }
     }
 }
 

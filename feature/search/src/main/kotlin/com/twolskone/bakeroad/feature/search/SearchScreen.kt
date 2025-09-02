@@ -25,8 +25,10 @@ import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadSearchTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Bakery
+import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.ui.BakeryCard
 import com.twolskone.bakeroad.core.ui.EmptyCard
+import com.twolskone.bakeroad.core.ui.RecommendBakeryCard
 import com.twolskone.bakeroad.feature.search.component.RecentSearchQueryChip
 import com.twolskone.bakeroad.feature.search.component.SectionTitle
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
@@ -47,7 +49,8 @@ internal fun SearchScreen(
     onDeleteQueryClick: (String) -> Unit,
     onDeleteAllQueriesClick: () -> Unit,
     onSearchResultClick: (Bakery) -> Unit,
-    onClearQueriesClick: () -> Unit
+    onClearQueriesClick: () -> Unit,
+    onRecentBakeryClick: (RecommendBakery) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -65,7 +68,11 @@ internal fun SearchScreen(
             onClearClick = onClearQueriesClick
         )
         when (state.section) {
-            SearchSection.RecentSearchResult -> RecentSearchResult(list = state.recentSearchBakeryList)
+            SearchSection.RecentSearchResult -> RecentSearchResult(
+                list = state.recentBakeryList,
+                onCardClick = onRecentBakeryClick
+            )
+
             SearchSection.RecentSearchQueries -> RecentSearchQueries(
                 queryList = state.recentQueryList,
                 onChipClick = { query ->
@@ -89,7 +96,10 @@ internal fun SearchScreen(
  * 최근 조회한 빵집
  */
 @Composable
-private fun ColumnScope.RecentSearchResult(list: ImmutableList<Bakery>) {
+private fun ColumnScope.RecentSearchResult(
+    list: ImmutableList<RecommendBakery>,
+    onCardClick: (RecommendBakery) -> Unit
+) {
     SectionTitle(
         title = stringResource(id = R.string.feature_search_title_recent_search_result),
         deleteAllEnabled = list.isNotEmpty(),
@@ -101,7 +111,15 @@ private fun ColumnScope.RecentSearchResult(list: ImmutableList<Bakery>) {
             contentPadding = PaddingValues(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
-
+            items(
+                items = list,
+                key = { bakery -> bakery.id }
+            ) {
+                RecommendBakeryCard(
+                    bakery = it,
+                    onCardClick = onCardClick
+                )
+            }
         }
     } else {
         EmptyCard(

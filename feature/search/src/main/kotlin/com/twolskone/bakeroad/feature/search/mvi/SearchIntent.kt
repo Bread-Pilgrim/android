@@ -8,4 +8,5 @@ internal sealed interface SearchIntent : BaseUiIntent {
     data class DeleteQuery(val query: String) : SearchIntent
     data object DeleteAllQueries : SearchIntent
     data class SetLoading(val loading: Boolean) : SearchIntent
+    data object RefreshRecentBakeries : SearchIntent
 }

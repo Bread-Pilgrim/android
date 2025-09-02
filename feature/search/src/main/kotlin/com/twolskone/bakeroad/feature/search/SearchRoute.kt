@@ -24,6 +24,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.feature.search.mvi.SearchIntent
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filterIsInstance
 import timber.log.Timber
 
@@ -54,6 +55,16 @@ internal fun SearchRoute(
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchResult))
         } else {
             goBack()
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.mainEventBus.searchRefreshState.collectLatest { refresh ->
+            if (refresh) {
+                Timber.i("xxx collect searchRefreshState")
+                viewModel.mainEventBus.setSearchRefreshState(value = false)
+                viewModel.intent(SearchIntent.RefreshRecentBakeries)
+            }
         }
     }
 
@@ -97,6 +108,7 @@ internal fun SearchRoute(
         onClearQueriesClick = {
             queryTextState.clearText()
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))
-        }
+        },
+        onRecentBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) }
     )
 }

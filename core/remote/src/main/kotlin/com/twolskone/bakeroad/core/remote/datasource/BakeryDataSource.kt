@@ -26,4 +26,5 @@ interface BakeryDataSource {
     fun checkReviewEligibility(bakeryId: Int): Flow<BakeryReviewEligibilityResponse>
     suspend fun getLikeBakeries(cursorValue: String, pageSize: Int, sort: String): BakeriesResponse
     suspend fun getVisitedBakeries(cursorValue: String, pageSize: Int, sort: String): BakeriesResponse
+    fun getRecentBakeries(): Flow<List<RecommendBakeryResponse>>
 }

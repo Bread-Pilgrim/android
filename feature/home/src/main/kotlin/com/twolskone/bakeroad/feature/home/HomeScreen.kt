@@ -43,9 +43,9 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
+import com.twolskone.bakeroad.core.ui.RecommendBakeryCard
 import com.twolskone.bakeroad.core.ui.TourAreaCard
 import com.twolskone.bakeroad.core.ui.popup.AreaEventBottomSheet
-import com.twolskone.bakeroad.feature.home.component.RecommendBakeryCard
 import com.twolskone.bakeroad.feature.home.component.Title
 import com.twolskone.bakeroad.feature.home.mvi.HomeState
 import com.twolskone.bakeroad.feature.home.mvi.SheetState

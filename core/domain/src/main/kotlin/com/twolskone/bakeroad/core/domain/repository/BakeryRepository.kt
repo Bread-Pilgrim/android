@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
 import com.twolskone.bakeroad.core.model.paging.CursorPaging
@@ -24,4 +25,5 @@ interface BakeryRepository {
     fun deleteLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
     fun checkReviewEligibility(bakeryId: Int): Flow<Boolean>
     fun getMyBakeries(cursor: String, myBakeryType: MyBakeryType, sort: BakerySortType): Flow<CursorPaging<Bakery>>
+    fun getRecentBakeries(): Flow<List<RecommendBakery>>
 }

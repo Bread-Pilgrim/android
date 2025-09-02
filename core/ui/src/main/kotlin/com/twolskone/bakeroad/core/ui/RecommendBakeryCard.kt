@@ -1,4 +1,4 @@
-package com.twolskone.bakeroad.feature.home.component
+package com.twolskone.bakeroad.core.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,7 +33,6 @@ import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickabl
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
-import com.twolskone.bakeroad.core.ui.BakeryOpenStatusChip
 
 private val ImageSize = 116.dp
 private val ImageShape = RoundedCornerShape(6.dp)
@@ -43,7 +42,7 @@ private val CardHeight = 213.dp
  * 빵집 추천 카드
  */
 @Composable
-internal fun RecommendBakeryCard(
+fun RecommendBakeryCard(
     modifier: Modifier = Modifier,
     bakery: RecommendBakery,
     onCardClick: (RecommendBakery) -> Unit
@@ -82,7 +81,7 @@ internal fun RecommendBakeryCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_star_yellow),
+                imageVector = ImageVector.vectorResource(id = R.drawable.core_ui_ic_star_yellow),
                 contentDescription = "RatingStar"
             )
             Text(

@@ -117,4 +117,8 @@ internal interface BakeryApi {
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeriesResponse>
+
+    /* 최근 조회한 빵집 목록 */
+    @GET("bakeries/recent")
+    suspend fun getRecentBakeries(): BaseResponse<List<RecommendBakeryResponse>>
 }

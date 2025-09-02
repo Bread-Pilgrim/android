@@ -165,4 +165,8 @@ internal class BakeryDataSourceImpl @Inject constructor(
         )
         return response.toData()
     }
+
+    override fun getRecentBakeries(): Flow<List<RecommendBakeryResponse>> = flow {
+        emitData(api.getRecentBakeries())
+    }.flowOn(networkDispatcher)
 }

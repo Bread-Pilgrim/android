@@ -13,13 +13,22 @@ import timber.log.Timber
 
 class MainEventBusImpl @Inject constructor() : MainEventBus {
 
-    private val _homeRefreshEvent = MutableStateFlow(false)
+    private val _homeRefreshState = MutableStateFlow(false)
     override val homeRefreshState: StateFlow<Boolean>
-        get() = _homeRefreshEvent.asStateFlow()
+        get() = _homeRefreshState.asStateFlow()
 
     override fun setHomeRefreshState(value: Boolean) {
-        Timber.i("xxx setRefreshHomeState : $value")
-        _homeRefreshEvent.value = value
+        Timber.i("xxx setHomeRefreshState : $value")
+        _homeRefreshState.value = value
+    }
+
+    private val _searchRefreshState = MutableStateFlow(false)
+    override val searchRefreshState: StateFlow<Boolean>
+        get() = _searchRefreshState.asStateFlow()
+
+    override fun setSearchRefreshState(value: Boolean) {
+        Timber.i("xxx setSearchRefreshState : $value")
+        _searchRefreshState.value = value
     }
 
     private val _homeReselectEvent = MutableSharedFlow<Unit>(/*extraBufferCapacity = 1*/)

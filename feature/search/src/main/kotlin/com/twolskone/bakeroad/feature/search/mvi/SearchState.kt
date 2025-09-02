@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.search.mvi
 import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 import com.twolskone.bakeroad.core.model.Bakery
+import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection.RecentSearchQueries
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection.RecentSearchResult
 import com.twolskone.bakeroad.feature.search.mvi.SearchSection.SearchResult
@@ -13,7 +14,7 @@ import kotlinx.collections.immutable.persistentListOf
 internal data class SearchState(
     val loading: Boolean = false,
     val section: SearchSection = RecentSearchResult,
-    val recentSearchBakeryList: ImmutableList<Bakery> = persistentListOf(),
+    val recentBakeryList: ImmutableList<RecommendBakery> = persistentListOf(),
     val recentQueryList: ImmutableList<Pair<String, String>> = persistentListOf(),
     val searchBakeryList: ImmutableList<Bakery> = persistentListOf()
 ) : BaseUiState

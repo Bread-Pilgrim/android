@@ -99,6 +99,7 @@ internal class BakeryDetailViewModel @Inject constructor(
     }
 
     init {
+        mainEvetBus.setSearchRefreshState(value = true) // 검색 탭, 최근 조회한 빵집 목록 갱신.
         getBakeryDetail()
         getPreviewReviews()
         getTourAreas()

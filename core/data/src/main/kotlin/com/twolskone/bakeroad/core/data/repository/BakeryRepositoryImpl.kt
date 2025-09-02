@@ -14,6 +14,7 @@ import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.RecommendBakery
 import com.twolskone.bakeroad.core.model.ReviewMenu
 import com.twolskone.bakeroad.core.model.WriteBakeryReview
 import com.twolskone.bakeroad.core.model.paging.CursorPaging
@@ -146,4 +147,13 @@ internal class BakeryRepositoryImpl @Inject constructor(
         )
         emit(paging)
     }.flowOn(networkDispatcher)
+
+    override fun getRecentBakeries(): Flow<List<RecommendBakery>> {
+        return bakeryDataSource.getRecentBakeries()
+            .map { bakeries ->
+                bakeries.map { bakery ->
+                    bakery.toExternalModel()
+                }
+            }
+    }
 }

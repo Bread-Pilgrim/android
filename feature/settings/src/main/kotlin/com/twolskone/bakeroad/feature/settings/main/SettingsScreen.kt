@@ -33,7 +33,8 @@ internal fun SettingsScreen(
     onBackClick: () -> Unit,
     onNoticeClick: () -> Unit,
     onAppInfoClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
+    onDeleteAccountClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -66,10 +67,18 @@ internal fun SettingsScreen(
         HorizontalDivider(color = BakeRoadTheme.colorScheme.Gray50)
         SettingsMenu(
             modifier = Modifier.fillMaxWidth(),
-            text = stringResource(id = R.string.feature_settings_label_logout),
+            text = stringResource(id = R.string.feature_settings_logout),
             textStyle = BakeRoadTheme.typography.bodyMediumMedium.copy(color = BakeRoadTheme.colorScheme.Gray400),
             showRightArrow = false,
-            onClick = {}
+            onClick = onLogoutClick
+        )
+        HorizontalDivider(color = BakeRoadTheme.colorScheme.Gray50)
+        SettingsMenu(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.feature_settings_delete_account),
+            textStyle = BakeRoadTheme.typography.bodyMediumMedium.copy(color = BakeRoadTheme.colorScheme.Gray400),
+            showRightArrow = false,
+            onClick = onDeleteAccountClick
         )
     }
 }
@@ -114,7 +123,8 @@ private fun SettingsScreenPreview() {
             onBackClick = {},
             onNoticeClick = {},
             onAppInfoClick = {},
-            onLogoutClick = {}
+            onLogoutClick = {},
+            onDeleteAccountClick = {}
         )
     }
 }

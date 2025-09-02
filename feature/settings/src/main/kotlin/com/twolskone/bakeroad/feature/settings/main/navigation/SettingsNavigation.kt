@@ -10,12 +10,14 @@ internal data object SettingsRoute
 
 internal fun NavGraphBuilder.settingsScreen(
     navigateToNotice: () -> Unit,
-    navigateToAppInfo: () -> Unit
+    navigateToAppInfo: () -> Unit,
+    navigateToLogin: () -> Unit
 ) {
     composable<SettingsRoute> {
         SettingsRoute(
             navigateToNotice = navigateToNotice,
-            navigateToAppInfo = navigateToAppInfo
+            navigateToAppInfo = navigateToAppInfo,
+            navigateToLogin = navigateToLogin
         )
     }
 }

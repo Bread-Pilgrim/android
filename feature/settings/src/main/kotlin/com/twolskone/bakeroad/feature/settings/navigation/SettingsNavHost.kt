@@ -16,7 +16,8 @@ import com.twolskone.bakeroad.feature.settings.notice.navigation.noticeScreen
 @Composable
 internal fun SettingsNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    navigateToLogin: () -> Unit
 ) {
     NavHost(
         modifier = modifier,
@@ -25,7 +26,8 @@ internal fun SettingsNavHost(
     ) {
         settingsScreen(
             navigateToNotice = navController::navigateToNotice,
-            navigateToAppInfo = navController::navigateToAppInfo
+            navigateToAppInfo = navController::navigateToAppInfo,
+            navigateToLogin = navigateToLogin
         )
         appInfoScreen(
             goBack = {

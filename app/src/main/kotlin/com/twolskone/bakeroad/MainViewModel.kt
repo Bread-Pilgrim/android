@@ -19,9 +19,7 @@ internal class MainViewModel @Inject constructor(
         return MainState()
     }
 
-    override fun handleException(cause: Throwable) {
-
-    }
+    override fun handleException(cause: Throwable) {}
 
     override suspend fun handleIntent(intent: MainIntent) {
         when (intent) {

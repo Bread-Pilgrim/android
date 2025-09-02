@@ -38,10 +38,10 @@ fun BakeRoadAlert(
     title: String = "",
     content: String = "",
     primaryText: String,
-    secondaryText: String,
+    secondaryText: String = "",
     onDismissRequest: () -> Unit,
     onPrimaryAction: () -> Unit,
-    onSecondaryAction: () -> Unit
+    onSecondaryAction: () -> Unit = {}
 ) {
     val windowInfo = LocalWindowInfo.current
     val density = LocalDensity.current
@@ -55,16 +55,20 @@ fun BakeRoadAlert(
         onDismissRequest = onDismissRequest,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {
-            Text(
-                modifier = Modifier.padding(top = 4.dp),
-                text = title,
-                style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Gray990)
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = content,
-                style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
-            )
+            if (title.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = title,
+                    style = BakeRoadTheme.typography.headingSmallBold.copy(color = BakeRoadTheme.colorScheme.Gray990)
+                )
+            }
+            if (content.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = content,
+                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
+                )
+            }
             Spacer(modifier = Modifier.height(20.dp))
             BakeRoadPopupButtons(
                 buttonType = buttonType,
@@ -88,17 +92,18 @@ private fun BakeRoadPopupButtons(
     when (buttonType) {
         PopupButton.SHORT -> {
             Row(modifier = Modifier.fillMaxWidth()) {
-                BakeRoadOutlinedButton(
-                    modifier = Modifier.weight(1f),
-                    role = OutlinedButtonRole.SECONDARY,
-                    size = ButtonSize.LARGE,
-                    onClick = onSecondaryClick,
-                    content = { Text(text = secondaryText) }
-                )
+                if (secondaryText.isNotEmpty()) {
+                    BakeRoadOutlinedButton(
+                        modifier = Modifier.weight(1f),
+                        role = OutlinedButtonRole.SECONDARY,
+                        size = ButtonSize.LARGE,
+                        onClick = onSecondaryClick,
+                        content = { Text(text = secondaryText) }
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
                 BakeRoadSolidButton(
-                    modifier = Modifier
-                        .padding(start = 8.dp)
-                        .weight(1f),
+                    modifier = Modifier.weight(1f),
                     role = SolidButtonRole.PRIMARY,
                     size = ButtonSize.LARGE,
                     onClick = onPrimaryClick,
@@ -115,15 +120,16 @@ private fun BakeRoadPopupButtons(
                 onClick = onPrimaryClick,
                 content = { Text(text = primaryText) }
             )
-            BakeRoadOutlinedButton(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .fillMaxWidth(),
-                role = OutlinedButtonRole.SECONDARY,
-                size = ButtonSize.LARGE,
-                onClick = onSecondaryClick,
-                content = { Text(text = secondaryText) }
-            )
+            if (secondaryText.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                BakeRoadOutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    role = OutlinedButtonRole.SECONDARY,
+                    size = ButtonSize.LARGE,
+                    onClick = onSecondaryClick,
+                    content = { Text(text = secondaryText) }
+                )
+            }
         }
     }
 }

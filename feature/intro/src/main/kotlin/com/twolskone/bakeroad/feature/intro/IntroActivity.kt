@@ -8,10 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
-import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.designsystem.theme.White
 import com.twolskone.bakeroad.core.navigator.MainNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
+import com.twolskone.bakeroad.core.navigator.util.KEY_LOGIN
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -25,7 +25,12 @@ internal class IntroActivity : ComponentActivity() {
     lateinit var mainNavigator: MainNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val splashScreen = installSplashScreen()
+        val splashScreen = if (intent.getBooleanExtra(KEY_LOGIN, false)) {
+            setTheme(com.twolskone.bakeroad.core.designsystem.R.style.CoreDesignSystem_BakeRoad_Theme)
+            null
+        } else {
+            installSplashScreen()
+        }
         setSystemBarColorTheme(lightTheme = true)
         super.onCreate(savedInstanceState)
 
@@ -39,7 +44,7 @@ internal class IntroActivity : ComponentActivity() {
         }
 
         // Disable default splash screen exit animation.
-        splashScreen.setOnExitAnimationListener {
+        splashScreen?.setOnExitAnimationListener {
             it.remove()
             setSystemBarColorTheme(lightTheme = true)
         }

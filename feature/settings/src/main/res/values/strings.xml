@@ -3,9 +3,15 @@
     <string name="feature_settings">설정</string>
     <string name="feature_settings_notice">공지사항</string>
     <string name="feature_settings_app_info">앱 정보</string>
-    <string name="feature_settings_label_logout">로그아웃</string>
+    <string name="feature_settings_logout">로그아웃</string>
+    <string name="feature_settings_delete_account">계정 탈퇴</string>
     <string name="feature_settings_title_device_info">장치 정보</string>
     <string name="feature_settings_title_app_version">앱 버전</string>
     <string name="feature_settings_title_user_info">사용자 정보</string>
     <string name="feature_settings_label_app_version">버전 %s</string>
+    <string name="feature_settings_button_delete_account">탈퇴하기</string>
+    <string name="feature_settings_alert_title_logout">로그아웃 하시겠어요?</string>
+    <string name="feature_settings_alert_title_delete_account">⚠️ 계정 탈퇴 안내</string>
+    <string name="feature_settings_alert_description_delete_account">• 빵글 계정 및 모든 기록(리뷰, 찜, 뱃지 등)이 삭제됩니다.\n• 삭제된 데이터는 복구할 수 없습니다.\n• 카카오 계정 연동도 함께 해제됩니다.</string>
+    <string name="feature_settings_alert_description_delete_account_completion">계정 탈퇴가 완료되었습니다.\n그동안 빵글을 이용해 주셔서 감사합니다.\n언제든 다시 찾아와주세요! 🍞</string>
 </resources>

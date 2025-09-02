@@ -5,6 +5,7 @@ import com.kakao.sdk.common.model.AuthError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.common.model.KakaoSdkError
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
+import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.auth.LoginUseCase
 import com.twolskone.bakeroad.core.domain.usecase.auth.VerifyTokenUseCase
@@ -12,6 +13,7 @@ import com.twolskone.bakeroad.core.domain.usecase.user.GetOnboardingStatusUseCas
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientError
 import com.twolskone.bakeroad.core.exception.ClientException
+import com.twolskone.bakeroad.core.navigator.util.KEY_LOGIN
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
 import com.twolskone.bakeroad.feature.intro.mvi.IntroSideEffect
 import com.twolskone.bakeroad.feature.intro.mvi.IntroState
@@ -29,6 +31,16 @@ internal class IntroViewModel @Inject constructor(
     private val getOnboardingStatusUseCase: GetOnboardingStatusUseCase
 ) : BaseViewModel<IntroState, IntroIntent, IntroSideEffect>(savedStateHandle) {
 
+    override fun initState(savedStateHandle: SavedStateHandle): IntroState {
+        return IntroState(
+            type = if (savedStateHandle.get<Boolean>(KEY_LOGIN).orFalse()) {
+                IntroType.LOGIN
+            } else {
+                IntroType.SPLASH
+            }
+        )
+    }
+
     init {
         launch {
             if (verifyTokenUseCase()) {
@@ -41,10 +53,6 @@ internal class IntroViewModel @Inject constructor(
         }
     }
 
-    override fun initState(savedStateHandle: SavedStateHandle): IntroState {
-        return IntroState()
-    }
-
     override suspend fun handleIntent(intent: IntroIntent) {
         when (intent) {
             is IntroIntent.LoginKakao -> {
@@ -55,7 +63,6 @@ internal class IntroViewModel @Inject constructor(
 
     override fun handleException(cause: Throwable) {
         Timber.e(cause.message)
-
         when (cause) {
             // 카카오 로그인
             is KakaoSdkError -> {

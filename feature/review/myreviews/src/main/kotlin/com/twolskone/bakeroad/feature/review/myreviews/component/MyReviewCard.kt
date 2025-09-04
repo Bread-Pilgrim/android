@@ -150,26 +150,34 @@ internal fun MyReviewCard(
             }
         }
         Row(
-            modifier = Modifier
-                .padding(top = 16.dp, bottom = CardPadding, start = CardPadding, end = CardPadding)
-                .noRippleSingleClickable { onLikeClick(review.id, !review.isLike) },
+            modifier = Modifier.padding(
+                top = 16.dp,
+                bottom = CardPadding,
+                start = CardPadding,
+                end = CardPadding
+            ),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                modifier = Modifier.size(20.dp),
-                imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_fill),
-                contentDescription = "Like",
-                tint = likeColor
-            )
-            Text(
-                modifier = Modifier.padding(start = 4.dp),
-                text = if (review.likeCount <= 0) {
-                    stringResource(com.twolskone.bakeroad.core.ui.R.string.core_ui_label_like)
-                } else {
-                    review.likeCount.toString()
-                },
-                style = BakeRoadTheme.typography.bodyXsmallRegular.copy(color = likeColor)
-            )
+            Row(
+                modifier = Modifier.noRippleSingleClickable { onLikeClick(review.id, !review.isLike) },
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    modifier = Modifier.size(20.dp),
+                    imageVector = ImageVector.vectorResource(id = com.twolskone.bakeroad.core.ui.R.drawable.core_ui_ic_heart_fill),
+                    contentDescription = "Like",
+                    tint = likeColor
+                )
+                Text(
+                    modifier = Modifier.padding(start = 4.dp),
+                    text = if (review.likeCount <= 0) {
+                        stringResource(com.twolskone.bakeroad.core.ui.R.string.core_ui_label_like)
+                    } else {
+                        review.likeCount.toString()
+                    },
+                    style = BakeRoadTheme.typography.bodyXsmallRegular.copy(color = likeColor)
+                )
+            }
             Text(
                 modifier = Modifier.weight(1f),
                 text = review.date?.let { "${it.year}.${it.monthValue}.${it.dayOfMonth}" }.orEmpty(),

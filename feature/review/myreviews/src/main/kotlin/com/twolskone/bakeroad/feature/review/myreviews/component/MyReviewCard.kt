@@ -39,6 +39,7 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.MyBakeryReview
 import java.time.LocalDate
@@ -51,6 +52,7 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
 internal fun MyReviewCard(
     modifier: Modifier = Modifier,
     review: MyBakeryReview,
+    onBakeryNameClick: (bakeryId: Int) -> Unit,
     onLikeClick: (Int, Boolean) -> Unit
 ) {
     val likeColor by animateColorAsState(
@@ -79,7 +81,7 @@ internal fun MyReviewCard(
         ) {
             // 빵집 이름
             Text(
-                modifier = Modifier,
+                modifier = Modifier.singleClickable { onBakeryNameClick(review.bakeryId) },
                 text = review.bakeryName,
                 style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
             )
@@ -207,6 +209,7 @@ private fun ReviewCardPreview() {
                 menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                 photos = emptyList()
             ),
+            onBakeryNameClick = {},
             onLikeClick = { _, _ -> }
         )
     }

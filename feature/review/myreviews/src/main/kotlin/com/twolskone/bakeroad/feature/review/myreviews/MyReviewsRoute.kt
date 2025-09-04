@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 internal fun MyReviewRoute(
     viewModel: MyReviewsViewModel = hiltViewModel(),
+    navigateToBakeryDetail: (bakeryId: Int) -> Unit,
     finish: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -43,6 +44,7 @@ internal fun MyReviewRoute(
             state = state,
             listState = listState,
             onBackClick = finish,
+            onBakeryNameClick = navigateToBakeryDetail,
             onLikeClick = { id, isLike -> viewModel.intent(MyReviewsIntent.ClickLike(id = id, isLike = isLike)) }
         )
     }

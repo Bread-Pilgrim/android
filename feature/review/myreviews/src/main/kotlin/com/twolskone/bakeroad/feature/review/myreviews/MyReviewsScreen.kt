@@ -31,6 +31,7 @@ internal fun MyReviewsScreen(
     state: MyReviewsState,
     listState: LazyListState,
     onBackClick: () -> Unit,
+    onBakeryNameClick: (bakeryId: Int) -> Unit,
     onLikeClick: (Int, Boolean) -> Unit
 ) {
     Column(
@@ -66,6 +67,7 @@ internal fun MyReviewsScreen(
                 ) {
                     MyReviewCard(
                         review = it,
+                        onBakeryNameClick = onBakeryNameClick,
                         onLikeClick = onLikeClick
                     )
                 }

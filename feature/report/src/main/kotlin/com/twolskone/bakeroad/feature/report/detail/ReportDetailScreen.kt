@@ -193,12 +193,11 @@ internal fun ReportDetailScreen(
         }
     }
 
-    if (state.loading) {
-        BakeRoadLoadingScreen(
-            modifier = Modifier.fillMaxSize(),
-            type = LoadingType.Default
-        )
-    }
+    BakeRoadLoadingScreen(
+        modifier = Modifier.fillMaxSize(),
+        isLoading = state.loading,
+        type = LoadingType.Default
+    )
 }
 
 @Preview

@@ -188,6 +188,7 @@ private fun ColumnScope.SearchResult(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f),
+            isLoading = true,
             type = LoadingType.Default
         )
     } else if (resultPagingItems.isEmpty) {

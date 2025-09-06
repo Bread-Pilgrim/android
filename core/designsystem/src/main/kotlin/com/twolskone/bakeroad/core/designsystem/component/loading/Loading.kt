@@ -78,35 +78,40 @@ fun BakeRoadLoading(
 @Composable
 fun BakeRoadLoadingScreen(
     modifier: Modifier = Modifier,
+    isLoading: Boolean,
     touchBlocking: Boolean = true,
     type: LoadingType,
     colors: LoadingColors = BakeRoadLoadingDefaults.colors(type),
     size: Dp = BakeRoadLoadingDefaults.size(type),
     trackWidth: Dp = BakeRoadLoadingDefaults.trackWidth(type)
 ) {
-    Box(
-        modifier = modifier
-            .then(
-                if (touchBlocking) {
-                    Modifier.pointerInput(Unit) {
-                        awaitPointerEventScope {
-                            while (true) {
-                                awaitPointerEvent()
+    if (isLoading) {
+        Box(
+            modifier = modifier
+                .then(
+                    if (touchBlocking) {
+                        Modifier.pointerInput(Unit) {
+                            awaitPointerEventScope {
+                                while (true) {
+                                    awaitPointerEvent()
+                                }
                             }
                         }
+                    } else {
+                        Modifier
                     }
-                } else {
-                    Modifier
-                }
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        BakeRoadLoading(
-            type = type,
-            colors = colors,
-            size = size,
-            trackWidth = trackWidth
-        )
+                ),
+            contentAlignment = Alignment.Center
+        ) {
+            BakeRoadLoading(
+                type = type,
+                colors = colors,
+                size = size,
+                trackWidth = trackWidth
+            )
+        }
+    } else {
+        Box(modifier = Modifier.fillMaxSize())
     }
 }
 

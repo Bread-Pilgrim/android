@@ -7,5 +7,5 @@ import com.twolskone.bakeroad.core.ui.model.CursorPagingUiState
 
 @Immutable
 internal data class MyReviewsState(
-    val paging: CursorPagingUiState<MyBakeryReview> = CursorPagingUiState()
+    val paging: CursorPagingUiState<MyBakeryReview> = CursorPagingUiState(isLoading = true)
 ) : BaseUiState

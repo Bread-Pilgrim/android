@@ -81,10 +81,10 @@ internal fun MyReviewsScreen(
             }
         }
     }
-    if (state.paging.isLoading) {
-        BakeRoadLoadingScreen(
-            modifier = Modifier.fillMaxSize(),
-            type = LoadingType.Default
-        )
-    }
+
+    BakeRoadLoadingScreen(
+        modifier = Modifier.fillMaxSize(),
+        isLoading = state.paging.isLoading,
+        type = LoadingType.Default
+    )
 }

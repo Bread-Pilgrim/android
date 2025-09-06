@@ -208,12 +208,12 @@ internal fun WriteBakeryReviewScreen(
             content = { Text(text = stringResource(id = R.string.feature_review_write_button_write_complete)) }
         )
     }
-    if (state.loading) {
-        BakeRoadLoadingScreen(
-            modifier = Modifier.fillMaxSize(),
-            type = LoadingType.Default
-        )
-    }
+
+    BakeRoadLoadingScreen(
+        modifier = Modifier.fillMaxSize(),
+        isLoading = state.loading,
+        type = LoadingType.Default
+    )
 }
 
 private val PhotoSize = 100.dp

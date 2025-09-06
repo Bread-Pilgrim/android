@@ -19,46 +19,46 @@ internal interface UserApi {
 
     /* 온보딩 저장 (취향, 닉네임) */
     @POST("users/me/onboarding")
-    suspend fun postOnboarding(@Body request: OnboardingRequest): BaseResponse<Unit>
+    suspend fun postOnboarding(@Body request: OnboardingRequest): BaseResponse<Unit, Unit>
 
     /* 취향 조회 */
     @GET("users/preferences")
-    suspend fun getPreferences(): BaseResponse<PreferencesGetResponse>
+    suspend fun getPreferences(): BaseResponse<PreferencesGetResponse, Unit>
 
     /* 취향 변경 */
     @PATCH("users/preferences")
-    suspend fun patchPreferences(@Body request: PreferencesPatchRequest): BaseResponse<Unit>
+    suspend fun patchPreferences(@Body request: PreferencesPatchRequest): BaseResponse<Unit, Unit>
 
     /* 내가 쓴 리뷰 목록 */
     @GET("users/me/reviews")
     suspend fun getMyReviews(
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
-    ): BaseResponse<MyBakeryReviewsResponse>
+    ): BaseResponse<MyBakeryReviewsResponse, Unit>
 
     /* 프로필 조회 */
     @GET("users/me")
-    suspend fun getProfile(): BaseResponse<ProfileResponse>
+    suspend fun getProfile(): BaseResponse<ProfileResponse, Unit>
 
     /* 빵말정산 월 리스트 조회 */
     @GET("users/me/bread-report/monthly")
     suspend fun getReportMonthlyList(
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
-    ): BaseResponse<ReportMonthlyListResponse>
+    ): BaseResponse<ReportMonthlyListResponse, Unit>
 
     /* 빵말정산 조회 */
     @GET("users/me/bread-report")
     suspend fun getReport(
         @Query("year") year: Int,
         @Query("month") month: Int
-    ): BaseResponse<ReportResponse>
+    ): BaseResponse<ReportResponse, Unit>
 
     /* 대표뱃지 설정 */
     @POST("users/me/badges/{badge_id}/represent")
-    suspend fun enableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit>
+    suspend fun enableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit, Unit>
 
     /* 대표뱃지 해제 */
     @POST("users/me/badges/{badge_id}/derepresent")
-    suspend fun disableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit>
+    suspend fun disableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit, Unit>
 }

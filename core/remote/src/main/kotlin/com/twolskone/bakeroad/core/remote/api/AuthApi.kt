@@ -13,11 +13,11 @@ internal interface AuthApi {
     suspend fun login(
         @Header("access-token") accessToken: String,
         @Body request: LoginRequest
-    ): BaseResponse<LoginResponse>
+    ): BaseResponse<LoginResponse, Unit>
 
     @POST("auth/token/verify")
     suspend fun verify(
         @Header("access-token") accessToken: String,
         @Header("refresh-token") refreshToken: String
-    ): BaseResponse<Unit>
+    ): BaseResponse<Unit, Unit>
 }

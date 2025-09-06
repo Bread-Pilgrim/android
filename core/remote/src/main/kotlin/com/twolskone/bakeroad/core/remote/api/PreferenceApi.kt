@@ -8,5 +8,5 @@ internal interface PreferenceApi {
 
     /* 취향 항목 조회 */
     @GET("preferences/options")
-    suspend fun getOptions(): BaseResponse<PreferenceOptionsResponse>
+    suspend fun getOptions(): BaseResponse<PreferenceOptionsResponse, Unit>
 }

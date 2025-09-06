@@ -22,11 +22,11 @@ internal interface BakeryApi {
 
     /* 내 취향 기반 추천 빵집 목록 */
     @GET("bakeries/recommend/preference")
-    suspend fun getRecommendPreferenceBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
+    suspend fun getRecommendPreferenceBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>, Unit>
 
     /* Hot한 추천 빵집 목록 */
     @GET("bakeries/recommend/hot")
-    suspend fun getRecommendHotBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>>
+    suspend fun getRecommendHotBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>, Unit>
 
     /* 내 취향 기반 빵집 목록 */
     @GET("bakeries/preference")
@@ -34,7 +34,7 @@ internal interface BakeryApi {
         @Query("area_code") areaCode: String,
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
-    ): BaseResponse<BakeriesResponse>
+    ): BaseResponse<BakeriesResponse, Unit>
 
     /* Hot한 빵집 목록 */
     @GET("bakeries/hot")
@@ -42,11 +42,11 @@ internal interface BakeryApi {
         @Query("area_code") areaCode: String,
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
-    ): BaseResponse<BakeriesResponse>
+    ): BaseResponse<BakeriesResponse, Unit>
 
     /* 빵집 상세 조회 */
     @GET("bakeries/{bakeryId}")
-    suspend fun getBakeryDetail(@Path("bakeryId") bakeryId: Int): BaseResponse<BakeryDetailResponse>
+    suspend fun getBakeryDetail(@Path("bakeryId") bakeryId: Int): BaseResponse<BakeryDetailResponse, Unit>
 
     /* 빵집 리뷰 미리보기 */
     @GET("bakeries/{bakery_id}/reviews")
@@ -55,7 +55,7 @@ internal interface BakeryApi {
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int = 5,
         @Query("sort_clause") sort: String = "LIKE_COUNT.DESC"
-    ): BaseResponse<BakeryReviewsResponse>
+    ): BaseResponse<BakeryReviewsResponse, Unit>
 
     /* 빵집 리뷰 목록 */
     @GET("bakeries/{bakery_id}/reviews")
@@ -64,7 +64,7 @@ internal interface BakeryApi {
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
-    ): BaseResponse<BakeryReviewsResponse>
+    ): BaseResponse<BakeryReviewsResponse, Unit>
 
     /* 내가 작성한 빵집 리뷰 목록 */
     @GET("bakeries/{bakery_id}/my-review")
@@ -72,11 +72,11 @@ internal interface BakeryApi {
         @Path("bakery_id") bakeryId: Int,
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int
-    ): BaseResponse<BakeryReviewsResponse>
+    ): BaseResponse<BakeryReviewsResponse, Unit>
 
     /* 빵집 메뉴 조회 */
     @GET("bakeries/{bakery_id}/menus")
-    suspend fun getMenus(@Path("bakery_id") bakeryId: Int): BaseResponse<List<BakeryMenuResponse>>
+    suspend fun getMenus(@Path("bakery_id") bakeryId: Int): BaseResponse<List<BakeryMenuResponse>, Unit>
 
     /* 빵집 리뷰 작성 */
     @Multipart
@@ -88,19 +88,19 @@ internal interface BakeryApi {
         @Part("is_private") isPrivate: RequestBody,
         @Part("consumed_menus") consumedMenus: RequestBody,
         @Part reviewImgs: List<MultipartBody.Part>
-    ): BaseResponse<Unit>
+    ): BaseResponse<Unit, Unit>
 
     /* 빵집 좋아요 */
     @POST("bakeries/{bakery_id}/like")
-    suspend fun postLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse>
+    suspend fun postLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse, Unit>
 
     /* 빵집 좋아요 취소 */
     @DELETE("bakeries/{bakery_id}/like")
-    suspend fun deleteLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse>
+    suspend fun deleteLike(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryLikeResponse, Unit>
 
     /* 빵집 리뷰 작성 가능 여부 체크 */
     @GET("bakeries/{bakery_id}/review/eligibility")
-    suspend fun checkReviewEligibility(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryReviewEligibilityResponse>
+    suspend fun checkReviewEligibility(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryReviewEligibilityResponse, Unit>
 
     /* 내가 찜한 빵집 목록 */
     @GET("bakeries/like")
@@ -108,7 +108,7 @@ internal interface BakeryApi {
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
-    ): BaseResponse<BakeriesResponse>
+    ): BaseResponse<BakeriesResponse, Unit>
 
     /* 내가 방문한 빵집 목록 */
     @GET("bakeries/visited")
@@ -116,9 +116,9 @@ internal interface BakeryApi {
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int,
         @Query("sort_clause") sort: String
-    ): BaseResponse<BakeriesResponse>
+    ): BaseResponse<BakeriesResponse, Unit>
 
     /* 최근 조회한 빵집 목록 */
     @GET("bakeries/recent")
-    suspend fun getRecentBakeries(): BaseResponse<List<RecommendBakeryResponse>>
+    suspend fun getRecentBakeries(): BaseResponse<List<RecommendBakeryResponse>, Unit>
 }

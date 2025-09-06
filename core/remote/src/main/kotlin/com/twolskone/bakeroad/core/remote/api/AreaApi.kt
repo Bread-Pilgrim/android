@@ -7,5 +7,5 @@ import retrofit2.http.GET
 internal interface AreaApi {
 
     @GET("areas")
-    suspend fun getAreas(): BaseResponse<List<AreaResponse>>
+    suspend fun getAreas(): BaseResponse<List<AreaResponse>, Unit>
 }

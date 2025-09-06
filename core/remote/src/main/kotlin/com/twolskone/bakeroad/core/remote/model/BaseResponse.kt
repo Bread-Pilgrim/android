@@ -2,18 +2,21 @@ package com.twolskone.bakeroad.core.remote.model
 
 import com.twolskone.bakeroad.core.exception.BakeRoadError
 import com.twolskone.bakeroad.core.exception.BakeRoadException
+import com.twolskone.bakeroad.core.model.ResultWrapper
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class BaseResponse<T>(
+data class BaseResponse<T, R>(
     @SerialName("status_code")
     val code: Int,
     @SerialName("message")
     val message: String,
     @SerialName("data")
     val data: T? = null,
+    @SerialName("extra")
+    val extra: R? = null,
     @SerialName("token")
     val token: Token? = null,
     @SerialName("error_usecase")
@@ -30,7 +33,7 @@ data class BaseResponse<T>(
 }
 
 // When this function is used with T as Unit type.
-internal fun <T> BaseResponse<T>.toDataOrNull(): T? =
+internal fun <T, R> BaseResponse<T, R>.toDataOrNull(): T? =
     if (code == 200) {
         data
     } else {
@@ -43,7 +46,7 @@ internal fun <T> BaseResponse<T>.toDataOrNull(): T? =
         )
     }
 
-internal fun <T> BaseResponse<T>.toData(): T =
+internal fun <T, R> BaseResponse<T, R>.toData(): T =
     if (code == 200) {
         data ?: throw BakeRoadException(
             statusCode = BakeRoadException.STATUS_CODE_UNKNOWN,
@@ -59,10 +62,30 @@ internal fun <T> BaseResponse<T>.toData(): T =
         )
     }
 
-internal suspend fun <T : BaseResponse<Unit>> FlowCollector<Unit>.emitUnit(response: T) {
+internal fun <T, R> BaseResponse<T, R>.toResultWrapper(): ResultWrapper<T, R> =
+    if (code == 200) {
+        if (data != null && extra != null) {
+            ResultWrapper(data = data, extra = extra)
+        } else {
+            throw BakeRoadException(
+                statusCode = BakeRoadException.STATUS_CODE_UNKNOWN,
+                message = message
+            )
+        }
+    } else {
+        throw BakeRoadException(
+            statusCode = code,
+            error = runCatching {
+                errorUseCase?.let { BakeRoadError.valueOf(it) }
+            }.getOrDefault(null),
+            message = message
+        )
+    }
+
+internal suspend fun <R> FlowCollector<Unit>.emitUnit(response: BaseResponse<Unit, R>) {
     emit(response.toDataOrNull() ?: Unit)
 }
 
-internal suspend fun <T : BaseResponse<R>, R : Any> FlowCollector<R>.emitData(response: T) {
+internal suspend fun <T, R> FlowCollector<T>.emitData(response: BaseResponse<T, R>) {
     emit(response.toData())
 }

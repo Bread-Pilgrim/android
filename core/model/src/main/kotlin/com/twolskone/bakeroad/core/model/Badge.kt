@@ -1,5 +1,7 @@
 package com.twolskone.bakeroad.core.model
 
+import java.io.Serializable
+
 /**
  * 뱃지
  * @param id                뱃지 ID
@@ -16,7 +18,7 @@ data class Badge(
     val imageUrl: String,
     val isEarned: Boolean,
     val isRepresentative: Boolean
-) {
+) : Serializable {
 
     companion object {
         fun ofEmpty(): Badge = Badge(

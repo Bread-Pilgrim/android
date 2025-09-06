@@ -8,5 +8,5 @@ internal interface NoticeApi {
 
     /* 공지사항 조회 */
     @GET("notices")
-    suspend fun getNotices(): BaseResponse<List<NoticeResponse>>
+    suspend fun getNotices(): BaseResponse<List<NoticeResponse>, Unit>
 }

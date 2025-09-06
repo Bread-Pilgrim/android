@@ -17,6 +17,7 @@ dependencies {
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)
     implementation(projects.core.datastore)
+    implementation(projects.core.model)
 
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit)

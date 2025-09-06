@@ -12,5 +12,5 @@ internal interface SearchApi {
         @Query("keyword") keyword: String,
         @Query("cursor_value") cursorValue: String,
         @Query("page_size") pageSize: Int,
-    ): BaseResponse<BakeriesResponse>
+    ): BaseResponse<BakeriesResponse, Unit>
 }

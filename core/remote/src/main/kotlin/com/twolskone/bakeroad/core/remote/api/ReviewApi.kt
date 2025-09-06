@@ -9,8 +9,8 @@ import retrofit2.http.Path
 internal interface ReviewApi {
 
     @POST("reviews/{review_id}/like")
-    suspend fun postLike(@Path("review_id") reviewId: Int): BaseResponse<ReviewLikeResponse>
+    suspend fun postLike(@Path("review_id") reviewId: Int): BaseResponse<ReviewLikeResponse, Unit>
 
     @DELETE("reviews/{review_id}/like")
-    suspend fun deleteLike(@Path("review_id") reviewId: Int): BaseResponse<ReviewLikeResponse>
+    suspend fun deleteLike(@Path("review_id") reviewId: Int): BaseResponse<ReviewLikeResponse, Unit>
 }

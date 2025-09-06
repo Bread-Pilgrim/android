@@ -13,9 +13,9 @@ internal interface TourApi {
     suspend fun getAreas(
         @Query("area_code") areaCode: String,
         @Query("tour_cat") tourCategory: String
-    ): BaseResponse<List<TourAreaResponse>>
+    ): BaseResponse<List<TourAreaResponse>, Unit>
 
     /* 해당 지역의 행사정보 */
     @GET("tours/events/area")
-    suspend fun getAreaEvent(@Query("area_code") areaCode: String): BaseResponse<TourAreaEventResponse>
+    suspend fun getAreaEvent(@Query("area_code") areaCode: String): BaseResponse<TourAreaEventResponse, Unit>
 }

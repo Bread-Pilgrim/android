@@ -8,6 +8,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryMenuResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewEligibilityResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
+import com.twolskone.bakeroad.core.remote.model.extra.BadgeExtraResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.http.DELETE
@@ -88,7 +89,7 @@ internal interface BakeryApi {
         @Part("is_private") isPrivate: RequestBody,
         @Part("consumed_menus") consumedMenus: RequestBody,
         @Part reviewImgs: List<MultipartBody.Part>
-    ): BaseResponse<Unit, Unit>
+    ): BaseResponse<Unit, List<BadgeExtraResponse>>
 
     /* 빵집 좋아요 */
     @POST("bakeries/{bakery_id}/like")

@@ -82,7 +82,7 @@ internal class OnboardingViewModel @Inject constructor(
             OnboardingIntent.StartBakeRoad -> {
                 reduce { copy(isLoading = true) }
                 delay(DELAY_START_BAKE_ROAD)
-                postOnboardingUseCase(
+                val achievedBadges = postOnboardingUseCase(
                     nickname = state.value.nicknameSettingsState.nicknameText,
                     selectedPreferenceOptions = with(state.value.preferenceOptionsState) {
                         PreferenceOptionIds(
@@ -93,7 +93,7 @@ internal class OnboardingViewModel @Inject constructor(
                     }
                 )
                 setOnboardingStatusUseCase(isOnboardingCompleted = true)
-                postSideEffect(OnboardingSideEffect.NavigateToMain)
+                postSideEffect(OnboardingSideEffect.NavigateToMain(achievedBadges = achievedBadges))
             }
 
             OnboardingIntent.EditPreferences -> {
@@ -125,7 +125,7 @@ internal class OnboardingViewModel @Inject constructor(
             is BakeRoadException -> {
                 when (cause.error) {
                     BakeRoadError.DuplicateNickname -> reduce { copy(nicknameSettingsState = nicknameSettingsState.copy(errorMessage = cause.message)) }
-                    BakeRoadError.AlreadyOnboarding -> postSideEffect(OnboardingSideEffect.NavigateToMain)
+                    BakeRoadError.AlreadyOnboarding -> postSideEffect(OnboardingSideEffect.NavigateToMain())
                     else -> showSnackbar(type = SnackbarType.ERROR, message = cause.message)
                 }
             }

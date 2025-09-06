@@ -16,7 +16,7 @@
     <string name="core_ui_button_close">닫기</string>
     <string name="core_ui_button_dismiss_today">오늘 안보기</string>
     <string name="core_ui_button_see_details">자세히 보기</string>
-    <string name="core_ui_button_badge_settings">뱃지 설정하기</string>
+    <string name="core_ui_button_see_badge">내 뱃지 보기</string>
     <string name="core_ui_label_bakery_open_status_open">영업중</string>
     <string name="core_ui_label_bakery_open_status_closed">영업종료</string>
     <string name="core_ui_label_bakery_open_status_day_off">휴무일</string>

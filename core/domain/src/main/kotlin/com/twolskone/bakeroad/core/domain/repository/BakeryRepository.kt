@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.core.domain.repository
 
 import androidx.paging.PagingData
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
@@ -20,7 +21,7 @@ interface BakeryRepository {
     fun getPreviewReviews(bakeryId: Int): Flow<List<BakeryReview>>
     fun getReviews(myReview: Boolean, bakeryId: Int, sort: ReviewSortType?): Flow<PagingData<BakeryReview>>
     fun getReviewMenus(bakeryId: Int): Flow<List<ReviewMenu>>
-    fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit>
+    fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<List<Badge>>
     fun postLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
     fun deleteLike(bakeryId: Int): Flow<Pair<Int, Boolean>>
     fun checkReviewEligibility(bakeryId: Int): Flow<Boolean>

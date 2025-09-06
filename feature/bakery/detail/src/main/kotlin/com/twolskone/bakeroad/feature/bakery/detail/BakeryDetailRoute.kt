@@ -8,13 +8,18 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.IntentCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
@@ -29,14 +34,19 @@ import com.kakao.sdk.template.model.Link
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
+import com.twolskone.bakeroad.core.model.Badge
+import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_LIKE
 import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_BAKERY_LIST
+import com.twolskone.bakeroad.core.ui.popup.BadgeAchievedBottomSheet
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
 import com.twolskone.bakeroad.feature.bakery.detail.model.ReviewTab
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailIntent
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailSideEffect
 import com.twolskone.bakeroad.feature.bakery.detail.mvi.BakeryDetailState
+import java.io.Serializable
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.filterIsInstance
 import timber.log.Timber
@@ -45,6 +55,7 @@ import timber.log.Timber
 internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel(),
     navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBadgeList: () -> Unit,
     setResult: (code: Int, intent: Intent?, withFinish: Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -54,11 +65,18 @@ internal fun BakeryDetailRoute(
     val reviewSortState by viewModel.reviewSortState.collectAsStateWithLifecycle()
     val myReviewPagingItems = viewModel.myReviewPagingFlow.collectAsLazyPagingItems()
     val reviewPagingItems = viewModel.reviewPagingFlow.collectAsLazyPagingItems()
+    var achievedBadges by remember { mutableStateOf<List<Badge>>(emptyList()) }
     val writeReviewLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             Timber.i("xxx writeReviewLauncher :: Completed write review")
+            result.data?.let { intent ->
+                // 뱃지 획득
+                (IntentCompat.getSerializableExtra(intent, KEY_BADGE_ACHIEVED, Serializable::class.java) as? ArrayList<*>)?.let { list ->
+                    achievedBadges = list.filterIsInstance<Badge>()
+                }
+            }
             viewModel.mainEvetBus.setHomeRefreshState(value = true) // 홈 갱신
             if (tabState == BakeryDetailTab.REVIEW) {
                 when (reviewTabState) {
@@ -144,6 +162,18 @@ internal fun BakeryDetailRoute(
                 )
             }
         )
+
+        if (achievedBadges.isNotEmpty()) {
+            BadgeAchievedBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                badgeList = achievedBadges.toImmutableList(),
+                onDismissRequest = { achievedBadges = emptyList() },
+                onSeeBadgeClick = {
+                    achievedBadges = emptyList()
+                    navigateToBadgeList()
+                }
+            )
+        }
     }
 }
 

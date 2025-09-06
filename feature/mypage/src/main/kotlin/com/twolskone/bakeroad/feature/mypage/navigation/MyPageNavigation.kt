@@ -17,7 +17,7 @@ fun NavGraphBuilder.myPageScreen(
     padding: PaddingValues,
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
-    navigateToBadgeList: (ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBadgeList: () -> Unit,
     navigateToMyReviews: () -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     goBack: () -> Unit

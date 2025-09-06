@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
+import com.twolskone.bakeroad.core.navigator.BadgeListNavigator
 import com.twolskone.bakeroad.core.navigator.WriteBakeryReviewNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -14,6 +15,9 @@ internal class BakeryDetailActivity : ComponentActivity() {
 
     @Inject
     lateinit var writeBakeryReviewNavigator: WriteBakeryReviewNavigator
+
+    @Inject
+    lateinit var badgeListNavigator: BadgeListNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +40,12 @@ internal class BakeryDetailActivity : ComponentActivity() {
                             setResult(code)
                         }
                         if (finish) finish()
+                    },
+                    navigateToBadgeList = {
+                        badgeListNavigator.navigateFromActivity(
+                            activity = this,
+                            withFinish = false
+                        )
                     }
                 )
             }

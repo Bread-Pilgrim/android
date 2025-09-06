@@ -17,10 +17,7 @@ internal class BadgeListActivity : ComponentActivity() {
             SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
                 BadgeListRoute(
-                    setResult = { code, finish ->
-                        setResult(code)
-                        if (finish) finish()
-                    }
+                    finish = { finish() }
                 )
             }
         }

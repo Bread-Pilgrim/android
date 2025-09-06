@@ -11,6 +11,7 @@ import com.twolskone.bakeroad.core.data.paging.BakeryReviewPagingSource
 import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
 import com.twolskone.bakeroad.core.data.paging.defaultPagingConfig
 import com.twolskone.bakeroad.core.domain.repository.BakeryRepository
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.Bakery
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
@@ -96,15 +97,26 @@ internal class BakeryRepositoryImpl @Inject constructor(
             }
     }
 
-    override fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<Unit> {
+    override fun postReview(bakeryId: Int, review: WriteBakeryReview): Flow<List<Badge>> {
         val request = WriteBakeryReviewRequest(
             rating = review.rating,
             content = review.content,
             isPrivate = review.isPrivate,
-            consumedMenus = review.menus.map { WriteBakeryReviewRequest.Menu(menuId = it.id, quantity = it.quantity) },
+            consumedMenus = review.menus.map {
+                WriteBakeryReviewRequest.Menu(
+                    menuId = it.id,
+                    quantity = it.quantity,
+                    breadTypeId = it.breadTypeId
+                )
+            },
             reviewImgs = review.photos
         )
         return bakeryDataSource.postReview(bakeryId = bakeryId, request = request)
+            .map { extra ->
+                extra.map { badge ->
+                    badge.toExternalModel()
+                }
+            }
     }
 
     override fun postLike(bakeryId: Int): Flow<Pair<Int, Boolean>> {

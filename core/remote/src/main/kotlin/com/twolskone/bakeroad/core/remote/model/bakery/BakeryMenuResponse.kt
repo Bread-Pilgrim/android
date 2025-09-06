@@ -9,6 +9,8 @@ data class BakeryMenuResponse(
     val menuId: Int = -1,
     @SerialName("menu_name")
     val menuName: String = "",
+    @SerialName("bread_type_id")
+    val breadTypeId: Int = -1,
     @SerialName("is_signature")
     val isSignature: Boolean = false
 )

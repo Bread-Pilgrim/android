@@ -49,7 +49,7 @@ fun BadgeAchievedBottomSheet(
     modifier: Modifier = Modifier,
     badgeList: ImmutableList<Badge>,
     onDismissRequest: () -> Unit,
-    onBadgeSettingsClick: () -> Unit
+    onSeeBadgeClick: () -> Unit
 ) {
     val pagerState = rememberPagerState(
         initialPage = 0,
@@ -115,8 +115,8 @@ fun BadgeAchievedBottomSheet(
                         .weight(1f),
                     role = SolidButtonRole.PRIMARY,
                     size = ButtonSize.LARGE,
-                    onClick = onBadgeSettingsClick,
-                    content = { Text(text = stringResource(id = R.string.core_ui_button_badge_settings)) }
+                    onClick = onSeeBadgeClick,
+                    content = { Text(text = stringResource(id = R.string.core_ui_button_see_badge)) }
                 )
             }
         }
@@ -203,7 +203,7 @@ private fun BadgeAchievedBottomSheetPreview() {
 //                    )
                 ),
                 onDismissRequest = { showSheet = false },
-                onBadgeSettingsClick = { showSheet = false }
+                onSeeBadgeClick = { showSheet = false }
             )
         }
     }

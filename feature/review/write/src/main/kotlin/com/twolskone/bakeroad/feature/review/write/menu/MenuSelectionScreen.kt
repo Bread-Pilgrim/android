@@ -272,24 +272,28 @@ private fun MenuSelectionScreenPreview() {
                     id = 1,
                     name = "꿀고구마 휘낭시에 1",
                     isSignature = true,
+                    breadTypeId = 1,
                     count = 1
                 ),
                 ReviewMenu(
                     id = 1,
                     name = "꿀고구마 휘낭시에 2",
                     isSignature = true,
+                    breadTypeId = 1,
                     count = 0
                 ),
                 ReviewMenu(
                     id = 1,
                     name = "꿀고구마 휘낭시에 3",
                     isSignature = false,
+                    breadTypeId = 1,
                     count = 10
                 ),
                 ReviewMenu(
                     id = 1,
                     name = "꿀고구마 휘낭시에 4",
                     isSignature = false,
+                    breadTypeId = 1,
                     count = 0
                 )
             ),
@@ -315,6 +319,7 @@ private fun MenuSelectionListItemPreview() {
                     id = 1,
                     name = "꿀고구마 휘낭시에 3",
                     isSignature = false,
+                    breadTypeId = 1,
                     count = 10
                 ),
                 onClick = { _, isSelected -> selected = isSelected },

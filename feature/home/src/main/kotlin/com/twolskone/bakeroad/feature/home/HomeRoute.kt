@@ -6,17 +6,26 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.ui.popup.BadgeAchievedBottomSheet
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import timber.log.Timber
 
 @Composable
@@ -26,10 +35,12 @@ internal fun HomeRoute(
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBadgeList: () -> Unit,
     openBrowser: (url: String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val verticalScrollState = rememberLazyListState()
+    var achievedBadges by remember { mutableStateOf(emptyList<Badge>()) }
     val changePreferenceLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -73,6 +84,14 @@ internal fun HomeRoute(
         }
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.achievedBadges
+            .filter { it.isNotEmpty() }
+            .collectLatest {
+                achievedBadges = it
+            }
+    }
+
     HomeScreen(
         padding = padding,
         verticalScrollState = verticalScrollState,
@@ -91,4 +110,16 @@ internal fun HomeRoute(
         onAreaEventSeeDetailsClick = { link -> openBrowser(link) },
         onAreaEventSheetDismiss = { isTodayDismissed -> viewModel.intent(HomeIntent.DismissAreaEventSheet(isTodayDismissed = isTodayDismissed)) }
     )
+
+    if (achievedBadges.isNotEmpty()) {
+        BadgeAchievedBottomSheet(
+            modifier = Modifier.fillMaxWidth(),
+            badgeList = achievedBadges.toImmutableList(),
+            onDismissRequest = { achievedBadges = emptyList() },
+            onSeeBadgeClick = {
+                achievedBadges = emptyList()
+                navigateToBadgeList()
+            }
+        )
+    }
 }

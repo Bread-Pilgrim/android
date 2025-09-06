@@ -22,6 +22,8 @@ data class WriteBakeryReviewRequest(
         @SerialName("menu_id")
         val menuId: Int,
         @SerialName("quantity")
-        val quantity: Int
+        val quantity: Int,
+        @SerialName("bread_type_id")
+        val breadTypeId: Int
     )
 }

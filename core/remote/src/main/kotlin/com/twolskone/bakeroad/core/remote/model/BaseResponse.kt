@@ -2,7 +2,6 @@ package com.twolskone.bakeroad.core.remote.model
 
 import com.twolskone.bakeroad.core.exception.BakeRoadError
 import com.twolskone.bakeroad.core.exception.BakeRoadException
-import com.twolskone.bakeroad.core.model.ResultWrapper
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -62,16 +61,9 @@ internal fun <T, R> BaseResponse<T, R>.toData(): T =
         )
     }
 
-internal fun <T, R> BaseResponse<T, R>.toResultWrapper(): ResultWrapper<T, R> =
+internal fun <T, R> BaseResponse<T, R>.toExtraOrNull(): R? =
     if (code == 200) {
-        if (data != null && extra != null) {
-            ResultWrapper(data = data, extra = extra)
-        } else {
-            throw BakeRoadException(
-                statusCode = BakeRoadException.STATUS_CODE_UNKNOWN,
-                message = message
-            )
-        }
+        extra
     } else {
         throw BakeRoadException(
             statusCode = code,

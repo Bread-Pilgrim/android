@@ -1,6 +1,5 @@
 package com.twolskone.bakeroad.feature.review.write
 
-import android.app.Activity
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.common.kotlin.extension.orZero
@@ -121,17 +120,19 @@ internal class WriteReviewViewModel @Inject constructor(
                 isPrivate = isPrivate,
                 menus = menuList
                     .filter { menu -> menu.count > 0 }
-                    .map { WriteBakeryReview.Menu(id = it.id, quantity = it.count) },
+                    .map {
+                        WriteBakeryReview.Menu(
+                            id = it.id,
+                            quantity = it.count,
+                            breadTypeId = it.breadTypeId
+                        )
+                    },
                 photos = photoList
             )
         }
-        val result = postBakeryReviewUseCase(bakeryId = bakeryId, review = review)
+        val achievedBadges = postBakeryReviewUseCase(bakeryId = bakeryId, review = review)
 
-        reduce { copy(loading = false) }
-
-        if (result) {
-//            postSideEffect(WriteBakeryReviewSideEffect.SetResult(code = Activity.RESULT_OK, withFinish = true))
-            postSideEffect(WriteBakeryReviewSideEffect.NavigateToComplete)
-        }
+        reduce { copy(loading = false, achievedBadgeList = achievedBadges.toImmutableList()) }
+        postSideEffect(WriteBakeryReviewSideEffect.NavigateToComplete)
     }
 }

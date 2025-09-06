@@ -5,11 +5,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.core.content.IntentCompat
 import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.common.kotlin.extension.toIntOrZero
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.navigator.BadgeListNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
@@ -18,10 +20,12 @@ import com.twolskone.bakeroad.core.navigator.MyReviewsNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import com.twolskone.bakeroad.core.navigator.ReportNavigator
 import com.twolskone.bakeroad.core.navigator.SettingsNavigator
+import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.core.navigator.util.KEY_HOME_REFRESH
 import com.twolskone.bakeroad.mvi.MainIntent
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.Serializable
 import javax.inject.Inject
 import timber.log.Timber
 
@@ -100,10 +104,10 @@ class MainActivity : ComponentActivity() {
                             withFinish = false
                         )
                     },
-                    navigateToBadgeList = { launcher ->
-                        badgeListNavigator.navigateFromLauncher(
+                    navigateToBadgeList = {
+                        badgeListNavigator.navigateFromActivity(
                             activity = this,
-                            launcher = launcher
+                            withFinish = false
                         )
                     },
                     navigateToMyReviews = {
@@ -149,6 +153,14 @@ class MainActivity : ComponentActivity() {
                         putExtra("areaCode", areaCode)
                     }
                 )
+            }
+        }
+        // 뱃지 획득
+        (IntentCompat.getSerializableExtra(intent, KEY_BADGE_ACHIEVED, Serializable::class.java) as? ArrayList<*>)?.let { list ->
+            val badges = list.filterIsInstance<Badge>()
+            Timber.i("xxx onNewIntent // AchieveBadges($badges)")
+            if (badges.isNotEmpty()) {
+                viewModel.intent(MainIntent.AchieveBadges(badges = badges))
             }
         }
     }

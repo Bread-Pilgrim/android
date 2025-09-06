@@ -6,7 +6,9 @@ import com.twolskone.bakeroad.core.remote.api.UserApi
 import com.twolskone.bakeroad.core.remote.datasource.UserDataSource
 import com.twolskone.bakeroad.core.remote.model.emitData
 import com.twolskone.bakeroad.core.remote.model.emitUnit
+import com.twolskone.bakeroad.core.remote.model.extra.BadgeExtraResponse
 import com.twolskone.bakeroad.core.remote.model.toData
+import com.twolskone.bakeroad.core.remote.model.toExtraOrNull
 import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
@@ -25,8 +27,9 @@ internal class UserDataSourceImpl @Inject constructor(
     @Dispatcher(BakeRoadDispatcher.IO) private val networkDispatcher: CoroutineDispatcher
 ) : UserDataSource {
 
-    override fun postOnboarding(request: OnboardingRequest): Flow<Unit> = flow {
-        emitUnit(api.postOnboarding(request = request))
+    override fun postOnboarding(request: OnboardingRequest): Flow<List<BadgeExtraResponse>> = flow {
+        val response = api.postOnboarding(request = request)
+        emit(response.toExtraOrNull().orEmpty())
     }.flowOn(networkDispatcher)
 
     override fun patchPreferences(request: PreferencesPatchRequest): Flow<Unit> = flow {

@@ -25,7 +25,6 @@ internal fun WriteBakeryReviewRoute(
     modifier: Modifier = Modifier,
     viewModel: WriteReviewViewModel,
     onBackClick: () -> Unit,
-    setResult: (code: Int, withFinish: Boolean) -> Unit,
     navigateToComplete: () -> Unit
 ) {
     val context = LocalContext.current
@@ -65,7 +64,6 @@ internal fun WriteBakeryReviewRoute(
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collect {
             when (it) {
-                is WriteBakeryReviewSideEffect.SetResult -> {}/*setResult(it.code, it.withFinish)*/
                 WriteBakeryReviewSideEffect.NavigateToComplete -> navigateToComplete()
             }
         }

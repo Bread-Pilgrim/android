@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.badge.GetBadgesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.user.DisableBadgeUseCase
 import com.twolskone.bakeroad.core.domain.usecase.user.EnableBadgeUseCase
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.core.model.Badge
@@ -20,6 +21,7 @@ import timber.log.Timber
 @HiltViewModel
 internal class BadgeListViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val mainEventBus: MainEventBus,
     getBadgesUseCase: GetBadgesUseCase,
     private val enableBadgeUseCase: EnableBadgeUseCase,
     private val disableBadgeUseCase: DisableBadgeUseCase
@@ -67,11 +69,11 @@ internal class BadgeListViewModel @Inject constructor(
                         representativeBadge = intent.badge.copy(isRepresentative = true),
                         badgeList = badgeList.map { badge ->
                             badge.copy(isRepresentative = (badge.id == intent.badge.id))
-                        }.toImmutableList(),
-                        isBadgeUpdated = true
+                        }.toImmutableList()
                     )
                 }
                 showSnackbar(type = SnackbarType.SUCCESS, messageRes = R.string.feature_badge_snackbar_enable_badge)
+                mainEventBus.setMyPageRefreshState(true)
             }
 
             is BadgeListIntent.DisableBadge -> {
@@ -81,11 +83,11 @@ internal class BadgeListViewModel @Inject constructor(
                         representativeBadge = Badge.ofEmpty(),
                         badgeList = badgeList.map { badge ->
                             badge.copy(isRepresentative = false)
-                        }.toImmutableList(),
-                        isBadgeUpdated = true
+                        }.toImmutableList()
                     )
                 }
                 showSnackbar(type = SnackbarType.SUCCESS, messageRes = R.string.feature_badge_snackbar_disable_badge)
+                mainEventBus.setMyPageRefreshState(true)
             }
         }
     }

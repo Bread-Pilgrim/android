@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -30,7 +31,9 @@ import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNav
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBarItem
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.eventbus.MainEventBus
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.type.BakeryType
+import com.twolskone.bakeroad.core.ui.popup.BadgeAchievedBottomSheet
 import com.twolskone.bakeroad.feature.home.navigation.navigateToHome
 import com.twolskone.bakeroad.feature.mybakery.navigation.navigateToMyBakery
 import com.twolskone.bakeroad.feature.mypage.navigation.navigateToMyPage
@@ -38,6 +41,7 @@ import com.twolskone.bakeroad.feature.search.navigation.navigateToSearch
 import com.twolskone.bakeroad.mvi.MainSideEffect
 import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -53,7 +57,7 @@ internal fun BakeRoadApp(
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
     navigateToSettings: () -> Unit,
     navigateToReport: () -> Unit,
-    navigateToBadgeList: (ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBadgeList: () -> Unit,
     navigateToMyReviews: () -> Unit,
     openBrowser: (url: String) -> Unit,
     finish: () -> Unit
@@ -62,6 +66,7 @@ internal fun BakeRoadApp(
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
     var backTimeMillis by remember { mutableLongStateOf(0) }
+    var achievedBadges by remember { mutableStateOf(emptyList<Badge>()) }
     val onBack: () -> Unit = {
         val currentTimeMillis = System.currentTimeMillis()
         if (currentTimeMillis - backTimeMillis >= BackInterval) {
@@ -95,6 +100,8 @@ internal fun BakeRoadApp(
                     navController = navController,
                     destination = BakeRoadDestination.Home
                 )
+
+                is MainSideEffect.AchieveBadges -> { achievedBadges = it.badges }
             }
         }
     }
@@ -143,6 +150,18 @@ internal fun BakeRoadApp(
                 navigateToMyReviews = navigateToMyReviews,
                 openBrowser = openBrowser,
                 goBack = onBack
+            )
+        }
+
+        if (achievedBadges.isNotEmpty()) {
+            BadgeAchievedBottomSheet(
+                modifier = Modifier.fillMaxWidth(),
+                badgeList = achievedBadges.toImmutableList(),
+                onDismissRequest = { achievedBadges = emptyList() },
+                onSeeBadgeClick = {
+                    achievedBadges = emptyList()
+                    navigateToBadgeList()
+                }
             )
         }
     }

@@ -16,8 +16,9 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
 import com.twolskone.bakeroad.core.remote.model.emitData
-import com.twolskone.bakeroad.core.remote.model.emitUnit
+import com.twolskone.bakeroad.core.remote.model.extra.BadgeExtraResponse
 import com.twolskone.bakeroad.core.remote.model.toData
+import com.twolskone.bakeroad.core.remote.model.toExtraOrNull
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
@@ -117,23 +118,22 @@ internal class BakeryDataSourceImpl @Inject constructor(
         emitData(api.getMenus(bakeryId = bakeryId))
     }.flowOn(networkDispatcher)
 
-    override fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit> = flow {
+    override fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<List<BadgeExtraResponse>> = flow {
         val imageMultipartList = request.reviewImgs.map {
             val uri = it.toUri()
             val imageFile = FileUtil.getImageFileFromUri(context = context, uri = uri)
             val imageRequestBody = imageFile.asRequestBody("image/jpeg".toMediaTypeOrNull())
             MultipartBody.Part.createFormData("review_imgs", imageFile.name, imageRequestBody)
         }
-        emitUnit(
-            api.postReview(
-                bakeryId = bakeryId,
-                rating = request.rating.toString().toRequestBody(contentType = "text/plain".toMediaType()),
-                content = request.content.toRequestBody(contentType = "text/plain".toMediaType()),
-                isPrivate = request.isPrivate.toString().toRequestBody(contentType = "text/plain".toMediaType()),
-                consumedMenus = Json.encodeToString(request.consumedMenus).toRequestBody(contentType = "application/json".toMediaType()),
-                reviewImgs = imageMultipartList
-            )
+        val response = api.postReview(
+            bakeryId = bakeryId,
+            rating = request.rating.toString().toRequestBody(contentType = "text/plain".toMediaType()),
+            content = request.content.toRequestBody(contentType = "text/plain".toMediaType()),
+            isPrivate = request.isPrivate.toString().toRequestBody(contentType = "text/plain".toMediaType()),
+            consumedMenus = Json.encodeToString(request.consumedMenus).toRequestBody(contentType = "application/json".toMediaType()),
+            reviewImgs = imageMultipartList
         )
+        emit(response.toExtraOrNull().orEmpty())
     }.flowOn(networkDispatcher)
 
     override fun postLike(bakeryId: Int): Flow<BakeryLikeResponse> = flow {

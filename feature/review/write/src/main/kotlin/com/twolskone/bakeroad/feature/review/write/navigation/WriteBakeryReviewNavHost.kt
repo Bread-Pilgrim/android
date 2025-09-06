@@ -37,12 +37,8 @@ internal fun WriteBakeryReviewNavHost(
             viewModel = viewModel,
             onBackClick = {
                 val canBack = navController.currentDestination.isRouteInHierarchy(route = WriteBakeryReviewRoute::class)
-                if (canBack) {
-//                    navController.navigateToMenuSelection()
-                    navController.popBackStack()
-                }
+                if (canBack) navController.popBackStack()
             },
-            setResult = setResult,
             navigateToComplete = {
                 navController.navigateToComplete(
                     navOptions = navOptions {

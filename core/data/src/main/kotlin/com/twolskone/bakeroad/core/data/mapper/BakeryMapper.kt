@@ -98,6 +98,7 @@ internal fun BakeryMenuResponse.toReviewMenu(): ReviewMenu =
     ReviewMenu(
         id = menuId,
         name = menuName,
+        breadTypeId = breadTypeId,
         isSignature = isSignature,
         count = 0
     )

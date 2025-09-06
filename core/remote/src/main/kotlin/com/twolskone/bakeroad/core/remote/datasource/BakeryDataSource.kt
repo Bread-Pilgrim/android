@@ -8,6 +8,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewEligibilityRe
 import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
+import com.twolskone.bakeroad.core.remote.model.extra.BadgeExtraResponse
 import kotlinx.coroutines.flow.Flow
 
 interface BakeryDataSource {
@@ -20,7 +21,7 @@ interface BakeryDataSource {
     suspend fun getReviews(bakeryId: Int, sort: String, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     suspend fun getMyReviews(bakeryId: Int, cursorValue: String, pageSize: Int): BakeryReviewsResponse
     fun getMenus(bakeryId: Int): Flow<List<BakeryMenuResponse>>
-    fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<Unit>
+    fun postReview(bakeryId: Int, request: WriteBakeryReviewRequest): Flow<List<BadgeExtraResponse>>
     fun postLike(bakeryId: Int): Flow<BakeryLikeResponse>
     fun deleteLike(bakeryId: Int): Flow<BakeryLikeResponse>
     fun checkReviewEligibility(bakeryId: Int): Flow<BakeryReviewEligibilityResponse>

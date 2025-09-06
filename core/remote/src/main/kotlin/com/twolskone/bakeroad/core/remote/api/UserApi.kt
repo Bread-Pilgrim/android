@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.core.remote.api
 
 import com.twolskone.bakeroad.core.remote.model.BaseResponse
+import com.twolskone.bakeroad.core.remote.model.extra.BadgeExtraResponse
 import com.twolskone.bakeroad.core.remote.model.user.MyBakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.user.OnboardingRequest
 import com.twolskone.bakeroad.core.remote.model.user.PreferencesGetResponse
@@ -19,7 +20,7 @@ internal interface UserApi {
 
     /* 온보딩 저장 (취향, 닉네임) */
     @POST("users/me/onboarding")
-    suspend fun postOnboarding(@Body request: OnboardingRequest): BaseResponse<Unit, Unit>
+    suspend fun postOnboarding(@Body request: OnboardingRequest): BaseResponse<Unit, List<BadgeExtraResponse>>
 
     /* 취향 조회 */
     @GET("users/preferences")

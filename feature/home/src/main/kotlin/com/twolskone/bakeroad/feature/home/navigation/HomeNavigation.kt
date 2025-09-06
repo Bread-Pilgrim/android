@@ -19,6 +19,7 @@ fun NavGraphBuilder.homeScreen(
     navigateToBakeryList: (areaCodes: String, BakeryType, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToBakeryDetail: (bakeryId: Int, areaCode: Int, launcher: ActivityResultLauncher<Intent>) -> Unit,
     navigateToEditPreference: (ActivityResultLauncher<Intent>) -> Unit,
+    navigateToBadgeList: () -> Unit,
     openBrowser: (url: String) -> Unit
 ) {
     composable<HomeRoute> {
@@ -27,6 +28,7 @@ fun NavGraphBuilder.homeScreen(
             navigateToBakeryList = navigateToBakeryList,
             navigateToBakeryDetail = navigateToBakeryDetail,
             navigateToEditPreference = navigateToEditPreference,
+            navigateToBadgeList = navigateToBadgeList,
             openBrowser = openBrowser
         )
     }

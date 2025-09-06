@@ -17,14 +17,12 @@ internal fun NavController.navigateToWriteBakeryReview(navOptions: NavOptions? =
 internal fun NavGraphBuilder.writeBakeryReviewScreen(
     viewModel: WriteReviewViewModel,
     onBackClick: () -> Unit,
-    setResult: (code: Int, withFinish: Boolean) -> Unit,
     navigateToComplete: () -> Unit
 ) {
     composable<WriteBakeryReviewRoute> {
         WriteBakeryReviewRoute(
             viewModel = viewModel,
             onBackClick = onBackClick,
-            setResult = setResult,
             navigateToComplete = navigateToComplete
         )
     }

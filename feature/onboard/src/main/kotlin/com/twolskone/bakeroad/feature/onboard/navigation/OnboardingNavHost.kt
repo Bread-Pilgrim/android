@@ -7,6 +7,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.twolskone.bakeroad.core.common.android.extension.isRouteInHierarchy
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.feature.onboard.OnboardingViewModel
 import com.twolskone.bakeroad.feature.onboard.mvi.OnboardingSideEffect
 import com.twolskone.bakeroad.feature.onboard.nickname.navigation.NicknameSettingsRoute
@@ -22,12 +23,12 @@ internal fun OnBoardingNavHost(
     navController: NavHostController,
     finish: () -> Unit,
     setResult: (code: Int, withFinish: Boolean) -> Unit,
-    navigateToMain: () -> Unit
+    navigateToMain: (List<Badge>) -> Unit
 ) {
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collect {
             when (it) {
-                OnboardingSideEffect.NavigateToMain -> navigateToMain()
+                is OnboardingSideEffect.NavigateToMain -> navigateToMain(it.achievedBadges)
                 is OnboardingSideEffect.SetResult -> setResult(it.code, it.withFinish)
             }
         }

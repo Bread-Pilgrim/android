@@ -18,11 +18,13 @@ data class WriteBakeryReview(
 
     /**
      * 선택 메뉴
-     * @param id        메뉴 ID
-     * @param quantity  개수
+     * @param id            메뉴 ID
+     * @param quantity      개수
+     * @param breadTypeId   빵 타입 ID
      */
     data class Menu(
         val id: Int,
-        val quantity: Int
+        val quantity: Int,
+        val breadTypeId: Int
     )
 }

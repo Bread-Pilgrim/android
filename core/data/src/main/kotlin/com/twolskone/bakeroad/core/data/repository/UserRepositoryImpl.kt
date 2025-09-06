@@ -6,6 +6,7 @@ import com.twolskone.bakeroad.core.data.mapper.toExternalModel
 import com.twolskone.bakeroad.core.data.paging.DefaultPageSize
 import com.twolskone.bakeroad.core.datastore.CacheDataSource
 import com.twolskone.bakeroad.core.domain.repository.UserRepository
+import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.MyBakeryReview
 import com.twolskone.bakeroad.core.model.PreferenceOptionIds
 import com.twolskone.bakeroad.core.model.Profile
@@ -36,7 +37,7 @@ internal class UserRepositoryImpl @Inject constructor(
         cacheDataSource.setOnboardingCompleted(value)
     }
 
-    override fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<Unit> {
+    override fun postOnboarding(nickname: String, selectedPreferenceOptions: PreferenceOptionIds): Flow<List<Badge>> {
         val request = OnboardingRequest(
             nickname = nickname,
             breadTypes = selectedPreferenceOptions.breadTypes,
@@ -44,6 +45,11 @@ internal class UserRepositoryImpl @Inject constructor(
             atmospheres = selectedPreferenceOptions.atmospheres
         )
         return userDataSource.postOnboarding(request = request)
+            .map { extra ->
+                extra.map { badge ->
+                    badge.toExternalModel()
+                }
+            }
     }
 
     override fun patchPreferences(addPreferences: List<Int>, deletePreferences: List<Int>): Flow<Unit> {

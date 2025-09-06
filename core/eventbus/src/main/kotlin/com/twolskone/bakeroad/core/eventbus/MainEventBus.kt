@@ -16,6 +16,10 @@ interface MainEventBus {
     val searchRefreshState: StateFlow<Boolean>
     fun setSearchRefreshState(value: Boolean)
 
+    /* 나의 빵글 탭 갱신 */
+    val myPageRefreshState: StateFlow<Boolean>
+    fun setMyPageRefreshState(value: Boolean)
+
     /* 홈 탭 재선택 */
     val homeReselectEvent: SharedFlow<Unit>
     suspend fun reselectHome()

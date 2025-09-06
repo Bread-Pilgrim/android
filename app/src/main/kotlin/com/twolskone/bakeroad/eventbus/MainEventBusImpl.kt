@@ -31,6 +31,15 @@ class MainEventBusImpl @Inject constructor() : MainEventBus {
         _searchRefreshState.value = value
     }
 
+    private val _myPageRefreshState = MutableStateFlow(false)
+    override val myPageRefreshState: StateFlow<Boolean>
+        get() = _myPageRefreshState.asStateFlow()
+
+    override fun setMyPageRefreshState(value: Boolean) {
+        Timber.i("xxx setMyPageRefreshState : $value")
+        _myPageRefreshState.value = value
+    }
+
     private val _homeReselectEvent = MutableSharedFlow<Unit>(/*extraBufferCapacity = 1*/)
     override val homeReselectEvent: SharedFlow<Unit>
         get() = _homeReselectEvent.asSharedFlow()

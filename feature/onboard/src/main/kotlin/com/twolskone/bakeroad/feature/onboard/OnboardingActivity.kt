@@ -10,6 +10,7 @@ import androidx.navigation.compose.rememberNavController
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.MainNavigator
+import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.feature.onboard.navigation.OnBoardingNavHost
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -36,10 +37,17 @@ internal class OnboardingActivity : ComponentActivity() {
                         setResult(code)
                         if (finish) finish()
                     },
-                    navigateToMain = {
+                    navigateToMain = { achievedBadges ->
                         mainNavigator.navigateFromActivity(
                             activity = this,
-                            withFinish = true
+                            withFinish = true,
+                            intentBuilder = {
+                                if (achievedBadges.isNotEmpty()) {
+                                    putExtra(KEY_BADGE_ACHIEVED, ArrayList(achievedBadges))
+                                } else {
+                                    this
+                                }
+                            }
                         )
                     }
                 )

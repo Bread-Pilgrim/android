@@ -54,4 +54,12 @@ class AreaEventDataSource @Inject constructor(private val areaEventDataStore: Da
                 .build()
         }
     }
+
+    suspend fun clear() {
+        areaEventDataStore.updateData { currentData ->
+            currentData.toBuilder()
+                .clear()
+                .build()
+        }
+    }
 }

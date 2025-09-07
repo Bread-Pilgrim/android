@@ -14,4 +14,8 @@ internal class AuthRepositoryImpl @Inject constructor(private val authDataSource
     override fun verify(): Flow<Unit> {
         return authDataSource.verify()
     }
+
+    override fun logout(): Flow<Unit> {
+        return authDataSource.logout()
+    }
 }

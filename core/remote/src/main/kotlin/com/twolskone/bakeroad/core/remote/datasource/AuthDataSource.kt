@@ -5,4 +5,5 @@ import kotlinx.coroutines.flow.Flow
 interface AuthDataSource {
     fun login(accessToken: String): Flow<Boolean>
     fun verify(): Flow<Unit>
+    fun logout(): Flow<Unit>
 }

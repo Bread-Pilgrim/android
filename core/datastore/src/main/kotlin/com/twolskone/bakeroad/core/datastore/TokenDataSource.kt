@@ -36,4 +36,8 @@ class TokenDataSource @Inject constructor(@TokenDataStore private val dataStore:
             Timber.e(cause)
         }
     }
+
+    suspend fun clearAll() {
+        dataStore.edit { preferences -> preferences.clear() }
+    }
 }

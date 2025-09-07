@@ -20,4 +20,10 @@ internal interface AuthApi {
         @Header("access-token") accessToken: String,
         @Header("refresh-token") refreshToken: String
     ): BaseResponse<Unit, Unit>
+
+    @POST("auth/logout")
+    suspend fun logout(
+        @Header("access-token") accessToken: String,
+        @Header("refresh-token") refreshToken: String
+    ): BaseResponse<Unit, Unit>
 }

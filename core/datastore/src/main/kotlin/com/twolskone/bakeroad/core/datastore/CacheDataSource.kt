@@ -76,4 +76,8 @@ class CacheDataSource @Inject constructor(@CacheDataStore private val dataStore:
     suspend fun clearRecentSearchQueries() {
         dataStore.edit { preferences -> preferences.remove(KEY_RECENT_SEARCH_QUERY) }
     }
+
+    suspend fun clearAll() {
+        dataStore.edit { preferences -> preferences.clear() }
+    }
 }

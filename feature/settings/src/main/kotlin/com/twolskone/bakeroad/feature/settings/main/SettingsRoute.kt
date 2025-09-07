@@ -1,6 +1,7 @@
 package com.twolskone.bakeroad.feature.settings.main
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -11,6 +12,7 @@ import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.feature.settings.R
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsDialogState
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsIntent
+import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsSideEffect
 
 @Composable
 internal fun SettingsRoute(
@@ -21,6 +23,14 @@ internal fun SettingsRoute(
     navigateToLogin: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect {
+            when (it) {
+                SettingsSideEffect.NavigateToLogin -> navigateToLogin()
+            }
+        }
+    }
 
     BaseComposable(baseViewModel = viewModel) {
         SettingsScreen(

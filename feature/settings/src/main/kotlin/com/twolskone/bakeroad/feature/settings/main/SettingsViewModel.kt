@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.feature.settings.main
 import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.auth.LogoutUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsDialogState
@@ -15,7 +16,8 @@ import timber.log.Timber
 
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    private val logoutUseCase: LogoutUseCase
 ) : BaseViewModel<SettingsState, SettingsIntent, SettingsSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): SettingsState {
@@ -51,6 +53,10 @@ internal class SettingsViewModel @Inject constructor(
 
             SettingsIntent.Logout -> {
                 reduce { copy(dialog = SettingsDialogState.None) }
+                val result = logoutUseCase()
+                if (result) {
+                    postSideEffect(SettingsSideEffect.NavigateToLogin)
+                }
             }
 
             SettingsIntent.DeleteAccount -> {

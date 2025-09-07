@@ -39,7 +39,6 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
-import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.MyBakeryReview
 import java.time.LocalDate
@@ -52,7 +51,7 @@ private val contentPadding = PaddingValues(top = 8.dp, start = CardPadding, end 
 internal fun MyReviewCard(
     modifier: Modifier = Modifier,
     review: MyBakeryReview,
-    onBakeryNameClick: (bakeryId: Int) -> Unit,
+    onBakeryNameClick: (bakeryId: Int, areaCode: Int) -> Unit,
     onLikeClick: (Int, Boolean) -> Unit
 ) {
     val likeColor by animateColorAsState(
@@ -81,7 +80,7 @@ internal fun MyReviewCard(
         ) {
             // 빵집 이름
             Text(
-                modifier = Modifier.singleClickable { onBakeryNameClick(review.bakeryId) },
+                modifier = Modifier.noRippleSingleClickable { onBakeryNameClick(review.bakeryId, review.areaCode) },
                 text = review.bakeryName,
                 style = BakeRoadTheme.typography.bodyMediumSemibold.copy(color = BakeRoadTheme.colorScheme.Black)
             )
@@ -200,6 +199,7 @@ private fun ReviewCardPreview() {
             review = MyBakeryReview(
                 id = 1,
                 bakeryId = 1,
+                areaCode = 1,
                 bakeryName = "서라당",
                 isLike = false,
                 content = "겉은 바삭, 속은 촉촉! 버터 향 가득한 크루아상이 진짜 미쳤어요… 또 가고 싶을 정도 \uD83E\uDD50✨",
@@ -209,7 +209,7 @@ private fun ReviewCardPreview() {
                 menus = listOf("꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에", "꿀고구마휘낭시에"),
                 photos = emptyList()
             ),
-            onBakeryNameClick = {},
+            onBakeryNameClick = { _, _ -> },
             onLikeClick = { _, _ -> }
         )
     }

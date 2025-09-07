@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.filter
 @Composable
 internal fun MyReviewRoute(
     viewModel: MyReviewsViewModel = hiltViewModel(),
-    navigateToBakeryDetail: (bakeryId: Int) -> Unit,
+    navigateToBakeryDetail: (bakeryId: Int, areaCode: Int) -> Unit,
     finish: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()

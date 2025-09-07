@@ -18,6 +18,7 @@ internal fun MyBakeryReviewResponse.toExternalModel(): MyBakeryReview =
     MyBakeryReview(
         id = reviewId,
         bakeryId = bakeryId,
+        areaCode = commercialAreaId,
         bakeryName = bakeryName,
         isLike = isLike,
         content = reviewContent,

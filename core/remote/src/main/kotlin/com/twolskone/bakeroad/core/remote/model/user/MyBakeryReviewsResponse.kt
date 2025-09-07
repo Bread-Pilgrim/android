@@ -17,6 +17,8 @@ data class MyBakeryReviewResponse(
     val reviewId: Int = -1,
     @SerialName("bakery_id")
     val bakeryId: Int = -1,
+    @SerialName("commercial_area_id")
+    val commercialAreaId: Int = -1,
     @SerialName("bakery_name")
     val bakeryName: String = "",
     @SerialName("review_content")

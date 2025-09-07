@@ -6,6 +6,7 @@ import java.time.LocalDate
  * 내가 쓴 리뷰
  * @param id            리뷰 ID
  * @param bakeryId      빵집 ID
+ * @param areaCode      빵집 지역 코드
  * @param bakeryName    빵집 이름
  * @param isLike        사용자 좋아요 여부
  * @param content       리뷰 내용
@@ -18,6 +19,7 @@ import java.time.LocalDate
 data class MyBakeryReview(
     val id: Int,
     val bakeryId: Int,
+    val areaCode: Int,
     val bakeryName: String,
     val isLike: Boolean,
     val content: String,

@@ -22,12 +22,13 @@ class MyReviewsActivity : ComponentActivity() {
             SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
                 MyReviewRoute(
-                    navigateToBakeryDetail = { bakeryId ->
+                    navigateToBakeryDetail = { bakeryId, areaCode ->
                         bakeryDetailNavigator.navigateFromActivity(
                             activity = this,
                             withFinish = false,
                             intentBuilder = {
                                 putExtra("bakeryId", bakeryId)
+                                putExtra("areaCode", areaCode)
                             }
                         )
                     },

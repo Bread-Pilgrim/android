@@ -10,6 +10,7 @@ import com.twolskone.bakeroad.core.remote.model.user.ProfileResponse
 import com.twolskone.bakeroad.core.remote.model.user.ReportMonthlyListResponse
 import com.twolskone.bakeroad.core.remote.model.user.ReportResponse
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
@@ -62,4 +63,8 @@ internal interface UserApi {
     /* 대표뱃지 해제 */
     @POST("users/me/badges/{badge_id}/derepresent")
     suspend fun disableBadge(@Path("badge_id") badgeId: Int): BaseResponse<Unit, Unit>
+
+    /* 계정 탈퇴 */
+    @DELETE("users/me")
+    suspend fun deleteAccount(): BaseResponse<Unit, Unit>
 }

@@ -21,4 +21,5 @@ interface UserRepository {
     fun getReportDetail(year: Int, month: Int): Flow<ReportDetail>
     fun enableBadge(badgeId: Int): Flow<Unit>
     fun disableBadge(badgeId: Int): Flow<Unit>
+    fun deleteAccount(): Flow<Unit>
 }

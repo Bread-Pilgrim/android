@@ -20,4 +20,5 @@ interface UserDataSource {
     fun getReport(year: Int, month: Int): Flow<ReportResponse>
     fun enableBadge(badgeId: Int): Flow<Unit>
     fun disableBadge(badgeId: Int): Flow<Unit>
+    fun deleteAccount(): Flow<Unit>
 }

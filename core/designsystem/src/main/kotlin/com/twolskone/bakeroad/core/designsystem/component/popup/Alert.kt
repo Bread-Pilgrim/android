@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadOutlinedButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
@@ -39,6 +40,7 @@ fun BakeRoadAlert(
     content: String = "",
     primaryText: String,
     secondaryText: String = "",
+    properties: DialogProperties = DialogProperties(),
     onDismissRequest: () -> Unit,
     onPrimaryAction: () -> Unit,
     onSecondaryAction: () -> Unit = {}
@@ -52,6 +54,7 @@ fun BakeRoadAlert(
             .width(width)
             .background(color = BakeRoadTheme.colorScheme.White, shape = AlertShape)
             .padding(AlertPadding),
+        properties = properties,
         onDismissRequest = onDismissRequest,
     ) {
         Column(modifier = Modifier.fillMaxWidth()) {

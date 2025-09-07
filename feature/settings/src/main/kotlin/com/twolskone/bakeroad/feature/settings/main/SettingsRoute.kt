@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.DialogProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
@@ -72,8 +73,18 @@ internal fun SettingsRoute(
                     buttonType = PopupButton.SHORT,
                     content = stringResource(id = R.string.feature_settings_alert_description_delete_account_completion),
                     primaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_confirm),
-                    onDismissRequest = { viewModel.intent(SettingsIntent.DismissAlert) },
-                    onPrimaryAction = {},
+                    properties = DialogProperties(
+                        dismissOnBackPress = false,
+                        dismissOnClickOutside = false
+                    ),
+                    onDismissRequest = {
+                        viewModel.intent(SettingsIntent.DismissAlert)
+                        navigateToLogin()
+                    },
+                    onPrimaryAction = {
+                        viewModel.intent(SettingsIntent.DismissAlert)
+                        navigateToLogin()
+                    }
                 )
             }
 

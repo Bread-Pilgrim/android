@@ -105,4 +105,8 @@ internal class UserRepositoryImpl @Inject constructor(
     override fun disableBadge(badgeId: Int): Flow<Unit> {
         return userDataSource.disableBadge(badgeId = badgeId)
     }
+
+    override fun deleteAccount(): Flow<Unit> {
+        return userDataSource.deleteAccount()
+    }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.auth.LogoutUseCase
+import com.twolskone.bakeroad.core.domain.usecase.user.DeleteAccountUseCase
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
 import com.twolskone.bakeroad.feature.settings.main.mvi.SettingsDialogState
@@ -17,7 +18,8 @@ import timber.log.Timber
 @HiltViewModel
 internal class SettingsViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    private val logoutUseCase: LogoutUseCase
+    private val logoutUseCase: LogoutUseCase,
+    private val deleteAccountUseCase: DeleteAccountUseCase
 ) : BaseViewModel<SettingsState, SettingsIntent, SettingsSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): SettingsState {
@@ -47,8 +49,6 @@ internal class SettingsViewModel @Inject constructor(
 
             SettingsIntent.ShowDeleteAccountAlert -> reduce { copy(dialog = SettingsDialogState.DeleteAccount) }
 
-            SettingsIntent.ShowDeleteAccountCompletionAlert -> reduce { copy(dialog = SettingsDialogState.DeleteAccountCompletion) }
-
             SettingsIntent.DismissAlert -> reduce { copy(dialog = SettingsDialogState.None) }
 
             SettingsIntent.Logout -> {
@@ -61,6 +61,10 @@ internal class SettingsViewModel @Inject constructor(
 
             SettingsIntent.DeleteAccount -> {
                 reduce { copy(dialog = SettingsDialogState.None) }
+                val result = deleteAccountUseCase()
+                if (result) {
+                    reduce { copy(dialog = SettingsDialogState.DeleteAccountCompletion) }
+                }
             }
         }
     }

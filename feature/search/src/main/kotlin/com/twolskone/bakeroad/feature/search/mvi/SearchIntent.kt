@@ -9,4 +9,5 @@ internal sealed interface SearchIntent : BaseUiIntent {
     data object DeleteAllQueries : SearchIntent
     data class SetLoading(val loading: Boolean) : SearchIntent
     data object RefreshRecentBakeries : SearchIntent
+    data object DeleteRecentBakeries : SearchIntent
 }

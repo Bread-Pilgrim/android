@@ -168,4 +168,8 @@ internal class BakeryRepositoryImpl @Inject constructor(
                 }
             }
     }
+
+    override fun deleteRecentBakeries(): Flow<Unit> {
+        return bakeryDataSource.deleteRecentBakeries()
+    }
 }

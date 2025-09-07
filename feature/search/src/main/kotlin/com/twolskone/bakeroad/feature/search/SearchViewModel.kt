@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn
 import com.twolskone.bakeroad.core.common.android.base.BaseViewModel
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
+import com.twolskone.bakeroad.core.domain.usecase.bakery.DeleteRecentBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.bakery.GetRecentBakeriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteAllRecentSearchQueriesUseCase
 import com.twolskone.bakeroad.core.domain.usecase.search.DeleteRecentSearchQueryUseCase
@@ -19,6 +20,7 @@ import com.twolskone.bakeroad.feature.search.mvi.SearchSideEffect
 import com.twolskone.bakeroad.feature.search.mvi.SearchState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -35,7 +37,8 @@ internal class SearchViewModel @Inject constructor(
     private val deleteRecentSearchQueryUseCase: DeleteRecentSearchQueryUseCase,
     private val deleteAllRecentSearchQueriesUseCase: DeleteAllRecentSearchQueriesUseCase,
     private val getSearchBakeriesUseCase: GetSearchBakeriesUseCase,
-    private val getRecentBakeriesUseCase: GetRecentBakeriesUseCase
+    private val getRecentBakeriesUseCase: GetRecentBakeriesUseCase,
+    private val deleteRecentBakeriesUseCase: DeleteRecentBakeriesUseCase
 ) : BaseViewModel<SearchState, SearchIntent, SearchSideEffect>(savedStateHandle) {
 
     override fun initState(savedStateHandle: SavedStateHandle): SearchState {
@@ -108,6 +111,13 @@ internal class SearchViewModel @Inject constructor(
             is SearchIntent.SetLoading -> reduce { copy(loading = intent.loading) }
 
             SearchIntent.RefreshRecentBakeries -> getRecentBakeryList()
+
+            SearchIntent.DeleteRecentBakeries -> {
+                val result = deleteRecentBakeriesUseCase()
+                if (result) {
+                    reduce { copy(recentBakeryList = persistentListOf()) }
+                }
+            }
         }
     }
 

@@ -16,6 +16,7 @@ import com.twolskone.bakeroad.core.remote.model.bakery.BakeryReviewsResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.RecommendBakeryResponse
 import com.twolskone.bakeroad.core.remote.model.bakery.WriteBakeryReviewRequest
 import com.twolskone.bakeroad.core.remote.model.emitData
+import com.twolskone.bakeroad.core.remote.model.emitUnit
 import com.twolskone.bakeroad.core.remote.model.extra.BadgeExtraResponse
 import com.twolskone.bakeroad.core.remote.model.toData
 import com.twolskone.bakeroad.core.remote.model.toExtraOrNull
@@ -168,5 +169,9 @@ internal class BakeryDataSourceImpl @Inject constructor(
 
     override fun getRecentBakeries(): Flow<List<RecommendBakeryResponse>> = flow {
         emitData(api.getRecentBakeries())
+    }.flowOn(networkDispatcher)
+
+    override fun deleteRecentBakeries(): Flow<Unit> = flow {
+        emitUnit(api.deleteRecentBakeries())
     }.flowOn(networkDispatcher)
 }

@@ -21,15 +21,15 @@ import retrofit2.http.Query
 
 internal interface BakeryApi {
 
-    /* 내 취향 기반 추천 빵집 목록 */
+    /* 내 취향 기반 추천 빵집 */
     @GET("bakeries/recommend/preference")
     suspend fun getRecommendPreferenceBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>, Unit>
 
-    /* Hot한 추천 빵집 목록 */
+    /* Hot한 추천 빵집 */
     @GET("bakeries/recommend/hot")
     suspend fun getRecommendHotBakeries(@Query("area_code") areaCode: String): BaseResponse<List<RecommendBakeryResponse>, Unit>
 
-    /* 내 취향 기반 빵집 목록 */
+    /* 내 취향 기반 빵집 */
     @GET("bakeries/preference")
     suspend fun getPreferenceBakeries(
         @Query("area_code") areaCode: String,
@@ -37,7 +37,7 @@ internal interface BakeryApi {
         @Query("page_size") pageSize: Int
     ): BaseResponse<BakeriesResponse, Unit>
 
-    /* Hot한 빵집 목록 */
+    /* Hot한 빵집 */
     @GET("bakeries/hot")
     suspend fun getHotBakeries(
         @Query("area_code") areaCode: String,
@@ -58,7 +58,7 @@ internal interface BakeryApi {
         @Query("sort_clause") sort: String = "LIKE_COUNT.DESC"
     ): BaseResponse<BakeryReviewsResponse, Unit>
 
-    /* 빵집 리뷰 목록 */
+    /* 빵집 리뷰 */
     @GET("bakeries/{bakery_id}/reviews")
     suspend fun getReviews(
         @Path("bakery_id") bakeryId: Int,
@@ -67,7 +67,7 @@ internal interface BakeryApi {
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeryReviewsResponse, Unit>
 
-    /* 내가 작성한 빵집 리뷰 목록 */
+    /* 내가 작성한 빵집 리뷰 */
     @GET("bakeries/{bakery_id}/my-review")
     suspend fun getMyReviews(
         @Path("bakery_id") bakeryId: Int,
@@ -103,7 +103,7 @@ internal interface BakeryApi {
     @GET("bakeries/{bakery_id}/review/eligibility")
     suspend fun checkReviewEligibility(@Path("bakery_id") bakeryId: Int): BaseResponse<BakeryReviewEligibilityResponse, Unit>
 
-    /* 내가 찜한 빵집 목록 */
+    /* 내가 찜한 빵집 */
     @GET("bakeries/like")
     suspend fun getLikeBakeries(
         @Query("cursor_value") cursorValue: String,
@@ -111,7 +111,7 @@ internal interface BakeryApi {
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeriesResponse, Unit>
 
-    /* 내가 방문한 빵집 목록 */
+    /* 내가 방문한 빵집 */
     @GET("bakeries/visited")
     suspend fun getVisitedBakeries(
         @Query("cursor_value") cursorValue: String,
@@ -119,7 +119,11 @@ internal interface BakeryApi {
         @Query("sort_clause") sort: String
     ): BaseResponse<BakeriesResponse, Unit>
 
-    /* 최근 조회한 빵집 목록 */
+    /* 최근 조회한 빵집 */
     @GET("bakeries/recent")
     suspend fun getRecentBakeries(): BaseResponse<List<RecommendBakeryResponse>, Unit>
+
+    /* 최근 조회한 빵집 삭제 */
+    @DELETE("bakeries/recent")
+    suspend fun deleteRecentBakeries(): BaseResponse<Unit, Unit>
 }

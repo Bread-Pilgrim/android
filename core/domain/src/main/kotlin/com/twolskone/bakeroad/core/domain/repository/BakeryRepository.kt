@@ -27,4 +27,5 @@ interface BakeryRepository {
     fun checkReviewEligibility(bakeryId: Int): Flow<Boolean>
     fun getMyBakeries(cursor: String, myBakeryType: MyBakeryType, sort: BakerySortType): Flow<CursorPaging<Bakery>>
     fun getRecentBakeries(): Flow<List<RecommendBakery>>
+    fun deleteRecentBakeries(): Flow<Unit>
 }

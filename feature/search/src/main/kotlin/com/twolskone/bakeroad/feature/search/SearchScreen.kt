@@ -50,7 +50,8 @@ internal fun SearchScreen(
     onDeleteAllQueriesClick: () -> Unit,
     onSearchResultClick: (Bakery) -> Unit,
     onClearQueriesClick: () -> Unit,
-    onRecentBakeryClick: (RecommendBakery) -> Unit
+    onRecentBakeryClick: (RecommendBakery) -> Unit,
+    onDeleteRecentBakeriesClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -70,7 +71,8 @@ internal fun SearchScreen(
         when (state.section) {
             SearchSection.RecentSearchResult -> RecentSearchResult(
                 list = state.recentBakeryList,
-                onCardClick = onRecentBakeryClick
+                onCardClick = onRecentBakeryClick,
+                onDeleteAllClick = onDeleteRecentBakeriesClick
             )
 
             SearchSection.RecentSearchQueries -> RecentSearchQueries(
@@ -98,12 +100,13 @@ internal fun SearchScreen(
 @Composable
 private fun ColumnScope.RecentSearchResult(
     list: ImmutableList<RecommendBakery>,
-    onCardClick: (RecommendBakery) -> Unit
+    onCardClick: (RecommendBakery) -> Unit,
+    onDeleteAllClick: () -> Unit
 ) {
     SectionTitle(
         title = stringResource(id = R.string.feature_search_title_recent_search_result),
         deleteAllEnabled = list.isNotEmpty(),
-        onDeleteAllClick = {}
+        onDeleteAllClick = onDeleteAllClick
     )
     if (list.isNotEmpty()) {
         LazyRow(

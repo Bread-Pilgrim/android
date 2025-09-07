@@ -109,6 +109,7 @@ internal fun SearchRoute(
             queryTextState.clearText()
             viewModel.intent(SearchIntent.ChangeSection(section = SearchSection.RecentSearchQueries))
         },
-        onRecentBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) }
+        onRecentBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
+        onDeleteRecentBakeriesClick = { viewModel.intent(SearchIntent.DeleteRecentBakeries) }
     )
 }

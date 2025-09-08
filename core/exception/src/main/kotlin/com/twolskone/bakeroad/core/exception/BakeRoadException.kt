@@ -24,5 +24,9 @@ class BakeRoadException(
 
 enum class BakeRoadError(val code: String) {
     DuplicateNickname(code = "DUPLICATE_NICKNAME"), // 닉네임 중복 에러
-    AlreadyOnboarding(code = "ALREADY_ONBOARDED")   // 온보딩에서 이미 취향설정해서 발생하는 에러
+    AlreadyOnboarding(code = "ALREADY_ONBOARDED");  // 온보딩에서 이미 취향설정해서 발생하는 에러
+
+    companion object {
+        fun ofCode(code: String): BakeRoadError? = entries.find { it.code == code }
+    }
 }

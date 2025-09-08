@@ -39,7 +39,7 @@ internal fun <T, R> BaseResponse<T, R>.toDataOrNull(): T? =
         throw BakeRoadException(
             statusCode = code,
             error = runCatching {
-                errorUseCase?.let { BakeRoadError.valueOf(it) }
+                errorUseCase?.let { BakeRoadError.ofCode(it) }
             }.getOrDefault(null),
             message = message
         )
@@ -55,7 +55,7 @@ internal fun <T, R> BaseResponse<T, R>.toData(): T =
         throw BakeRoadException(
             statusCode = code,
             error = runCatching {
-                errorUseCase?.let { BakeRoadError.valueOf(it) }
+                errorUseCase?.let { BakeRoadError.ofCode(it) }
             }.getOrDefault(null),
             message = message
         )
@@ -68,7 +68,7 @@ internal fun <T, R> BaseResponse<T, R>.toExtraOrNull(): R? =
         throw BakeRoadException(
             statusCode = code,
             error = runCatching {
-                errorUseCase?.let { BakeRoadError.valueOf(it) }
+                errorUseCase?.let { BakeRoadError.ofCode(it) }
             }.getOrDefault(null),
             message = message
         )

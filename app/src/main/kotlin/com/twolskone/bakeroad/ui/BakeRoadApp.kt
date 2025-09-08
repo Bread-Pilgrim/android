@@ -43,6 +43,7 @@ import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 
 private const val BackInterval = 1500L
@@ -100,10 +101,16 @@ internal fun BakeRoadApp(
                     navController = navController,
                     destination = BakeRoadDestination.Home
                 )
-
-                is MainSideEffect.AchieveBadges -> { achievedBadges = it.badges }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.achieveBadges
+            .filter { it.isNotEmpty() }
+            .collectLatest {
+                achievedBadges = it
+            }
     }
 
     BaseComposable(baseViewModel = viewModel) {

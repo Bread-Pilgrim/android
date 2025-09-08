@@ -25,7 +25,6 @@ import com.twolskone.bakeroad.core.ui.popup.BadgeAchievedBottomSheet
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
 import timber.log.Timber
 
 @Composable
@@ -82,14 +81,6 @@ internal fun HomeRoute(
             Timber.i("xxx collect homeReselectEvent")
             verticalScrollState.animateScrollToItem(0)
         }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.achievedBadges
-            .filter { it.isNotEmpty() }
-            .collectLatest {
-                achievedBadges = it
-            }
     }
 
     HomeScreen(

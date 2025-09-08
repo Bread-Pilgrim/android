@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
     val mainEventBus: MainEventBus
 ) : BaseViewModel<MainState, MainIntent, MainSideEffect>(savedStateHandle) {
 
@@ -21,13 +21,8 @@ internal class MainViewModel @Inject constructor(
         return MainState()
     }
 
-    init {
-        savedStateHandle.get<List<Badge>>(KEY_BADGE_ACHIEVED)?.let { achievedBadges ->
-            if (achievedBadges.isNotEmpty()) {
-                postSideEffect(MainSideEffect.AchieveBadges(badges = achievedBadges))
-            }
-        }
-    }
+    // 획득한 뱃지
+    val achieveBadges = savedStateHandle.getStateFlow(KEY_BADGE_ACHIEVED, emptyList<Badge>())
 
     override fun handleException(cause: Throwable) {}
 
@@ -38,7 +33,9 @@ internal class MainViewModel @Inject constructor(
                 postSideEffect(MainSideEffect.NavigateToHome)
             }
 
-            is MainIntent.AchieveBadges -> postSideEffect(MainSideEffect.AchieveBadges(badges = intent.badges))
+            is MainIntent.AchieveBadges -> {
+                savedStateHandle[KEY_BADGE_ACHIEVED] = intent.badges
+            }
         }
     }
 }

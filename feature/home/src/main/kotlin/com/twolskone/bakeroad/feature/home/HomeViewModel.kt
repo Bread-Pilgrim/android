@@ -14,9 +14,7 @@ import com.twolskone.bakeroad.core.domain.usecase.tour.SetAreaEventDismissedTime
 import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientException
-import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.model.EntireBusan
-import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.feature.home.mvi.HomeIntent
 import com.twolskone.bakeroad.feature.home.mvi.HomeSideEffect
 import com.twolskone.bakeroad.feature.home.mvi.HomeState
@@ -50,8 +48,6 @@ internal class HomeViewModel @Inject constructor(
     override fun initState(savedStateHandle: SavedStateHandle): HomeState {
         return HomeState()
     }
-
-    val achievedBadges = savedStateHandle.getStateFlow(KEY_BADGE_ACHIEVED, emptyList<Badge>())
 
     private val areaTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
     private val tourAreaCategoryTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)

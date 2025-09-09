@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
@@ -39,6 +40,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.twolskone.bakeroad.core.common.android.util.KakaoMapUtil.openKakaoMapWithCoordinate
 import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
@@ -88,6 +90,7 @@ internal fun BakeryDetailScreen(
     onBackClick: () -> Unit,
     onShareClick: () -> Unit
 ) {
+    val context = LocalContext.current
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -181,7 +184,8 @@ internal fun BakeryDetailScreen(
                         expandOpeningHour = expandOpeningHour,
                         rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
                         onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour },
-                        onWriteReviewClick = onWriteReviewClick
+                        onWriteReviewClick = onWriteReviewClick,
+                        onSeeMapClick = { state.bakeryInfo?.let { context.openKakaoMapWithCoordinate(x = it.mapX, y = it.mapY) } }
                     )
                 }
             }

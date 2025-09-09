@@ -60,7 +60,8 @@ internal fun BakeryInfoSection(
     expandOpeningHour: Boolean,
     rotateOpeningHourIconAngle: Float,
     onExpandOpeningHourClick: () -> Unit,
-    onWriteReviewClick: () -> Unit
+    onWriteReviewClick: () -> Unit,
+    onSeeMapClick: () -> Unit
 ) {
     val clipboard = LocalClipboard.current
     val scope = rememberCoroutineScope()
@@ -132,8 +133,7 @@ internal fun BakeryInfoSection(
                     style = BakeRoadTheme.typography.bodyXsmallMedium.copy(color = BakeRoadTheme.colorScheme.Gray800)
                 )
                 Text(
-                    modifier = Modifier
-                        .singleClickable { },
+                    modifier = Modifier.singleClickable { onSeeMapClick() },
                     text = stringResource(R.string.feature_bakery_detail_button_view_map),
                     style = BakeRoadTheme.typography.bodyXsmallMedium.copy(
                         color = BakeRoadTheme.colorScheme.Gray950,
@@ -377,13 +377,16 @@ private fun BakeryInfoSectionPreview() {
                         )
                     ),
                     dayOff = persistentListOf(),
-                    isLike = true
+                    isLike = true,
+                    mapX = 0f,
+                    mapY = 0f
                 ),
                 reviewState = ReviewState(),
                 expandOpeningHour = false,
                 rotateOpeningHourIconAngle = 0f,
                 onExpandOpeningHourClick = {},
-                onWriteReviewClick = {}
+                onWriteReviewClick = {},
+                onSeeMapClick = {}
             )
         }
     }

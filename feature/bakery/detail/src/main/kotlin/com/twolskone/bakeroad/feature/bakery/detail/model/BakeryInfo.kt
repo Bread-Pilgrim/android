@@ -15,9 +15,11 @@ internal data class BakeryInfo(
     val address: String,
     val phone: String,
     val openStatus: BakeryOpenStatus,
-    val openingHour: ImmutableList<OpeningHour>,
-    val dayOff: ImmutableList<DayOfWeek>,
     val isLike: Boolean,
+    val mapX: Float,
+    val mapY: Float,
+    val openingHour: ImmutableList<OpeningHour>,
+    val dayOff: ImmutableList<DayOfWeek>
 ) {
 
     @Immutable
@@ -34,6 +36,9 @@ internal fun BakeryDetail.toBakeryInfo(): BakeryInfo =
         address = address,
         phone = phone,
         openStatus = openStatus,
+        isLike = isLike,
+        mapX = mapX,
+        mapY = mapY,
         openingHour = openingHours
             .filter { it.isOpened }
             .map {
@@ -46,8 +51,7 @@ internal fun BakeryDetail.toBakeryInfo(): BakeryInfo =
         dayOff = openingHours
             .filter { !it.isOpened }
             .map { it.dayOfWeek }
-            .toImmutableList(),
-        isLike = isLike
+            .toImmutableList()
     )
 
 internal val BakeryInfo.OpeningHour.openingHourLabel: String

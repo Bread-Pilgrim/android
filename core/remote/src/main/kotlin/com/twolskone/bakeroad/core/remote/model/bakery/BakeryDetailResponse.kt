@@ -15,6 +15,10 @@ data class BakeryDetailResponse(
     val phone: String = "",
     @SerialName("open_status")
     val openStatus: String,
+    @SerialName("mapx")
+    val mapx: Float = 0f,
+    @SerialName("mapy")
+    val mapy: Float = 0f,
     @SerialName("operating_hours")
     val operatingHours: List<OperatingHour>,
     @SerialName("is_like")

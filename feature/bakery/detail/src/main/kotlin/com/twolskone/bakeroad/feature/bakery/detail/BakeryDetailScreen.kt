@@ -185,7 +185,11 @@ internal fun BakeryDetailScreen(
                         rotateOpeningHourIconAngle = rotateOpeningHourIconAngle,
                         onExpandOpeningHourClick = { expandOpeningHour = !expandOpeningHour },
                         onWriteReviewClick = onWriteReviewClick,
-                        onSeeMapClick = { state.bakeryInfo?.let { context.openKakaoMapWithCoordinate(x = it.mapX, y = it.mapY) } }
+                        onSeeMapClick = {
+                            state.bakeryInfo?.let {
+                                context.openKakaoMapWithCoordinate(latitude = it.latitude, longitude = it.longitude)
+                            }
+                        }
                     )
                 }
             }

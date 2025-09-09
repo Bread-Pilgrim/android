@@ -57,8 +57,8 @@ internal fun BakeryDetailResponse.toExternalModel(): BakeryDetail =
             BakeryOpenStatus.ofStatus(openStatus) ?: BakeryOpenStatus.OPEN
         }.getOrDefault(BakeryOpenStatus.OPEN),
         isLike = isLike,
-        mapX = mapx,
-        mapY = mapy,
+        latitude = mapy,
+        longitude = mapx,
         openingHours = operatingHours
             .sortedBy { it.dayOfWeek }
             .map {

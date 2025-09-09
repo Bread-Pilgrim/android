@@ -378,8 +378,8 @@ private fun BakeryInfoSectionPreview() {
                     ),
                     dayOff = persistentListOf(),
                     isLike = true,
-                    mapX = 0f,
-                    mapY = 0f
+                    latitude = 0f,
+                    longitude = 0f
                 ),
                 reviewState = ReviewState(),
                 expandOpeningHour = false,

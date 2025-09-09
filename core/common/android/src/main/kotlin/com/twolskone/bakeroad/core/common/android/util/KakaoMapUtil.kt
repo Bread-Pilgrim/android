@@ -12,10 +12,10 @@ object KakaoMapUtil {
     /**
      * 좌표로 이동
      */
-    fun Context.openKakaoMapWithCoordinate(x: Float, y: Float) {
+    fun Context.openKakaoMapWithCoordinate(latitude: Float, longitude: Float) {
         try {
-            if (x > 0f && y > 0f) {
-                val url = "kakaomap://look?p=$x,$y"
+            if (latitude > 0f && longitude > 0f) {
+                val url = "kakaomap://look?p=$latitude,$longitude"
                 val intent = Intent(Intent.ACTION_VIEW, url.toUri())
                 startActivity(intent)
             }

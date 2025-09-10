@@ -56,7 +56,10 @@ internal class IntroViewModel @Inject constructor(
     override suspend fun handleIntent(intent: IntroIntent) {
         when (intent) {
             is IntroIntent.LoginKakao -> {
-                navigate(isOnboardingCompleted = loginUseCase(accessToken = intent.accessToken))
+                reduce { copy(loading = true) }
+                val isOnboardingCompleted = loginUseCase(accessToken = intent.accessToken)
+                reduce { copy(loading = false) }
+                navigate(isOnboardingCompleted = isOnboardingCompleted)
             }
         }
     }

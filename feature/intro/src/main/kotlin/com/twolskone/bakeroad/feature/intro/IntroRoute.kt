@@ -19,6 +19,8 @@ import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.auth.model.Prompt
 import com.kakao.sdk.user.UserApiClient
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
+import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
+import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.feature.intro.login.LoginScreen
 import com.twolskone.bakeroad.feature.intro.mvi.IntroIntent
@@ -80,6 +82,12 @@ internal fun IntroRoute(
                 )
             }
         }
+
+        BakeRoadLoadingScreen(
+            modifier = Modifier.fillMaxSize(),
+            isLoading = state.loading,
+            type = LoadingType.Default
+        )
     }
 }
 

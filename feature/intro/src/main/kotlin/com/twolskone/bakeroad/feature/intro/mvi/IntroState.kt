@@ -4,7 +4,10 @@ import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
 
 @Immutable
-internal data class IntroState(val type: IntroType = IntroType.SPLASH) : BaseUiState
+internal data class IntroState(
+    val type: IntroType = IntroType.SPLASH,
+    val loading: Boolean = false
+) : BaseUiState
 
 @Immutable
 internal enum class IntroType {

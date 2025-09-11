@@ -31,8 +31,19 @@ internal data class LoadingState(
     val areaLoading: Boolean = true,
     val preferenceBakeryLoading: Boolean = true,
     val hotBakeryLoading: Boolean = true,
-    val tourAreaLoading: Boolean = true
-)
+    val tourAreaLoading: Boolean = true,
+    val pullToRefreshLoading: Boolean = false,
+) {
+
+    fun pullToRefresh() = copy(
+        allLoading = true,
+        areaLoading = false,
+        preferenceBakeryLoading = true,
+        hotBakeryLoading = true,
+        tourAreaLoading = true,
+        pullToRefreshLoading = true
+    )
+}
 
 @Immutable
 internal sealed interface SheetState {

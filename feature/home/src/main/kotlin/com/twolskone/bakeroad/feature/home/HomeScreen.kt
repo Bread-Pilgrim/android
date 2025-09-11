@@ -17,7 +17,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -65,257 +69,277 @@ internal fun HomeScreen(
     onEditPreferenceClick: () -> Unit,
     onAreaEventSeeDetailsClick: (link: String) -> Unit,
     onAreaEventSheetDismiss: (isTodayDismissed: Boolean) -> Unit,
+    onRefresh: () -> Unit
 ) {
+    val refreshState = rememberPullToRefreshState()
+
     LogComposeScreenEvent(screen = "HomeScreen")
 
-    LazyColumn(
-        modifier = modifier
-            .fillMaxSize()
-            .background(color = BakeRoadTheme.colorScheme.White),
-        contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
-        state = verticalScrollState
-    ) {
-        item {
-            BakeRoadTopAppBar(
-                modifier = Modifier.fillMaxWidth(),
-                leftActions = {
-                    Image(
-                        modifier = Modifier.padding(start = 10.dp),
-                        imageVector = ImageVector.vectorResource(id = R.drawable.feature_home_ic_logo),
-                        contentDescription = "Logo"
-                    )
-                },
-                rightActions = {
-                    BakeRoadTextButton(
-                        modifier = Modifier.padding(end = 4.dp),
-                        style = TextButtonStyle.ASSISTIVE,
-                        size = TextButtonSize.SMALL,
-                        content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change)) },
-                        onClick = onEditPreferenceClick
-                    )
-                }
+    PullToRefreshBox(
+        state = refreshState,
+        isRefreshing = state.loadingState.pullToRefreshLoading,
+        onRefresh = onRefresh,
+        indicator = {
+            Indicator(
+                modifier = Modifier
+                    .padding(top = 56.dp)
+                    .align(Alignment.TopCenter),
+                isRefreshing = state.loadingState.pullToRefreshLoading,
+                state = refreshState,
+                containerColor = BakeRoadTheme.colorScheme.White,
+                color = BakeRoadTheme.colorScheme.Primary500,
             )
         }
-        // 지역 필터
-        stickyHeader {
-            if (state.loadingState.areaLoading) {
-                LineChipsSkeleton(
-                    modifier = Modifier
-                        .padding(top = 10.dp, bottom = 30.dp)
-                        .padding(horizontal = 16.dp)
+    ) {
+        LazyColumn(
+            modifier = modifier
+                .fillMaxSize()
+                .background(color = BakeRoadTheme.colorScheme.White),
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            state = verticalScrollState
+        ) {
+            item {
+                BakeRoadTopAppBar(
+                    modifier = Modifier.fillMaxWidth(),
+                    leftActions = {
+                        Image(
+                            modifier = Modifier.padding(start = 10.dp),
+                            imageVector = ImageVector.vectorResource(id = R.drawable.feature_home_ic_logo),
+                            contentDescription = "Logo"
+                        )
+                    },
+                    rightActions = {
+                        BakeRoadTextButton(
+                            modifier = Modifier.padding(end = 4.dp),
+                            style = TextButtonStyle.ASSISTIVE,
+                            size = TextButtonSize.SMALL,
+                            content = { Text(text = stringResource(id = com.twolskone.bakeroad.core.ui.R.string.core_ui_button_preference_change)) },
+                            onClick = onEditPreferenceClick
+                        )
+                    }
                 )
-            } else {
-                Column(modifier = Modifier.fillMaxWidth()) {
+            }
+            // 지역 필터
+            stickyHeader {
+                if (state.loadingState.areaLoading) {
+                    LineChipsSkeleton(
+                        modifier = Modifier
+                            .padding(top = 10.dp, bottom = 30.dp)
+                            .padding(horizontal = 16.dp)
+                    )
+                } else {
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        LazyRow(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(color = BakeRoadTheme.colorScheme.White)
+                                .padding(top = 10.dp),
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                        ) {
+                            items(
+                                items = state.areaList,
+                                key = { area -> area.code }
+                            ) { area ->
+                                BakeRoadLineChip(
+                                    selected = state.selectedAreaCodes.contains(area.code),
+                                    selectInterval = 0,
+                                    onSelectedChange = { onAreaSelect(it, area.code) },
+                                    label = { Text(text = area.name) }
+                                )
+                            }
+                        }
+                        // Gradient. (White <- Transparent)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(30.dp)
+                                .background(
+                                    Brush.verticalGradient(
+                                        colorStops = arrayOf(
+                                            0.2f to Color.White,
+                                            0.4f to Color.White.copy(alpha = 0.8f),
+                                            0.6f to Color.White.copy(alpha = 0.5f),
+                                            0.8f to Color.White.copy(alpha = 0.2f),
+                                            1.0f to Color.Transparent
+                                        )
+                                    )
+                                )
+                        )
+                    }
+                }
+            }
+            // 내 취향 추천 빵집 제목
+            item(contentType = "titleWithSeeAll") {
+                if (state.loadingState.preferenceBakeryLoading && state.loadingState.allLoading) {
+                    TitleSkeleton(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        titleWidth = 160.dp
+                    )
+                } else {
+                    Title(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(id = R.string.feature_home_title_my_preference_bakery),
+                        onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.PREFERENCE) }
+                    )
+                }
+            }
+            // 내 취향 추천 빵집 목록
+            item(contentType = "bakeries") {
+                if (state.loadingState.preferenceBakeryLoading) {
+                    SimpleBakeriesSkeleton(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .fillMaxWidth()
+                    )
+                } else {
                     LazyRow(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(color = BakeRoadTheme.colorScheme.White)
-                            .padding(top = 10.dp),
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                            .padding(vertical = 12.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
                     ) {
                         items(
-                            items = state.areaList,
-                            key = { area -> area.code }
-                        ) { area ->
-                            BakeRoadLineChip(
-                                selected = state.selectedAreaCodes.contains(area.code),
-                                selectInterval = 0,
-                                onSelectedChange = { onAreaSelect(it, area.code) },
-                                label = { Text(text = area.name) }
+                            items = state.preferenceBakeryList,
+                            key = { bakery -> bakery.id }
+                        ) {
+                            RecommendBakeryCard(
+                                bakery = it,
+                                onCardClick = { bakery -> onBakeryClick(bakery) }
                             )
                         }
                     }
-                    // Gradient. (White <- Transparent)
-                    Box(
+                }
+            }
+            // Hot한 빵집 제목
+            item(contentType = "titleWithSeeAll") {
+                if (state.loadingState.hotBakeryLoading && state.loadingState.allLoading) {
+                    TitleSkeleton(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .height(30.dp)
-                            .background(
-                                Brush.verticalGradient(
-                                    colorStops = arrayOf(
-                                        0.2f to Color.White,
-                                        0.4f to Color.White.copy(alpha = 0.8f),
-                                        0.6f to Color.White.copy(alpha = 0.5f),
-                                        0.8f to Color.White.copy(alpha = 0.2f),
-                                        1.0f to Color.Transparent
-                                    )
-                                )
-                            )
+                            .padding(top = 16.dp)
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        titleWidth = 154.dp
+                    )
+                } else {
+                    Title(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .padding(horizontal = 10.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(id = R.string.feature_home_title_hot_bakery),
+                        onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.HOT) }
                     )
                 }
             }
-        }
-        // 내 취향 추천 빵집 제목
-        item(contentType = "titleWithSeeAll") {
-            if (state.loadingState.preferenceBakeryLoading && state.loadingState.allLoading) {
-                TitleSkeleton(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    titleWidth = 160.dp
-                )
-            } else {
-                Title(
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(id = R.string.feature_home_title_my_preference_bakery),
-                    onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.PREFERENCE) }
-                )
-            }
-        }
-        // 내 취향 추천 빵집 목록
-        item(contentType = "bakeries") {
-            if (state.loadingState.preferenceBakeryLoading) {
-                SimpleBakeriesSkeleton(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .fillMaxWidth()
-                )
-            } else {
-                LazyRow(
-                    modifier = Modifier
-                        .padding(vertical = 12.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(
-                        items = state.preferenceBakeryList,
-                        key = { bakery -> bakery.id }
+            // Hot한 빵집 목록
+            item(contentType = "bakeries") {
+                if (state.loadingState.hotBakeryLoading) {
+                    SimpleBakeriesSkeleton(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 12.dp)
+                            .fillMaxWidth()
+                    )
+                } else {
+                    LazyRow(
+                        modifier = Modifier
+                            .padding(vertical = 12.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(10.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp)
                     ) {
-                        RecommendBakeryCard(
-                            bakery = it,
-                            onCardClick = { bakery -> onBakeryClick(bakery) }
-                        )
+                        items(
+                            items = state.hotBakeryList,
+                            key = { bakery -> bakery.id }
+                        ) {
+                            RecommendBakeryCard(
+                                bakery = it,
+                                onCardClick = { bakery -> onBakeryClick(bakery) }
+                            )
+                        }
                     }
                 }
             }
-        }
-        // Hot한 빵집 제목
-        item(contentType = "titleWithSeeAll") {
-            if (state.loadingState.hotBakeryLoading && state.loadingState.allLoading) {
-                TitleSkeleton(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    titleWidth = 154.dp
-                )
-            } else {
-                Title(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .padding(horizontal = 10.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(id = R.string.feature_home_title_hot_bakery),
-                    onSeeAllClick = { onSeeAllBakeriesClick(BakeryType.HOT) }
-                )
-            }
-        }
-        // Hot한 빵집 목록
-        item(contentType = "bakeries") {
-            if (state.loadingState.hotBakeryLoading) {
-                SimpleBakeriesSkeleton(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .fillMaxWidth()
-                )
-            } else {
-                LazyRow(
-                    modifier = Modifier
-                        .padding(vertical = 12.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(10.dp),
-                    contentPadding = PaddingValues(horizontal = 16.dp)
-                ) {
-                    items(
-                        items = state.hotBakeryList,
-                        key = { bakery -> bakery.id }
-                    ) {
-                        RecommendBakeryCard(
-                            bakery = it,
-                            onCardClick = { bakery -> onBakeryClick(bakery) }
-                        )
-                    }
-                }
-            }
-        }
-        // 주변 추천 관광지 제목
-        item {
-            if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
-                TitleSkeleton(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth(),
-                    titleWidth = 190.dp,
-                    skipButton = true
-                )
-            } else {
-                Title(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .padding(horizontal = 10.dp)
-                        .fillMaxWidth(),
-                    title = stringResource(id = R.string.feature_home_title_tour_area)
-                )
-            }
-        }
-        // 관광지 카테고리 필터
-        item {
-            if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
-                ChipsSkeleton(
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 2.dp)
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                )
-            } else {
-                LazyRow(
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 2.dp)
-                        .fillMaxWidth(),
-                    contentPadding = PaddingValues(horizontal = 16.dp),
-                    horizontalArrangement = Arrangement.spacedBy(7.dp)
-                ) {
-                    items(
-                        items = TourAreaCategory.entries,
-                        key = { category -> category.code }
-                    ) { category ->
-                        BakeRoadChip(
-                            selected = state.selectedTourAreaCategories.contains(category),
-                            color = ChipColor.SUB,
-                            size = ChipSize.LARGE,
-                            selectInterval = 0,
-                            onSelectedChange = { onTourCategorySelect(it, category) },
-                            label = { Text(text = category.toLabel()) }
-                        )
-                    }
-                }
-            }
-        }
-        // 주변 추천 관광지 목록
-        if (state.loadingState.tourAreaLoading) {
+            // 주변 추천 관광지 제목
             item {
-                TourAreasSkeleton(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 10.dp)
-                        .fillMaxWidth()
-                )
+                if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
+                    TitleSkeleton(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth(),
+                        titleWidth = 190.dp,
+                        skipButton = true
+                    )
+                } else {
+                    Title(
+                        modifier = Modifier
+                            .padding(top = 16.dp)
+                            .padding(horizontal = 10.dp)
+                            .fillMaxWidth(),
+                        title = stringResource(id = R.string.feature_home_title_tour_area)
+                    )
+                }
             }
-        } else {
-            items(
-                items = state.tourAreaList,
-                key = { tourArea -> "${tourArea.type}_${tourArea.title}_${tourArea.mapX}_${tourArea.mapY}" }
-            ) {
-                TourAreaCard(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp, vertical = 10.dp)
-                        .fillMaxWidth(),
-                    tourArea = it
-                )
+            // 관광지 카테고리 필터
+            item {
+                if (state.loadingState.tourAreaLoading && state.loadingState.allLoading) {
+                    ChipsSkeleton(
+                        modifier = Modifier
+                            .padding(top = 16.dp, bottom = 2.dp)
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
+                    )
+                } else {
+                    LazyRow(
+                        modifier = Modifier
+                            .padding(top = 16.dp, bottom = 2.dp)
+                            .fillMaxWidth(),
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(7.dp)
+                    ) {
+                        items(
+                            items = TourAreaCategory.entries,
+                            key = { category -> category.code }
+                        ) { category ->
+                            BakeRoadChip(
+                                selected = state.selectedTourAreaCategories.contains(category),
+                                color = ChipColor.SUB,
+                                size = ChipSize.LARGE,
+                                selectInterval = 0,
+                                onSelectedChange = { onTourCategorySelect(it, category) },
+                                label = { Text(text = category.toLabel()) }
+                            )
+                        }
+                    }
+                }
+            }
+            // 주변 추천 관광지 목록
+            if (state.loadingState.tourAreaLoading) {
+                item {
+                    TourAreasSkeleton(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .fillMaxWidth()
+                    )
+                }
+            } else {
+                items(
+                    items = state.tourAreaList,
+                    key = { tourArea -> "${tourArea.type}_${tourArea.title}_${tourArea.mapX}_${tourArea.mapY}" }
+                ) {
+                    TourAreaCard(
+                        modifier = Modifier
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                            .fillMaxWidth(),
+                        tourArea = it
+                    )
+                }
             }
         }
     }
@@ -363,7 +387,8 @@ private fun HomeScreenPreview() {
             onBakeryClick = {},
             onEditPreferenceClick = {},
             onAreaEventSeeDetailsClick = {},
-            onAreaEventSheetDismiss = {}
+            onAreaEventSheetDismiss = {},
+            onRefresh = {}
         )
     }
 }

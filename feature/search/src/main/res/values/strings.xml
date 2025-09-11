@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="feature_search">검색</string>
-    <string name="feature_search_hint">가고 싶은 빵집이나 메뉴를 검색해보세요.</string>
+    <string name="feature_search_hint">빵집이나 메뉴를 검색해보세요.</string>
     <string name="feature_search_empty_recent_search_result">최근에 조회한 빵집이 없어요.\n원하는 매장을 검색해보세요!</string>
     <string name="feature_search_empty_recent_search_query">아직 검색하신 내역이 없어요.\n원하는 매장을 검색해보세요!</string>
     <string name="feature_search_empty_search_result">검색 결과가 없습니다.\n다른 키워드로 다시 입력해주세요.</string>

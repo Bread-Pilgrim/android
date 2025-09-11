@@ -26,6 +26,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,11 +58,12 @@ import com.twolskone.bakeroad.core.designsystem.component.switch.BakeRoadSwitch
 import com.twolskone.bakeroad.core.designsystem.component.switch.SwitchSize
 import com.twolskone.bakeroad.core.designsystem.component.textinput.BakeRoadTextBox
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
-import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
+import com.twolskone.bakeroad.core.model.isOtherMenu
 import com.twolskone.bakeroad.feature.review.write.mvi.WriteBakeryReviewState
 
+private const val ReviewContentMinLength = 10
 private const val ReviewContentMaxLength = 300
 
 @Composable
@@ -74,6 +78,12 @@ internal fun WriteBakeryReviewScreen(
     onPrivateCheck: (Boolean) -> Unit,
     onSubmit: () -> Unit
 ) {
+    val enableButton: Boolean by remember {
+        derivedStateOf {
+            contentTextState.text.length >= ReviewContentMinLength
+        }
+    }
+
     LogComposeScreenEvent(screen = "WriteBakeryReviewScreen")
 
     Box(
@@ -87,9 +97,10 @@ internal fun WriteBakeryReviewScreen(
                 .fillMaxWidth()
                 .align(Alignment.TopCenter),
             leftActions = {
-                BakeRoadTopAppBarIcon(
-                    iconRes = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_back,
-                    contentDescription = "Back",
+                BakeRoadTextButton(
+                    style = TextButtonStyle.ASSISTIVE,
+                    size = TextButtonSize.SMALL,
+                    content = { Text(text = stringResource(id = R.string.feature_review_write_button_back)) },
                     onClick = onBackClick
                 )
             },
@@ -150,7 +161,15 @@ internal fun WriteBakeryReviewScreen(
                         selected = false,
                         color = ChipColor.LIGHT_GRAY,
                         size = ChipSize.LARGE,
-                        label = { Text(text = menu.name) }
+                        label = {
+                            Text(
+                                text = if (!menu.isOtherMenu()) {
+                                    "${menu.name} ${stringResource(id = R.string.feature_review_write_format_menu_count, menu.count)}"
+                                } else {
+                                    menu.name
+                                }
+                            )
+                        }
                     )
                 }
             }
@@ -165,6 +184,8 @@ internal fun WriteBakeryReviewScreen(
                     .padding(horizontal = 15.dp)
                     .height(150.dp),
                 state = contentTextState,
+                placeholder = stringResource(R.string.feature_review_write_placeholder_review),
+                minLength = ReviewContentMinLength,
                 maxLength = ReviewContentMaxLength
             )
             BakeRoadTextButton(
@@ -204,7 +225,7 @@ internal fun WriteBakeryReviewScreen(
                 .padding(horizontal = 15.dp, vertical = 24.dp)
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            enabled = contentTextState.text.isNotEmpty(),
+            enabled = enableButton,
             role = SolidButtonRole.PRIMARY,
             size = ButtonSize.XLARGE,
             onClick = onSubmit,

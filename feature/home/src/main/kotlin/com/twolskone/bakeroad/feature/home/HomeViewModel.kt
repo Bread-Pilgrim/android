@@ -117,6 +117,11 @@ internal class HomeViewModel @Inject constructor(
                 }
                 reduce { copy(sheetState = SheetState.Nothing) }
             }
+
+            HomeIntent.PullToRefresh -> {
+                reduce { copy(loadingState = loadingState.pullToRefresh()) }
+                refreshAll()
+            }
         }
     }
 
@@ -169,7 +174,14 @@ internal class HomeViewModel @Inject constructor(
             val hotBakeriesJob = refreshHotBakeries()
             val tourAreasJob = refreshTourAreas()
             joinAll(preferenceBakeriesJob, hotBakeriesJob, tourAreasJob)
-            reduce { copy(loadingState = loadingState.copy(allLoading = false)) }
+            reduce {
+                copy(
+                    loadingState = loadingState.copy(
+                        allLoading = false,
+                        pullToRefreshLoading = false
+                    )
+                )
+            }
         }
     }
 

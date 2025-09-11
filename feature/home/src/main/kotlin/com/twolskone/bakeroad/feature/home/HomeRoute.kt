@@ -99,7 +99,8 @@ internal fun HomeRoute(
         onBakeryClick = { bakery -> navigateToBakeryDetail(bakery.id, bakery.areaCode, bakeryDetailLauncher) },
         onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) },
         onAreaEventSeeDetailsClick = { link -> openBrowser(link) },
-        onAreaEventSheetDismiss = { isTodayDismissed -> viewModel.intent(HomeIntent.DismissAreaEventSheet(isTodayDismissed = isTodayDismissed)) }
+        onAreaEventSheetDismiss = { isTodayDismissed -> viewModel.intent(HomeIntent.DismissAreaEventSheet(isTodayDismissed = isTodayDismissed)) },
+        onRefresh = { viewModel.intent(HomeIntent.PullToRefresh) }
     )
 
     if (achievedBadges.isNotEmpty()) {

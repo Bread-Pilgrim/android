@@ -7,7 +7,7 @@
     <string name="feature_home_title_hot_bakery">🔥 Hot한 빵집 모음</string>
     <string name="feature_home_title_tour_area">🏖 같이 가볼만한 관광지</string>
     <string name="feature_home_label_tour_area_category_nature">자연</string>
-    <string name="feature_home_label_tour_area_category_humanities">인문(문화/예술/역사)</string>
+    <string name="feature_home_label_tour_area_category_humanities">인문</string>
     <string name="feature_home_label_tour_area_category_leisure">레포츠</string>
     <string name="feature_home_label_tour_area_category_shopping">쇼핑</string>
     <string name="feature_home_label_tour_area_category_recommend_course">추천코스</string>

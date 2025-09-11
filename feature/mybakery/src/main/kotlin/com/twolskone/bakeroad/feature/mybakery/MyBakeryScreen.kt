@@ -77,7 +77,9 @@ internal fun MyBakeryScreen(
         onRefresh = onRefresh,
         indicator = {
             Indicator(
-                modifier = Modifier.align(Alignment.TopCenter),
+                modifier = Modifier
+                    .padding(top = 56.dp)
+                    .align(Alignment.TopCenter),
                 isRefreshing = state.isRefreshing,
                 state = refreshState,
                 containerColor = BakeRoadTheme.colorScheme.White,

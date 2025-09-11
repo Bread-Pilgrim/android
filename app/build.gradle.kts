@@ -3,6 +3,7 @@ import com.twolskone.bakeroad.BakeRoadBuildType
 plugins {
     alias(libs.plugins.bakeroad.android.application)
     alias(libs.plugins.bakeroad.android.application.compose)
+    alias(libs.plugins.bakeroad.android.application.firebase)
     alias(libs.plugins.bakeroad.hilt)
     id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
@@ -73,6 +74,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.exception)
     implementation(projects.core.eventbus)
+    implementation(projects.core.analytics)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtimeCompose)

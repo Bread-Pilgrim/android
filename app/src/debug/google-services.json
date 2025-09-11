@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "608682409713",
+    "project_id": "bakeroad-8df9b",
+    "storage_bucket": "bakeroad-8df9b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608682409713:android:5bfa5626308966791ff350",
+        "android_client_info": {
+          "package_name": "com.twolskone.bakeroad"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_BLw2ZD1hXwT4qflVREOvk80wqlzfLUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608682409713:android:7e98854a928104ca1ff350",
+        "android_client_info": {
+          "package_name": "com.twolskone.bakeroad.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_BLw2ZD1hXwT4qflVREOvk80wqlzfLUg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

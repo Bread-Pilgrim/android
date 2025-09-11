@@ -5,9 +5,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.core.content.IntentCompat
 import androidx.core.net.toUri
 import androidx.navigation.compose.rememberNavController
+import com.twolskone.bakeroad.core.analytics.AnalyticsHelper
+import com.twolskone.bakeroad.core.analytics.LocalAnalyticsHelper
 import com.twolskone.bakeroad.core.common.kotlin.extension.toIntOrZero
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
@@ -53,6 +56,9 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var myReviewsNavigator: MyReviewsNavigator         // 내가 쓴 리뷰
 
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper               // Firebase Analytics Helper
+
     private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,70 +67,74 @@ class MainActivity : ComponentActivity() {
         setContent {
             SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
-                BakeRoadApp(
-                    viewModel = viewModel,
-                    mainEventBus = viewModel.mainEventBus,
-                    navController = rememberNavController(),
-                    navigateToBakeryList = { areaCodes, bakeryType, launcher ->
-                        bakeryListNavigator.navigateFromLauncher(
-                            activity = this,
-                            launcher = launcher,
-                            intentBuilder = {
-                                putExtra("areaCodes", areaCodes)
-                                putExtra("bakeryType", bakeryType)
+                CompositionLocalProvider(
+                    LocalAnalyticsHelper provides analyticsHelper
+                ) {
+                    BakeRoadApp(
+                        viewModel = viewModel,
+                        mainEventBus = viewModel.mainEventBus,
+                        navController = rememberNavController(),
+                        navigateToBakeryList = { areaCodes, bakeryType, launcher ->
+                            bakeryListNavigator.navigateFromLauncher(
+                                activity = this,
+                                launcher = launcher,
+                                intentBuilder = {
+                                    putExtra("areaCodes", areaCodes)
+                                    putExtra("bakeryType", bakeryType)
+                                }
+                            )
+                        },
+                        navigateToBakeryDetail = { bakeryId, areaCode, launcher ->
+                            bakeryDetailNavigator.navigateFromLauncher(
+                                activity = this,
+                                launcher = launcher,
+                                intentBuilder = {
+                                    putExtra("bakeryId", bakeryId)
+                                    putExtra("areaCode", areaCode)
+                                }
+                            )
+                        },
+                        navigateToEditPreference = { launcher ->
+                            onboardingNavigator.navigateFromLauncher(
+                                activity = this,
+                                intentBuilder = { putExtra("isEditPreference", true) },
+                                launcher = launcher
+                            )
+                        },
+                        navigateToSettings = {
+                            settingsNavigator.navigateFromActivity(
+                                activity = this,
+                                withFinish = false
+                            )
+                        },
+                        navigateToReport = {
+                            reportNavigator.navigateFromActivity(
+                                activity = this,
+                                withFinish = false
+                            )
+                        },
+                        navigateToBadgeList = {
+                            badgeListNavigator.navigateFromActivity(
+                                activity = this,
+                                withFinish = false
+                            )
+                        },
+                        navigateToMyReviews = {
+                            myReviewsNavigator.navigateFromActivity(
+                                activity = this,
+                                withFinish = false
+                            )
+                        },
+                        openBrowser = { url ->
+                            try {
+                                startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
+                            } catch (e: Exception) {
+                                Timber.e(e)
                             }
-                        )
-                    },
-                    navigateToBakeryDetail = { bakeryId, areaCode, launcher ->
-                        bakeryDetailNavigator.navigateFromLauncher(
-                            activity = this,
-                            launcher = launcher,
-                            intentBuilder = {
-                                putExtra("bakeryId", bakeryId)
-                                putExtra("areaCode", areaCode)
-                            }
-                        )
-                    },
-                    navigateToEditPreference = { launcher ->
-                        onboardingNavigator.navigateFromLauncher(
-                            activity = this,
-                            intentBuilder = { putExtra("isEditPreference", true) },
-                            launcher = launcher
-                        )
-                    },
-                    navigateToSettings = {
-                        settingsNavigator.navigateFromActivity(
-                            activity = this,
-                            withFinish = false
-                        )
-                    },
-                    navigateToReport = {
-                        reportNavigator.navigateFromActivity(
-                            activity = this,
-                            withFinish = false
-                        )
-                    },
-                    navigateToBadgeList = {
-                        badgeListNavigator.navigateFromActivity(
-                            activity = this,
-                            withFinish = false
-                        )
-                    },
-                    navigateToMyReviews = {
-                        myReviewsNavigator.navigateFromActivity(
-                            activity = this,
-                            withFinish = false
-                        )
-                    },
-                    openBrowser = { url ->
-                        try {
-                            startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
-                        } catch (e: Exception) {
-                            Timber.e(e)
-                        }
-                    },
-                    finish = { finish() }
-                )
+                        },
+                        finish = { finish() }
+                    )
+                }
             }
         }
 

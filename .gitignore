@@ -44,3 +44,6 @@ captures/
 # Compose metrics, reports
 compose-metrics/
 compose-reports/
+
+# Firebase configuration json file
+app/google-services.json

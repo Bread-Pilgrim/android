@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
@@ -73,6 +74,8 @@ internal fun WriteBakeryReviewScreen(
     onPrivateCheck: (Boolean) -> Unit,
     onSubmit: () -> Unit
 ) {
+    LogComposeScreenEvent(screen = "WriteBakeryReviewScreen")
+
     Box(
         modifier = modifier
             .fillMaxSize()

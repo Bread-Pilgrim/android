@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.itemKey
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
 import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
@@ -53,6 +54,8 @@ internal fun SearchScreen(
     onRecentBakeryClick: (RecommendBakery) -> Unit,
     onDeleteRecentBakeriesClick: () -> Unit
 ) {
+    LogComposeScreenEvent(screen = "SearchScreen")
+
     Column(
         modifier = modifier
             .fillMaxSize()

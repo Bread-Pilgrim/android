@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.coerceAtLeast
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
@@ -70,6 +71,8 @@ internal fun MyBakeryScreen(
     val refreshState = rememberPullToRefreshState()
     val density = LocalDensity.current
     var showSortBottomSheet by remember { mutableStateOf(false) }
+
+    LogComposeScreenEvent(screen = "MyBakeryScreen")
 
     PullToRefreshBox(
         state = refreshState,

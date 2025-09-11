@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.designsystem.component.loading.BakeRoadLoadingScreen
 import com.twolskone.bakeroad.core.designsystem.component.loading.LoadingType
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -34,6 +35,8 @@ internal fun MyReviewsScreen(
     onBakeryNameClick: (bakeryId: Int, areaCode: Int) -> Unit,
     onLikeClick: (Int, Boolean) -> Unit
 ) {
+    LogComposeScreenEvent(screen = "MyReviewsScreen")
+
     Column(
         modifier = modifier
             .fillMaxSize()

@@ -40,6 +40,7 @@ import androidx.compose.ui.util.fastForEach
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.common.android.util.KakaoMapUtil.openKakaoMapWithCoordinate
 import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
@@ -136,6 +137,8 @@ internal fun BakeryDetailScreen(
         targetValue = if (expandOpeningHour) -180f else 0f,
         label = "OpeningHourRotationAnimation"
     )
+
+    LogComposeScreenEvent(screen = "BakeryDetailScreen")
 
     LaunchedEffect(topBarColor) { Timber.e("topBarColor : $topBarColor") }
     LaunchedEffect(topBarColorTransition) { Timber.e("topBarColorTransition : $topBarColorTransition") }

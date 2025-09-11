@@ -19,6 +19,7 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.common.android.extension.isLoading
 import com.twolskone.bakeroad.core.designsystem.component.skeleton.BakeriesSkeleton
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
@@ -42,6 +43,8 @@ internal fun BakeryListScreen(
         BakeryType.PREFERENCE -> stringResource(id = R.string.feature_bakery_list_title_preference)
         BakeryType.HOT -> stringResource(id = R.string.feature_bakery_list_title_hot)
     }
+
+    LogComposeScreenEvent(screen = "BakeryListScreen")
 
     Column(
         modifier = modifier

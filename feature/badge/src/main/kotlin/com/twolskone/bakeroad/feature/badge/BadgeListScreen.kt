@@ -29,6 +29,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadSolidButton
 import com.twolskone.bakeroad.core.designsystem.component.button.ButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.SolidButtonRole
@@ -52,6 +53,8 @@ internal fun BadgeListScreen(
     onDisableBadge: (Badge) -> Unit
 ) {
     var selectedBadge by remember { mutableStateOf<Badge?>(null) }
+
+    LogComposeScreenEvent(screen = "BadgeListScreen")
 
     Column(
         modifier = modifier

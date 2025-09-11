@@ -36,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.designsystem.component.button.BakeRoadTextButton
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonSize
 import com.twolskone.bakeroad.core.designsystem.component.button.TextButtonStyle
@@ -63,6 +64,8 @@ internal fun MenuSelectionScreen(
     onBackClick: () -> Unit
 ) {
     val isMenusSelected = menuList.any { menu -> menu.count > 0 }
+
+    LogComposeScreenEvent(screen = "MenuSelectionScreen")
 
     Column(modifier = modifier.background(color = BakeRoadTheme.colorScheme.White)) {
         BakeRoadTopAppBar(

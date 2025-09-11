@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
 import com.twolskone.bakeroad.core.common.android.util.DeviceUtil
 import com.twolskone.bakeroad.core.common.android.util.DeviceUtil.appVersion
 import com.twolskone.bakeroad.core.common.android.util.DeviceUtil.appVersionCode
@@ -36,6 +37,8 @@ internal fun AppInfoScreen(
     onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
+
+    LogComposeScreenEvent(screen = "AppInfoScreen")
 
     Column(
         modifier = modifier

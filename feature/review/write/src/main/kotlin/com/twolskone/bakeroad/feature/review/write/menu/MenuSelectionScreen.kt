@@ -209,6 +209,7 @@ private fun QuantityCounter(
     Row(
         modifier = modifier
             .height(QuantityCounterHeight)
+            .clip(shape = RoundedCornerShape(6.dp))
             .background(color = BakeRoadTheme.colorScheme.White, shape = RoundedCornerShape(6.dp)),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween

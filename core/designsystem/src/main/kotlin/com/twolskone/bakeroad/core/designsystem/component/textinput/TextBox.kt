@@ -39,7 +39,9 @@ private val TextFieldBoxShape = RoundedCornerShape(10.dp)
 fun BakeRoadTextBox(
     modifier: Modifier = Modifier,
     state: TextFieldState,
+    placeholder: String = "",
     enabled: Boolean = true,
+    minLength: Int,
     maxLength: Int,
     lineLimits: TextFieldLineLimits = if (maxLength > 1) TextFieldLineLimits.MultiLine() else TextFieldLineLimits.SingleLine,
     inputTransformation: InputTransformation? = if (maxLength > 1) InputTransformation.maxLength(maxLength) else null,
@@ -54,7 +56,7 @@ fun BakeRoadTextBox(
     val disabledCounterColor = BakeRoadTheme.colorScheme.Gray100
     val counterColor by remember(currentLength, maxLength) {
         derivedStateOf {
-            if (currentLength <= 0) disabledCounterColor else activeCounterColor
+            if (currentLength < minLength) disabledCounterColor else activeCounterColor
         }
     }
 
@@ -77,12 +79,22 @@ fun BakeRoadTextBox(
                     .background(color = BakeRoadTheme.colorScheme.White, shape = TextFieldBoxShape)
                     .border(
                         width = 1.dp,
-                        color = if (isFocus) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray300,
+                        color = if (isFocus) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray100,
                         shape = TextFieldBoxShape
                     )
                     .padding(horizontal = 12.dp, vertical = 16.dp)
             ) {
-                Box(modifier = Modifier.weight(1f, fill = true)) { textInput() }
+                Box(modifier = Modifier.weight(1f, fill = true)) {
+                    if (state.text.isEmpty() && placeholder.isNotEmpty()) {
+                        Text(
+                            text = placeholder,
+                            style = BakeRoadTheme.typography.bodySmallRegular,
+                            color = BakeRoadTheme.colorScheme.Gray400
+                        )
+                    } else {
+                        textInput()
+                    }
+                }
                 Text(
                     modifier = Modifier
                         .padding(top = 12.dp)
@@ -110,6 +122,8 @@ private fun BakeRoadTextFieldPreview() {
                 .fillMaxWidth()
                 .height(150.dp),
             state = rememberTextFieldState(),
+            placeholder = "정성스러운 리뷰는 다른 유저들의 빵 여행에 큰 도움이 됩니다.\n맛, 분위기, 추천 포인트를 자유롭게 남겨주세요!\n(최소 10자 이상 작성해주세요)",
+            minLength = 10,
             maxLength = 30
         )
     }

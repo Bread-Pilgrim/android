@@ -2,4 +2,5 @@
     <string name="app_name">빵글</string>
     <string name="app_name_debug">빵글(debug)</string>
     <string name="snackbar_press_back_again_to_exit">한 번 더 누르면 앱이 종료돼요</string>
+    <string name="alert_content_token_expired">로그인이 만료됐어요.\n보안을 위해 다시 로그인 해주세요 🥹</string>
 </resources>

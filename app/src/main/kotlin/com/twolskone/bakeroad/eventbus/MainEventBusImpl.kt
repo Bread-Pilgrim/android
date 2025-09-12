@@ -3,6 +3,7 @@ package com.twolskone.bakeroad.eventbus
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import javax.inject.Inject
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -38,6 +39,15 @@ class MainEventBusImpl @Inject constructor() : MainEventBus {
     override fun setMyPageRefreshState(value: Boolean) {
         Timber.i("xxx setMyPageRefreshState : $value")
         _myPageRefreshState.value = value
+    }
+
+    private val _tokenExpiredEvent = MutableSharedFlow<Unit>(extraBufferCapacity = 1, onBufferOverflow = BufferOverflow.DROP_LATEST)
+    override val tokenExpiredEvent: SharedFlow<Unit>
+        get() = _tokenExpiredEvent.asSharedFlow()
+
+    override fun onTokenExpired() {
+        Timber.i("xxx onTokenExpired")
+        _tokenExpiredEvent.tryEmit(Unit)
     }
 
     private val _homeReselectEvent = MutableSharedFlow<Unit>(/*extraBufferCapacity = 1*/)

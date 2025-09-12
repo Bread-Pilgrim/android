@@ -20,6 +20,10 @@ interface MainEventBus {
     val myPageRefreshState: StateFlow<Boolean>
     fun setMyPageRefreshState(value: Boolean)
 
+    /* 토큰 만료 */
+    val tokenExpiredEvent: SharedFlow<Unit>
+    fun onTokenExpired()
+
     /* 홈 탭 재선택 */
     val homeReselectEvent: SharedFlow<Unit>
     suspend fun reselectHome()

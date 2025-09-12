@@ -21,4 +21,5 @@ interface UserDataSource {
     fun enableBadge(badgeId: Int): Flow<Unit>
     fun disableBadge(badgeId: Int): Flow<Unit>
     fun deleteAccount(): Flow<Unit>
+    suspend fun clearAllDataStores()
 }

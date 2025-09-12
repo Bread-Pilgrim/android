@@ -1,6 +1,8 @@
 package com.twolskone.bakeroad.core.remote.interceptor
 
 import com.twolskone.bakeroad.core.datastore.TokenDataSource
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
+import com.twolskone.bakeroad.core.exception.BakeRoadException.Companion.STATUS_CODE_INVALID_TOKEN
 import com.twolskone.bakeroad.core.exception.extension.handleNetworkException
 import javax.inject.Inject
 import kotlinx.coroutines.runBlocking
@@ -11,7 +13,10 @@ import okhttp3.ResponseBody.Companion.toResponseBody
 import org.json.JSONObject
 import timber.log.Timber
 
-internal class ResponseInterceptor @Inject constructor(private val tokenDataSource: TokenDataSource) : Interceptor {
+internal class ResponseInterceptor @Inject constructor(
+    private val tokenDataSource: TokenDataSource,
+    private val mainEventBus: MainEventBus
+) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         return try {
@@ -45,6 +50,12 @@ internal class ResponseInterceptor @Inject constructor(private val tokenDataSour
                         .protocol(Protocol.HTTP_1_1)
                         .code(200)
                         .message(json.optString("message").orEmpty())
+                }
+
+                // All token expired.
+                if (json.optInt("status_code") == STATUS_CODE_INVALID_TOKEN) {
+                    Timber.i("All Token expired..")
+                    mainEventBus.onTokenExpired()
                 }
 
                 return responseBuilder

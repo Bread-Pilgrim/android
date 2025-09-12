@@ -10,6 +10,7 @@ import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.domain.usecase.auth.LoginUseCase
 import com.twolskone.bakeroad.core.domain.usecase.auth.VerifyTokenUseCase
 import com.twolskone.bakeroad.core.domain.usecase.user.GetOnboardingStatusUseCase
+import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.exception.BakeRoadException
 import com.twolskone.bakeroad.core.exception.ClientError
 import com.twolskone.bakeroad.core.exception.ClientException
@@ -26,6 +27,7 @@ import com.kakao.sdk.common.model.ClientError as KakaoClientError
 @HiltViewModel
 internal class IntroViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
+    private val mainEventBus: MainEventBus,
     private val verifyTokenUseCase: VerifyTokenUseCase,
     private val loginUseCase: LoginUseCase,
     private val getOnboardingStatusUseCase: GetOnboardingStatusUseCase
@@ -102,7 +104,8 @@ internal class IntroViewModel @Inject constructor(
 
             is BakeRoadException -> {
                 when (cause.statusCode) {
-                    BakeRoadException.STATUS_CODE_INVALID_TOKEN -> showLoginScreen()    // 유효하지 않은 토큰 : 로그인 화면
+                    // 유효하지 않은 토큰 -> 로그인 화면 이동
+                    BakeRoadException.STATUS_CODE_INVALID_TOKEN -> showLoginScreen()
                     else -> showSnackbar(type = SnackbarType.ERROR, message = cause.message)
                 }
             }

@@ -7,6 +7,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.core.eventbus)
+
     implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.kakao.auth) // 카카오 로그인

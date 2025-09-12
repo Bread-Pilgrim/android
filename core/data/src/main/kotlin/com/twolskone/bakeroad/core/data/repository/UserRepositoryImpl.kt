@@ -109,4 +109,8 @@ internal class UserRepositoryImpl @Inject constructor(
     override fun deleteAccount(): Flow<Unit> {
         return userDataSource.deleteAccount()
     }
+
+    override suspend fun clearAllDataStores() {
+        return userDataSource.clearAllDataStores()
+    }
 }

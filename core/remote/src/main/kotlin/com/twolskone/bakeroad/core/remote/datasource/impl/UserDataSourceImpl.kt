@@ -82,4 +82,10 @@ internal class UserDataSourceImpl @Inject constructor(
         areaEventDataSource.clear()
         emit(data)
     }
+
+    override suspend fun clearAllDataStores() {
+        cacheDataSource.clearAll()
+        tokenDataSource.clearAll()
+        areaEventDataSource.clear()
+    }
 }

@@ -19,6 +19,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.util.fastForEach
+import androidx.compose.ui.window.DialogProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -29,6 +31,8 @@ import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.isRouteInHierarchy
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBar
 import com.twolskone.bakeroad.core.designsystem.component.navigation.BakeRoadNavigationBarItem
+import com.twolskone.bakeroad.core.designsystem.component.popup.BakeRoadAlert
+import com.twolskone.bakeroad.core.designsystem.component.popup.PopupButton
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.eventbus.MainEventBus
 import com.twolskone.bakeroad.core.model.Badge
@@ -38,12 +42,15 @@ import com.twolskone.bakeroad.feature.home.navigation.navigateToHome
 import com.twolskone.bakeroad.feature.mybakery.navigation.navigateToMyBakery
 import com.twolskone.bakeroad.feature.mypage.navigation.navigateToMyPage
 import com.twolskone.bakeroad.feature.search.navigation.navigateToSearch
+import com.twolskone.bakeroad.mvi.MainDialogState
+import com.twolskone.bakeroad.mvi.MainIntent
 import com.twolskone.bakeroad.mvi.MainSideEffect
 import com.twolskone.bakeroad.navigation.BakeRoadDestination
 import com.twolskone.bakeroad.navigation.BakeRoadNavHost
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 
 private const val BackInterval = 1500L
@@ -60,10 +67,12 @@ internal fun BakeRoadApp(
     navigateToReport: () -> Unit,
     navigateToBadgeList: () -> Unit,
     navigateToMyReviews: () -> Unit,
+    navigateToLogin: () -> Unit,
     openBrowser: (url: String) -> Unit,
     finish: () -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val state by viewModel.state.collectAsStateWithLifecycle()
     val currentBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStackEntry?.destination
     var backTimeMillis by remember { mutableLongStateOf(0) }
@@ -95,12 +104,22 @@ internal fun BakeRoadApp(
     }
 
     LaunchedEffect(Unit) {
+        mainEventBus.tokenExpiredEvent
+            .take(1)
+            .collect {
+                viewModel.intent(MainIntent.ShowTokenExpiredAlert)
+            }
+    }
+
+    LaunchedEffect(Unit) {
         viewModel.sideEffect.collect {
             when (it) {
                 MainSideEffect.NavigateToHome -> navigateToBakeRoadDestination(
                     navController = navController,
                     destination = BakeRoadDestination.Home
                 )
+
+                MainSideEffect.NavigateToLogin -> navigateToLogin()
             }
         }
     }
@@ -170,6 +189,22 @@ internal fun BakeRoadApp(
                     navigateToBadgeList()
                 }
             )
+        }
+
+        when (state.dialog) {
+            MainDialogState.TokenExpired -> BakeRoadAlert(
+                buttonType = PopupButton.SHORT,
+                content = stringResource(id = R.string.alert_content_token_expired),
+                primaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_confirm),
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                ),
+                onDismissRequest = { viewModel.intent(MainIntent.HandleTokenExpired) },
+                onPrimaryAction = { viewModel.intent(MainIntent.HandleTokenExpired) }
+            )
+
+            MainDialogState.None -> {}
         }
     }
 }

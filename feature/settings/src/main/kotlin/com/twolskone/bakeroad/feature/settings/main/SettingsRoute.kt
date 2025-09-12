@@ -59,7 +59,7 @@ internal fun SettingsRoute(
                 BakeRoadAlert(
                     buttonType = PopupButton.SHORT,
                     title = stringResource(id = R.string.feature_settings_alert_title_delete_account),
-                    content = stringResource(id = R.string.feature_settings_alert_description_delete_account),
+                    content = stringResource(id = R.string.feature_settings_alert_content_delete_account),
                     primaryText = stringResource(id = R.string.feature_settings_button_delete_account),
                     secondaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_cancel),
                     onDismissRequest = { viewModel.intent(SettingsIntent.DismissAlert) },
@@ -71,7 +71,7 @@ internal fun SettingsRoute(
             SettingsDialogState.DeleteAccountCompletion -> {
                 BakeRoadAlert(
                     buttonType = PopupButton.SHORT,
-                    content = stringResource(id = R.string.feature_settings_alert_description_delete_account_completion),
+                    content = stringResource(id = R.string.feature_settings_alert_content_delete_account_completion),
                     primaryText = stringResource(id = com.twolskone.bakeroad.core.designsystem.R.string.core_designsystem_button_confirm),
                     properties = DialogProperties(
                         dismissOnBackPress = false,

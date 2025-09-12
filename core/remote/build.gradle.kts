@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.core.common.android)
     implementation(projects.core.datastore)
     implementation(projects.core.model)
+    implementation(projects.core.eventbus)
 
     implementation(libs.okhttp.logging)
     implementation(libs.retrofit)

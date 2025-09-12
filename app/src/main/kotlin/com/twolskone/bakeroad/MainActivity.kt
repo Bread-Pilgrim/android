@@ -19,12 +19,14 @@ import com.twolskone.bakeroad.core.model.EntireBusan
 import com.twolskone.bakeroad.core.navigator.BadgeListNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
 import com.twolskone.bakeroad.core.navigator.BakeryListNavigator
+import com.twolskone.bakeroad.core.navigator.IntroNavigator
 import com.twolskone.bakeroad.core.navigator.MyReviewsNavigator
 import com.twolskone.bakeroad.core.navigator.OnboardingNavigator
 import com.twolskone.bakeroad.core.navigator.ReportNavigator
 import com.twolskone.bakeroad.core.navigator.SettingsNavigator
 import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.core.navigator.util.KEY_HOME_REFRESH
+import com.twolskone.bakeroad.core.navigator.util.KEY_LOGIN
 import com.twolskone.bakeroad.mvi.MainIntent
 import com.twolskone.bakeroad.ui.BakeRoadApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +57,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var myReviewsNavigator: MyReviewsNavigator         // 내가 쓴 리뷰
+
+    @Inject
+    lateinit var introNavigator: IntroNavigator                 // 인트로
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper               // Firebase Analytics Helper
@@ -123,6 +128,16 @@ class MainActivity : ComponentActivity() {
                             myReviewsNavigator.navigateFromActivity(
                                 activity = this,
                                 withFinish = false
+                            )
+                        },
+                        navigateToLogin = {
+                            introNavigator.navigateFromActivity(
+                                activity = this,
+                                withFinish = true,
+                                intentBuilder = {
+                                    putExtra(KEY_LOGIN, true)
+                                    setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                                }
                             )
                         },
                         openBrowser = { url ->

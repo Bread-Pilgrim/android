@@ -136,7 +136,7 @@ private fun MenuSelectionListItem(
             .clip(MenuSelectionListItemShape)
             .singleClickable { onClick(menu, !selected) }
             .background(color = containerColor, shape = MenuSelectionListItemShape)
-            .padding(horizontal = 12.dp, vertical = 12.dp)
+            .padding(12.dp)
             .animateContentSize()
     ) {
         Row(
@@ -145,9 +145,7 @@ private fun MenuSelectionListItem(
         ) {
             if (menu.isSignature) {
                 BakeRoadChip(
-                    modifier = Modifier
-                        .padding(horizontal = 4.dp)
-                        .padding(end = 2.dp),
+                    modifier = Modifier.padding(start = 4.dp, end = 2.dp),
                     selected = false,
                     color = ChipColor.SUB,
                     size = ChipSize.SMALL,
@@ -155,7 +153,9 @@ private fun MenuSelectionListItem(
                 )
             }
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 4.dp),
                 text = if (menu.isOtherMenu()) stringResource(id = R.string.feature_review_write_button_other_menu) else menu.name,
                 style = BakeRoadTheme.typography.bodySmallMedium.copy(color = contentColor)
             )
@@ -280,21 +280,21 @@ private fun MenuSelectionScreenPreview() {
                     count = 1
                 ),
                 ReviewMenu(
-                    id = 1,
+                    id = 2,
                     name = "꿀고구마 휘낭시에 2",
                     isSignature = true,
                     breadTypeId = 1,
                     count = 0
                 ),
                 ReviewMenu(
-                    id = 1,
+                    id = 3,
                     name = "꿀고구마 휘낭시에 3",
                     isSignature = false,
                     breadTypeId = 1,
                     count = 10
                 ),
                 ReviewMenu(
-                    id = 1,
+                    id = 4,
                     name = "꿀고구마 휘낭시에 4",
                     isSignature = false,
                     breadTypeId = 1,

@@ -1,6 +1,6 @@
 # 🍞 빵글 - 빵덕후들의 여정, 취향을 기록하다
 > 내가 먹은 빵, 취향까지 정산해주는 기록형 빵지순례 앱
-<img width="500" src="https://github.com/user-attachments/assets/348a4dfd-ea28-455a-940e-96f5380a7d51" />
+<img width="500" src="https://github.com/user-attachments/assets/4823db88-347c-414e-a429-2ae3322856e8" />
 
 [플레이스토어 다운로드](https://play.google.com/store/apps/details?id=com.twolskone.bakeroad)
 

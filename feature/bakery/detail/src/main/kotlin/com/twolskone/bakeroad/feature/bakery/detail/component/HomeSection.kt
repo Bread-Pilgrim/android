@@ -70,7 +70,8 @@ internal fun LazyListScope.home(
     onViewAllMenuClick: () -> Unit,
     onViewAllReviewClick: () -> Unit,
     onViewAllTourAreaClick: () -> Unit,
-    onReviewLikeClick: (Int, Boolean) -> Unit
+    onReviewLikeClick: (Int, Boolean) -> Unit,
+    onTourAreaClick: (TourArea) -> Unit
 ) {
     item {
         Column(modifier = itemModifier) {
@@ -103,7 +104,8 @@ internal fun LazyListScope.home(
                 TourAreaContent(
                     modifier = Modifier.fillMaxWidth(),
                     tourAreaList = tourAreaList,
-                    onViewAllClick = onViewAllTourAreaClick
+                    onViewAllClick = onViewAllTourAreaClick,
+                    onTourAreaClick = onTourAreaClick
                 )
             }
         }
@@ -234,7 +236,8 @@ private fun ReviewContent(
 private fun TourAreaContent(
     modifier: Modifier = Modifier,
     tourAreaList: ImmutableList<TourArea>,
-    onViewAllClick: () -> Unit
+    onViewAllClick: () -> Unit,
+    onTourAreaClick: (TourArea) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -263,7 +266,10 @@ private fun TourAreaContent(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 tourAreaList.take(TourAreaMaxCount).fastForEach { tourArea ->
-                    SimpleTourAreaCard(tourArea = tourArea)
+                    SimpleTourAreaCard(
+                        tourArea = tourArea,
+                        onClick = onTourAreaClick
+                    )
                 }
             }
             BakeRoadOutlinedButton(
@@ -507,11 +513,12 @@ private fun TourAreaContentPreview() {
                         type = "타입",
                         address = "주소주소주소주소",
                         imagePath = "",
-                        mapY = 0f,
-                        mapX = 0f
+                        latitude = 0f,
+                        longitude = 0f
                     )
                 ),
-                onViewAllClick = {}
+                onViewAllClick = {},
+                onTourAreaClick = {}
             )
         }
     }

@@ -23,6 +23,7 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.TourArea
 
@@ -34,9 +35,10 @@ private val ImageShape = RoundedCornerShape(10.dp)
 @Composable
 fun TourAreaCard(
     modifier: Modifier = Modifier,
-    tourArea: TourArea
+    tourArea: TourArea,
+    onClick: (TourArea) -> Unit
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.noRippleSingleClickable { onClick(tourArea) }) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -96,9 +98,10 @@ private fun TourAreaCardPreview() {
                     address = "전통시장 / 광복동",
                     type = "자연",
                     imagePath = "",
-                    mapX = 0f,
-                    mapY = 0f
-                )
+                    latitude = 0f,
+                    longitude = 0f
+                ),
+                onClick = {}
             )
             TourAreaCard(
                 modifier = Modifier.fillMaxWidth(),
@@ -107,9 +110,10 @@ private fun TourAreaCardPreview() {
                     address = "전통시장 / 광복동",
                     type = "자연",
                     imagePath = "",
-                    mapX = 0f,
-                    mapY = 0f
-                )
+                    latitude = 0f,
+                    longitude = 0f
+                ),
+                onClick = {}
             )
         }
     }

@@ -19,18 +19,23 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.TourArea
 
 private val SimpleImageSize = 100.dp
 
-// TODO. 공통 컴포넌트화 ?
 @Composable
 internal fun SimpleTourAreaCard(
     modifier: Modifier = Modifier,
-    tourArea: TourArea
+    tourArea: TourArea,
+    onClick: (TourArea) -> Unit
 ) {
-    Column(modifier = modifier.width(SimpleImageSize)) {
+    Column(
+        modifier = modifier
+            .width(SimpleImageSize)
+            .noRippleSingleClickable { onClick(tourArea) }
+    ) {
         Box {
             AsyncImage(
                 modifier = Modifier

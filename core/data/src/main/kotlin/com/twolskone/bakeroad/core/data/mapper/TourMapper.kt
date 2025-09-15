@@ -15,8 +15,8 @@ internal fun TourAreaResponse.toExternalModel(): TourArea =
         type = tourType,
         address = address,
         imagePath = tourImg,
-        mapX = mapX,
-        mapY = mapY
+        latitude = mapY,
+        longitude = mapX
     )
 
 internal fun TourAreaEventResponse.toExternalModel(): AreaEvent =

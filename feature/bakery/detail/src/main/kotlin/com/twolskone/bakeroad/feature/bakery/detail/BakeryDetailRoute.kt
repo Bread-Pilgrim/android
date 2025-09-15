@@ -34,6 +34,7 @@ import com.kakao.sdk.template.model.Link
 import com.twolskone.bakeroad.core.common.android.base.BaseComposable
 import com.twolskone.bakeroad.core.common.android.extension.ObserveError
 import com.twolskone.bakeroad.core.common.android.extension.isEmpty
+import com.twolskone.bakeroad.core.common.android.util.KakaoMapUtil.openKakaoMapWithCoordinate
 import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
@@ -160,7 +161,9 @@ internal fun BakeryDetailRoute(
                     areaCode = viewModel.areaCode,
                     state = state
                 )
-            }
+            },
+            onSeeMapClick = { latitude, longitude -> context.openKakaoMapWithCoordinate(latitude = latitude, longitude = longitude) },
+            onTourAreaClick = { context.openKakaoMapWithCoordinate(latitude = it.latitude, longitude = it.longitude) }
         )
 
         if (achievedBadges.isNotEmpty()) {

@@ -20,7 +20,8 @@ import kotlinx.collections.immutable.ImmutableList
  */
 internal fun LazyListScope.tourArea(
     loading: Boolean,
-    tourList: ImmutableList<TourArea>
+    tourList: ImmutableList<TourArea>,
+    onTourAreaClick: (TourArea) -> Unit
 ) {
     if (loading) {
         item {
@@ -34,14 +35,15 @@ internal fun LazyListScope.tourArea(
     } else {
         items(
             items = tourList,
-            key = { tourArea -> "${tourArea.title}_${tourArea.type}_${tourArea.mapX}_${tourArea.mapY}" }
+            key = { tourArea -> "${tourArea.title}_${tourArea.type}_${tourArea.latitude}_${tourArea.longitude}" }
         ) { tour ->
             TourAreaCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = BakeRoadTheme.colorScheme.White)
                     .padding(horizontal = 16.dp, vertical = 10.dp),
-                tourArea = tour
+                tourArea = tour,
+                onClick = onTourAreaClick
             )
         }
         item {

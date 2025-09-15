@@ -46,6 +46,7 @@ import com.twolskone.bakeroad.core.designsystem.component.skeleton.TourAreasSkel
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBar
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.RecommendBakery
+import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.core.model.type.BakeryType
 import com.twolskone.bakeroad.core.model.type.TourAreaCategory
 import com.twolskone.bakeroad.core.ui.RecommendBakeryCard
@@ -69,7 +70,8 @@ internal fun HomeScreen(
     onEditPreferenceClick: () -> Unit,
     onAreaEventSeeDetailsClick: (link: String) -> Unit,
     onAreaEventSheetDismiss: (isTodayDismissed: Boolean) -> Unit,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    onTourAreaClick: (TourArea) -> Unit
 ) {
     val refreshState = rememberPullToRefreshState()
 
@@ -331,13 +333,14 @@ internal fun HomeScreen(
             } else {
                 items(
                     items = state.tourAreaList,
-                    key = { tourArea -> "${tourArea.type}_${tourArea.title}_${tourArea.mapX}_${tourArea.mapY}" }
+                    key = { tourArea -> "${tourArea.type}_${tourArea.title}_${tourArea.latitude}_${tourArea.longitude}" }
                 ) {
                     TourAreaCard(
                         modifier = Modifier
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                             .fillMaxWidth(),
-                        tourArea = it
+                        tourArea = it,
+                        onClick = onTourAreaClick
                     )
                 }
             }
@@ -388,7 +391,8 @@ private fun HomeScreenPreview() {
             onEditPreferenceClick = {},
             onAreaEventSeeDetailsClick = {},
             onAreaEventSheetDismiss = {},
-            onRefresh = {}
+            onRefresh = {},
+            onTourAreaClick = {}
         )
     }
 }

@@ -15,8 +15,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.twolskone.bakeroad.core.common.android.util.KakaoMapUtil.openKakaoMapWithCoordinate
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarState
 import com.twolskone.bakeroad.core.designsystem.component.snackbar.SnackbarType
 import com.twolskone.bakeroad.core.model.Badge
@@ -37,6 +39,7 @@ internal fun HomeRoute(
     navigateToBadgeList: () -> Unit,
     openBrowser: (url: String) -> Unit
 ) {
+    val context = LocalContext.current
     val state by viewModel.state.collectAsStateWithLifecycle()
     val verticalScrollState = rememberLazyListState()
     var achievedBadges by remember { mutableStateOf(emptyList<Badge>()) }
@@ -100,7 +103,8 @@ internal fun HomeRoute(
         onEditPreferenceClick = { navigateToEditPreference(changePreferenceLauncher) },
         onAreaEventSeeDetailsClick = { link -> openBrowser(link) },
         onAreaEventSheetDismiss = { isTodayDismissed -> viewModel.intent(HomeIntent.DismissAreaEventSheet(isTodayDismissed = isTodayDismissed)) },
-        onRefresh = { viewModel.intent(HomeIntent.PullToRefresh) }
+        onRefresh = { viewModel.intent(HomeIntent.PullToRefresh) },
+        onTourAreaClick = { context.openKakaoMapWithCoordinate(latitude = it.latitude, longitude = it.longitude) }
     )
 
     if (achievedBadges.isNotEmpty()) {

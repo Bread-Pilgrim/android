@@ -41,7 +41,6 @@ import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.twolskone.bakeroad.core.analytics.LogComposeScreenEvent
-import com.twolskone.bakeroad.core.common.android.util.KakaoMapUtil.openKakaoMapWithCoordinate
 import com.twolskone.bakeroad.core.common.kotlin.extension.orFalse
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadScrollableTabRow
 import com.twolskone.bakeroad.core.designsystem.component.tab.BakeRoadTab
@@ -49,6 +48,7 @@ import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppB
 import com.twolskone.bakeroad.core.designsystem.component.topbar.BakeRoadTopAppBarIcon
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryReview
+import com.twolskone.bakeroad.core.model.TourArea
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
 import com.twolskone.bakeroad.core.model.type.ReviewSortType
 import com.twolskone.bakeroad.core.ui.LikeIcon
@@ -89,7 +89,9 @@ internal fun BakeryDetailScreen(
     onBakeryLikeClick: (Boolean) -> Unit,
     onReviewLikeClick: (Int, Boolean) -> Unit,
     onBackClick: () -> Unit,
-    onShareClick: () -> Unit
+    onShareClick: () -> Unit,
+    onSeeMapClick: (latitude: Float, longitude: Float) -> Unit,
+    onTourAreaClick: (TourArea) -> Unit
 ) {
     val context = LocalContext.current
     val density = LocalDensity.current
@@ -190,7 +192,7 @@ internal fun BakeryDetailScreen(
                         onWriteReviewClick = onWriteReviewClick,
                         onSeeMapClick = {
                             state.bakeryInfo?.let {
-                                context.openKakaoMapWithCoordinate(latitude = it.latitude, longitude = it.longitude)
+                                onSeeMapClick(it.latitude, it.longitude)
                             }
                         }
                     )
@@ -231,7 +233,8 @@ internal fun BakeryDetailScreen(
                         onViewAllMenuClick = { onTabSelect(BakeryDetailTab.MENU) },
                         onViewAllReviewClick = { onTabSelect(BakeryDetailTab.REVIEW) },
                         onViewAllTourAreaClick = { onTabSelect(BakeryDetailTab.TOUR_AREA) },
-                        onReviewLikeClick = onReviewLikeClick
+                        onReviewLikeClick = onReviewLikeClick,
+                        onTourAreaClick = onTourAreaClick
                     )
                 }
 
@@ -259,7 +262,8 @@ internal fun BakeryDetailScreen(
                 BakeryDetailTab.TOUR_AREA -> {
                     tourArea(
                         loading = state.loadingState.tourAreaLoading,
-                        tourList = state.tourAreaList
+                        tourList = state.tourAreaList,
+                        onTourAreaClick = onTourAreaClick
                     )
                 }
             }
@@ -360,7 +364,9 @@ private fun BakeryDetailScreenPreview() {
             onBakeryLikeClick = {},
             onReviewLikeClick = { _, _ -> },
             onBackClick = {},
-            onShareClick = {}
+            onShareClick = {},
+            onSeeMapClick = { _, _ -> },
+            onTourAreaClick = {}
         )
     }
 }

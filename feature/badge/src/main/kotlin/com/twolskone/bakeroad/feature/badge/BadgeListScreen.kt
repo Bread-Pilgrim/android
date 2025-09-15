@@ -1,7 +1,6 @@
 package com.twolskone.bakeroad.feature.badge
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +42,7 @@ import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.ui.BakeRoadBadge
 import com.twolskone.bakeroad.feature.badge.mvi.BadgeListState
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun BadgeListScreen(
@@ -140,11 +140,11 @@ internal fun BadgeListScreen(
                             }
                         )
                         .fillMaxWidth()
+                        .padding(bottom = 8.dp)
                         .clip(RoundedCornerShape(10.dp))
                         .background(color = BakeRoadTheme.colorScheme.White)
                         .singleClickable { selectedBadge = badge },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(10.dp)
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Box {
                         BakeRoadBadge(
@@ -168,7 +168,9 @@ internal fun BadgeListScreen(
                         }
                     }
                     Text(
-                        modifier = Modifier.padding(bottom = 10.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 6.dp)
+                            .padding(top = 2.dp, bottom = 8.dp),
                         text = badge.name,
                         style = BakeRoadTheme.typography.bodyXsmallMedium,
                         color = BakeRoadTheme.colorScheme.Gray600,
@@ -266,7 +268,7 @@ private fun BadgeBottomSheet(
 private fun BadgeListScreenPreview() {
     BakeRoadTheme {
         BadgeListScreen(
-            state = BadgeListState(),
+            state = BadgeListState(badgeList = DummyBadges.toImmutableList()),
             onBackClick = {},
             onEnableBadge = {},
             onDisableBadge = {}

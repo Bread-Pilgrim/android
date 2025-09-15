@@ -6,6 +6,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import com.twolskone.bakeroad.core.designsystem.R
@@ -51,6 +52,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 22.sp,
         fontWeight = FontWeight(700),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     headingMediumBold = TextStyle(
@@ -58,6 +63,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 20.sp,
         fontWeight = FontWeight(700),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     headingSmallBold = TextStyle(
@@ -65,6 +74,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 18.sp,
         fontWeight = FontWeight(700),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyXlargeSemibold = TextStyle(
@@ -72,6 +85,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 20.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyLargeSemibold = TextStyle(
@@ -79,6 +96,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 18.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyMediumSemibold = TextStyle(
@@ -86,6 +107,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 16.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodySmallSemibold = TextStyle(
@@ -93,6 +118,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 15.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyXsmallSemibold = TextStyle(
@@ -100,6 +129,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 14.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     body2XsmallSemibold = TextStyle(
@@ -107,6 +140,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 13.sp,
         fontWeight = FontWeight(600),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyXlargeMedium = TextStyle(
@@ -114,6 +151,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 20.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyLargeMedium = TextStyle(
@@ -121,6 +162,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 18.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyMediumMedium = TextStyle(
@@ -128,6 +173,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 16.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodySmallMedium = TextStyle(
@@ -135,6 +184,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 15.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyXsmallMedium = TextStyle(
@@ -142,6 +195,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 14.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     body2XsmallMedium = TextStyle(
@@ -149,6 +206,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 13.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     body3XsmallMedium = TextStyle(
@@ -156,6 +217,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 12.sp,
         fontWeight = FontWeight(500),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyXlargeRegular = TextStyle(
@@ -163,6 +228,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 20.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyLargeRegular = TextStyle(
@@ -170,6 +239,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 18.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyMediumRegular = TextStyle(
@@ -177,6 +250,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 16.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodySmallRegular = TextStyle(
@@ -184,6 +261,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 15.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     bodyXsmallRegular = TextStyle(
@@ -191,6 +272,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 14.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     body2XsmallRegular = TextStyle(
@@ -198,6 +283,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 13.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     ),
     body3XsmallRegular = TextStyle(
@@ -205,6 +294,10 @@ internal val bakeRoadTypography = BakeRoadTypography(
         fontSize = 12.sp,
         fontWeight = FontWeight(400),
         lineHeight = 1.4.em,
+        lineHeightStyle = LineHeightStyle(
+            alignment = LineHeightStyle.Alignment.Center,
+            trim = LineHeightStyle.Trim.None
+        ),
         letterSpacing = 0.sp
     )
 )

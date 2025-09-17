@@ -6,6 +6,7 @@
     <string name="feature_bakery_detail_button_view_all_menu">메뉴 전체보기</string>
     <string name="feature_bakery_detail_button_view_all_review">리뷰 전체보기</string>
     <string name="feature_bakery_detail_button_view_all_tour_area">관광지 전체보기</string>
+    <string name="feature_bakery_detail_button_view_image">이미지로 보기</string>
     <string name="feature_bakery_detail_tab_home">홈</string>
     <string name="feature_bakery_detail_tab_menu">메뉴</string>
     <string name="feature_bakery_detail_tab_review">리뷰</string>

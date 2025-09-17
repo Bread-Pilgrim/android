@@ -1,12 +1,13 @@
-package com.twolskone.bakeroad.feature.settings.notice.mvi
+package com.twolskone.bakeroad.feature.photoviewer.mvi
 
 import androidx.compose.runtime.Immutable
 import com.twolskone.bakeroad.core.common.android.base.BaseUiState
-import com.twolskone.bakeroad.core.model.Notice
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 @Immutable
-internal data class NoticeState(
-    val noticeList: ImmutableList<Notice> = persistentListOf()
+internal data class PhotoViewerState(
+    val title: String = "",
+    val initialPage: Int = 0,
+    val photoList: ImmutableList<String> = persistentListOf()
 ) : BaseUiState

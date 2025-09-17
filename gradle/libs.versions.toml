@@ -34,6 +34,8 @@ lottie = "6.6.6"
 gmsPlugin = "4.4.3"
 firebaseBom = "34.2.0"
 firebaseCrashlyticsPlugin = "3.0.6"
+photoCompose = "1.0.1"
+zoomable = "2.8.1"
 
 [libraries]
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -103,6 +105,8 @@ timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 kakao-auth = { group = "com.kakao.sdk", name = "v2-user", version.ref = "kakao" }
 kakao-share = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao" }
 lottie-compose = { group = "com.airbnb.android", name = "lottie-compose", version.ref = "lottie" }
+photo-compose = { group = "io.github.fornewid", name = "photo-compose", version.ref = "photoCompose" }
+zoomable = { group = "net.engawapg.lib", name = "zoomable", version.ref = "zoomable" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }

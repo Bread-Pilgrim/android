@@ -14,7 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
@@ -39,6 +39,7 @@ import coil.compose.AsyncImage
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
 import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.MyBakeryReview
 import java.time.LocalDate
@@ -52,7 +53,8 @@ internal fun MyReviewCard(
     modifier: Modifier = Modifier,
     review: MyBakeryReview,
     onBakeryNameClick: (bakeryId: Int, areaCode: Int) -> Unit,
-    onLikeClick: (Int, Boolean) -> Unit
+    onLikeClick: (Int, Boolean) -> Unit,
+    onImageClick: (Int) -> Unit
 ) {
     val likeColor by animateColorAsState(
         targetValue = if (review.isLike) {
@@ -107,15 +109,16 @@ internal fun MyReviewCard(
                     horizontalArrangement = Arrangement.spacedBy(7.dp),
                     contentPadding = contentPadding
                 ) {
-                    items(
+                    itemsIndexed(
                         items = review.photos,
-                        key = { url -> url }
-                    ) { url ->
+                        key = { _, url -> url }
+                    ) { index, url ->
                         AsyncImage(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(8.dp))
                                 .width(cardWidth)
-                                .aspectRatio(3f / 2f),
+                                .aspectRatio(3f / 2f)
+                                .singleClickable { onImageClick(index) },
                             model = url,
                             contentDescription = "ReviewImage",
                             placeholder = painterResource(id = com.twolskone.bakeroad.core.designsystem.R.drawable.core_designsystem_ic_thumbnail),
@@ -210,7 +213,8 @@ private fun ReviewCardPreview() {
                 photos = emptyList()
             ),
             onBakeryNameClick = { _, _ -> },
-            onLikeClick = { _, _ -> }
+            onLikeClick = { _, _ -> },
+            onImageClick = {}
         )
     }
 }

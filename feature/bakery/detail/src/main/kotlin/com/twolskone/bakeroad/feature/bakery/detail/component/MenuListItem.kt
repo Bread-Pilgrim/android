@@ -22,6 +22,7 @@ import com.twolskone.bakeroad.core.common.kotlin.extension.toCommaString
 import com.twolskone.bakeroad.core.designsystem.component.chip.BakeRoadChip
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipColor
 import com.twolskone.bakeroad.core.designsystem.component.chip.ChipSize
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.feature.bakery.detail.R
@@ -33,7 +34,8 @@ import com.twolskone.bakeroad.feature.bakery.detail.R
 @Composable
 internal fun MenuListItem(
     modifier: Modifier = Modifier,
-    menu: BakeryDetail.Menu
+    menu: BakeryDetail.Menu,
+    onImageClick: () -> Unit
 ) {
     Row(
         modifier = modifier,
@@ -67,7 +69,8 @@ internal fun MenuListItem(
                 modifier = Modifier
                     .padding(start = 12.dp)
                     .clip(RoundedCornerShape(8.dp))
-                    .size(width = 100.dp, height = 80.dp),
+                    .size(width = 100.dp, height = 80.dp)
+                    .singleClickable { onImageClick() },
                 model = menu.imageUrl,
                 contentDescription = "Menu",
                 contentScale = ContentScale.Crop,
@@ -91,7 +94,8 @@ private fun MenuListItemPreview() {
                 price = 3000,
                 isSignature = true,
                 imageUrl = ""
-            )
+            ),
+            onImageClick = {}
         )
     }
 }

@@ -9,6 +9,7 @@ import com.twolskone.bakeroad.core.analytics.LocalAnalyticsHelper
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.BakeryDetailNavigator
+import com.twolskone.bakeroad.core.navigator.PhotoViewerNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -17,6 +18,9 @@ class MyReviewsActivity : ComponentActivity() {
 
     @Inject
     lateinit var bakeryDetailNavigator: BakeryDetailNavigator
+
+    @Inject
+    lateinit var photoViewerNavigator: PhotoViewerNavigator
 
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper               // Firebase Analytics Helper
@@ -39,6 +43,13 @@ class MyReviewsActivity : ComponentActivity() {
                                     putExtra("bakeryId", bakeryId)
                                     putExtra("areaCode", areaCode)
                                 }
+                            )
+                        },
+                        navigateToPhotoViewer = { intent ->
+                            photoViewerNavigator.navigateFromActivity(
+                                activity = this,
+                                withFinish = false,
+                                intentBuilder = { putExtras(intent) }
                             )
                         },
                         finish = { finish() }

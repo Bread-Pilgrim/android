@@ -9,6 +9,7 @@ import com.twolskone.bakeroad.core.analytics.LocalAnalyticsHelper
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.designsystem.theme.SystemBarColorTheme
 import com.twolskone.bakeroad.core.navigator.BadgeListNavigator
+import com.twolskone.bakeroad.core.navigator.PhotoViewerNavigator
 import com.twolskone.bakeroad.core.navigator.WriteBakeryReviewNavigator
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -23,7 +24,10 @@ internal class BakeryDetailActivity : ComponentActivity() {
     lateinit var badgeListNavigator: BadgeListNavigator
 
     @Inject
-    lateinit var analyticsHelper: AnalyticsHelper                       // Firebase Analytics Helper
+    lateinit var photoViewerNavigator: PhotoViewerNavigator
+
+    @Inject
+    lateinit var analyticsHelper: AnalyticsHelper                      // Firebase Analytics Helper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +57,13 @@ internal class BakeryDetailActivity : ComponentActivity() {
                         navigateToBadgeList = {
                             badgeListNavigator.navigateFromActivity(
                                 activity = this,
+                                withFinish = false
+                            )
+                        },
+                        navigateToPhotoViewer = { intent ->
+                            photoViewerNavigator.navigateFromActivity(
+                                activity = this,
+                                intentBuilder = { putExtras(intent) },
                                 withFinish = false
                             )
                         }

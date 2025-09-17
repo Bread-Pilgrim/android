@@ -28,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
@@ -91,9 +90,12 @@ internal fun BakeryDetailScreen(
     onBackClick: () -> Unit,
     onShareClick: () -> Unit,
     onSeeMapClick: (latitude: Float, longitude: Float) -> Unit,
-    onTourAreaClick: (TourArea) -> Unit
+    onTourAreaClick: (TourArea) -> Unit,
+    onBakeryImageClick: (Int) -> Unit,
+    onMenuImageClick: (Int) -> Unit,
+    onPreviewReviewImageClick: (reviewIndex: Int, imageIndex: Int) -> Unit,
+    onReviewImageClick: (imageList: List<String>, index: Int) -> Unit
 ) {
-    val context = LocalContext.current
     val density = LocalDensity.current
     val windowInfo = LocalWindowInfo.current
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -176,7 +178,8 @@ internal fun BakeryDetailScreen(
                     BakeryImageHeader(
                         modifier = Modifier.fillMaxWidth(),
                         imageList = state.bakeryImageList,
-                        bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN
+                        bakeryOpenStatus = state.bakeryInfo?.openStatus ?: BakeryOpenStatus.OPEN,
+                        onImageClick = onBakeryImageClick
                     )
                 }
                 item {
@@ -234,14 +237,17 @@ internal fun BakeryDetailScreen(
                         onViewAllReviewClick = { onTabSelect(BakeryDetailTab.REVIEW) },
                         onViewAllTourAreaClick = { onTabSelect(BakeryDetailTab.TOUR_AREA) },
                         onReviewLikeClick = onReviewLikeClick,
-                        onTourAreaClick = onTourAreaClick
+                        onTourAreaClick = onTourAreaClick,
+                        onMenuImageClick = onMenuImageClick,
+                        onReviewImageClick = { reviewIndex, imageIndex -> onPreviewReviewImageClick(reviewIndex, imageIndex) }
                     )
                 }
 
                 BakeryDetailTab.MENU -> {
                     menu(
                         loading = state.loadingState.bakeryDetailLoading,
-                        menuList = state.menuList
+                        menuList = state.menuList,
+                        onImageClick = onMenuImageClick
                     )
                 }
 
@@ -255,7 +261,8 @@ internal fun BakeryDetailScreen(
                         onReviewTabSelect = onReviewTabSelect,
                         onSortClick = { showReviewSortBottomSheet = true },
                         onWriteReviewClick = onWriteReviewClick,
-                        onReviewLikeClick = onReviewLikeClick
+                        onReviewLikeClick = onReviewLikeClick,
+                        onReviewImageClick = onReviewImageClick
                     )
                 }
 
@@ -366,7 +373,11 @@ private fun BakeryDetailScreenPreview() {
             onBackClick = {},
             onShareClick = {},
             onSeeMapClick = { _, _ -> },
-            onTourAreaClick = {}
+            onTourAreaClick = {},
+            onBakeryImageClick = {},
+            onMenuImageClick = {},
+            onPreviewReviewImageClick = { _, _ -> },
+            onReviewImageClick = { _, _ -> }
         )
     }
 }

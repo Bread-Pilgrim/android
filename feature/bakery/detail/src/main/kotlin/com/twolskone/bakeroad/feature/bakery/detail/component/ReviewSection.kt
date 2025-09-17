@@ -52,7 +52,8 @@ internal fun LazyListScope.review(
     onReviewTabSelect: (ReviewTab) -> Unit,
     onSortClick: () -> Unit,
     onWriteReviewClick: () -> Unit,
-    onReviewLikeClick: (Int, Boolean) -> Unit
+    onReviewLikeClick: (Int, Boolean) -> Unit,
+    onReviewImageClick: (List<String>, Int) -> Unit
 ) {
     item {
         Box(modifier = Modifier.background(color = BakeRoadTheme.colorScheme.White)) {
@@ -108,7 +109,8 @@ internal fun LazyListScope.review(
                                 .padding(vertical = 6.dp, horizontal = 16.dp),
                             review = review,
                             localLikeMap = state.localLikeMap,
-                            onLikeClick = onReviewLikeClick
+                            onLikeClick = onReviewLikeClick,
+                            onImageClick = { imageIndex -> onReviewImageClick(review.photos, imageIndex) }
                         )
                     }
                 }
@@ -146,7 +148,8 @@ internal fun LazyListScope.review(
                                 .padding(vertical = 6.dp, horizontal = 16.dp),
                             review = review,
                             localLikeMap = state.localLikeMap,
-                            onLikeClick = onReviewLikeClick
+                            onLikeClick = onReviewLikeClick,
+                            onImageClick = { imageIndex -> onReviewImageClick(review.photos, imageIndex) }
                         )
                     }
                 }

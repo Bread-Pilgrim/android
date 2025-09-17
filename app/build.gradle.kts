@@ -62,6 +62,7 @@ dependencies {
     implementation(projects.feature.settings)
     implementation(projects.feature.report)
     implementation(projects.feature.badge)
+    implementation(projects.feature.photoviewer)
 
     implementation(projects.core.common.kotlin)
     implementation(projects.core.common.android)

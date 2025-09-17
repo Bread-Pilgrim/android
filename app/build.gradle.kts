@@ -13,8 +13,8 @@ android {
 
     defaultConfig {
         applicationId = "com.twolskone.bakeroad"
-        versionCode = 3
-        versionName = "1.0.2"   // X.Y.Z; X = Major, Y = minor, Z = Patch level
+        versionCode = 4
+        versionName = "1.0.3"   // X.Y.Z; X = Major, Y = minor, Z = Patch level
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

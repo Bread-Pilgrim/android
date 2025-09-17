@@ -26,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastForEach
@@ -37,6 +38,7 @@ import com.twolskone.bakeroad.core.designsystem.component.button.OutlinedButtonR
 import com.twolskone.bakeroad.core.designsystem.component.skeleton.ReviewsSkeleton
 import com.twolskone.bakeroad.core.designsystem.component.skeleton.TitleSkeleton
 import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.core.model.BakeryReview
@@ -71,7 +73,9 @@ internal fun LazyListScope.home(
     onViewAllReviewClick: () -> Unit,
     onViewAllTourAreaClick: () -> Unit,
     onReviewLikeClick: (Int, Boolean) -> Unit,
-    onTourAreaClick: (TourArea) -> Unit
+    onTourAreaClick: (TourArea) -> Unit,
+    onMenuImageClick: (Int) -> Unit,
+    onReviewImageClick: (Int, Int) -> Unit
 ) {
     item {
         Column(modifier = itemModifier) {
@@ -81,7 +85,8 @@ internal fun LazyListScope.home(
                 MenuContent(
                     modifier = Modifier.fillMaxWidth(),
                     menuList = menuList,
-                    onViewAllClick = onViewAllMenuClick
+                    onViewAllClick = onViewAllMenuClick,
+                    onImageClick = onMenuImageClick
                 )
             }
             if (loadingState.previewReviewLoading) {
@@ -95,7 +100,8 @@ internal fun LazyListScope.home(
                     reviewList = reviewList,
                     onViewAllClick = onViewAllReviewClick,
                     localReviewLikeMap = localReviewLikeMap,
-                    onLikeClick = onReviewLikeClick
+                    onLikeClick = onReviewLikeClick,
+                    onImageClick = onReviewImageClick
                 )
             }
             if (loadingState.tourAreaLoading) {
@@ -120,7 +126,8 @@ internal fun LazyListScope.home(
 private fun MenuContent(
     modifier: Modifier = Modifier,
     menuList: ImmutableList<BakeryDetail.Menu>,
-    onViewAllClick: () -> Unit
+    onViewAllClick: () -> Unit,
+    onImageClick: (Int) -> Unit
 ) {
     val lastIndex = menuList.take(4).size - 1
 
@@ -130,14 +137,32 @@ private fun MenuContent(
             .padding(horizontal = 16.dp, vertical = 20.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
             Text(
                 text = stringResource(R.string.feature_bakery_detail_title_recommend_menu),
                 style = BakeRoadTheme.typography.bodyLargeSemibold
             )
+            if (menuList.any { it.imageUrl.isNotBlank() }) {
+                Text(
+                    modifier = Modifier.singleClickable { onImageClick(0) },
+                    text = stringResource(R.string.feature_bakery_detail_button_view_image),
+                    style = BakeRoadTheme.typography.bodyXsmallMedium.copy(
+                        color = BakeRoadTheme.colorScheme.Gray950,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
         }
         menuList.take(MenuMaxCount).fastForEachIndexed { index, menu ->
-            MenuListItem(modifier = Modifier.fillMaxWidth(), menu = menu)
+            MenuListItem(
+                modifier = Modifier.fillMaxWidth(),
+                menu = menu,
+                onImageClick = { onImageClick(index) }
+            )
             if (index != lastIndex) {
                 HorizontalDivider(
                     modifier = Modifier.fillMaxWidth(),
@@ -169,7 +194,8 @@ private fun ReviewContent(
     reviewList: ImmutableList<BakeryReview>,
     localReviewLikeMap: PersistentMap<Int, Boolean>,
     onViewAllClick: () -> Unit,
-    onLikeClick: (Int, Boolean) -> Unit
+    onLikeClick: (Int, Boolean) -> Unit,
+    onImageClick: (reviewIndex: Int, imageIndex: Int) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -204,12 +230,13 @@ private fun ReviewContent(
             )
         }
         if (reviewList.isNotEmpty()) {
-            reviewList.fastForEach { review ->
+            reviewList.fastForEachIndexed { index, review ->
                 ReviewCard(
                     modifier = Modifier.fillMaxWidth(),
                     review = review,
                     localLikeMap = localReviewLikeMap,
-                    onLikeClick = onLikeClick
+                    onLikeClick = onLikeClick,
+                    onImageClick = { imageIndex -> onImageClick(index, imageIndex) }
                 )
             }
             BakeRoadOutlinedButton(
@@ -456,7 +483,8 @@ private fun MenuContentPreview() {
                         imageUrl = ""
                     )
                 ),
-                onViewAllClick = {}
+                onViewAllClick = {},
+                onImageClick = {}
             )
         }
     }
@@ -491,7 +519,8 @@ private fun ReviewContentPreview() {
                 ),
                 localReviewLikeMap = persistentMapOf(),
                 onViewAllClick = {},
-                onLikeClick = { _, _ -> }
+                onLikeClick = { _, _ -> },
+                onImageClick = { _, _ -> }
             )
         }
     }

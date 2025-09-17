@@ -21,7 +21,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.twolskone.bakeroad.core.designsystem.extension.noRippleSingleClickable
 import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.type.BakeryOpenStatus
@@ -33,7 +35,8 @@ import kotlinx.collections.immutable.persistentListOf
 internal fun BakeryImageHeader(
     modifier: Modifier = Modifier,
     imageList: ImmutableList<String>,
-    bakeryOpenStatus: BakeryOpenStatus
+    bakeryOpenStatus: BakeryOpenStatus,
+    onImageClick: (Int) -> Unit
 ) {
     val imagePagerState = rememberPagerState(pageCount = { imageList.size })
 
@@ -44,7 +47,9 @@ internal fun BakeryImageHeader(
             ) { imagePage ->
                 imageList.getOrNull(imagePage)?.let { image ->
                     AsyncImage(
-                        modifier = Modifier.fillMaxSize(),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .noRippleSingleClickable { onImageClick(imagePage) },
                         model = image,
                         contentDescription = "Bakery",
                         contentScale = ContentScale.Crop,
@@ -91,7 +96,8 @@ private fun ImagePagerIndicator(
     ) {
         Text(
             text = "${currentPageIndex + 1}/$pageCount",
-            style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray50)
+            style = BakeRoadTheme.typography.body2XsmallRegular.copy(color = BakeRoadTheme.colorScheme.Gray50),
+            letterSpacing = 2.sp
         )
     }
 }
@@ -112,8 +118,9 @@ private fun BakeryImageHeaderPreview() {
     BakeRoadTheme {
         BakeryImageHeader(
             modifier = Modifier.fillMaxWidth(),
-            imageList = persistentListOf(),
-            bakeryOpenStatus = BakeryOpenStatus.OPEN
+            imageList = persistentListOf(""),
+            bakeryOpenStatus = BakeryOpenStatus.OPEN,
+            onImageClick = {}
         )
     }
 }

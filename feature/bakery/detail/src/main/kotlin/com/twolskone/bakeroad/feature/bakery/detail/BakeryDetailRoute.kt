@@ -39,6 +39,10 @@ import com.twolskone.bakeroad.core.model.Badge
 import com.twolskone.bakeroad.core.navigator.util.KEY_BADGE_ACHIEVED
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_ID
 import com.twolskone.bakeroad.core.navigator.util.KEY_BAKERY_LIKE
+import com.twolskone.bakeroad.core.navigator.util.KEY_PHOTO_VIEWER_DESCRIPTION_ARRAY
+import com.twolskone.bakeroad.core.navigator.util.KEY_PHOTO_VIEWER_INITIAL_PAGE
+import com.twolskone.bakeroad.core.navigator.util.KEY_PHOTO_VIEWER_PHOTO_ARRAY
+import com.twolskone.bakeroad.core.navigator.util.KEY_PHOTO_VIEWER_TITLE
 import com.twolskone.bakeroad.core.navigator.util.RESULT_REFRESH_BAKERY_LIST
 import com.twolskone.bakeroad.core.ui.popup.BadgeAchievedBottomSheet
 import com.twolskone.bakeroad.feature.bakery.detail.model.BakeryDetailTab
@@ -57,6 +61,7 @@ internal fun BakeryDetailRoute(
     viewModel: BakeryDetailViewModel = hiltViewModel(),
     navigateToWriteBakeryReview: (Int, ActivityResultLauncher<Intent>) -> Unit,
     navigateToBadgeList: () -> Unit,
+    navigateToPhotoViewer: (Intent) -> Unit,
     setResult: (code: Int, intent: Intent?, withFinish: Boolean) -> Unit
 ) {
     val context = LocalContext.current
@@ -163,7 +168,44 @@ internal fun BakeryDetailRoute(
                 )
             },
             onSeeMapClick = { latitude, longitude -> context.openKakaoMapWithCoordinate(latitude = latitude, longitude = longitude) },
-            onTourAreaClick = { context.openKakaoMapWithCoordinate(latitude = it.latitude, longitude = it.longitude) }
+            onTourAreaClick = { context.openKakaoMapWithCoordinate(latitude = it.latitude, longitude = it.longitude) },
+            onBakeryImageClick = { index ->
+                if (state.bakeryImageList.size > 0) {
+                    val intent = Intent().apply {
+                        putExtra(KEY_PHOTO_VIEWER_TITLE, state.bakeryInfo?.name.orEmpty())
+                        putExtra(KEY_PHOTO_VIEWER_INITIAL_PAGE, index)
+                        putExtra(KEY_PHOTO_VIEWER_PHOTO_ARRAY, state.bakeryImageList.toTypedArray())
+                    }
+                    navigateToPhotoViewer(intent)
+                }
+            },
+            onMenuImageClick = { index ->
+                val intent = Intent().apply {
+                    putExtra(KEY_PHOTO_VIEWER_TITLE, state.bakeryInfo?.name.orEmpty())
+                    putExtra(KEY_PHOTO_VIEWER_DESCRIPTION_ARRAY, state.menuList.map { it.name }.toTypedArray())
+                    putExtra(KEY_PHOTO_VIEWER_INITIAL_PAGE, index)
+                    putExtra(KEY_PHOTO_VIEWER_PHOTO_ARRAY, state.menuList.map { it.imageUrl }.toTypedArray())
+                }
+                navigateToPhotoViewer(intent)
+            },
+            onPreviewReviewImageClick = { reviewIndex, imageIndex ->
+                state.reviewState.previewReviewList.getOrNull(reviewIndex)?.let {
+                    val intent = Intent().apply {
+                        putExtra(KEY_PHOTO_VIEWER_TITLE, state.bakeryInfo?.name.orEmpty())
+                        putExtra(KEY_PHOTO_VIEWER_INITIAL_PAGE, imageIndex)
+                        putExtra(KEY_PHOTO_VIEWER_PHOTO_ARRAY, it.photos.toTypedArray())
+                    }
+                    navigateToPhotoViewer(intent)
+                }
+            },
+            onReviewImageClick = { imageList, imageIndex ->
+                val intent = Intent().apply {
+                    putExtra(KEY_PHOTO_VIEWER_TITLE, state.bakeryInfo?.name.orEmpty())
+                    putExtra(KEY_PHOTO_VIEWER_INITIAL_PAGE, imageIndex)
+                    putExtra(KEY_PHOTO_VIEWER_PHOTO_ARRAY, imageList.toTypedArray())
+                }
+                navigateToPhotoViewer(intent)
+            }
         )
 
         if (achievedBadges.isNotEmpty()) {

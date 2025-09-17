@@ -19,13 +19,16 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.twolskone.bakeroad.core.designsystem.component.skeleton.TitleSkeleton
 import com.twolskone.bakeroad.core.designsystem.extension.shimmerEffect
+import com.twolskone.bakeroad.core.designsystem.extension.singleClickable
 import com.twolskone.bakeroad.core.designsystem.theme.BakeRoadTheme
 import com.twolskone.bakeroad.core.model.BakeryDetail
 import com.twolskone.bakeroad.feature.bakery.detail.R
@@ -37,7 +40,8 @@ import kotlinx.collections.immutable.persistentListOf
  */
 internal fun LazyListScope.menu(
     loading: Boolean,
-    menuList: ImmutableList<BakeryDetail.Menu>
+    menuList: ImmutableList<BakeryDetail.Menu>,
+    onImageClick: (Int) -> Unit
 ) {
     if (loading) {
         item { MenuSectionSkeleton() }
@@ -48,12 +52,24 @@ internal fun LazyListScope.menu(
                     .fillMaxWidth()
                     .background(color = BakeRoadTheme.colorScheme.White)
                     .padding(horizontal = 16.dp)
-                    .padding(top = 20.dp, bottom = 16.dp)
+                    .padding(top = 20.dp, bottom = 16.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Text(
                     text = stringResource(R.string.feature_bakery_detail_title_all_menu),
                     style = BakeRoadTheme.typography.bodyLargeSemibold
                 )
+                if (menuList.any { it.imageUrl.isNotBlank() }) {
+                    Text(
+                        modifier = Modifier.singleClickable { onImageClick(0) },
+                        text = stringResource(R.string.feature_bakery_detail_button_view_image),
+                        style = BakeRoadTheme.typography.bodyXsmallMedium.copy(
+                            color = BakeRoadTheme.colorScheme.Gray950,
+                            textDecoration = TextDecoration.Underline
+                        )
+                    )
+                }
             }
         }
         itemsIndexed(items = menuList) { index, menu ->
@@ -63,7 +79,11 @@ internal fun LazyListScope.menu(
                     .background(color = BakeRoadTheme.colorScheme.White)
                     .padding(horizontal = 16.dp)
             ) {
-                MenuListItem(modifier = Modifier.fillMaxWidth(), menu = menu)
+                MenuListItem(
+                    modifier = Modifier.fillMaxWidth(),
+                    menu = menu,
+                    onImageClick = { onImageClick(index) }
+                )
                 Spacer(modifier = Modifier.height(if (index == menuList.lastIndex) 20.dp else 16.dp))
             }
         }
@@ -161,7 +181,8 @@ private fun MenuSectionPreview() {
                         isSignature = false,
                         imageUrl = ""
                     )
-                )
+                ),
+                onImageClick = {}
             )
         }
     }

@@ -10,7 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -33,7 +33,8 @@ internal fun MyReviewsScreen(
     listState: LazyListState,
     onBackClick: () -> Unit,
     onBakeryNameClick: (bakeryId: Int, areaCode: Int) -> Unit,
-    onLikeClick: (Int, Boolean) -> Unit
+    onLikeClick: (Int, Boolean) -> Unit,
+    onImageClick: (reviewIndex: Int, imageIndex: Int) -> Unit
 ) {
     LogComposeScreenEvent(screen = "MyReviewsScreen")
 
@@ -64,14 +65,15 @@ internal fun MyReviewsScreen(
             state = listState
         ) {
             if (state.paging.list.isNotEmpty()) {
-                items(
+                itemsIndexed(
                     items = state.paging.list,
-                    key = { review -> review.id }
-                ) {
+                    key = { _, review -> review.id }
+                ) { index, review ->
                     MyReviewCard(
-                        review = it,
+                        review = review,
                         onBakeryNameClick = onBakeryNameClick,
-                        onLikeClick = onLikeClick
+                        onLikeClick = onLikeClick,
+                        onImageClick = { imageIndex -> onImageClick(index, imageIndex) }
                     )
                 }
             } else {

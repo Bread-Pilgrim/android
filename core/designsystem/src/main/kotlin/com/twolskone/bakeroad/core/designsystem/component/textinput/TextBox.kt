@@ -82,7 +82,7 @@ fun BakeRoadTextBox(
                         color = if (isFocus) BakeRoadTheme.colorScheme.Primary500 else BakeRoadTheme.colorScheme.Gray100,
                         shape = TextFieldBoxShape
                     )
-                    .padding(horizontal = 12.dp, vertical = 16.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 Box(modifier = Modifier.weight(1f, fill = true)) {
                     if (state.text.isEmpty() && placeholder.isNotEmpty()) {

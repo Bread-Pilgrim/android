@@ -21,7 +21,7 @@ internal class PhotoViewerActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            SystemBarColorTheme(lightTheme = false)
+            SystemBarColorTheme(lightTheme = true)
             BakeRoadTheme {
                 CompositionLocalProvider(
                     LocalAnalyticsHelper provides analyticsHelper

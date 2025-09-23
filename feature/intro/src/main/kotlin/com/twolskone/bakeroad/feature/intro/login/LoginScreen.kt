@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -45,7 +44,7 @@ internal fun LoginScreen(
                 imageVector = ImageVector.vectorResource(id = R.drawable.feature_intro_ic_logo_login),
                 contentDescription = "Logo"
             )
-            Spacer(modifier = Modifier.height(104.dp))
+            Spacer(modifier = Modifier.height(68.dp))
             KakaoButton(
                 modifier = Modifier
                     .fillMaxWidth()
